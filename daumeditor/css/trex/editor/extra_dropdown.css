@@ -1,0 +1,15 @@
+/*==== extra-drop-down ====*/
+	.tx-extra a.tx-icon { background-image:none; width:13px; height:30px; }
+	.tx-list-extra .tx-extra{ margin-top: -4px; }
+	.tx-list-extra .tx-btn-nlrbg, .tx-list-extra .tx-btn-nlrbg-hovered{ background-position:-293px -97px; }
+	.tx-list-extra .tx-btn-nlrbg-pushed {background-position:-293px -132px;}
+
+	ul.tx-extra-menu { padding:0 8px; top:25px; border:1px solid #e0e0e0; width: 36px; }
+	.tx-extra-menu li.tx-list { float:none; border-bottom:1px solid #f1f1f1; margin:0; padding:0 4px; height: 25px; }
+	.tx-extra-menu li.tx-list a { float:none; }
+
+	.tx-toolbar-extra-drop-down .tx-disable a {cursor:default; filter:alpha(opacity=30); opacity:0.3;}
+
+	/* IE6 hack */
+	.tx-extra{ _position:absolute; _right:0; }
+	.tx-editor-container .tx-nav-search .tx-list-extra{ _padding-right: 15px; }

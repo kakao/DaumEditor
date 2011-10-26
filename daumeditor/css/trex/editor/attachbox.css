@@ -1,0 +1,92 @@
+/*==== attachbox ====*/
+	.tx-attach-active { display:none; position:absolute; z-index:100000; background-color:#7E94BF; filter:alpha(opacity=30); opacity:0.3; }
+	.tx-attach-div {margin:10px 0 0 0; display:none; }
+	.tx-attach-div div.tx-attach-txt { float:left; font-weight:bold; font-family:gulim,tahoma,sans-serif; font-size:12px; line-height:1.4; }
+	.tx-attach-box {  border:1px #D5D5D5 solid; background:#FAFAFA; margin:10px 0 15px 70px; padding:0 0 5px 0;}
+	.tx-attach-box .tx-attach-box-inner { border:1px #fff solid; padding:5px 0 0 5px; }
+
+	.tx-attach-box .tx-attach-preview { float:left; width:147px; height:108px; margin:0; background:#FFFFFF; position:relative; padding:5px; border:1px #eaeaea solid; }
+	.tx-attach-box .tx-attach-preview p { display:none; }
+	.tx-attach-box .tx-attach-preview img { display:block; margin:0 auto; -moz-user-select:none; -khtml-user-select:none; }
+	.tx-attach-box p.tx-thumb-pie {
+		position:absolute; display:block; z-index:10; top:82px; left:8px;
+		width:13px; height:13px;
+		background:url(http://i1.daumcdn.net/icon/editor/ic_pie.gif?v=2) no-repeat;
+	}
+	.tx-attach-box p.tx-thumb-movie {
+		position:absolute; display:block; z-index:10; top:73px; left:22px;
+		width:13px; height:13px;
+		background:url(http://i1.daumcdn.net/icon/editor/ic_play01.gif?v=2) no-repeat;
+	}
+
+	.tx-attach-box .tx-attach-main { height:118px; position:relative;}
+	.tx-attach-box .tx-upload-progress { position:absolute; z-index:20; top:45px; left:320px; width:300px; height:40px; padding:10px; border:1px #aaa solid; background:#fff; display:none; }
+	*+html .tx-attach-box .tx-upload-progress { left:150px;}
+	* html .tx-attach-box .tx-upload-progress { left:150px;}
+	.tx-attach-box .tx-upload-progress div { border:1px #ddd solid; background:#FB6235 url(http://i1.daumcdn.net/icon/editor/progress_01.gif?v=2); width:10px; height:15px; font-size:11px; font-family:dotum,verdana; color:#fff; text-align:center; padding: 3px 0 2px; }
+	.tx-attach-box .tx-upload-progress p { font-size:11px; font-family:dotum,verdana; color:#666; text-align:center; }
+
+	.tx-attach-box .tx-attach-top { height:21px; margin:1px 0 4px 0; }
+	.tx-attach-box .tx-attach-top li { list-style:none; float:left; font-size:11px; font-family:dotum,verdana; color:#666; }
+
+	.tx-attach-box .tx-attach-delete a {
+		display:block; margin:0 4px; width:57px; height:21px; text-indent:-100em; overflow:hidden;
+		background:url(http://i1.daumcdn.net/icon/editor/btn_deletefile.gif?v=2) no-repeat; cursor:pointer;
+	}
+
+	.tx-attach-box li.tx-attach-size { float:right; padding:5px 5px 0 0; }
+	.tx-attach-box .tx-attach-size-up { font-weight:bold; color:#FB6235; }
+	.tx-attach-box .tx-attach-size-used { font-weight:bold; }
+
+	.tx-attach-box .tx-attach-list {
+		margin:0 5px 0 4px;
+		height: 84px; padding:3px;
+		border:1px #D5D5D5 solid;
+		background:#FFFFFF;
+		overflow:-moz-scrollbars-vertical;
+		scrollbar-3dlight-color:#FFFFFF;
+		scrollbar-arrow-color:#9f9f9f;
+		scrollbar-darkshadow-color:#FFFFFF;
+		scrollbar-face-color:#e6e6e6;
+		scrollbar-highlight-color:#c3c3c3;
+		scrollbar-shadow-color:#c3c3c3;
+		scrollbar-track-color:#F3F3F3;
+		overflow:hidden; overflow-y:scroll;
+		-moz-user-select: none;
+		-khtml-user-select: none;
+	}
+	.tx-attach-box .tx-attach-list li { height:16px; padding:3px 3px 2px 3px; clear:both}
+	.tx-attach-box .tx-attach-list li.tx-hovered { background:#F2F2F2; }
+	.tx-attach-box .tx-attach-list li.tx-clicked { background:#C8D9F7; }
+
+	.tx-attach-box .tx-attach-list li dl { width:100%; margin:0; padding:0; }
+
+	.tx-attach-box .tx-attach-list li .tx-name { float:left; font-size:11px; font-family:dotum,verdana; color:#666; padding:1px 0 0 0; cursor:pointer; }
+	.tx-attach-box .tx-attach-list li.tx-existed .tx-name { color:#999; }
+	.tx-attach-box .tx-attach-list .tx-name strong { font-family:dotum; font-size:11px; color:#ed1c24; font-weight: normal; letter-spacing:-1px; }
+	.tx-attach-box .tx-attach-list li.tx-existed .tx-insert { display:none; }
+
+	.tx-attach-box .tx-attach-list dd.tx-button {float:right;}
+
+	.tx-attach-box .tx-attach-list li a.tx-insert {
+		float:left; display:block; width:15px; height:15px; margin:0 0 0 3px;
+		text-indent:-100em; overflow:hidden;
+		background:url(http://i1.daumcdn.net/icon/editor/btn_a_upload.gif?v=2) no-repeat; cursor:pointer;
+	}
+	.tx-attach-box .tx-attach-list li a.tx-delete {
+		float:left; display:none; width:15px; height:15px;
+		text-indent:-100em; overflow:hidden;
+		background:url(http://i1.daumcdn.net/icon/editor/btn_a_delete.gif?v=2) no-repeat; cursor:pointer;
+	}
+	.tx-attach-box .tx-attach-list li.tx-hovered a.tx-delete { display:block; }
+	.tx-attach-box .tx-attach-list li.tx-clicked a.tx-delete { display:block; }
+
+	.tx-attach-box a.tx-attach-two-images {
+		float:left; margin-right: 4px; width:21px; height:20px; text-indent:-100em; overflow:hidden;
+		background:url(http://i1.daumcdn.net/icon/editor/btn_images_two.gif?v=2) no-repeat; cursor:pointer;
+	}
+
+	.tx-attach-box a.tx-attach-three-images {
+		float:left; margin: 0; width:24px; height:20px; text-indent:-100em; overflow:hidden;
+		background:url(http://i1.daumcdn.net/icon/editor/btn_images_three.gif?v=2) no-repeat; cursor:pointer;
+	}

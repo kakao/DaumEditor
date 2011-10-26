@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <title>Benchmark</title>
+
+    <link rel="stylesheet" href="testcase/lib/qunit_f2b99a6_patched.css">
+    <style type="text/css">
+        #qunit-tests .bench-info {
+            display: inline-block;
+            width: 500px;
+        }
+        #qunit-tests .record {
+            display: inline-block;
+            text-align: right;
+        }
+        #qunit-tests .narrow {
+            width: 110px;
+        }
+        #qunit-tests .wide {
+            width: 140px;
+        }
+    </style>
+    <script type="text/javascript" src="http://ftdev.daum.net/jigu/jigu-latest.js"></script>
+    <script type="text/javascript" src="testcase/lib/benchmark.js"></script>
+    <script type="text/javascript" src="/daumeditor/js/scopeVariable.js"></script>
+    <script type="text/javascript" src="/daumeditor/js/global.js"></script>
+    <script type="text/javascript" src="/daumeditor/js/lib/stopwatch.js"></script>
+    <script type="text/javascript" src="/daumeditor/js/lib/txlib.js"></script>
+    <script type="text/javascript" src="/daumeditor/js/lib/hyperscript.js"></script>
+    <script type="text/javascript" src="/daumeditor/js/lib/template.js"></script>
+    <script type="text/javascript" src="/daumeditor/js/lib/dgetty.js"></script>
+    <script type="text/javascript" src="/daumeditor/js/lib/dfindy.js"></script>
+    <script type="text/javascript" src="/daumeditor/js/lib/xgetty.js"></script>
+    <script type="text/javascript" src="/daumeditor/js/lib/dateformat.js"></script>
+    <script type="text/javascript" src="/daumeditor/js/trex/trex.js"></script>
+    <script type="text/javascript" src="/daumeditor/js/trex/lib/domutil.js"></script>
+</head>
+<body>
+    <h1 id="qunit-header">Benchmark</h1>
+
+    <h2 id="qunit-banner"></h2>
+
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+
+    <ol id="qunit-tests"></ol>
+
+    <div class="fixture">
+        <div id="test"></div>
+    </div>
+    
+    <script type="text/javascript">
+        (function(window) {
+            var filter = "";
+            var location = window.location || { search: "" };
+            var params = location.search.slice(1).split("&");
+            for (var i = 0; i < params.length; i++) {
+                var query = params[i].split("=");
+                if (query[0] == "filter") {
+                    filter = query[1];
+                }
+            }
+
+            Benchmark.prototype.MAX_TIME_ELAPSED = 0.1;
+            var currentSuite = null;
+            var timer;
+            var suiteQueue = [];
+            var suiteCount = 0;
+            var BenchRunner = {
+                suite: function(name, options) {
+                    currentSuite = new Benchmark.Suite(name, options);
+                    currentSuite.on('start', function() {
+                        showRegisteredBenches(this);
+                    });
+                    currentSuite.on('cycle', function(bench) {
+                        showBenchResult(bench);
+                    });
+                    currentSuite.on('complete', function(bench) {
+                        checkCompletion(bench);
+                    });
+                    suiteQueue.push(currentSuite);
+                    timer = -1;
+                    suiteCount += 1;
+                },
+                bench: function(name, fn, option) {
+                    currentSuite && currentSuite.add(name, fn, option);
+                    clearInterval(timer);
+                    timer = setTimeout(process, 50);
+                }
+            };
+            function process() {
+                while (suiteQueue.length) {
+                    var suite = suiteQueue.shift();
+                    if (suite.name.indexOf(filter) >= 0) {
+                        suite.run(true);
+                    }
+                }
+            }
+            window.suite = BenchRunner.suite;
+            window.bench = BenchRunner.bench;
+
+            function showRegisteredBenches(suite) {
+                // show user agent information
+                var suiteName = suite.name;
+                for (var i = 0; i < suite.length; i++) {
+                    var bench = suite[i];
+                    var panel = createPanel(bench);
+                    $('qunit-tests').appendChild(panel);
+                }
+                function createPanel(bench) {
+                    var panel = document.createElement("li");
+                    panel.id = bench.name;
+                    var html = Benchmark.interpolate(
+                        '<strong class="bench-info"><span class="module-name">#{suiteName}</span>: <span class="test-name">#{benchName}</span></strong>' +
+                        '<span class="record wide"></span><span class="record narrow"></span><span class="record narrow"></span>' +
+                        '<ol style="display:none;"><li>#{benchFunction}</li></ol>',
+                        {
+                            suiteName: suiteName,
+                            benchName: bench.name,
+                            benchFunction: bench.fn
+                        }
+                    );
+                    panel.innerHTML = html;
+                    addEvent(panel.childNodes[0], 'click', function() {
+                        var next = panel.lastChild,
+                            display = next.style.display;
+                        next.style.display = display === "none" ? "block" : "none";
+                    });
+                    return panel;
+                }
+            }
+            function showBenchResult(bench) {
+                var panel = id(bench.name);
+                panel.className = "pass";
+                panel.childNodes[1].innerHTML = Benchmark.formatNumber(bench.hz.toFixed(0)) + " ops/sec";
+                panel.childNodes[2].innerHTML = Benchmark.formatNumber((bench.times.period * 1000000).toFixed(2)) + " μsec/ops";
+//                panel.childNodes[3].innerHTML = Benchmark.formatNumber(bench.times.elapsed.toFixed(2)) + " sec";
+            }
+            function checkCompletion() {
+                suiteCount--;
+                if (suiteCount === 0) {
+                    var banner = id('qunit-banner');
+                    banner.className = "qunit-pass";
+                    // show elapsed time
+                }
+            }
+
+            function id(name) {
+                return !!(typeof document !== "undefined" && document && document.getElementById) && document.getElementById(name);
+            }
+
+            function addEvent(elem, type, fn) {
+                if (elem.addEventListener) {
+                    elem.addEventListener(type, fn, false);
+                } else if (elem.attachEvent) {
+                    elem.attachEvent("on" + type, fn);
+                } else {
+                    fn();
+                }
+            }
+        })(this);
+    </script>
+    <script type="text/javascript" src="benchmark/_benchmark_suites.js"></script>
+</body>
+</html>

@@ -1,0 +1,477 @@
+(function() {
+
+    /**
+     * wysiwyg 영역의 컨텐츠를 수정, 관리하기 위한 클래스로,
+     * 편집 영역에 해당하는 iframe 객체에 접근하여 이벤트를 부여하거나 속성 값들을 읽거나 변경한다.
+     *
+     * @class
+     * @extends Trex.Canvas.BasedPanel
+     * @param {Object} canvas
+     * @param {Object} config - canvas의 config
+     */
+    Trex.Canvas.WysiwygPanel = Trex.Class.create(/** @lends Trex.Canvas.WysiwygPanel.prototype */{
+        /** @ignore */
+        $extend: Trex.Canvas.BasedPanel,
+
+
+        /** @ignore */
+        $const: {
+            /** @name Trex.Canvas.WysiwygPanel.__MODE */
+            __MODE: Trex.Canvas.__WYSIWYG_MODE,
+            EVENT_BINDING_DELAY: 500
+        },
+
+
+        initialize: function(canvas, canvasConfig) {
+            this.$super.initialize(canvas, canvasConfig);
+
+            this.canvasConfig = canvasConfig;
+            this.iframe = this.el;
+            this.wysiwygWindow = this.iframe.contentWindow;
+
+            var self = this;
+            var iframeLoader = new Trex.WysiwygIframeLoader(this.iframe);
+            iframeLoader.load(function(doc) {
+                self.wysiwygDoc = doc;
+
+                self.initializeSubModules(doc);
+                self.installScripts(self.wysiwygWindow, doc);
+                self.makeEditable();
+                self.applyBodyStyles(self.canvasConfig.styles);
+                self.clearContent();
+                self.bindEvents(canvas);
+                Editor.__PANEL_LOADED = _TRUE;
+                canvas.fireJobs(Trex.Ev.__IFRAME_LOAD_COMPLETE, doc);
+            });
+
+        },
+
+
+        initializeSubModules: function(doc) {
+            var win = this.wysiwygWindow;
+            this.processor = new Trex.Canvas.ProcessorP(win, doc);
+            this.webfontLoader = new Trex.WebfontLoader(doc, this.canvasConfig);
+        },
+
+
+        /**
+         * WYSIWYG 영역 iframe을 편집 가능한 상태로 변경한다.
+         */
+        makeEditable: function() {
+            if (this.canvasConfig.readonly) {
+                return;
+            }
+
+            if ($tx.msie || $tx.chrome || $tx.webkit_ver >= 3) { //Safari 3, Chrome, and Internet Explorer (since 5.5).
+                this.wysiwygDoc.body.setAttribute("contentEditable", _TRUE.toString() );
+            } else { //old version or Firefox, Opera
+                var self = this;
+                setTimeout(function() {
+                    try {
+                        self.wysiwygDoc.designMode = "On";
+                        if ($tx.gecko) {
+                            self.wysiwygDoc.execCommand("enableInlineTableEditing", _FALSE, _FALSE);
+                        }
+                    } catch(e) {
+                        self.designModeActivated = _FALSE;
+                    }
+                }, 10);
+            }
+        },
+
+
+        /**
+         * panel의 이름을 리턴한다.
+         * @function
+         * @returns {String} 'html'
+         */
+        getName: function() {
+            return this.constructor.__MODE;
+        },
+
+
+        /**
+         * wysiwyg 영역의 window 객체를 넘겨준다.
+         * @function
+         * @returns {Element} wysiwyg 영역의 window 객체
+         */
+        getWindow: function() {
+            return this.wysiwygWindow;
+        },
+
+
+        /**
+         * wysiwyg 영역의 document 객체를 넘겨준다.
+         * @function
+         * @returns {Element} wysiwyg 영역의 document 객체
+         */
+        getDocument: function() {
+            return this.wysiwygDoc;
+        },
+
+
+        /**
+         * wysiwyg 영역에 쓰여진 컨텐츠를 얻어온다.
+         * @function
+         * @returns {String} 컨텐츠 문자열
+         */
+        getContent: function() {
+            return this.wysiwygDoc.body.innerHTML;
+        },
+
+
+        /**
+         * wysiwyg 영역의 컨텐츠를 주어진 문자열로 수정한다.
+         * @function
+         * @param {String} contentHTML - 컨텐츠
+         */
+        setContent: function(contentHTML) {
+            contentHTML = this.doPreFilter(contentHTML);
+            this.setBodyHTML(contentHTML);
+            this.doPostFilter(this.wysiwygDoc.body);
+        },
+
+        doPreFilter: function(contentHTML) {
+            if (contentHTML) {
+                contentHTML = removeWordJoiner(contentHTML);
+                contentHTML = preventRemovingNoScopeElementInIE(contentHTML);
+            }
+            return contentHTML;
+        },
+
+        setBodyHTML: function(content) {
+            this.wysiwygDoc.body.innerHTML = content || $tom.EMPTY_PARAGRAPH_HTML;
+        },
+
+        doPostFilter: function(body) {
+            makeEmptyParagraphVisibleInIE(body);
+        },
+
+
+        /**
+         * 편집 문서 body의 HTML을 모두 지우고 기본 마크업을 세팅한다.
+         */
+        clearContent: function() {
+            this.setContent("");
+        },
+
+
+        /**
+         * 현재 wysiwyg 영역의 수직 스크롤 값을 얻어온다.
+         * @function
+         * @returns {Number} 수직 스크롤 값
+         */
+        getScrollTop: function() {
+            return $tom.getScrollTop(this.wysiwygDoc);
+        },
+
+
+        /**
+         * wysiwyg 영역의 수직 스크롤 값을 셋팅한다.
+         * @function
+         * @param {Number} scrollTop - 수직 스크롤 값
+         */
+        setScrollTop: function(scrollTop) {
+            $tom.setScrollTop(this.wysiwygDoc, scrollTop);
+        },
+
+
+        /**
+         * 현재 wysiwyg 영역의 수평 스크롤 값을 얻어온다.
+         * @function
+         * @returns {Number} 수평 스크롤 값
+         */
+        getScrollLeft: function() {
+            return $tom.getScrollLeft(this.wysiwygDoc);
+        },
+
+
+        /**
+         * 생성된 Processor 객체를 리턴한다.
+         * @function
+         * @returns {Object} Processor 객체
+         */
+        getProcessor: function() {
+            return this.processor;
+        },
+
+
+        /**
+         * 만약 processor 객체가 준비되었다면 processor 객체를 argument로 넘기며 주어진 함수를 수행한다.
+         * @param fn {function} processor 객체를 argument로 받아 실행할 함수
+         */
+        ifProcessorReady: function(fn) {
+            if (this.processor) {
+                fn(this.processor);
+            }
+        },
+
+
+        /**
+         * 스타일명으로 wysiwyg 영역의 스타일 값을 얻어온다.
+         * @function
+         * @param {String} name - 스타일명
+         * @returns {String} 해당 스타일 값
+         */
+        getStyle: function(name) {
+            return $tx.getStyle(this.wysiwygDoc.body, name);
+        },
+
+
+        /**
+         * wysiwyg 영역에 스타일을 적용한다.
+         * @function
+         * @param {Object} styles - 적용할 스타일
+         */
+        addStyle: function(styles) {
+            $tx.setStyleProperty(this.wysiwygDoc.body, styles);
+        },
+
+
+        /**
+         * 주어진 문서의 body element 에 CSS 속성을 지정한다. 단 폰트 관련 속성은 제외한다.
+         * @param doc {HTMLDocument}
+         * @param styles {Object} key: value 형태의 CSS property 모음
+         */
+        setBodyStyle: function(doc, styles) {
+            var excluded = excludeNotAllowed(styles);
+            $tx.setStyleProperty(doc.body, excluded);
+        },
+
+
+        /**
+         * 주어진 문서에 폰트 관련 CSS 속성을 지정한다
+         * @param doc {HTMLDocument}
+         * @param styles {Object} key: value 형태의 CSS property 모음
+         */
+        setFontStyle: function(doc, styles) {
+            var extendedStyles = Object.extend(styles, { 'browser': $tx.browser });
+            var cssText = new Template(
+                    "body, td, button { color:#{color}; font-size:#{fontSize}; font-family:#{fontFamily}; line-height:#{lineHeight}; }",
+                    "a, a:hover, a:link, a:active, a:visited { color:#{color}; }",
+                    "div.txc-search-border { border-color:#{color}; }",
+                    "div.txc-search-opborder { border-color:#{color}; }",
+                    "img.tx-unresizable { width: auto !important; height: auto !important; }",
+                    "button a { text-decoration:none #{if:browser=='firefox'}!important#{/if:browser}; color:#{color} #{if:browser=='firefox'}!important#{/if:browser}; }"
+                    ).evaluate(extendedStyles);
+            $tx.applyCSSText(doc, cssText);
+        },
+
+
+        applyBodyStyles: function(styles) {
+            var doc = this.wysiwygDoc;
+            try {
+                this.setFontStyle(doc, styles);
+                this.setBodyStyle(doc, styles);
+            } catch(e) {
+            }
+        },
+
+
+        /**
+         * iframe에서 발생하는 각종 event 들을 observing 하기 시작한다.
+         */
+        bindEvents: function(canvas) {
+            var eventBinder = new Trex.WysiwygEventBinder(this.wysiwygWindow, this.wysiwygDoc, canvas, this.processor);
+            setTimeout(function() {
+                eventBinder.bindEvents();
+            }, this.constructor.EVENT_BINDING_DELAY); // why delay 500ms?
+        },
+
+
+        /**
+         * panel 엘리먼트를 가지고 온다.
+         * @function
+         */
+        getPanel: function(config) {
+            var id = config.initializedId || "";
+            return $must("tx_canvas_wysiwyg" + id, "Trex.Canvas.WysiwygPanel");
+        },
+
+
+        /**
+         * panel 엘리먼트를 감싸고 있는 wrapper 엘리먼트를 가지고 온다.
+         * @function
+         */
+        getHolder: function(config) {
+            var id = config.initializedId || "";
+            return $must("tx_canvas_wysiwyg_holder" + id, "Trex.Canvas.WysiwygPanel");
+        },
+
+
+        /**
+         * wysiwyg 영역에 포커스를 준다.
+         * @function
+         */
+        focus: function() {
+            this.ifProcessorReady(function(processor) {
+                processor.focus();
+            });
+        },
+
+
+        /**
+         * wysiwyg panel을 보이게한다.
+         * @function
+         */
+        show: function() {
+            this.$super.show();
+            this.ifProcessorReady(function(processor) {
+                setTimeout(function() {
+                    try {
+                        processor.focusOnTop(); //한메일에서 모드 변경시 focus 제일 위로 가게함.. (주의: 현재 다른 서비스는 Bottom 으로 되어있음)
+                    } catch(e) {
+                    }
+                }, 100);
+            });
+        },
+
+
+        /**
+         * wysiwyg panel을 감춘다.
+         * @function
+         */
+        hide: function() {
+            this.ifProcessorReady(function(processor) {
+                processor.blur();
+            });
+            this.$super.hide();
+        },
+
+
+        /**
+         * 컨텐츠를 파싱하여 사용되고 있는 웹폰트가 있으면, 웹폰트 css를 로딩한다.<br/>
+         * 로딩속도를 향상시키기 위해 본문을 파싱하여 웹폰트를 사용할 경우에만 동적으로 웹폰트 CSS를 호출한다.
+         * @function
+         * @param {String} content - 컨텐츠
+         */
+        includeWebfontCss: function(content) {
+            this.webfontLoader.load(content);
+        },
+
+
+        /**
+         * 본문에 사용된 웹폰트명 목록을 리턴한다.
+         * @function
+         * @returns {Array} 사용하고 있는 웹폰트명 목록
+         */
+        getUsedWebfont: function() {
+            return this.webfontLoader.getUsed();
+        },
+
+
+        /**
+         * 특정 노드의 wysiwyg 영역에서의 상대 위치를 얻어온다.
+         * @function
+         * @param {Element} node - 특정 노드
+         * @returns {Object} position 객체 { x: number, y: number, width: number, height: number }
+         */
+        getPositionByNode: function(node) {
+            var wysiwygRelative = new Trex.WysiwygRelative(this.iframe);
+            return wysiwygRelative.getRelative(node);
+        },
+
+
+        /**
+         * WYSIWYG 문서에서 자바스크립트를 동적으로 실행한다
+         * @function
+         * @param {String} script - 자바스크립트 문자열
+         */
+        runScript: function(script, callback) {
+            var scriptLoader = new Trex.ScriptLoader(this.wysiwygWindow);
+            scriptLoader.runBy(script, callback);
+        },
+
+
+        /**
+         * WYSIWYG 문서에서 자바스크립트를 동적으로 실행한다
+         * @function
+         * @param {String} url - 자바스크립트 url
+         */
+        importScript: function(url, callback) {
+            var scriptLoader = new Trex.ScriptLoader(this.wysiwygWindow);
+            scriptLoader.importBy(url, callback);
+        },
+
+
+        installScripts: function() {
+            var self = this, win = self.wysiwygWindow, doc = self.wysiwygDoc;
+            installHyperscript(win, doc);
+            installTxImport(win, self);
+            installLegacyDummies(win);
+        }
+
+    });
+
+    function excludeNotAllowed(style) {
+        var notAllowed = ["color", "fontSize", "fontFamily", "lineHeight"];
+        var excluded = Object.clone(style);
+        for (var i = 0; i < notAllowed.length; i++) {
+            delete excluded[notAllowed[i]];
+        }
+        return excluded;
+    }
+
+    function installTxImport(win, panel) {
+        win.txImportScript = function(url, callback) {
+            panel.importScript(url, callback);
+        };
+    }
+
+    function installLegacyDummies(win) {
+        var dummyFunction = function() {
+        };
+        win.UI = {
+            toolTip: dummyFunction
+        };
+        win.ciaCallback = dummyFunction;
+        win.ShowOrgImage = dummyFunction;
+    }
+
+    function removeWordJoiner(content) {
+        return content.replace(Trex.__WORD_JOINER_REGEXP, "");
+    }
+
+    /*
+     * NOTE: FTDUEDTR-900
+     */
+    function preventRemovingNoScopeElementInIE(markup) {
+        if ($tx.msie) {
+            markup = markup.replace(/(<script|<style)/i, Trex.__WORD_JOINER + "$1");
+        }
+        return markup;
+    }
+
+    /*
+     * IE에서 빈 p 엘리먼트는 높이를 갖지 않고 화면에 표시되지 않는다. 따라 빈 문단 표시를 위하여 <P>&nbsp;</P> 를
+     * 사용하는 데, 편집시에는 &nbsp;가 빈칸 한칸으로서 자리를 차지하여 걸리적 거리므로 이를 제거하여 준다.
+     * 이와 같이 contentEditable 환경에서 &nbsp; 를 주었다가 빼면 빈 엘리먼트임에도 불구하고 문단으로서 높이를 유지한다.
+     *
+     * 의문 1.
+     *  그런데 LI는 왜 하는 걸까 -_-^
+     * 의문 2.
+     *    <P></P> 를 하나의 문단으로 여기고 높이를 잡아주는 게 맞을까? 글 조회시에는 표시 되지 않을텐데...
+     *    편집시와 조회시 불일치 발생한다.
+     *    참고 이슈 #FTDUEDTR-1121
+     * 의문 3.
+     *    저장시 빈 문단에 &nbsp;를 다시 넣어주는 듯 한데, 어디서 해주는 걸까
+     * @param body
+     */
+    function makeEmptyParagraphVisibleInIE(body) {
+        if ($tx.msie) {
+            var pNodes = $tom.collectAll(body, 'p,li');
+            for (var i = 0, len = pNodes.length; i < len; i++) {
+                var node = pNodes[i];
+                if ($tom.getLength(node) === 0 && node.tagName.toLowerCase() !== 'p') { //#FTDUEDTR-1121
+                    try {
+                        node.innerHTML = '&nbsp;';
+                    } catch(ignore) {
+                    }
+                }
+                if ($tom.getLength(node) === 1 && node.innerHTML === '&nbsp;') {
+                    node.innerHTML = '';
+                }
+            }
+        }
+    }
+})();

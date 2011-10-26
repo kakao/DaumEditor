@@ -1,0 +1,75 @@
+/*==== richtextbox ====*/
+	.tx-richtextbox a.tx-icon {background-position:-44px -110px;}
+	.tx-richtextbox a.tx-icon {float:left;display:block;width:21px;height:22px;background-repeat:no-repeat;font-size:0;line-height:0px;text-indent:-1000px;overflow:hidden;}
+	.tx-richtextbox-menu {
+		background:#F9F9F9;
+		padding:0;
+		border:1px solid #BABABA;
+		width:181px;
+		position:absolute;
+		z-index:15000;
+	}
+	.tx-richtextbox-menu a {cursor:pointer;display:block;text-decoration:none;}
+	.tx-richtextbox-menu div.tx-menu-header {margin: 6px 8px 0 8px;}
+	.tx-richtextbox-menu div.tx-menu-preview-area {background:#FFFFFF;border:1px solid #E9E9E9;padding:4px 4px;}
+	.tx-richtextbox-menu div.tx-menu-preview-area div.tx-menu-preview{	height: 20px;border : 1px solid #dddddd;}
+	.tx-richtextbox-menu div.tx-menu-inner {border : 1px solid #dddddd;border-top : 0;background:#FFFFFF;padding:5px;margin: 0 8px 0 8px;}
+	.tx-richtextbox-menu .tx-advanced-list div.tx-menu-inner {border : 0;margin: 0;background:#f9f9f9;padding:8px 0 8px 8px;}
+	.tx-richtextbox-menu div.tx-menu-list table {
+		background-image:url(http://i1.daumcdn.net/icon/editor/textbox/textbox.gif?v=2);
+		background-repeat:no-repeat;
+		border-collapse:collapse;
+		width:150px;
+		background-position:-2px -2px;
+	}
+	*+ html .tx-richtextbox-menu div.tx-menu-list table { background-position:-1px -1px;}
+	* html .tx-richtextbox-menu div.tx-menu-list table { background-position:-1px -1px;}
+
+	.tx-richtextbox-menu div.tx-menu-list td,.tx-richtextbox-menu div.tx-menu-list td a {width:22px;border:1px solid #FFFFFF;padding:0;}
+	.tx-richtextbox-menu div.tx-menu-list td a:hover { border:1px solid #768fbd; }
+	.tx-richtextbox-menu div.tx-menu-list td a span {color:#333333;cursor:pointer;display:block;height:22px;overflow:hidden;text-align:center;text-indent:-100em;width:22px;}
+	.tx-richtextbox-menu .tx-menu-switch { margin-top:5px; border-top: 1px solid #dddddd; border-left: 1px solid #dddddd; padding:0; height:23px; border-bottom: 0; border-right: 0;}
+	.tx-richtextbox-menu .tx-menu-switch div { float:left; width:50%; height: 100%; background:#f9f9f9; border-bottom: 1px solid #dddddd; }
+	.tx-richtextbox-menu .tx-menu-switch div a { display: block; height: 100%; border-right:1px solid #dddddd; }
+	.tx-richtextbox-menu .tx-menu-switch div a span{position:relative; left:15px; top:5px;font-family:dotum;font-size:11px;color:#000;}
+	.tx-richtextbox-menu .tx-menu-switch div.tx-selected { border-bottom: 1px solid #ffffff; background:#ffffff; }
+	.tx-richtextbox-menu .tx-menu-footer {clear:both;height:20px;margin:6px 0 6px 0;padding-left:55px;}
+	.tx-richtextbox-menu div.tx-menu-footer img.tx-menu-confirm { cursor:pointer; }
+	.tx-richtextbox-menu div.tx-menu-footer img.tx-menu-cancel { cursor:pointer; }
+
+	.tx-richtextbox-menu div.tx-menu-rowcol { border:1px solid #e9e9e9; border-top:none; background-color:#fff; padding:5px 4px; clear:both; height:18px; font-family:dotum;font-size:11px;}
+	.tx-richtextbox-menu div.tx-menu-rowcol .tx-col-area { float:left; position:relative; color:#333; width:58px; background:url(http://i1.daumcdn.net/icon/editor/ic_col.gif?v=2) no-repeat 0 3px; padding-left:12px; }
+	.tx-richtextbox-menu div.tx-menu-rowcol .tx-row-area { float:right; position:relative; color:#333; width:60px; background:url(http://i1.daumcdn.net/icon/editor/ic_row.gif?v=2) no-repeat 0 3px; padding-left:14px; }
+	.tx-richtextbox-menu div.tx-menu-rowcol label {font-family:dotum;font-size:11px;padding-right:3px;}
+	.tx-richtextbox-menu div.tx-menu-rowcol input {vertical-align:middle;width:30px; height:14px; color:#333; padding:1px 0 1px 2px; border:1px solid #b8b8b8; border-right:1px solid #eaeaea; border-bottom:1px solid #eaeaea;font-size:11px; }
+	.tx-richtextbox-menu div.tx-menu-rowcol .btn_add { position:absolute; top:1px; right:3px; z-index:999; display:block; width:15px; height:8px; text-indent:-100em; background:url(http://i1.daumcdn.net/icon/editor/btn_plus.gif?v=2) no-repeat; overflow:hidden; margin:0; padding:0; }
+	.tx-richtextbox-menu div.tx-menu-rowcol .btn_sub { position:absolute; top:9px; right:3px; z-index:999; display:block; width:15px; height:8px; text-indent:-100em; background:url(http://i1.daumcdn.net/icon/editor/btn_minus.gif?v=2) no-repeat; overflow:hidden; margin:0; padding:0; }
+	* html .tx-richtextbox-menu div.tx-menu-rowcol .btn_add { top:2px; margin:0; padding:0; }
+	* html .tx-richtextbox-menu div.tx-menu-rowcol .btn_sub { top:10px; margin:0; padding:0; }
+
+	.tx-richtextbox-menu div.tx-advanced-list { margin-top:5px; padding:6px 0; }
+	.tx-richtextbox-menu div.tx-advanced-list table{ border-collapse: collapse; }
+	.tx-richtextbox-menu div.tx-advanced-list td{ padding: 0; }
+	.tx-richtextbox-menu div.tx-advanced-list dl { clear:both; margin: 4px 0 0 0; height:18px; font-family:dotum; font-size:11px; }
+	.tx-richtextbox-menu div.tx-advanced-list dt { float:left; color:#333; text-align:left; width:55px; padding:4px 0 0 0; }
+	.tx-richtextbox-menu div.tx-advanced-list dd { float:left; color:#333; text-align:left; }
+	.tx-richtextbox-menu div.tx-advanced-list dd input { vertical-align:middle;width:36px; height:14px; font-size:11px; color:#333; padding:1px 0 1px 2px; border:1px solid #b8b8b8; border-right:1px solid #eaeaea; border-bottom:1px solid #eaeaea; }
+	.tx-richtextbox-menu div.tx-advanced-list dd .btn_add { position:absolute; top:1px; right:1px; z-index:999; display:block; width:15px; height:8px; text-indent:-100em; background:url(http://i1.daumcdn.net/icon/editor/btn_plus.gif?v=2) no-repeat; overflow:hidden;  margin:0; padding:0; }
+	.tx-richtextbox-menu div.tx-advanced-list dd .btn_sub { position:absolute; top:9px; right:1px; z-index:999; display:block; width:15px; height:8px; text-indent:-100em; background:url(http://i1.daumcdn.net/icon/editor/btn_minus.gif?v=2) no-repeat; overflow:hidden;  margin:0; padding:0; }
+	* html .tx-richtextbox-menu div.tx-advanced-list .btn_add { top:3px;  margin:0; padding:0; }
+	* html .tx-richtextbox-menu div.tx-advanced-list .btn_sub { top:11px;  margin:0; padding:0; }
+	.tx-richtextbox-menu div.tx-advanced-list dd { position:relative; }
+	.tx-richtextbox-menu div.tx-advanced-list dd.tx-color-wrap { z-index:10000; }
+	.tx-richtextbox-menu div.tx-advanced-list dd .tx-color-box { float:left; border:1px solid #dfdfdf; padding:2px; width:34px;}
+	.tx-richtextbox-menu div.tx-advanced-list dd .tx-color-box .tx-color-bg-thumb { float:left; display:block; width:34px; height:12px; overflow:hidden; cursor:pointer; }
+	.tx-richtextbox-menu div.tx-advanced-list dd .tx-color-box .tx-color-border-thumb { float:left; display:block; width:34px; height:12px; overflow:hidden; cursor:pointer; }
+	.tx-richtextbox-menu div.tx-advanced-list dd .tx-colorpallete { left:-95px; top:16px; }
+	.tx-richtextbox-menu div.tx-advanced-list dd a.tx-color-arrow-up { float:left; display:block; width:13px; height:18px; background:url(http://i1.daumcdn.net/icon/editor/btn_cb_spread.gif?v=2) no-repeat 100% 0; cursor:pointer; }
+	.tx-richtextbox-menu div.tx-advanced-list dd a.tx-color-arrow-down { float:left; display:block; width:13px; height:18px; background:url(http://i1.daumcdn.net/icon/editor/btn_cb_spread.gif?v=2) no-repeat 100% 0; cursor:pointer; }
+	.tx-richtextbox-menu div.tx-menu-enter { margin-top:9px; clear:both; height:20px; padding-left:48px; }
+	.tx-richtextbox-menu div.tx-menu-enter img { cursor:pointer; }
+
+	.tx-richtextbox-menu dd { margin-left: 0; }
+	.tx-richtextbox-menu .tx-border-area a { display:block; width:22px; height:22px; border: 1px solid #fff; }
+	.tx-richtextbox-menu .tx-border-area a:hover { border: 1px solid #768fbd; }
+	.tx-richtextbox-menu .tx-border-area img { border: 0; }

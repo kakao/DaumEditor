@@ -1,0 +1,25 @@
+/*==== image ====*/
+.tx-list .tx-image a {
+	height: 25px;
+	width: 35px;
+	background-position: 0 6px;
+}
+.tx-image a:hover {background-position:0 -18px;}
+.tx-toolbar-basic .tx-list .tx-image a {background-position:7px 4px;width:42px;}
+
+/*==== file ====*/
+.tx-list .tx-file a {
+	height: 25px;
+	width: 33px;
+	background-position: -106px 6px;
+}
+.tx-file a:hover {background-position: -106px -18px;}
+.tx-toolbar-basic .tx-list .tx-file a {background-position:-100px 4px; width:46px;}
+
+/*==== media ====*/
+.tx-list .tx-media a {
+	height: 25px;
+	width: 49px;
+	background-position: -425px 6px;
+}
+.tx-media a:hover {background-position:-425px -18px;}

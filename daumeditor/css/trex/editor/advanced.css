@@ -1,0 +1,23 @@
+/*==== advanced ====*/
+	.tx-advanced{
+		margin-top: -7px;
+		margin-right: -2px;
+		background-position:-311px -95px;
+	}
+	.tx-advanced.tx-btn-nlrbg-pushed{
+		background-position:-311px -131px;
+		margin-top: -5px;
+	}
+	.tx-advanced a.tx-icon {width:15px; height:31px; background-image:none;}
+	.tx-advanced.tx-btn-nlrbg-pushed a.tx-icon {height:62px;}
+
+	.tx-toolbar-basic-open .tx-advanced a.tx-icon {background-position:-126px -110px;}
+
+	.tx-toolbar-advanced { border-top:1px solid #e8e8e8; }
+	.tx-toolbar-advanced li.tx-list {z-index:4;}
+
+	/* IE6 hack */
+	.tx-advanced{
+		_position:absolute;
+		_right:0;
+	}

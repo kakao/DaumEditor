@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<project name="trex_build_jsdoc">
+    <property file="build.properties" />
+
+	<property description="JSDoc" name="JSDOC" value="jsdoc-toolkit/jsrun.jar" />
+
+	<target name="jsdoc_make">
+		<java jar="${JSDOC}" fork="true" failonerror="true">
+			<jvmarg value="-Dfile.encoding=UTF-8" />
+			<arg value="jsdoc-toolkit/app/run.js" />
+			<arg value="-c=jsdoc-toolkit/config.js" />
+		</java>
+    </target>
+	
+</project>

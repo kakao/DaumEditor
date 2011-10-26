@@ -1,0 +1,33 @@
+/*==== container ====*/
+body, td, button {
+	line-height:1.5;
+	font-size: 9pt;
+	font-family: gulim,tahoma,sans-serif;
+}
+
+body {
+	background: transparent;
+	scrollbar-3dlight-color:#FFFFFF;
+	scrollbar-arrow-color:#9f9f9f;
+	scrollbar-darkshadow-color:#FFFFFF;
+	scrollbar-face-color:#e6e6e6;
+	scrollbar-highlight-color:#c3c3c3;
+	scrollbar-shadow-color:#c3c3c3;
+	scrollbar-track-color:#F3F3F3;
+	margin:0;
+	padding:8px;
+}
+
+p { margin: 0; padding: 0; }
+a:hover, a:link, a:active, a:visited  { text-decoration:none; border-bottom:1px dashed #840000; }
+
+button { 
+	cursor:default; 
+	-moz-user-modify:read-only !important; 
+	-webkit-user-modify:read-only !important; 
+	-khtml-user-modify:read-only !important; 
+}
+/*button table td { font-size:0; }*/ /* from ie */
+button a:hover, button a:link, button a:active, button a:visited  { border:none; }
+
+blockquote { margin:0; }
