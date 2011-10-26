@@ -10,8 +10,6 @@
     </path>
     <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="ant.contrib.classpath"/>
 
-    <!-- TODO 메인 작업과 서브 작업에 대한 구분이 어렵다 -->
-
 	<target name="checkout" depends="clean" description="checkout current snapshot from SVN">
 		<ant antfile="build_svn.xml" target="checkout_to_workingcopy" />
 	</target>
