@@ -22,7 +22,6 @@
             width: 140px;
         }
     </style>
-    <script type="text/javascript" src="http://ftdev.daum.net/jigu/jigu-latest.js"></script>
     <script type="text/javascript" src="testcase/lib/benchmark.js"></script>
     <script type="text/javascript" src="../daumeditor/js/scopeVariable.js"></script>
     <script type="text/javascript" src="../daumeditor/js/global.js"></script>
@@ -107,7 +106,7 @@
                 for (var i = 0; i < suite.length; i++) {
                     var bench = suite[i];
                     var panel = createPanel(bench);
-                    $('qunit-tests').appendChild(panel);
+                    document.getElementById('qunit-tests').appendChild(panel);
                 }
                 function createPanel(bench) {
                     var panel = document.createElement("li");

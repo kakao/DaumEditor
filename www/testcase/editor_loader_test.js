@@ -39,7 +39,7 @@
     });
 
     test("editor loader의 base path 찾기", function() {
-        ok(EditorJSLoader.getBasePath().endsWith("/daumeditor/js/"), "일반적인 경우");
+        ok(EditorJSLoader.getBasePath().match(/\/daumeditor\/js\/$/), "일반적인 경우");
         EditorJSLoader.NAME = "jquery.js";
         equal(EditorJSLoader.getBasePath(), "https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/", "custom 한 js의 base path 찾기");
     });
@@ -233,7 +233,9 @@
     }
 
     function removeNode(node) {
-        node = daum.$(node);
+        if (typeof node == 'string') {
+            node = document.getElementById(node);
+        }
         if (node && node.parentNode) {
             node.parentNode.removeChild(node);
         }
