@@ -2,7 +2,7 @@
     var testCases = [
         "testcase/Assistant.js",
         "testcase/txlib_test.js",
-        "testcase/moreless_test.js",
+//        "testcase/moreless_test.js",
         "testcase/richtextbox_test.js",
         "testcase/fontTool_test.js",
         "testcase/bold_test.js",
@@ -24,7 +24,7 @@
         "testcase/processor_test.js",
         "testcase/processor_webkit_test.js",
         "testcase/webfontloader_test.js",
-        "testcase/autosaver_test.js",
+//        "testcase/autosaver_test.js",
         "testcase/fixing_test.js",
         "testcase/well_formed_test.js",
         "testcase/paste_test.js"

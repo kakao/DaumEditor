@@ -6,7 +6,7 @@
     <title>DaumEditor7 Test Suite - QA</title>
 
     <!-- @QUnit libs -->
-    <script type="text/javascript"> 
+    <script type="text/javascript">
         // fixture
     </script>
     <script type="text/javascript" src="testcase/lib/qunit_f2b99a6_patched.js"></script>
@@ -42,7 +42,8 @@
 
     <!-- @Daum Editor -->
     <link rel="stylesheet" href="../daumeditor/css/editor.css" type="text/css"  charset="utf-8"/>
-    <script src="../daumeditor/js/editor_loader.js?service=open&environment=development" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8"
+             src="../daumeditor/js/editor_loader.js?environment=development"></script>
 
     <!-- override Editor default css -->
     <style type="text/css">
@@ -142,193 +143,216 @@
                 tx-slt-70bg, tx-slt-59bg, tx-slt-42bg, tx-btn-43lrbg, tx-btn-52lrbg, tx-btn-57lrbg, tx-btn-71lrbg
                 tx-btn-48lbg, tx-btn-48rbg, tx-btn-30lrbg, tx-btn-46lrbg, tx-btn-67lrbg, tx-btn-49lbg, tx-btn-58bg, tx-btn-46bg, tx-btn-49rbg
             -->
-            <div id="tx_toolbar_basic" class="tx-toolbar tx-toolbar-basic"><div class="tx-toolbar-boundary">
-                <ul class="tx-bar tx-bar-left">
-                             <li class="tx-list">
-                <div id="tx_fontfamily" unselectable="on" class="tx-slt-70bg tx-fontfamily">
-                    <a href="javascript:;" title="글꼴">굴림</a>
-                </div>
-                <div id="tx_fontfamily_menu" class="tx-fontfamily-menu tx-menu" unselectable="on"></div>
-            </li>
-                         </ul>
-                <ul class="tx-bar tx-bar-left">
-                              <li class="tx-list">
-                <div unselectable="on" class="tx-slt-42bg tx-fontsize" id="tx_fontsize">
-                    <a href="javascript:;" title="글자크기">9pt</a>
-                </div>
-                <div id="tx_fontsize_menu" class="tx-fontsize-menu tx-menu" unselectable="on"></div>
-            </li>
-                        </ul>
-                <ul class="tx-bar tx-bar-left tx-group-font">
-
-                             <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-lbg 	tx-bold" id="tx_bold">
-                    <a href="javascript:;" class="tx-icon" title="굵게 (Ctrl+B)">굵게</a>
-                </div>
-            </li>
-                                     <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-bg 	tx-underline" id="tx_underline">
-                    <a href="javascript:;" class="tx-icon" title="밑줄 (Ctrl+U)">밑줄</a>
-                </div>
-            </li>
-                                     <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-bg 	tx-italic" id="tx_italic">
-                    <a href="javascript:;" class="tx-icon" title="기울임 (Ctrl+I)">기울임</a>
-                </div>
-            </li>
-                                     <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-bg 	tx-strike" id="tx_strike">
-                    <a href="javascript:;" class="tx-icon" title="취소선 (Ctrl+D)">취소선</a>
-                </div>
-            </li>
-                                     <li class="tx-list">
-                <div unselectable="on" class="		 tx-slt-tbg 	tx-forecolor" id="tx_forecolor">
-                    <a href="javascript:;" class="tx-icon" title="글자색">글자색</a>
-                    <a href="javascript:;" class="tx-arrow" title="글자색 선택">글자색 선택</a>
-                </div>
-                <div id="tx_forecolor_menu" class="tx-menu tx-forecolor-menu tx-colorpallete" unselectable="on"></div>
-            </li>
-                                     <li class="tx-list">
-                <div unselectable="on" class="		 tx-slt-brbg 	tx-backcolor" id="tx_backcolor">
-                    <a href="javascript:;" class="tx-icon" title="글자 배경색">글자 배경색</a>
-                    <a href="javascript:;" class="tx-arrow" title="글자 배경색 선택">글자 배경색 선택</a>
-                </div>
-                <div id="tx_backcolor_menu" class="tx-menu tx-backcolor-menu tx-colorpallete" unselectable="on"></div>
-            </li>
-                        </ul>
-                <ul class="tx-bar tx-bar-left tx-group-align">
-                             <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-lbg 	tx-alignleft" id="tx_alignleft">
-                    <a href="javascript:;" class="tx-icon" title="왼쪽정렬 (Ctrl+,)">왼쪽정렬</a>
-                </div>
-            </li>
-                                     <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-bg 	tx-aligncenter" id="tx_aligncenter">
-                    <a href="javascript:;" class="tx-icon" title="가운데정렬 (Ctrl+.)">가운데정렬</a>
-                </div>
-            </li>
-                                     <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-bg 	tx-alignright" id="tx_alignright">
-                    <a href="javascript:;" class="tx-icon" title="오른쪽정렬 (Ctrl+/)">오른쪽정렬</a>
-                </div>
-            </li>
-                                     <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-rbg 	tx-alignfull" id="tx_alignfull">
-                    <a href="javascript:;" class="tx-icon" title="양쪽정렬">양쪽정렬</a>
-                </div>
-            </li>
-                        </ul>
-                <ul class="tx-bar tx-bar-left tx-group-tab">
-                             <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-lbg 	tx-indent" id="tx_indent">
-                    <a href="javascript:;" title="들여쓰기 (Tab)" class="tx-icon">들여쓰기</a>
-                </div>
-            </li>
-                                     <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-rbg 	tx-outdent" id="tx_outdent">
-                    <a href="javascript:;" title="내어쓰기 (Shift+Tab)" class="tx-icon">내어쓰기</a>
-                </div>
-            </li>
-                        </ul>
-                <ul class="tx-bar tx-bar-left tx-group-list">
-                             <li class="tx-list">
-                <div unselectable="on" class="tx-slt-31lbg tx-lineheight" id="tx_lineheight">
-                    <a href="javascript:;" class="tx-icon" title="줄간격">줄간격</a>
-                    <a href="javascript:;" class="tx-arrow" title="줄간격">줄간격 선택</a>
-                </div>
-                <div id="tx_lineheight_menu" class="tx-lineheight-menu tx-menu" unselectable="on"></div>
-            </li>
-                                     <li class="tx-list">
-                <div unselectable="on" class="tx-slt-31rbg tx-styledlist" id="tx_styledlist">
-                    <a href="javascript:;" class="tx-icon" title="리스트">리스트</a>
-                    <a href="javascript:;" class="tx-arrow" title="리스트">리스트 선택</a>
-                </div>
-                <div id="tx_styledlist_menu" class="tx-styledlist-menu tx-menu" unselectable="on"></div>
-            </li>
-                        </ul>
-                <ul class="tx-bar tx-bar-left tx-group-etc">
-                            <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-lbg 	tx-emoticon" id="tx_emoticon">
-                    <a href="javascript:;" class="tx-icon" title="이모티콘">이모티콘</a>
-                </div>
-                <div id="tx_emoticon_menu" class="tx-emoticon-menu tx-menu" unselectable="on"></div>
-            </li>
-                                    <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-bg 	tx-link" id="tx_link">
-                    <a href="javascript:;" class="tx-icon" title="링크 (Ctrl+K)">링크</a>
-                </div>
-                <div id="tx_link_menu" class="tx-link-menu tx-menu"></div>
-            </li>
-                                    <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-bg 	tx-specialchar" id="tx_specialchar">
-                    <a href="javascript:;" class="tx-icon" title="특수문자">특수문자</a>
-                </div>
-                <div id="tx_specialchar_menu" class="tx-specialchar-menu tx-menu"></div>
-            </li>
-                                    <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-bg 	tx-table" id="tx_table">
-                    <a href="javascript:;" class="tx-icon" title="표만들기">표만들기</a>
-                </div>
-                <div id="tx_table_menu" class="tx-table-menu tx-menu" unselectable="on">
-                    <div class="tx-menu-inner">
-                        <div class="tx-menu-preview"></div>
-                        <div class="tx-menu-rowcol"></div>
-                        <div class="tx-menu-deco"></div>
-                        <div class="tx-menu-enter"></div>
+            <div id="tx_toolbar_basic" class="tx-toolbar tx-toolbar-basic">
+            <div class="tx-toolbar-boundary">
+            <ul class="tx-bar tx-bar-left">
+                <li class="tx-list">
+                    <div id="tx_fontfamily" unselectable="on" class="tx-slt-70bg tx-fontfamily">
+                        <a href="javascript:;" title="글꼴">굴림</a>
                     </div>
-                </div>
-            </li>
-                                    <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-rbg 	tx-horizontalrule" id="tx_horizontalrule">
-                    <a href="javascript:;" class="tx-icon" title="구분선">구분선</a>
-                </div>
-                <div id="tx_horizontalrule_menu" class="tx-horizontalrule-menu tx-menu" unselectable="on"></div>
-            </li>
-                        </ul>
-                <ul class="tx-bar tx-bar-left">
-                             <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-lbg 	tx-textbox" id="tx_textbox">
-                    <a href="javascript:;" class="tx-icon" title="글상자">글상자</a>
-                </div>
-                <div id="tx_textbox_menu" class="tx-textbox-menu tx-menu"></div>
-            </li>
-                                     <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-bg 	tx-quote" id="tx_quote">
-                    <a href="javascript:;" class="tx-icon" title="인용구 (Ctrl+Q)">인용구</a>
-                </div>
-                <div id="tx_quote_menu" class="tx-quote-menu tx-menu" unselectable="on"></div>
-            </li>
-                                     <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-bg 	tx-background" id="tx_background">
-                    <a href="javascript:;" class="tx-icon" title="배경색">배경색</a>
-                </div>
-                <div id="tx_background_menu" class="tx-menu tx-background-menu tx-colorpallete" unselectable="on"></div>
-            </li>
-                                     <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-rbg 	tx-dictionary" id="tx_dictionary">
-                    <a href="javascript:;" class="tx-icon" title="사전">사전</a>
-                </div>
-            </li>
-                        </ul>
-                <ul class="tx-bar tx-bar-left tx-group-undo">
-                             <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-lbg 	tx-undo" id="tx_undo">
-                    <a href="javascript:;" class="tx-icon" title="실행취소 (Ctrl+Z)">실행취소</a>
-                </div>
-            </li>
-                                     <li class="tx-list">
-                <div unselectable="on" class="		 tx-btn-rbg 	tx-redo" id="tx_redo">
-                    <a href="javascript:;" class="tx-icon" title="다시실행 (Ctrl+Y)">다시실행</a>
-                </div>
-            </li>
-                        </ul>
-                <ul class="tx-bar tx-bar-right">
-                             <li class="tx-list">
-                <div unselectable="on" class="tx-btn-nlrbg tx-advanced" id="tx_advanced">
-                    <a href="javascript:;" class="tx-icon" title="툴바 더보기">툴바 더보기</a>
-                </div>
-            </li>
-                        </ul>
+                    <div id="tx_fontfamily_menu" class="tx-fontfamily-menu tx-menu" unselectable="on"></div>
+                </li>
+            </ul>
+            <ul class="tx-bar tx-bar-left">
+                <li class="tx-list">
+                    <div unselectable="on" class="tx-slt-42bg tx-fontsize" id="tx_fontsize">
+                        <a href="javascript:;" title="글자크기">9pt</a>
+                    </div>
+                    <div id="tx_fontsize_menu" class="tx-fontsize-menu tx-menu" unselectable="on"></div>
+                </li>
+            </ul>
+            <ul class="tx-bar tx-bar-left tx-group-font">
+
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-lbg 	tx-bold" id="tx_bold">
+                        <a href="javascript:;" class="tx-icon" title="굵게 (Ctrl+B)">굵게</a>
+                    </div>
+                </li>
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-bg 	tx-underline" id="tx_underline">
+                        <a href="javascript:;" class="tx-icon" title="밑줄 (Ctrl+U)">밑줄</a>
+                    </div>
+                </li>
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-bg 	tx-italic" id="tx_italic">
+                        <a href="javascript:;" class="tx-icon" title="기울임 (Ctrl+I)">기울임</a>
+                    </div>
+                </li>
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-bg 	tx-strike" id="tx_strike">
+                        <a href="javascript:;" class="tx-icon" title="취소선 (Ctrl+D)">취소선</a>
+                    </div>
+                </li>
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-slt-tbg 	tx-forecolor" id="tx_forecolor">
+                        <a href="javascript:;" class="tx-icon" title="글자색">글자색</a>
+                        <a href="javascript:;" class="tx-arrow" title="글자색 선택">글자색 선택</a>
+                    </div>
+                    <div id="tx_forecolor_menu" class="tx-menu tx-forecolor-menu tx-colorpallete"
+                         unselectable="on"></div>
+                </li>
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-slt-brbg 	tx-backcolor" id="tx_backcolor">
+                        <a href="javascript:;" class="tx-icon" title="글자 배경색">글자 배경색</a>
+                        <a href="javascript:;" class="tx-arrow" title="글자 배경색 선택">글자 배경색 선택</a>
+                    </div>
+                    <div id="tx_backcolor_menu" class="tx-menu tx-backcolor-menu tx-colorpallete"
+                         unselectable="on"></div>
+                </li>
+            </ul>
+            <ul class="tx-bar tx-bar-left tx-group-align">
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-lbg 	tx-alignleft" id="tx_alignleft">
+                        <a href="javascript:;" class="tx-icon" title="왼쪽정렬 (Ctrl+,)">왼쪽정렬</a>
+                    </div>
+                </li>
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-bg 	tx-aligncenter" id="tx_aligncenter">
+                        <a href="javascript:;" class="tx-icon" title="가운데정렬 (Ctrl+.)">가운데정렬</a>
+                    </div>
+                </li>
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-bg 	tx-alignright" id="tx_alignright">
+                        <a href="javascript:;" class="tx-icon" title="오른쪽정렬 (Ctrl+/)">오른쪽정렬</a>
+                    </div>
+                </li>
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-rbg 	tx-alignfull" id="tx_alignfull">
+                        <a href="javascript:;" class="tx-icon" title="양쪽정렬">양쪽정렬</a>
+                    </div>
+                </li>
+            </ul>
+            <ul class="tx-bar tx-bar-left tx-group-tab">
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-lbg 	tx-indent" id="tx_indent">
+                        <a href="javascript:;" title="들여쓰기 (Tab)" class="tx-icon">들여쓰기</a>
+                    </div>
+                </li>
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-rbg 	tx-outdent" id="tx_outdent">
+                        <a href="javascript:;" title="내어쓰기 (Shift+Tab)" class="tx-icon">내어쓰기</a>
+                    </div>
+                </li>
+            </ul>
+            <ul class="tx-bar tx-bar-left tx-group-list">
+                <li class="tx-list">
+                    <div unselectable="on" class="tx-slt-31lbg tx-lineheight" id="tx_lineheight">
+                        <a href="javascript:;" class="tx-icon" title="줄간격">줄간격</a>
+                        <a href="javascript:;" class="tx-arrow" title="줄간격">줄간격 선택</a>
+                    </div>
+                    <div id="tx_lineheight_menu" class="tx-lineheight-menu tx-menu" unselectable="on"></div>
+                </li>
+                <li class="tx-list">
+                    <div unselectable="on" class="tx-slt-31rbg tx-styledlist" id="tx_styledlist">
+                        <a href="javascript:;" class="tx-icon" title="리스트">리스트</a>
+                        <a href="javascript:;" class="tx-arrow" title="리스트">리스트 선택</a>
+                    </div>
+                    <div id="tx_styledlist_menu" class="tx-styledlist-menu tx-menu" unselectable="on"></div>
+                </li>
+            </ul>
+            <ul class="tx-bar tx-bar-left tx-group-etc">
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-lbg 	tx-emoticon" id="tx_emoticon">
+                        <a href="javascript:;" class="tx-icon" title="이모티콘">이모티콘</a>
+                    </div>
+                    <div id="tx_emoticon_menu" class="tx-emoticon-menu tx-menu" unselectable="on"></div>
+                </li>
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-bg 	tx-link" id="tx_link">
+                        <a href="javascript:;" class="tx-icon" title="링크 (Ctrl+K)">링크</a>
+                    </div>
+                    <div id="tx_link_menu" class="tx-link-menu tx-menu"></div>
+                </li>
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-bg 	tx-specialchar" id="tx_specialchar">
+                        <a href="javascript:;" class="tx-icon" title="특수문자">특수문자</a>
+                    </div>
+                    <div id="tx_specialchar_menu" class="tx-specialchar-menu tx-menu"></div>
+                </li>
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-bg 	tx-table" id="tx_table">
+                        <a href="javascript:;" class="tx-icon" title="표만들기">표만들기</a>
+                    </div>
+                    <div id="tx_table_menu" class="tx-table-menu tx-menu" unselectable="on">
+                        <div class="tx-menu-inner">
+                            <div class="tx-menu-preview"></div>
+                            <div class="tx-menu-rowcol"></div>
+                            <div class="tx-menu-deco"></div>
+                            <div class="tx-menu-enter"></div>
+                        </div>
+                    </div>
+                </li>
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-rbg 	tx-horizontalrule" id="tx_horizontalrule">
+                        <a href="javascript:;" class="tx-icon" title="구분선">구분선</a>
+                    </div>
+                    <div id="tx_horizontalrule_menu" class="tx-horizontalrule-menu tx-menu" unselectable="on"></div>
+                </li>
+            </ul>
+            <ul class="tx-bar tx-bar-left">
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-lbg 	tx-richtextbox" id="tx_richtextbox">
+                        <a href="javascript:;" class="tx-icon" title="글상자">글상자</a>
+                    </div>
+                    <div id="tx_richtextbox_menu" class="tx-richtextbox-menu tx-menu">
+                        <div class="tx-menu-header">
+                            <div class="tx-menu-preview-area">
+                                <div class="tx-menu-preview"></div>
+                            </div>
+                            <div class="tx-menu-switch">
+                                <div class="tx-menu-simple tx-selected"><a><span>간단 선택</span></a></div>
+                                <div class="tx-menu-advanced"><a><span>직접 선택</span></a></div>
+                            </div>
+                        </div>
+                        <div class="tx-menu-inner">
+                        </div>
+                        <div class="tx-menu-footer">
+                            <img class="tx-menu-confirm"
+                                 src="http://i1.daumcdn.net/icon/editor/btn_confirm.gif?rv=1.0.1" alt=""/>
+                            <img class="tx-menu-cancel" hspace="3"
+                                 src="http://i1.daumcdn.net/icon/editor/btn_cancel.gif?rv=1.0.1" alt=""/>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-bg 	tx-quote" id="tx_quote">
+                        <a href="javascript:;" class="tx-icon" title="인용구 (Ctrl+Q)">인용구</a>
+                    </div>
+                    <div id="tx_quote_menu" class="tx-quote-menu tx-menu" unselectable="on"></div>
+                </li>
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-bg 	tx-background" id="tx_background">
+                        <a href="javascript:;" class="tx-icon" title="배경색">배경색</a>
+                    </div>
+                    <div id="tx_background_menu" class="tx-menu tx-background-menu tx-colorpallete"
+                         unselectable="on"></div>
+                </li>
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-rbg 	tx-dictionary" id="tx_dictionary">
+                        <a href="javascript:;" class="tx-icon" title="사전">사전</a>
+                    </div>
+                </li>
+            </ul>
+            <ul class="tx-bar tx-bar-left tx-group-undo">
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-lbg 	tx-undo" id="tx_undo">
+                        <a href="javascript:;" class="tx-icon" title="실행취소 (Ctrl+Z)">실행취소</a>
+                    </div>
+                </li>
+                <li class="tx-list">
+                    <div unselectable="on" class="		 tx-btn-rbg 	tx-redo" id="tx_redo">
+                        <a href="javascript:;" class="tx-icon" title="다시실행 (Ctrl+Y)">다시실행</a>
+                    </div>
+                </li>
+            </ul>
+            <ul class="tx-bar tx-bar-right">
+                <li class="tx-list">
+                    <div unselectable="on" class="tx-btn-nlrbg tx-advanced" id="tx_advanced">
+                        <a href="javascript:;" class="tx-icon" title="툴바 더보기">툴바 더보기</a>
+                    </div>
+                </li>
+            </ul>
             </div></div>
             <!-- 툴바 - 기본 끝 -->
             <!-- 툴바 - 더보기 시작 -->
@@ -396,167 +420,35 @@
 <script type="text/javascript">
 EditorJSLoader.ready(function() {
     var editorConfig = {
-         basic: {
-            txHost: '', /*#* 수정 불필요 *#*/
-            txPath: '/daumeditor/', /*#* 수정 불필요 *#*/
-            txVersion: '', /*#* 수정 불필요 *#*/
-            txService: '', /*#* 수정 불필요 *#*/
-            txProject: '', /*#* 수정 불필요 *#*/
-            txIP: '', /*#* 로컬검색 정렬 기준 파라메터 *#*/
-            wrapper: "tx_trex_container", /*#* 에디터를 둘러싸고 있는 레이어 이름(에디터 컨테이너) *#*/
-            form: 'tx_editor_form', /*#* 등록하기 위한 Form 이름 *#*/
-            canvas: {
-                showGuideArea: false,
-                styles: {
-                    //color: "#cccccc", /*#* 기본 글자색 *#*/
-                    //fontFamily: "굴림", /*#* 기본 글자체 *#*/
-                    //fontSize: "12pt" /*#* 기본 글자크기 *#*/
-                    //backgroundColor: "transparent" /*#* 기본 배경색 *#*/
-                    //lineHeight: "1.5", /*#* 기본 줄간격 *#*/
-                    //padding: "8px" /*#* 에디터 영역의 여백 *#*/
-                }
-            },
-            events: {
-                preventUnload: false
-            },
-            size: {
-                contentWidth: 700 /*#* 지정된 본문영역의 넓이가 있을 경우에 설정 *#*/
-            }
+        txHost: '', /*#* 수정 불필요 *#*/
+        txPath: '/daumeditor/', /*#* 수정 불필요 *#*/
+        txVersion: '', /*#* 수정 불필요 *#*/
+        txService: '', /*#* 수정 불필요 *#*/
+        txProject: '', /*#* 수정 불필요 *#*/
+        txIP: '', /*#* 로컬검색 정렬 기준 파라메터 *#*/
+        wrapper: "tx_trex_container", /*#* 에디터를 둘러싸고 있는 레이어 이름(에디터 컨테이너) *#*/
+        form: 'tx_editor_form', /*#* 등록하기 위한 Form 이름 *#*/
+        canvas: {
+            showGuideArea: false
         },
-        cafe: {
-            txHost: location.protocol + '//' + location.host,
-            txPath: '/daumeditor/',
-            txVersion: '5.4.7',
-            txService: 'cafe',
-            txIP: '127.0.0.1',
 
-            /* cafe data start */
-            sid: 'sid',
-            grpid: '1Muax',
-            mgrpid: '',
-            fldid: '',
-            dataid: '',
-            grpcode: 'riadev',
-            nickname: encodeURIComponent("hello"),
-            node: 'cafe308',
-            cafehost: 'http://cafe308.daum.net/_c21_',
-            filehost : "http://pds112-file.cafe.daum.net/cfu_adv/",
-            filesid: '',
-            params: ["grpid", "mgrpid", "fldid", "dataid", "cafehost", "grpcode", "nickname", "filehost", "sid", "filesid", "node", "maxwidth", "txIP"],
-            size: {
-                contentWidth: 712 /*#* 지정된 본문영역의 넓이가 있을 경우에 설정 *#*/
-            },
-            /* cafe data end */
-            canvas: {
-                styles: {
-                    color: '#444444',
-                    backgroundColor: '#ffffff',
-                    fontSize: "9pt",
-                    fontFamily: "gulim",
-                    paddingLeft: $tx.msie ? '20px' : "",
-                    paddingRight: $tx.msie ? '19px' : ""
-                },
-                cafeSkinBackgroundColor: '#ffffff',
-                readonly: false,
-                hasUserBgcolor: false,
-                showGuideArea: false,
-                selectedMode: "html"
-            },
-            initializedId: "",
-            wrapper: "tx_trex_container",
-            form: "tx_editor_form",
-            toolbar: {
-                fontfamily: {
-                    webfont: { use: true }
-                },
-                specialchar: {
-                    left: -300
-                },
-                richtextbox: {
-                    left: -100
-                },
-                table: {
-                    tableWidth: 700
-                }
-            },
-            sidebar: {
-                capacity: {
-                    maximum: 3145728,
-                    group: {
-                        used: 0 * 1024 * 1024,
-                        maximum: 102400 * 1024 * 1024
-                    },
-                    filter: {
-                        use: 'sound'
-                    }
-                },
-                attachbox : {
-                    show: true
-                },
-                attacher: {
-                    poll: {
-                        isWrap4Pv: false,
-                        features: { left:250, top:65, width: 500, height: 400 },
-                        pageUrl: "#cafehost" + '/article_poll_make_popup?grpid=1AIlv'
-                    },
-                    auction: {
-                        isWrap4Pv: false,
-                        features: { left:100, top:100, width:700, height:560 },
-                        pageUrl: false ?
-                                "static/PE_2008/attach/auction_test.html" :
-                                "http://used.auction.co.kr/EasySell/Daum/FixedPrice.aspx"
-                    },
-                    file: {
-                        upSource: '1Muax',
-                        server: 'CafeBasicCoca',
-                        //server: "CafeDirectService",
-                        //useCC: false
-                        useCC: true
-                    },
-                    movie: {
-                        tvpotOpen: false,
-                        multiple: true,
-                        maxCount: 5,
-                        showCategory: false
-                    },
-                    image:  {
-                        imagemaxwidth : 1024,
-                        server: "CafePep",
-                        //server: "CafeEditorService",
-                        oneshotPageUrl: "#cafehost/oneshot?grpid=#grpid&grpcode=#grpcode"
-                    }
-                },
-                searcher: {
-                    show: true
-                }
-            },
-            save: {
-                autosave: {
-//                    use: true,
-                    use: false,
-                    term: 60000,
-                    useAutoLoad: true,
-                    useLoadConfirmMessage: false,
-                    avMaxCnt: "10",
-                    avkey: "cafe_1Muax"
-                }
-    //            onSave: EditorEventHandler.onEditorSave
-            },
-            plugin: {
-                resizer: {
-                    use: true
-                }
-            },
-            events: {
-                preventUnload: false
-            }
+        events: {
+            preventUnload: false
+        },
+        size: {
+            contentWidth: 700 /*#* 지정된 본문영역의 넓이가 있을 경우에 설정 *#*/
         }
+
     };
-    new Editor(editorConfig["cafe"]);
-    Editor.getCanvas().observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function(panelDoc) {
-        window.ax = {};
-        installHyperscript(ax, panelDoc);
+    EditorJSLoader.ready(function(Editor) {
+        new Editor(editorConfig);
+
+        Editor.getCanvas().observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function(panelDoc) {
+            window.ax = {};
+            installHyperscript(ax, panelDoc);
+        });
     });
+
 });
 </script>
 
