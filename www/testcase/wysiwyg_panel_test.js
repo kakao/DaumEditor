@@ -44,7 +44,7 @@
     });
 
     test("get Document object of wysiwyg panel", function() {
-        var wysiwygDocument = daum.$("tx_canvas_wysiwyg").contentWindow.document;
+        var wysiwygDocument = document.getElementById("tx_canvas_wysiwyg").contentWindow.document;
         ok(wysiwygDocument === panel.getDocument());
     });
 
