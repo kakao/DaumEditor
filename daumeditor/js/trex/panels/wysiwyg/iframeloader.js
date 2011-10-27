@@ -50,6 +50,7 @@
     function absolutizeURL(url) {
         var location = _DOC.location;
         if (url.indexOf("http://") === 0) {
+        } else if (url.indexOf("file://") === 0) {
         } else if (url.indexOf("/") === 0) {
             url = "http://" + location.host + ":" + (location.port || "80") + url;
         } else {

@@ -1,1 +1,0 @@
-EditorJSLoader.loadModule("editor_common.js");

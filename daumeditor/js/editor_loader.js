@@ -1,6 +1,5 @@
 (function() {
     // TODO option parameter 문서 정리
-    // TODO bookmarklet 작성
     var DEFAULT_UNKNOWN_OPTION_VALUE = "",
             PREFIX_COOKIE = "tx_",
             DOC = document,
@@ -13,11 +12,11 @@
             DEFAULT_TIMEOUT = 5;
     
     var REGX_MATCH_VERSION = /\/([6-9][a-z.]?\.[a-z0-9\-]+\.[\-\w]+)\//,
-    	REGX_TEST_CSS = /[0-9\.a]+\/css\/editor_[a-z]+\.css/;
+    	REGX_TEST_CSS = /\/css\/editor(_[a-z]+)?\.css/;
 
     var DEFAULT_OPTIONS = {
         "environment" : ENV_PRODUCTION,
-        "service": "basic",
+        "service": "",
         "version": "",
         "host" : "http://s1.daumcdn.net/editor/"
     };
@@ -172,7 +171,7 @@
 
     function getCSSDevelopmentURL() {
         var cssBasePath = Loader.getCSSBasePath();
-        return cssBasePath + "editor_" + Loader.getOption("service") + ".css";
+        return cssBasePath + "editor" + Loader.getServicePostfix() + ".css";
     }
     
     var AsyncLoader = function(config){
@@ -361,13 +360,18 @@
 
         getOption: function(name) {
             return getCookieOption(name) || getUserOption(name) || getDefaultOption(name);
+        },
+
+        getServicePostfix: function() {
+            var service = Loader.getOption("service");
+            return service ? '_' + service : '';
         }
     };
     window.EditorJSLoader = Loader;
 
     function initialize() {
         var env = Loader.getOption("environment");
-        var jsModuleName = "editor_" + Loader.getOption("service") + ".js";
+        var jsModuleName = "editor" + Loader.getServicePostfix() + ".js";
         
         DEFAULT_OPTIONS["version"] = readCurrentURLVersion(Loader.NAME);
         
