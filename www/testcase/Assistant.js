@@ -127,7 +127,7 @@
         },
 
         getElementsBySelector: function(selector) {
-            return jQuery(selector, this.doc);
+            return Sizzle(selector, this.doc);
         },
 
         delayedAssertion: function(fn) {
