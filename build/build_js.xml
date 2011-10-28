@@ -12,40 +12,22 @@
 
 	<!-- editor.js : merge & minify javascript -->
 	<target name="merge_javascripts">
-		<antcall target="generate_version_js" />
 		<antcall target="merge_editor_js" />
 		<antcall target="merge_popup_js" />
         <antcall target="copy_etc_js_to_dist" />
 	</target>
-
-	<target name="generate_version_js">
-        <!--TODO depends로 load_version_properties를 지정하고싶은데 다른 파일에 정의된 target이다. -->
-        <ant antfile="build.xml" target="load_version_properties" />
-		<echo file="${working.dir}/js/version.js">Editor.version="${editor.version}";</echo>
-	</target>
-
-    <target name="clean_previous_js_output">
-        <delete dir="${dist.dir}/js" />
-    </target>
-
-	<target name="merge_editor_js" depends="clean_previous_js_output">
-		<foreach list="${services.list}" param="service_name" target="    _merge_js" />
-	</target>
-
-
-	<target name="    _merge_js">
-		<echo message="Merge javascripts for &quot;${service_name}&quot;" />
-        <mkdir dir="${dist.dir}/js/_orig" />
-		<property name="merged.js.path" value="${dist.dir}/js/_orig/editor_${service_name}.js" />
+	
+	<target name="merge_editor_js">
+		<echo message="Merge editor.js ..." />
+		<mkdir dir="${dist.dir}/js/_orig" />
+		<property name="merged.js.path" value="${dist.dir}/js/_orig/editor.js" />
         <java jar="${lib.rhino.path}" failonerror="true" fork="true">
 			<arg value="${build.js.dir}/concatEditorService.js" />
 			<arg value="${merged.js.path}" />
 			<arg value="${working.dir}" />
-			<arg value="${service_name}" />
 		</java>
 		<echo message="${merged.js.path} created" />
 	</target>
-
 
 	<target name="merge_popup_js">
 		<echo message="Merge popup.js ..." />
@@ -66,9 +48,6 @@
 		<echo message="copy async tools to _orig" />
         <copy todir="${dist.dir}/js/_orig${async.trex.dir}" overwrite="true">
             <fileset dir="${working.dir}/js${async.trex.dir}" />
-        </copy>
-        <copy todir="${dist.dir}/js/_orig${async.daumx.dir}" overwrite="true">
-            <fileset dir="${working.dir}/js${async.daumx.dir}" />
         </copy>
 	</target>
 
@@ -96,9 +75,10 @@
 	<target name="    _minify_javascript">
 		<!--suppress AntResolveInspection -->
         <propertyregex property="target_path" input="${file}" regexp="(.*)/_orig/(.*)\.esc\.js" replace="\1/\2.js" />
-        <dirname property="target_dir" file="${target_path}" />
+        <dirname property="target_dir" file="${file}" />
+		<basename property="target_filename" file="${file}" suffix=".esc.js" />
         <mkdir dir="${target_dir}" />
-		<echo message="minify ${file} to ${target_path}" />
+		<echo message="minify ${file} to ${target_dir}/${target_filename}.js" />
 		<java classname="com.yahoo.platform.yui.compressor.YUICompressor" classpath="${lib.yuicompressor.path}" failonerror="true">
 			<arg value="--charset" />
 			<arg value="utf-8" />
@@ -107,7 +87,7 @@
 			<!--suppress AntResolveInspection -->
 			<arg file="${file}" />
 			<arg value="-o" />
-			<arg file="${target_path}" />
+			<arg file="${target_dir}/${target_filename}.js" />
 		</java>
 	</target>
 </project>

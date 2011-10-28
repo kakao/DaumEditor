@@ -16,11 +16,9 @@ var EditorJSLoader = {
 };
 
 var mergedFile = arguments[0],
-    workingDir = arguments[1],
-    serviceName = arguments[2];
+    workingDir = arguments[1];
 
-load("workingcopy/js/editor_" + serviceName + ".js");
-load("workingcopy/js/editor_daumx.js");
+load("workingcopy/js/editor.js");
 load("workingcopy/js/editor_common.js");
 load("workingcopy/js/import_lib.js");
 

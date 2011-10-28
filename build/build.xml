@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="DaumEditor7" basedir="." default="build_all_patch">
+<project name="DaumEditor" basedir="." default="build_local">
 	<property file="build.properties" />
 	<property file="wiki.properties" />
 
@@ -10,30 +10,12 @@
     </path>
     <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="ant.contrib.classpath"/>
 
-	<target name="checkout" depends="clean" description="checkout current snapshot from SVN">
-		<ant antfile="build_svn.xml" target="checkout_to_workingcopy" />
-	</target>
-
-
 	<target name="workingcopy" depends="clean" description="workingcopy current files from local directory">
 		<echo message="Workingcopy from local dorectory" />
 		<mkdir dir="${working.dir}" />
 		<copy encoding="UTF-8" todir="${working.dir}/" overwrite="true">
 			<fileset dir="${working.dir}/../../daumeditor/" />
 		</copy>
-	</target>
-
-
-    <!-- TODO antcall과 depends 중 어느 것이 적합한가? -->
-	<target name="version_up_patch" description="count up editor version patch number">
-		<antcall target="increase_patch_number" />
-		<antcall target="update_pom" />
-	</target>
-
-	<target name="version_up_minor" description="count up editor version minor number">
-		<antcall target="increase_minor_number" />
-		<antcall target="reset_patch_number" />
-		<antcall target="update_pom" />
 	</target>
 
 	<target name="packaging" description="build editor artifacts">
@@ -44,39 +26,7 @@
 		<antcall target="build_js" />
 	</target>
 
-
-	<target name="deploy" description="deploy editor artifacts and force to sync source servers" depends="load_version_properties">
-		<antcall target="ftp_and_sync" />
-	</target>
-
-
-	<target name="tagging" description="tag current snapshot and version property" depends="load_version_properties">
-		<antcall target="commit_tagging" />
-	</target>
-
-
-	<target name="build_all_patch">
-		<antcall target="clean" />
-		<antcall target="checkout" />
-		<antcall target="version_up_patch" />
-		<antcall target="packaging" />
-		<antcall target="deploy" />
-		<antcall target="tagging" />
-		<antcall target="add_changelog_to_confluence" />
-	</target>
-
-	<target name="build_all_minor">
-		<antcall target="clean" />
-		<antcall target="checkout" />
-		<antcall target="version_up_minor" />
-		<antcall target="packaging" />
-		<antcall target="deploy" />
-		<antcall target="tagging" />
-		<antcall target="add_changelog_to_confluence" />
-	</target>
-
-
-    <!-- TODO local에서 build 과정을 모두 하는 것이 아니라, packaging 까지만 진행한다 -->
+	<!-- TODO local에서 build 과정을 모두 하는 것이 아니라, packaging 까지만 진행한다 -->
     <!-- TODO package, build, deploy 등의 정확한 기능을 지정한다 -->
 	<target name="build_local" description="workingcopy and packaging from local directory">
 		<antcall target="clean" />
@@ -84,12 +34,7 @@
 		<antcall target="packaging" />
 	</target>
 
-    <!-- TODO not working -->
-	<target name="build_doc" description="generate jsdoc documentation">
-		<ant antfile="build_jsdoc.xml" target="jsdoc_make" />
-	</target>
-
-	<target name="clean" description="remove all artifacts">
+ 	<target name="clean" description="remove all artifacts">
 		<delete dir="${dist.dir}" />
 		<delete dir="${working.dir}" />
 	</target>
@@ -97,7 +42,7 @@
 
 
 	<!-- build & packaging -->
-	<target name="build_js" depends="load_version_properties">
+	<target name="build_js">
 		<echo message="Building JS... ---------------------------------------------------" />
 		<mkdir dir="${dist.dir}/js/_orig" />
 		<ant antfile="build_js.xml" target="merge_javascripts" />
@@ -123,160 +68,6 @@
 		<ant antfile="build_css.xml" target="merge_content_css" />
 		<ant antfile="build_css.xml" target="minify_stylesheets" />
 		<echo message="Building CSS [OK] ------------------------------------------------" />
-	</target>
-
-
-	<!-- deploy -->
-	<target name="ftp_and_sync" depends="test_next_version_already_exists_on_server">
-		<ant antfile="build_ftp.xml" target="send_as_ftp" />
-		<ant antfile="build_ftp.xml" target="sync_to_backupserver" />
-	</target>
-
-
-	<target name="test_next_version_already_exists_on_server" depends="load_version_properties">
-		<ant antfile="build_ftp.xml" target="check_ftp_dir" />
-		<available property="existNextVersion" file="${dist.dir}/temp/${editor.version}/js/editor_basic.js" />
-		<fail if="existNextVersion" message="${editor.version} already exists on editor source server!!!" />
-	</target>
-
-
-	<!-- versioning -->
-    <target name="check_version_postfix" description="">
-        <condition property="hasVersionPostfix">
-            <and>
-                <isset property="version.postfix" />
-                <not>
-                    <equals arg1="${version.postfix}" arg2="" trim="true" />
-                </not>
-            </and>
-        </condition>
-    </target>
-
-	<target name="increase_patch_number" depends="check_version_postfix">
-        <if>
-            <not>
-                <equals arg1="${hasVersionPostfix}" arg2="true" />
-            </not>
-            <then>
-                <propertyfile file="version.properties">
-                    <entry key="version.patch.number" type="int" operation="+" value="1" pattern="0" />
-                </propertyfile>
-            </then>
-        </if>
-	</target>
-
-	<target name="increase_minor_number">
-		<propertyfile file="version.properties">
-			<entry key="version.minor.number" type="int" operation="+" value="1" pattern="0" />
-		</propertyfile>
-	</target>
-
-	<target name="reset_patch_number">
-		<propertyfile file="version.properties">
-			<entry key="version.patch.number" type="int" operation="=" value="0" pattern="0" />
-		</propertyfile>
-	</target>
-
-	<target name="load_version_properties" unless="editor.version" depends="check_version_postfix">
-		<property file="version.properties" />
-        <if>
-            <equals arg1="${hasVersionPostfix}" arg2="true" />
-            <then>
-                <property name="editor.version" value="${version.major.number}.${version.minor.number}.${version.patch.number}-${version.postfix}" />
-            </then>
-            <else>
-                <property name="editor.version" value="${version.major.number}.${version.minor.number}.${version.patch.number}" />
-            </else>
-        </if>
-		<echo message="new version generated : ${editor.version}" />
-	</target>
-
-	<target name="update_pom" depends="load_version_properties">
-        <if>
-			<available property="exists_pom" file="../pom.xml" />
-            <then>
-				<copy file="../pom.xml" tofile="../pom.tmp.xml" overwrite="true">
-					<filterchain>
-						<replaceregex pattern="(&lt;!--EditorVersion--&gt;).*\1" replace="\1${editor.version}-SNAPSHOT\1" />
-					</filterchain>
-				</copy>
-				<move file="../pom.tmp.xml" tofile="../pom.xml" overwrite="true" />
-            </then>
-        </if>
-	</target>
-
-	<target name="commit_tagging">
-		<ant antfile="build_svn.xml" target="commit_version" />
-		<ant antfile="build_svn.xml" target="tag_version" />
-	</target>
-
-
-	<!-- add_changelog_to_confluence -->
-	<target name="add_changelog_to_confluence" description="Adding changelog as a comment to Confluence Page" depends="load_version_properties">
-		<antcall target="get_previous_changelog" />
-		<antcall target="make_updated_changelog" />
-		<antcall target="update_changelog" />
-		<antcall target="cleanup_changelog_txt" />
-	</target>
-
-    <!-- TODO previous_changelog.txt 등은 임시 파일이기 때문에 temp 디렉토리에 생성하는 게 좋겠다. cleanup도 바로할 필요가 없을 거 같다 -->
-	<target name="get_previous_changelog">
-		<java jar="/daum/program/confluence-cli-1.5.0/release/confluence-cli-1.5.0.jar" fork="true" output="${working.dir}/previous_changelog.txt">
-			<jvmarg value="-Dfile.encoding=UTF-8" />
-			<arg value="--action" />
-			<arg value="getPageSource" />
-			<arg value="--server" />
-			<arg value="${wiki.url}" />
-			<arg value="--user" />
-			<arg value="${wiki.user}" />
-			<arg value="--password" />
-			<arg value="${wiki.password}" />
-			<arg value="--space" />
-			<arg value="${wiki.space}" />
-			<arg value="--title" />
-			<arg value="${wiki.title}" />
-		</java>
-	</target>
-	
-	<target name="make_updated_changelog">
-        <java jar="${lib.rhino.path}" failonerror="true" fork="true">
-			<arg value="${build.js.dir}/makeChangelog.js" />
-			<arg value="${editor.version}" />
-			<arg value="${working.dir}/previous_changelog.txt" />
-			<arg value="${working.dir}/new_changelog.txt" />		<!-- build_svn.xml 의 commit_version 에서 만들어줌 -->
-			<arg value="${working.dir}/updated_changelog.txt" />
-		</java>
-	</target>
-
-	<target name="update_changelog" depends="get_previous_changelog">
-		<loadfile property="updated_changelog" srcFile="${working.dir}/updated_changelog.txt" />
-		<condition property="updated_changelog" value="${updated_changelog}" else="">
-			<isset property="updated_changelog" />
-		</condition>
-
-		<java jar="/daum/program/confluence-cli-1.5.0/release/confluence-cli-1.5.0.jar" fork="true">
-			<jvmarg value="-Dfile.encoding=UTF-8" />
-			<arg value="--action" />
-			<arg value="storePage" />
-			<arg value="--server" />
-			<arg value="${wiki.url}" />
-			<arg value="--user" />
-			<arg value="${wiki.user}" />
-			<arg value="--password" />
-			<arg value="${wiki.password}" />
-			<arg value="--space" />
-			<arg value="${wiki.space}" />
-			<arg value="--title" />
-			<arg value="${wiki.title}" />
-			<arg value="--content" />
-			<arg value="${updated_changelog}" />
-		</java>
-	</target>
-	
-	<target name="cleanup_changelog_txt">
-		<delete file="${working.dir}/previous_changelog.txt"/>
-		<delete file="${working.dir}/new_changelog.txt"/>
-		<delete file="${working.dir}/updated_changelog.txt"/>
 	</target>
 
 </project>

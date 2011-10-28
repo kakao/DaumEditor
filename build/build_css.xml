@@ -10,26 +10,20 @@
     <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="ant.contrib.classpath"/>
 
 
-    <!-- merge & minify css -->
+	<!-- merge & minify css -->
     <target name="merge_editor_css">
-        <foreach list="${services.list}" param="service_name" target="    _merge_css" />
-        <copy file="${working.dir}/css/popup.css" tofile="${dist.dir}/css/popup.origin.css" overwrite="true"/>
-    </target>
-
-
-    <target name="    _merge_css">
-        <!--suppress AntResolveInspection -->
-        <echo message="Merge editor_${service_name}.css ..."/>
+    	<!--suppress AntResolveInspection -->
+        <echo message="Merge editor.css ..."/>
         <java jar="${lib.rhino.path}" failonerror="true" fork="true">
             <arg value="${build.js.dir}/concatStylesheet.js"/>
             <!--suppress AntResolveInspection -->
-            <arg value="${dist.dir}/css/editor_${service_name}.origin.css"/>
+            <arg value="${dist.dir}/css/editor.origin.css"/>
             <arg value="${working.dir}"/>
             <!--suppress AntResolveInspection -->
-            <arg value="/css/editor_${service_name}.css"/>
+            <arg value="/css/editor.css"/>
         </java>
+        <copy file="${working.dir}/css/popup.css" tofile="${dist.dir}/css/popup.origin.css" overwrite="true"/>
     </target>
-
 
     <target name="merge_content_css">
         <echo message="Merge content_view.css ..."/>
