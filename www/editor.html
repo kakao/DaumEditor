@@ -1,6 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" debug="true">
+<!doctype html>
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Daum 에디터 - 등록화면 예제</title>
@@ -26,152 +25,15 @@
     <script type="text/javascript" charset="utf-8"
              src="../daumeditor/js/editor_loader.js?environment=development"></script>
 
-    <style type="text/css">
-        body { padding:0;margin:0; background:#fff; font-family:'굴림',gulim,sans-serif; font-size:12px;  }
-
-        .header {
-            font-size:12px; color:#fff; font-weight:bold;
-            height:23px; margin:0; padding:11px 9px 0 20px;
-            background-image:url(http://icon.daum-img.net/editor/music/bg_top.gif);
-        }
-
-        .body { float:left; }
-        .wrapper { float:left; }
-        .dialog { float:right; }
-
-        form { padding:0;margin:0; }
-        .field {
-            padding: 0; margin:10px 0;
-        }
-        .field input {
-            background:#fafafa; height:14px; padding:2px 0 0 2px;
-            border-color:#bdbdbd #d1d1d1 #d1d1d1 #bdbdbd; border-style:solid; border-width:1px;
-            color:#666666; font-size:12px;
-        }
-        .field select { font-size:12px; }
-
-        .alert { padding:0; background:url(http://icon.daum-img.net/editor/file/ico_stop.gif) 0 0 no-repeat; margin:14px 36px 21px; color:#999; }
-        .alert dt { margin:0; font-size:12px; font-weight:bold; color:#6486e4; padding:8px 0 9px 37px; }
-        .alert dd { line-height:17px; margin:0 0 0 36px; padding:0;}
-        .alert strong {
-            color:#a7b9ec; font-weight:normal;
-        }
-        .alert a { color:#666; text-decoration:none; background:url(http://icon.daum-img.net/editor/file/b_link.gif) 100% 50% no-repeat; padding:0 7px 0 0; }
-        .alert a:hover { text-decoration:underline; }
-
-        .footer {
-            padding:10px 0 10px 330px; margin:10px 0 0 0; height:25px; background-color:#e9e9e9; clear:both;
-        }
-
-        /* width, position  */
-        .body { width:100%; }
-        .wrapper { width:800px; padding: 0 20px; }
-
-    </style>
-    <script type="text/javascript">
-    // <![CDATA[
-        /*-------- 글 등록할 때 필요한 함수들 시작 ----------*/
-
-        /* 예제용 함수 */
-        function saveContent() {
-            Editor.save(); /* 이 함수를 호출하여 글을 등록하면 된다. */
-        }
-
-        /**
-         * Editor.save()를 호출한 경우 데이터가 유효한지 검사하기 위해 부르는 콜백함수로
-         * 상황에 맞게 수정하여 사용한다.
-         * 모든 데이터가 유효할 경우에 true를 리턴한다.
-         * @function
-         * @param {Object} editor - 에디터에서 넘겨주는 editor 객체
-         * @returns {Boolean} 모든 데이터가 유효할 경우에 true
-         */
-        function validForm(editor) {
-            /* 제목 필드가 따로 존재할 경우 'tx_article_title'를 해당 아이디로 교체하여 사용. */
-            if($tx('tx_article_title').value == ""){
-                alert('제목을 입력하세요');
-                return false;
-            }
-
-            /* 본문 내용이 입력되었는지 검사하는 부분 */
-            var _validator = new Trex.Validator();
-            var _content = editor.getContent();
-            if(!_validator.exists(_content)) {
-                alert('내용을 입력하세요');
-                return false;
-            }
-
-            return true;
-        }
-
-        /**
-         * Editor.save()를 호출한 경우 데이터가 유효하면
-         * Form Summit을 위해 필드를 생성, 변경하기 위해 부르는 콜백함수로
-         * 상황에 맞게 수정하여 사용한다.
-         * 정상적인 경우에 true를 리턴한다.
-         * @function
-         * @param {Object} editor - 에디터에서 넘겨주는 editor 객체
-         * @returns {Boolean} 정상적인 경우에 true
-         */
-        function setForm(editor) {
-            var _formGen = editor.getForm();
-
-            var _content = editor.getContent();
-            _formGen.createField(
-                tx.textarea({
-                    /* 본문 내용을 필드를 생성하여 값을 할당하는 부분 */
-                    'name': "tx_content",
-                    'style': { 'display': "none" }
-                },
-                _content)
-            );
-
-            /* 아래의 코드는 첨부된 데이터를 필드를 생성하여 값을 할당하는 부분으로 상황에 맞게 수정하여 사용한다.
-             첨부된 데이터 중에 주어진 종류(image,file..)에 해당하는 것만 배열로 넘겨준다. */
-            var _attachments = editor.getAttachments('image');
-            for(var i=0,len=_attachments.length;i<len;i++) {
-                /* existStage는 현재 본문에 존재하는지 여부 */
-                if (_attachments[i].existStage) {
-                    /* data는 팝업에서 execAttach 등을 통해 넘긴 데이터 */
-                    alert(_attachments[i].data);
-                    _formGen.createField(
-                        tx.input({
-                            'type': "hidden",
-                            'name': 'tx_attach_image',
-                            'value': _attachments[i].data.imageurl /* 예에서는 이미지경로만 받아서 사용 */
-                        })
-                    );
-                }
-            }
-
-            return true;
-        }
-        /*-------- 글 등록할 때 필요한 함수들 끝 ----------*/
-        // ]]>
-    </script>
 </head>
 <body>
-<h1 class="header">
-    Daum 에디터 - 등록화면 예제
-</h1>
 <div class="body">
     <!-- 에디터 시작 -->
     <!--
         @decsription
         등록하기 위한 Form으로 상황에 맞게 수정하여 사용한다. Form 이름은 에디터를 생성할 때 설정값으로 설정한다.
     -->
-    <form name="tx_editor_form" id="tx_editor_form" action="register.html?ver=5.1.0" method="post" accept-charset="utf-8">
-    <div class="wrapper">
-        <div class="field">
-            <!-- 제목, 카테고리 영역 시작 -->
-            <select name="tx_article_category" id="tx_article_category" style="width:150px;">
-                <option value="0">카테고리 선택</option>
-                <option value="1">나의 이야기 </option>
-                <option value="2">너의 이야기 </option>
-                <option value="3">우리들의 이야기 </option>
-            </select>
-            <input type="text" name="tx_article_title" id="tx_article_title" value="제목 테스트" size="80"/>
-            <!-- 제목, 카테고리 영역 끝 -->
-        </div>
+    <form name="tx_editor_form" id="tx_editor_form" action="/your_submit_page" method="post" accept-charset="utf-8">
         <!-- 에디터 컨테이너 시작 -->
         <div id="tx_trex_container" class="tx-editor-container">
             <!-- 사이드바 -->
@@ -592,22 +454,17 @@
                 <!-- 첨부박스 끝 -->
         </div>
         <!-- 에디터 컨테이너 끝 -->
-    </div>
     </form>
 </div>
 <!-- 에디터 끝 -->
 <script type="text/javascript">
-// <![CDATA[
-
-    /*-------- 에디터 로드 시작 ----------*/
-    new Editor({
+    var config = {
         txHost: '', /* 런타임 시 리소스들을 로딩할 때 필요한 부분으로, 경로가 변경되면 이 부분 수정이 필요. ex) http://xxx.xxx.com */
         txPath: '/daumeditor/', /* 런타임 시 리소스들을 로딩할 때 필요한 부분으로, 경로가 변경되면 이 부분 수정이 필요. ex) /xxx/xxx/ */
-        txVersion: '5.1.0', /* 수정필요없음. */
         txService: 'sample', /* 수정필요없음. */
         txProject: 'sample', /* 수정필요없음. 프로젝트가 여러개일 경우만 수정한다. */
         initializedId: "", /* 대부분의 경우에 빈문자열 */
-        wrapper: "tx_trex_container"+"", /* 에디터를 둘러싸고 있는 레이어 이름(에디터 컨테이너) */
+        wrapper: "tx_trex_container", /* 에디터를 둘러싸고 있는 레이어 이름(에디터 컨테이너) */
         form: 'tx_editor_form'+"", /* 등록하기 위한 Form 이름 */
         txIconPath: "../daumeditor/images/icon/", /*에디터에 사용되는 이미지 디렉터리, 필요에 따라 수정한다. */
         txDecoPath: "../daumeditor/images/deco/", /*본문에 사용되는 이미지 디렉터리, 서비스에서 사용할 때는 완성된 컨텐츠로 배포되기 위해 절대경로로 수정한다. */
@@ -621,83 +478,12 @@
                 padding: "8px" /* 위지윅 영역의 여백 */
             }
         },
-        sidebar: {
-            attacher: {
-                image: {
-                },
-                file: {
-                }
-            }
-        },
         size: {
             contentWidth: 700 /* 지정된 본문영역의 넓이가 있을 경우에 설정 */
         }
-    }).focusOnForm("tx_article_title");
-    /*-------- 에디터 로드 끝 ----------*/
-// ]]>
-</script>
+    };
 
-
-<!--
-    저장된 컨텐츠를 불러오기 위한 예제
-    내용을 문자열로 입력하거나, 이미 주어진 필드(textarea)가 있을 경우 엘리먼트를 넘겨준다.
--->
-<div class="footer">
-    <a onclick="loadContent(); return false;" href="#">컨텐츠 불러오기</a>
-</div>
-<textarea id="tx_load_content" cols="80" rows="10">
-    <p style="text-align: center;">
-        <img src="http://cfile284.uf.daum.net/image/116E89154AA4F4E2838948" class="tx-daum-image" style="clear: none; float: none;"/>
-    </p>?
-    <p>
-        <a href="http://cfile297.uf.daum.net/attach/207C8C1B4AA4F5DC01A644"><img src="../daumeditor/images/icon/p_gif_s.gif"/> editor_bi.gif</a>
-    </p>
-    <p>불러올 본문내용입니다.</p>
-</textarea>
-<script type="text/javascript">
-// <![CDATA[
-    /*-------- 컨텐츠 불러오기 시작 ----------*/
-    /* 예제용 함수 */
-    function loadContent() {
-        var attachments = {};
-
-        attachments['image'] = [];
-        attachments['image'].push( {
-            'attacher': 'image',
-            'data': {
-                'imageurl': 'http://cfile284.uf.daum.net/image/116E89154AA4F4E2838948',
-                'filename': 'editor_bi.gif',
-                'filesize': 640,
-                'originalurl': 'http://cfile284.uf.daum.net/original/116E89154AA4F4E2838948',
-                'thumburl': 'http://cfile284.uf.daum.net/P150x100/116E89154AA4F4E2838948'
-            }
-        });
-
-        attachments['file'] = [];
-        attachments['file'].push({
-            'attacher': 'file',
-            'data': {
-                'attachurl': 'http://cfile297.uf.daum.net/attach/207C8C1B4AA4F5DC01A644',
-                'filemime': 'image/gif',
-                'filename': 'editor_bi.gif',
-                'filesize': 640
-            }
-        });
-
-        /* 저장된 컨텐츠를 불러오기 위한 함수 호출 */
-        Editor.modify({
-            "attachments": function() { /* 저장된 첨부가 있을 경우 배열로 넘김, 위의 부분을 수정하고 아래 부분은 수정없이 사용 */
-                var allattachments = [];
-                for(var i in attachments) {
-                    allattachments = allattachments.concat(attachments[i]);
-                }
-                return allattachments;
-            }(),
-            "content": $tx("tx_load_content") /* 내용 문자열, 주어진 필드(textarea) 엘리먼트 */
-        });
-    }
-    /**/
-// ]]>
+    var editor = new Editor(config);
 </script>
 </body>
 </html>
