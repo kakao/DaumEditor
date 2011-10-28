@@ -9,7 +9,6 @@
 	</path>
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="ant.contrib.classpath" />
 
-
 	<!-- editor.js : merge & minify javascript -->
 	<target name="merge_javascripts">
 		<antcall target="merge_editor_js" />
@@ -19,8 +18,8 @@
 	
 	<target name="merge_editor_js">
 		<echo message="Merge editor.js ..." />
-		<mkdir dir="${dist.dir}/js/_orig" />
-		<property name="merged.js.path" value="${dist.dir}/js/_orig/editor.js" />
+		<mkdir dir="${dist.dir}/js" />
+		<property name="merged.js.path" value="${dist.dir}/js/editor.js" />
         <java jar="${lib.rhino.path}" failonerror="true" fork="true">
 			<arg value="${build.js.dir}/concatEditorService.js" />
 			<arg value="${merged.js.path}" />
@@ -33,48 +32,46 @@
 		<echo message="Merge popup.js ..." />
         <java jar="${lib.rhino.path}" failonerror="true" fork="true">
 			<arg value="${build.js.dir}/concatEditor.js" />
-			<arg value="${dist.dir}/js/_orig/popup.js" />
+			<arg value="${dist.dir}/js/popup.js" />
 			<arg value="${working.dir}" />
 			<arg value="popup.js" />
 		</java>
 	</target>
 
-
     <target name="copy_etc_js_to_dist">
 		<echo message="copy etc to dist" />
-		<copy file="${working.dir}/js/global.js" todir="${dist.dir}/js/_orig" />
-		<copy file="${working.dir}/js/editor_loader.js" todir="${dist.dir}/js/_orig" />
+		<copy file="${working.dir}/js/global.js" todir="${dist.dir}/js" />
+		<copy file="${working.dir}/js/editor_loader.js" todir="${dist.dir}/js" />
 
-		<echo message="copy async tools to _orig" />
-        <copy todir="${dist.dir}/js/_orig${async.trex.dir}" overwrite="true">
+		<echo message="copy async tools to ${dist.dir}/js" />
+        <copy todir="${dist.dir}/js${async.trex.dir}" overwrite="true">
             <fileset dir="${working.dir}/js${async.trex.dir}" />
         </copy>
 	</target>
 
 	<target name="escape_and_delete_logging">
 		<echo message="Escape orig.editor.js" />
-		<native2ascii encoding="utf-8" src="${dist.dir}/js/_orig" dest="${dist.dir}/js/_orig" includes="**/*.js" excludes="**/*.esc.js" ext=".esc.js" />
+		<native2ascii encoding="utf-8" src="${dist.dir}/js" dest="${dist.dir}/js" includes="**/*.js" excludes="**/*.esc.js" ext=".esc.js" />
 
 		<echo message="Delete console message" />
 		<replaceregexp match="(console\.[^;]*;)" replace="" flags="g" byline="true" encoding="utf-8">
-			<fileset dir="${dist.dir}/js/_orig" includes="**/*.esc.js" />
+			<fileset dir="${dist.dir}/js" includes="**/*.esc.js" />
 		</replaceregexp>
 		<replaceregexp match="(StopWatch\.lap\([^;]*;)" replace="" flags="g" byline="true" encoding="utf-8">
-			<fileset dir="${dist.dir}/js/_orig" includes="**/*.esc.js" />
+			<fileset dir="${dist.dir}/js" includes="**/*.esc.js" />
 		</replaceregexp>
 	</target>
 
 	<target name="minify_javascripts">
 		<foreach target="    _minify_javascript" param="file">
 			<path>
-				<fileset dir="${dist.dir}/js/_orig" includes="**/*.esc.js" />
+				<fileset dir="${dist.dir}/js" includes="**/*.esc.js" />
 			</path>
 		</foreach>
 	</target>
 
 	<target name="    _minify_javascript">
 		<!--suppress AntResolveInspection -->
-        <propertyregex property="target_path" input="${file}" regexp="(.*)/_orig/(.*)\.esc\.js" replace="\1/\2.js" />
         <dirname property="target_dir" file="${file}" />
 		<basename property="target_filename" file="${file}" suffix=".esc.js" />
         <mkdir dir="${target_dir}" />

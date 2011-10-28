@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <project name="DaumEditor" basedir="." default="build_local">
 	<property file="build.properties" />
-	<property file="wiki.properties" />
 
     <path id="ant.contrib.classpath">
         <fileset dir="./lib/ant-contrib">
@@ -44,7 +43,6 @@
 	<!-- build & packaging -->
 	<target name="build_js">
 		<echo message="Building JS... ---------------------------------------------------" />
-		<mkdir dir="${dist.dir}/js/_orig" />
 		<ant antfile="build_js.xml" target="merge_javascripts" />
 		<ant antfile="build_js.xml" target="escape_and_delete_logging" />
 		<ant antfile="build_js.xml" target="minify_javascripts" />
