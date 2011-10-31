@@ -54,7 +54,7 @@ var readFileContent = function(filepath){
 // -------------------------------------------------------
 // add eval.js
 addGlobalCount();
-writeFile(mergedFile, readFileContent("trex/eval.js"));
+writeFile(mergedFile, readFileContent("trex/eval.js"), false);
 
 // add editor scope
 writeFile(mergedFile, '(function(){');

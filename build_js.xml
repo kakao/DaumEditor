@@ -19,7 +19,6 @@
         <target name="merge_editor_js">
             <echo message="Merge editor.js ..."/>
             <mkdir dir="${build.target.editor.js.dir}/merged"/>
-            <delete file="${build.target.editor.js.dir}/merged/editor.js"/>
             <java jar="${lib.rhino.path}" failonerror="true" fork="true">
                 <arg value="${build.js.dir}/concatEditorService.js"/>
                 <arg value="${build.target.editor.js.dir}/merged/editor.js"/>
@@ -31,7 +30,6 @@
         <target name="merge_popup_js">
             <echo message="Merge popup.js ..." />
             <mkdir dir="${build.target.editor.js.dir}/merged"/>
-            <delete file="${build.target.editor.js.dir}/merged/pop.js"/>
             <java jar="${lib.rhino.path}" failonerror="true" fork="true">
                 <arg value="${build.js.dir}/concatEditorService.js" />
                 <arg value="${build.target.editor.js.dir}/merged/popup.js" />
