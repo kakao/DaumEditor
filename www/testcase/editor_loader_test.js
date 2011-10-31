@@ -1,4 +1,5 @@
 (function() {
+    var IS_ORIGIN_LOCAL = (document.location.origin == "file://");
 
 	module("editor loader", {
         setup: function() {
@@ -89,14 +90,16 @@
         createDummyScriptWithParam("host=" + encodeURIComponent("http://localhost/"));
         equal(EditorJSLoader.getOption("host"), encodeURIComponent("http://localhost/"), "user option");
 
-        document.cookie = "tx_host=" + encodeURIComponent("http://editor.daum.net/");
-        document.cookie = "tx_environment=stage";
+        if (!IS_ORIGIN_LOCAL) { // local file doensn't support cookies
+            document.cookie = "tx_host=" + encodeURIComponent("http://editor.daum.net/");
+            document.cookie = "tx_environment=stage";
 
-        equal(EditorJSLoader.getOption("host"), "http://editor.daum.net/", "cookie option");
-        equal(EditorJSLoader.getOption("environment"), "stage", "동시에 여러개의 cookie option 사용 가능");
+            equal(EditorJSLoader.getOption("host"), "http://editor.daum.net/", "cookie option");
+            equal(EditorJSLoader.getOption("environment"), "stage", "동시에 여러개의 cookie option 사용 가능");
+        }
     });
 
-    test("EditorJSLoader onload callback 제공", function() {
+    !IS_ORIGIN_LOCAL && test("EditorJSLoader onload callback 제공", function() {
         expect(1);
         EditorJSLoader.ready(function(Editor) {
             ok(Editor, "load 완료시 argument로 Editor 객체 제공");
