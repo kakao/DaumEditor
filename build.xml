@@ -3,7 +3,7 @@
 	<property file="build.properties" />
 
     <path id="ant.contrib.classpath">
-        <fileset dir="./lib/ant-contrib">
+        <fileset dir="${lib.dir}/ant-contrib">
             <include name="ant-contrib-1.0b3.jar"/>
         </fileset>
     </path>
@@ -13,18 +13,21 @@
 		<echo message="Workingcopy from local dorectory" />
 		<mkdir dir="${working.dir}" />
 		<copy encoding="UTF-8" todir="${working.dir}/" overwrite="true">
-			<fileset dir="${working.dir}/../../daumeditor/" />
+			<fileset dir="${working.dir}/../daumeditor/" />
 		</copy>
 	</target>
 
 	<target name="packaging" description="build editor artifacts">
 		<delete dir="${dist.dir}" />
 		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${editor.src.dir}" />
+		<antcall target="build_www" />
 		<antcall target="build_html" />
 		<antcall target="build_css" />
 		<antcall target="build_js" />
 	</target>
 
+	
 	<!-- TODO local에서 build 과정을 모두 하는 것이 아니라, packaging 까지만 진행한다 -->
     <!-- TODO package, build, deploy 등의 정확한 기능을 지정한다 -->
 	<target name="build_local" description="workingcopy and packaging from local directory">
@@ -41,6 +44,14 @@
 
 
 	<!-- build & packaging -->
+	<target name="build_www">
+		<echo message="www from local dorectory" />
+		<mkdir dir="${dist.dir}/www" />
+		<copy encoding="UTF-8" todir="${dist.dir}/www/" overwrite="true">
+			<fileset dir="www/" />
+		</copy>
+	</target>
+	
 	<target name="build_js">
 		<echo message="Building JS... ---------------------------------------------------" />
 		<ant antfile="build_js.xml" target="merge_javascripts" />
@@ -52,7 +63,7 @@
 
 	<target name="build_html">
 		<echo message="Building HTML... -------------------------------------------------" />
-		<copy encoding="UTF-8" todir="${dist.dir}/pages" overwrite="true">
+		<copy encoding="UTF-8" todir="${editor.src.dir}/pages" overwrite="true">
 			<fileset dir="${working.dir}/pages" />
 		</copy>
 		<echo message="Building HTML [OK] -----------------------------------------------" />
@@ -61,7 +72,7 @@
 
 	<target name="build_css">
 		<echo message="Building CSS... --------------------------------------------------" />
-		<mkdir dir="${dist.dir}/css" />
+		<mkdir dir="${editor.src.dir}/css" />
 		<ant antfile="build_css.xml" target="merge_editor_css" />
 		<ant antfile="build_css.xml" target="merge_content_css" />
 		<ant antfile="build_css.xml" target="minify_stylesheets" />

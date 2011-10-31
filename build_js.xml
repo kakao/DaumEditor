@@ -3,7 +3,7 @@
 	<property file="build.properties" />
 
 	<path id="ant.contrib.classpath">
-		<fileset dir="./lib/ant-contrib">
+		<fileset dir="${lib.dir}/ant-contrib">
 			<include name="ant-contrib-1.0b3.jar" />
 		</fileset>
 	</path>
@@ -18,8 +18,8 @@
 	
 	<target name="merge_editor_js">
 		<echo message="Merge editor.js ..." />
-		<mkdir dir="${dist.dir}/js" />
-		<property name="merged.js.path" value="${dist.dir}/js/editor.js" />
+		<mkdir dir="${editor.src.dir}/js" />
+		<property name="merged.js.path" value="${editor.src.dir}/js/editor.js" />
         <java jar="${lib.rhino.path}" failonerror="true" fork="true">
 			<arg value="${build.js.dir}/concatEditorService.js" />
 			<arg value="${merged.js.path}" />
@@ -32,7 +32,7 @@
 		<echo message="Merge popup.js ..." />
         <java jar="${lib.rhino.path}" failonerror="true" fork="true">
 			<arg value="${build.js.dir}/concatEditor.js" />
-			<arg value="${dist.dir}/js/popup.js" />
+			<arg value="${editor.src.dir}/js/popup.js" />
 			<arg value="${working.dir}" />
 			<arg value="popup.js" />
 		</java>
@@ -40,32 +40,32 @@
 
     <target name="copy_etc_js_to_dist">
 		<echo message="copy etc to dist" />
-		<copy file="${working.dir}/js/global.js" todir="${dist.dir}/js" />
-		<copy file="${working.dir}/js/editor_loader.js" todir="${dist.dir}/js" />
+		<copy file="${working.dir}/js/global.js" todir="${editor.src.dir}/js" />
+		<copy file="${working.dir}/js/editor_loader.js" todir="${editor.src.dir}/js" />
 
-		<echo message="copy async tools to ${dist.dir}/js" />
-        <copy todir="${dist.dir}/js${async.trex.dir}" overwrite="true">
+		<echo message="copy async tools to ${editor.src.dir}/js" />
+        <copy todir="${editor.src.dir}/js${async.trex.dir}" overwrite="true">
             <fileset dir="${working.dir}/js${async.trex.dir}" />
         </copy>
 	</target>
 
 	<target name="escape_and_delete_logging">
 		<echo message="Escape orig.editor.js" />
-		<native2ascii encoding="utf-8" src="${dist.dir}/js" dest="${dist.dir}/js" includes="**/*.js" excludes="**/*.esc.js" ext=".esc.js" />
+		<native2ascii encoding="utf-8" src="${editor.src.dir}/js" dest="${editor.src.dir}/js" includes="**/*.js" excludes="**/*.esc.js" ext=".esc.js" />
 
 		<echo message="Delete console message" />
 		<replaceregexp match="(console\.[^;]*;)" replace="" flags="g" byline="true" encoding="utf-8">
-			<fileset dir="${dist.dir}/js" includes="**/*.esc.js" />
+			<fileset dir="${editor.src.dir}/js" includes="**/*.esc.js" />
 		</replaceregexp>
 		<replaceregexp match="(StopWatch\.lap\([^;]*;)" replace="" flags="g" byline="true" encoding="utf-8">
-			<fileset dir="${dist.dir}/js" includes="**/*.esc.js" />
+			<fileset dir="${editor.src.dir}/js" includes="**/*.esc.js" />
 		</replaceregexp>
 	</target>
 
 	<target name="minify_javascripts">
 		<foreach target="    _minify_javascript" param="file">
 			<path>
-				<fileset dir="${dist.dir}/js" includes="**/*.esc.js" />
+				<fileset dir="${editor.src.dir}/js" includes="**/*.esc.js" />
 			</path>
 		</foreach>
 	</target>

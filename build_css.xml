@@ -3,7 +3,7 @@
     <property file="build.properties"/>
 
     <path id="ant.contrib.classpath">
-        <fileset dir="./lib/ant-contrib">
+        <fileset dir="${lib.dir}/ant-contrib">
             <include name="ant-contrib-1.0b3.jar"/>
         </fileset>
     </path>
@@ -17,26 +17,26 @@
         <java jar="${lib.rhino.path}" failonerror="true" fork="true">
             <arg value="${build.js.dir}/concatStylesheet.js"/>
             <!--suppress AntResolveInspection -->
-            <arg value="${dist.dir}/css/editor.origin.css"/>
+            <arg value="${editor.src.dir}/css/editor.origin.css"/>
             <arg value="${working.dir}"/>
             <!--suppress AntResolveInspection -->
             <arg value="/css/editor.css"/>
         </java>
-        <copy file="${working.dir}/css/popup.css" tofile="${dist.dir}/css/popup.origin.css" overwrite="true"/>
+        <copy file="${working.dir}/css/popup.css" tofile="${editor.src.dir}/css/popup.origin.css" overwrite="true"/>
     </target>
 
     <target name="merge_content_css">
         <echo message="Merge content_view.css ..."/>
         <java jar="${lib.rhino.path}" failonerror="true" fork="true">
             <arg value="${build.js.dir}/concatStylesheet.js"/>
-            <arg value="${dist.dir}/css/content_view.origin.css"/>
+            <arg value="${editor.src.dir}/css/content_view.origin.css"/>
             <arg value="${working.dir}"/>
             <arg value="/css/content_view.css"/>
         </java>
 
         <java jar="${lib.rhino.path}" failonerror="true" fork="true">
             <arg value="${build.js.dir}/concatStylesheet.js"/>
-            <arg value="${dist.dir}/css/content_wysiwyg.origin.css"/>
+            <arg value="${editor.src.dir}/css/content_wysiwyg.origin.css"/>
             <arg value="${working.dir}"/>
             <arg value="/css/content_wysiwyg.css"/>
         </java>
@@ -61,10 +61,10 @@
             <arg value="--line-break"/>
             <arg value="1000"/>
             <!--suppress AntResolveInspection -->
-            <arg file="${dist.dir}/css/${css_fname}.origin.css"/>
+            <arg file="${editor.src.dir}/css/${css_fname}.origin.css"/>
             <arg value="-o"/>
             <!--suppress AntResolveInspection -->
-            <arg file="${dist.dir}/css/${css_fname}.css"/>
+            <arg file="${editor.src.dir}/css/${css_fname}.css"/>
         </java>
     </target>
 
