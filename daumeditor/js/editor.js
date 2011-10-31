@@ -178,13 +178,7 @@ var DEVELLIBS = [
 	"trex/modules/table/border.js",
 	"trex/modules/table/template.js",
 	
-	"trex/modules/tabledragger.js",
-    /** each > plugin */
-
-    '' /*dummy*/
+	"trex/modules/tabledragger.js"
 ];
 
-if (typeof daumx !== 'undefined') {
-    DEVELLIBS = DEVELLIBS.concat(daumx);
-}
 EditorJSLoader.loadModule("import_lib.js");
