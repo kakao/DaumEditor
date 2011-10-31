@@ -3,7 +3,7 @@
 	<property file="build.properties" />
 
     <target name="buildall" description="clean and build all"
-            depends="clean, build">
+            depends="clean, packaging">
 	</target>
 
     <target name="clean" description="remove all artifacts">
@@ -12,44 +12,40 @@
    </target>
 
     <target name="build" description="build artifacts"
-            depends="build-pages,build-css,build-js" />
+            depends="build-css,build-js"/>
 
     <target name="packaging" description="packaging distribution files"
             depends="build">
-        <mkdir dir="${build.dist.dir}"/>
-        <copy todir="${build.dist.dir}" overwrite="true">
-            <fileset dir="${build.target.dir}">
-                <exclude name="**/merged/"/>
-                <exclude name="**/merged/*"/>
-                <exclude name="**/escaped/"/>
-                <exclude name="**/escaped/*"/>
-            </fileset>
-        </copy>
+        <echo message="copy javascript and css files" level="info"/>
+            <copy todir="${build.dist.dir}" overwrite="true">
+                <fileset dir="${build.target.dir}">
+                    <exclude name="**/merged/"/>
+                    <exclude name="**/merged/*"/>
+                    <exclude name="**/escaped/"/>
+                    <exclude name="**/escaped/*"/>
+                </fileset>
+            </copy>
 
-        <copy todir="${build.dist.dir}/daumeditor/images" overwrite="true">
-            <fileset dir="${src.editor.images.dir}"/>
-        </copy>
+        <echo message="copy image files"/>
+            <copy todir="${build.dist.dir}/daumeditor/images" overwrite="true">
+                <fileset dir="${src.editor.images.dir}"/>
+            </copy>
+
+        <echo message="copy HTML files"/>
+            <copy encoding="UTF-8" todir="${build.dist.dir}/daumeditor/pages" overwrite="true">
+                <fileset dir="${src.editor.pages.dir}" />
+            </copy>
+
+            <copy encoding="UTF-8" todir="${build.dist.dir}/web" overwrite="true">
+                <fileset dir="${src.web.dir}">
+                    <include name="editor.html" />
+                </fileset>
+            </copy>
     </target>
 	<!-- end of Main Targets -->
 
 
-	<!-- build & packaging -->
-    <target name="build-pages">
-        <echo message="Building HTML... -------------------------------------------------" />
-        <mkdir dir="${build.target.editor.pages.dir}" />
-        <copy encoding="UTF-8" todir="${build.target.editor.pages.dir}" overwrite="true">
-            <fileset dir="${src.editor.pages.dir}" />
-        </copy>
-
-		<mkdir dir="${build.target.web.dir}" />
-		<copy encoding="UTF-8" todir="${build.target.web.dir}" overwrite="true">
-			<fileset dir="${src.web.dir}">
-                <include name="editor.html" />
-            </fileset>
-		</copy>
-    </target>
-
-
+	<!-- build javascript -->
 	<target name="build-js">
 		<echo message="Building JS... ---------------------------------------------------" />
         <mkdir dir="${build.target.editor.js.dir}" />
@@ -58,6 +54,8 @@
 		<ant antfile="build_js.xml" target="minify_javascripts" />
 	</target>
 
+
+    <!-- build CSS -->
 	<target name="build-css">
 		<echo message="Building CSS... --------------------------------------------------" />
 		<mkdir dir="${build.target.editor.css.dir}" />
