@@ -11,33 +11,35 @@
 
     <!-- merge & minify css -->
     <target name="merge_editor_css">
-    	<!--suppress AntResolveInspection -->
         <echo message="Merge editor.css ..."/>
+        <mkdir dir="${build.target.editor.css.dir}/merged"/>
         <java jar="${lib.rhino.path}" failonerror="true" fork="true">
             <arg value="${build.js.dir}/concatStylesheet.js"/>
-            <!--suppress AntResolveInspection -->
-            <arg value="${editor.src.dir}/css/editor.origin.css"/>
-            <arg value="${working.dir}"/>
-            <!--suppress AntResolveInspection -->
-            <arg value="/css/editor.css"/>
+            <arg value="${build.target.editor.css.dir}/merged/editor.css"/>
+            <arg value="${src.editor.css.dir}"/>
+            <arg value="editor.css"/>
         </java>
-        <copy file="${working.dir}/css/popup.css" tofile="${editor.src.dir}/css/popup.origin.css" overwrite="true"/>
+
+        <copy file="${src.editor.css.dir}/popup.css"
+            tofile="${build.target.editor.css.dir}/merged/popup.css" overwrite="true"/>
     </target>
 
     <target name="merge_content_css">
+        <mkdir dir="${build.target.editor.css.dir}/merged"/>
+
         <echo message="Merge content_view.css ..."/>
         <java jar="${lib.rhino.path}" failonerror="true" fork="true">
             <arg value="${build.js.dir}/concatStylesheet.js"/>
-            <arg value="${editor.src.dir}/css/content_view.origin.css"/>
-            <arg value="${working.dir}"/>
-            <arg value="/css/content_view.css"/>
+            <arg value="${build.target.editor.css.dir}/merged/content_view.css"/>
+            <arg value="${src.editor.css.dir}"/>
+            <arg value="content_view.css"/>
         </java>
 
         <java jar="${lib.rhino.path}" failonerror="true" fork="true">
             <arg value="${build.js.dir}/concatStylesheet.js"/>
-            <arg value="${editor.src.dir}/css/content_wysiwyg.origin.css"/>
-            <arg value="${working.dir}"/>
-            <arg value="/css/content_wysiwyg.css"/>
+            <arg value="${build.target.editor.css.dir}/merged/content_wysiwyg.css"/>
+            <arg value="${src.editor.css.dir}"/>
+            <arg value="content_wysiwyg.css"/>
         </java>
     </target>
 
@@ -59,11 +61,10 @@
             <arg value="utf-8"/>
             <arg value="--line-break"/>
             <arg value="1000"/>
-            <!--suppress AntResolveInspection -->
-            <arg file="${editor.src.dir}/css/${css_fname}.origin.css"/>
+
+            <arg file="${build.target.editor.css.dir}/merged/${css_fname}.css"/>
             <arg value="-o"/>
-            <!--suppress AntResolveInspection -->
-            <arg file="${editor.src.dir}/css/${css_fname}.css"/>
+            <arg file="${build.target.editor.css.dir}/${css_fname}.css"/>
         </java>
     </target>
 

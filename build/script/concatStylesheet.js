@@ -16,5 +16,5 @@ function getCssText(filename) {
     return orig;
 }
 
-var mergedText = getCssText(inputPath + inputFile);
-writeFile(mergedFile, mergedText);
+var mergedText = getCssText(inputPath + '/' + inputFile);
+writeFile(mergedFile, mergedText, false);

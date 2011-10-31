@@ -2,26 +2,38 @@
 <project name="DaumEditor" basedir="." default="buildall">
 	<property file="build.properties" />
 
-    <target name="buildall" description="">
-		<antcall target="clean" />
-		<antcall target="packaging" />
+    <target name="buildall" description="clean and build all"
+            depends="clean, build">
 	</target>
 
     <target name="clean" description="remove all artifacts">
        <delete dir="${build.target.dir}" />
-       <delete dir="${dist.dir}" />
+       <delete dir="${build.dist.dir}" />
    </target>
 
-    <target name="packaging" description="build editor artifacts">
-		<antcall target="build-pages" />
-		<antcall target="build-css" />
-		<antcall target="build-js" />
-	</target>
+    <target name="build" description="build artifacts"
+            depends="build-pages,build-css,build-js" />
+
+    <target name="packaging" description="packaging distribution files"
+            depends="build">
+        <mkdir dir="${build.dist.dir}"/>
+        <copy todir="${build.dist.dir}" overwrite="true">
+            <fileset dir="${build.target.dir}">
+                <exclude name="**/merged/"/>
+                <exclude name="**/merged/*"/>
+                <exclude name="**/escaped/"/>
+                <exclude name="**/escaped/*"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${build.dist.dir}/daumeditor/images" overwrite="true">
+            <fileset dir="${src.editor.images.dir}"/>
+        </copy>
+    </target>
 	<!-- end of Main Targets -->
 
 
 	<!-- build & packaging -->
-
     <target name="build-pages">
         <echo message="Building HTML... -------------------------------------------------" />
         <mkdir dir="${build.target.editor.pages.dir}" />
@@ -48,11 +60,10 @@
 
 	<target name="build-css">
 		<echo message="Building CSS... --------------------------------------------------" />
-		<mkdir dir="${build.target.editor.css.dir" />
+		<mkdir dir="${build.target.editor.css.dir}" />
 		<ant antfile="build_css.xml" target="merge_editor_css" />
 		<ant antfile="build_css.xml" target="merge_content_css" />
 		<ant antfile="build_css.xml" target="minify_stylesheets" />
-		<echo message="Building CSS [OK] ------------------------------------------------" />
 	</target>
 
 </project>
