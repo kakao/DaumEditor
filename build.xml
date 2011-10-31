@@ -48,7 +48,9 @@
 		<echo message="www from local dorectory" />
 		<mkdir dir="${dist.dir}/www" />
 		<copy encoding="UTF-8" todir="${dist.dir}/www/" overwrite="true">
-			<fileset dir="www/" />
+			<fileset dir="www/">
+                <include name="editor.html" />
+            </fileset>
 		</copy>
 	</target>
 	
