@@ -178,6 +178,8 @@
                 }
             };
             iframe = document.createElement("iframe");
+            document.body.appendChild(iframe);
+
             window.onBlankPageLoaded = function(win, doc) {
                 eventBinder = new Trex.WysiwygEventBinder(win, doc, canvas, processor);
                 eventBinder.bindEvents();
@@ -185,8 +187,13 @@
                 wysiwygWindow = win;
                 QUnit.start();
             };
-            iframe.src = "blank.html";
-            document.body.appendChild(iframe);
+
+            var doc = iframe.contentWindow.document;
+            doc.open();
+            doc.write('<html><head><title>mock iframe</title></head><body>' +
+                      '<script type="text/javascript">parent.onBlankPageLoaded(this, document);</sc' + 'ript>' +
+                      '</body></html>');
+            doc.close();
         },
         teardown: function() {
             document.body.removeChild(iframe);
