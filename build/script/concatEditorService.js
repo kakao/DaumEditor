@@ -1,6 +1,6 @@
 load("build/script/io.js");
 
-EDITOR_PROJECT_NAME = "__UNDEFINED__";
+var EDITOR_PROJECT_NAME = "__UNDEFINED__";
 var document = {
     write: function() {
     }
@@ -15,12 +15,20 @@ var EditorJSLoader = {
     }
 };
 
-var mergedFile = arguments[0],
-    workingDir = arguments[1];
+var i;
 
-load("workingcopy/js/editor.js");
-load("workingcopy/js/editor_common.js");
-load("workingcopy/js/import_lib.js");
+var mergedFile = arguments[0],
+    srcDir = arguments[1],
+    seedFile = arguments[2];
+
+var getSourcePath = function(filename){
+	return srcDir + '/' + filename;
+};
+
+var seeds = seedFile.split(",");
+for (i = 0; i < seeds.length; i++) {
+    load(getSourcePath(seeds[i]));
+}
 
 var isExcludeFile = function(filepath) {
     return (filepath === "" ||
@@ -28,9 +36,7 @@ var isExcludeFile = function(filepath) {
         filepath === "trex/eval.js");
 };
 
-var getWorkDir = function(filepath){
-	return workingDir + '/js/' + filepath;
-};
+
 
 var count = 0;
 var addGlobalCount = function(){
@@ -38,7 +44,7 @@ var addGlobalCount = function(){
 };
 
 var readFileContent = function(filepath){
-	var _filename = getWorkDir(filepath);
+	var _filename = getSourcePath(filepath);
     if (exists(_filename)) {
         return readFile(_filename, "utf-8");
     }
@@ -54,7 +60,7 @@ writeFile(mergedFile, readFileContent("trex/eval.js"));
 writeFile(mergedFile, '(function(){');
 
 // add files
-for (var i = 0; i < DEVELLIBS.length; i++) {
+for (i = 0; i < DEVELLIBS.length; i++) {
     if (isExcludeFile(DEVELLIBS[i]) === true) {
         continue;
     }

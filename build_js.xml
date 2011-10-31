@@ -2,88 +2,100 @@
 <project name="trex_build_js">
 	<property file="build.properties" />
 
+    <!-- 'foreach', 'propertyregex' task definition -->
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
             <pathelement location="${lib.dir}/ant-contrib-1.0b3.jar"/>
         </classpath>
     </taskdef>
-    
-	<!-- editor.js : merge & minify javascript -->
+
+	<!-- merging -->
 	<target name="merge_javascripts">
 		<antcall target="merge_editor_js" />
 		<antcall target="merge_popup_js" />
         <antcall target="copy_etc_js_to_dist" />
 	</target>
 	
-	<target name="merge_editor_js">
-		<echo message="Merge editor.js ..." />
-		<mkdir dir="${editor.src.dir}/js" />
-		<property name="merged.js.path" value="${editor.src.dir}/js/editor.js" />
-        <java jar="${lib.rhino.path}" failonerror="true" fork="true">
-			<arg value="${build.js.dir}/concatEditorService.js" />
-			<arg value="${merged.js.path}" />
-			<arg value="${working.dir}" />
-		</java>
-		<echo message="${merged.js.path} created" />
-	</target>
+        <target name="merge_editor_js">
+            <echo message="Merge editor.js ..."/>
+            <mkdir dir="${build.target.editor.js.dir}/merged"/>
+            <delete file="${build.target.editor.js.dir}/merged/editor.js"/>
+            <java jar="${lib.rhino.path}" failonerror="true" fork="true">
+                <arg value="${build.js.dir}/concatEditorService.js"/>
+                <arg value="${build.target.editor.js.dir}/merged/editor.js"/>
+                <arg value="${src.editor.js.dir}"/>
+                <arg value="editor.js,import_lib.js"/>
+            </java>
+        </target>
 
-	<target name="merge_popup_js">
-		<echo message="Merge popup.js ..." />
-        <java jar="${lib.rhino.path}" failonerror="true" fork="true">
-			<arg value="${build.js.dir}/concatEditor.js" />
-			<arg value="${editor.src.dir}/js/popup.js" />
-			<arg value="${working.dir}" />
-			<arg value="popup.js" />
-		</java>
-	</target>
+        <target name="merge_popup_js">
+            <echo message="Merge popup.js ..." />
+            <mkdir dir="${build.target.editor.js.dir}/merged"/>
+            <delete file="${build.target.editor.js.dir}/merged/pop.js"/>
+            <java jar="${lib.rhino.path}" failonerror="true" fork="true">
+                <arg value="${build.js.dir}/concatEditorService.js" />
+                <arg value="${build.target.editor.js.dir}/merged/popup.js" />
+                <arg value="${src.editor.js.dir}" />
+                <arg value="popup.js" />
+            </java>
+        </target>
 
-    <target name="copy_etc_js_to_dist">
-		<echo message="copy etc to dist" />
-		<copy file="${working.dir}/js/global.js" todir="${editor.src.dir}/js" />
-		<copy file="${working.dir}/js/editor_loader.js" todir="${editor.src.dir}/js" />
+        <target name="copy_etc_js_to_dist">
+            <echo message="copy etc to dist" />
+            <mkdir dir="${build.target.editor.js.dir}"/>
+            <copy file="${src.editor.js.dir}/global.js" todir="${build.target.editor.js.dir}/merged" />
+            <copy file="${src.editor.js.dir}/editor_loader.js" todir="${build.target.editor.js.dir}/merged" />
 
-		<echo message="copy async tools to ${editor.src.dir}/js" />
-        <copy todir="${editor.src.dir}/js${async.trex.dir}" overwrite="true">
-            <fileset dir="${working.dir}/js${async.trex.dir}" />
-        </copy>
-	</target>
+            <echo message="copy async tools to ${build.target.editor.js.dir}" />
+            <copy todir="${build.target.editor.js.dir}/merged/${async.trex.dir}" overwrite="true">
+                <fileset dir="${src.editor.js.dir}/${async.trex.dir}" />
+            </copy>
+        </target>
 
+
+    <!-- escaping -->
 	<target name="escape_and_delete_logging">
 		<echo message="Escape orig.editor.js" />
-		<native2ascii encoding="utf-8" src="${editor.src.dir}/js" dest="${editor.src.dir}/js" includes="**/*.js" excludes="**/*.esc.js" ext=".esc.js" />
+        <mkdir dir="${build.target.editor.js.dir}/escaped"/>
+		<native2ascii encoding="utf-8" src="${build.target.editor.js.dir}/merged" dest="${build.target.editor.js.dir}/escaped"
+                      includes="**/*.js"/>
 
 		<echo message="Delete console message" />
 		<replaceregexp match="(console\.[^;]*;)" replace="" flags="g" byline="true" encoding="utf-8">
-			<fileset dir="${editor.src.dir}/js" includes="**/*.esc.js" />
+			<fileset dir="${build.target.editor.js.dir}/escaped" includes="**/*.js" />
 		</replaceregexp>
 		<replaceregexp match="(StopWatch\.lap\([^;]*;)" replace="" flags="g" byline="true" encoding="utf-8">
-			<fileset dir="${editor.src.dir}/js" includes="**/*.esc.js" />
+			<fileset dir="${build.target.editor.js.dir}/escaped" includes="**/*.js" />
 		</replaceregexp>
 	</target>
 
-	<target name="minify_javascripts">
-		<foreach target="    _minify_javascript" param="file">
-			<path>
-				<fileset dir="${editor.src.dir}/js" includes="**/*.esc.js" />
-			</path>
-		</foreach>
-	</target>
 
-	<target name="    _minify_javascript">
-		<!--suppress AntResolveInspection -->
-        <dirname property="target_dir" file="${file}" />
-		<basename property="target_filename" file="${file}" suffix=".esc.js" />
-        <mkdir dir="${target_dir}" />
-		<echo message="minify ${file} to ${target_dir}/${target_filename}.js" />
-		<java classname="com.yahoo.platform.yui.compressor.YUICompressor" classpath="${lib.yuicompressor.path}" failonerror="true">
-			<arg value="--charset" />
-			<arg value="utf-8" />
-			<arg value="--line-break" />
-			<arg value="1000" />
-			<!--suppress AntResolveInspection -->
-			<arg file="${file}" />
-			<arg value="-o" />
-			<arg file="${target_dir}/${target_filename}.js" />
-		</java>
-	</target>
+    <!-- minifying -->
+    <target name="minify_javascripts">
+        <foreach target="_minify_javascript" param="file">
+            <path>
+                <fileset dir="${build.target.editor.js.dir}/escaped" includes="**/*.js"/>
+            </path>
+        </foreach>
+    </target>
+
+        <target name="_minify_javascript">
+            <dirname property="target_dir_escaped" file="${file}"/>
+            <propertyregex property="target_dir" input="${target_dir_escaped}" regexp="\/escaped" replace=""/>
+
+            <basename property="target_filename" file="${file}"/>
+            <!--  suffix=".escaped.js" -->
+            <mkdir dir="${target_dir}"/>
+            <echo message="minify ${file} to ${target_dir}/${target_filename}"/>
+            <java classname="com.yahoo.platform.yui.compressor.YUICompressor" classpath="${lib.yuicompressor.path}"
+                  failonerror="true">
+                <arg value="--charset"/>
+                <arg value="utf-8"/>
+                <arg value="--line-break"/>
+                <arg value="1000"/>
+                <arg file="${file}"/>
+                <arg value="-o"/>
+                <arg file="${target_dir}/${target_filename}"/>
+            </java>
+        </target>
 </project>

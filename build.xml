@@ -8,6 +8,7 @@
 	</target>
 
     <target name="clean" description="remove all artifacts">
+       <delete dir="${build.target.dir}" />
        <delete dir="${dist.dir}" />
    </target>
 
@@ -23,13 +24,13 @@
 
     <target name="build-pages">
         <echo message="Building HTML... -------------------------------------------------" />
-        <mkdir dir="${dist.editor.pages.dir}" />
-        <copy encoding="UTF-8" todir="${dist.editor.pages.dir}" overwrite="true">
+        <mkdir dir="${build.target.editor.pages.dir}" />
+        <copy encoding="UTF-8" todir="${build.target.editor.pages.dir}" overwrite="true">
             <fileset dir="${src.editor.pages.dir}" />
         </copy>
 
-		<mkdir dir="${dist.web.dir}" />
-		<copy encoding="UTF-8" todir="${dist.web.dir}" overwrite="true">
+		<mkdir dir="${build.target.web.dir}" />
+		<copy encoding="UTF-8" todir="${build.target.web.dir}" overwrite="true">
 			<fileset dir="${src.web.dir}">
                 <include name="editor.html" />
             </fileset>
@@ -39,16 +40,15 @@
 
 	<target name="build-js">
 		<echo message="Building JS... ---------------------------------------------------" />
-        <mkdir dir="${dist.editor.js.dir" />
+        <mkdir dir="${build.target.editor.js.dir}" />
 		<ant antfile="build_js.xml" target="merge_javascripts" />
 		<ant antfile="build_js.xml" target="escape_and_delete_logging" />
 		<ant antfile="build_js.xml" target="minify_javascripts" />
-		<echo message="Building JS [OK] -------------------------------------------------" />
 	</target>
 
 	<target name="build-css">
 		<echo message="Building CSS... --------------------------------------------------" />
-		<mkdir dir="${dist.editor.css.dir" />
+		<mkdir dir="${build.target.editor.css.dir" />
 		<ant antfile="build_css.xml" target="merge_editor_css" />
 		<ant antfile="build_css.xml" target="merge_content_css" />
 		<ant antfile="build_css.xml" target="minify_stylesheets" />

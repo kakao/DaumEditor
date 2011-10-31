@@ -1,4 +1,4 @@
-
 # build output directory
-workingcopy/
 dist/
+target/
+.DS_Store

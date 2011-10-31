@@ -1,3 +1,4 @@
+// deprecated
 load("build/script/io.js");
 
 EDITOR_PROJECT_NAME = "__UNDEFINED__";
