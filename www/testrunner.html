@@ -535,5 +535,12 @@ EditorJSLoader.ready(function() {
 <!-- @Test Suites -->
 <script type="text/javascript" src="testcase/lib/sizzle-1.5.1.js"></script>
 <script type="text/javascript" src="testcase/testsuites.js"></script>
+<script type="text/javascript">
+    EditorJSLoader.ready(function() {
+        for (var i = 0; i < testCases.length; i++) {
+            Trex.I.JSRequester.importScript(testCases[i]);
+        }
+    });
+</script>
 </body>
 </html>
