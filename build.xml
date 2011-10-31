@@ -1,73 +1,54 @@
 <?xml version="1.0"?>
-<project name="DaumEditor" basedir="." default="build_local">
+<project name="DaumEditor" basedir="." default="buildall">
 	<property file="build.properties" />
 
-	<target name="workingcopy" depends="clean" description="workingcopy current files from local directory">
-		<echo message="Workingcopy from local dorectory" />
-		<mkdir dir="${working.dir}" />
-		<copy encoding="UTF-8" todir="${working.dir}/" overwrite="true">
-			<fileset dir="${working.dir}/../daumeditor/" />
-		</copy>
-	</target>
-
-	<target name="packaging" description="build editor artifacts">
-		<delete dir="${dist.dir}" />
-		<mkdir dir="${dist.dir}" />
-		<mkdir dir="${editor.src.dir}" />
-		<antcall target="build_www" />
-		<antcall target="build_html" />
-		<antcall target="build_css" />
-		<antcall target="build_js" />
-	</target>
-
-
-	<!-- TODO local에서 build 과정을 모두 하는 것이 아니라, packaging 까지만 진행한다 -->
-    <!-- TODO package, build, deploy 등의 정확한 기능을 지정한다 -->
-	<target name="build_local" description="workingcopy and packaging from local directory">
+    <target name="buildall" description="">
 		<antcall target="clean" />
-		<antcall target="workingcopy" />
 		<antcall target="packaging" />
 	</target>
 
- 	<target name="clean" description="remove all artifacts">
-		<delete dir="${dist.dir}" />
-		<delete dir="${working.dir}" />
+    <target name="clean" description="remove all artifacts">
+       <delete dir="${dist.dir}" />
+   </target>
+
+    <target name="packaging" description="build editor artifacts">
+		<antcall target="build-pages" />
+		<antcall target="build-css" />
+		<antcall target="build-js" />
 	</target>
 	<!-- end of Main Targets -->
 
 
 	<!-- build & packaging -->
-	<target name="build_www">
-		<echo message="www from local dorectory" />
-		<mkdir dir="${dist.dir}/www" />
-		<copy encoding="UTF-8" todir="${dist.dir}/www/" overwrite="true">
-			<fileset dir="www/">
+
+    <target name="build-pages">
+        <echo message="Building HTML... -------------------------------------------------" />
+        <mkdir dir="${dist.editor.pages.dir}" />
+        <copy encoding="UTF-8" todir="${dist.editor.pages.dir}" overwrite="true">
+            <fileset dir="${src.editor.pages.dir}" />
+        </copy>
+
+		<mkdir dir="${dist.web.dir}" />
+		<copy encoding="UTF-8" todir="${dist.web.dir}" overwrite="true">
+			<fileset dir="${src.web.dir}">
                 <include name="editor.html" />
             </fileset>
 		</copy>
-	</target>
+    </target>
 
-	<target name="build_js">
+
+	<target name="build-js">
 		<echo message="Building JS... ---------------------------------------------------" />
+        <mkdir dir="${dist.editor.js.dir" />
 		<ant antfile="build_js.xml" target="merge_javascripts" />
 		<ant antfile="build_js.xml" target="escape_and_delete_logging" />
 		<ant antfile="build_js.xml" target="minify_javascripts" />
 		<echo message="Building JS [OK] -------------------------------------------------" />
 	</target>
 
-
-	<target name="build_html">
-		<echo message="Building HTML... -------------------------------------------------" />
-		<copy encoding="UTF-8" todir="${editor.src.dir}/pages" overwrite="true">
-			<fileset dir="${working.dir}/pages" />
-		</copy>
-		<echo message="Building HTML [OK] -----------------------------------------------" />
-	</target>
-
-
-	<target name="build_css">
+	<target name="build-css">
 		<echo message="Building CSS... --------------------------------------------------" />
-		<mkdir dir="${editor.src.dir}/css" />
+		<mkdir dir="${dist.editor.css.dir" />
 		<ant antfile="build_css.xml" target="merge_editor_css" />
 		<ant antfile="build_css.xml" target="merge_content_css" />
 		<ant antfile="build_css.xml" target="minify_stylesheets" />
