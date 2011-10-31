@@ -44,7 +44,7 @@
                 <fileset dir="${src.editor.pages.dir}" />
             </copy>
 
-            <copy encoding="UTF-8" todir="${build.dist.dir}/web" overwrite="true">
+            <copy encoding="UTF-8" todir="${build.dist.dir}/www" overwrite="true">
                 <fileset dir="${src.web.dir}">
                     <include name="editor.html" />
                 </fileset>
