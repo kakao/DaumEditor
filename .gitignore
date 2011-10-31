@@ -1,0 +1,4 @@
+# build output directory
+dist/
+target/
+.DS_Store

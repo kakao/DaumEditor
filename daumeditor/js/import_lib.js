@@ -45,7 +45,7 @@
         if (window.Editor && Editor.__EDITOR_LOADED) {
             var canvas = Editor.getCanvas().elContainer; //$tx("tx_canvas");
             var indicator = document.createElement("span");
-            indicator.innerHTML = "개발용 에디터";
+            indicator.innerHTML = "developer editor";
             $tx.setStyle(indicator, {
                 position: "absolute",
                 fontSize: "12px",
