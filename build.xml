@@ -5,7 +5,7 @@
     <!-- 'foreach', 'propertyregex' task definition -->
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
-            <pathelement location="${lib.dir}/ant-contrib-1.0b3.jar"/>
+            <pathelement location="${build.lib.dir}/ant-contrib-1.0b3.jar"/>
         </classpath>
     </taskdef>
 
@@ -69,8 +69,8 @@
             <target name="merge_editor_js">
                 <echo message="Merge editor.js ..."/>
                 <mkdir dir="${build.target.editor.js.dir}/merged"/>
-                <java jar="${lib.rhino.path}" failonerror="true" fork="true">
-                    <arg value="${build.js.dir}/concatEditorService.js"/>
+                <java jar="${build.lib.rhino}" failonerror="true" fork="true">
+                    <arg value="${build.script.dir}/concatEditorService.js"/>
                     <arg value="${build.target.editor.js.dir}/merged/editor.js"/>
                     <arg value="${src.editor.js.dir}"/>
                     <arg value="editor.js,import_lib.js"/>
@@ -80,8 +80,8 @@
             <target name="merge_popup_js">
                 <echo message="Merge popup.js ..." />
                 <mkdir dir="${build.target.editor.js.dir}/merged"/>
-                <java jar="${lib.rhino.path}" failonerror="true" fork="true">
-                    <arg value="${build.js.dir}/concatEditorService.js" />
+                <java jar="${build.lib.rhino}" failonerror="true" fork="true">
+                    <arg value="${build.script.dir}/concatEditorService.js" />
                     <arg value="${build.target.editor.js.dir}/merged/popup.js" />
                     <arg value="${src.editor.js.dir}" />
                     <arg value="popup.js" />
@@ -135,7 +135,7 @@
                 <!--  suffix=".escaped.js" -->
                 <mkdir dir="${target_dir}"/>
                 <echo message="minify ${file} to ${target_dir}/${target_filename}"/>
-                <java classname="com.yahoo.platform.yui.compressor.YUICompressor" classpath="${lib.yuicompressor.path}"
+                <java classname="com.yahoo.platform.yui.compressor.YUICompressor" classpath="${build.lib.yuicompressor}"
                       failonerror="true">
                     <arg value="--charset"/>
                     <arg value="utf-8"/>
@@ -160,8 +160,8 @@
         <target name="merge_editor_css">
             <echo message="Merge editor.css ..."/>
             <mkdir dir="${build.target.editor.css.dir}/merged"/>
-            <java jar="${lib.rhino.path}" failonerror="true" fork="true">
-                <arg value="${build.js.dir}/concatStylesheet.js"/>
+            <java jar="${build.lib.rhino}" failonerror="true" fork="true">
+                <arg value="${build.script.dir}/concatStylesheet.js"/>
                 <arg value="${build.target.editor.css.dir}/merged/editor.css"/>
                 <arg value="${src.editor.css.dir}"/>
                 <arg value="editor.css"/>
@@ -175,15 +175,15 @@
             <mkdir dir="${build.target.editor.css.dir}/merged"/>
 
             <echo message="Merge content_view.css ..."/>
-            <java jar="${lib.rhino.path}" failonerror="true" fork="true">
-                <arg value="${build.js.dir}/concatStylesheet.js"/>
+            <java jar="${build.lib.rhino}" failonerror="true" fork="true">
+                <arg value="${build.script.dir}/concatStylesheet.js"/>
                 <arg value="${build.target.editor.css.dir}/merged/content_view.css"/>
                 <arg value="${src.editor.css.dir}"/>
                 <arg value="content_view.css"/>
             </java>
 
-            <java jar="${lib.rhino.path}" failonerror="true" fork="true">
-                <arg value="${build.js.dir}/concatStylesheet.js"/>
+            <java jar="${build.lib.rhino}" failonerror="true" fork="true">
+                <arg value="${build.script.dir}/concatStylesheet.js"/>
                 <arg value="${build.target.editor.css.dir}/merged/content_wysiwyg.css"/>
                 <arg value="${src.editor.css.dir}"/>
                 <arg value="content_wysiwyg.css"/>
@@ -201,7 +201,7 @@
             <echo message="Minify ${css_fname}.css"/>
 
             <java classname="com.yahoo.platform.yui.compressor.YUICompressor"
-                  classpath="${lib.yuicompressor.path}" failonerror="true">
+                  classpath="${build.lib.yuicompressor}" failonerror="true">
                 <arg value="--type"/>
                 <arg value="css"/>
                 <arg value="--charset"/>
