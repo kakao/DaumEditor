@@ -2,6 +2,14 @@
 <project name="DaumEditor" basedir="." default="buildall">
 	<property file="build.properties" />
 
+    <!-- 'foreach', 'propertyregex' task definition -->
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="${lib.dir}/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+
+    <!-- main tasks ====================================================== -->
     <target name="buildall" description="clean and build all"
             depends="clean, packaging">
 	</target>
@@ -42,26 +50,168 @@
                 </fileset>
             </copy>
     </target>
-	<!-- end of Main Targets -->
 
 
-	<!-- build javascript -->
+	<!-- build javascript tasks ========================================== -->
 	<target name="build-js">
-		<echo message="Building JS... ---------------------------------------------------" />
         <mkdir dir="${build.target.editor.js.dir}" />
-		<ant antfile="build_js.xml" target="merge_javascripts" />
-		<ant antfile="build_js.xml" target="escape_and_delete_logging" />
-		<ant antfile="build_js.xml" target="minify_javascripts" />
+		<ant target="merge_javascripts" />
+		<ant target="escape_and_delete_logging" />
+		<ant target="minify_javascripts" />
 	</target>
 
+        <target name="merge_javascripts">
+            <antcall target="merge_editor_js" />
+            <antcall target="merge_popup_js" />
+            <antcall target="copy_etc_js_to_dist" />
+        </target>
 
-    <!-- build CSS -->
+            <target name="merge_editor_js">
+                <echo message="Merge editor.js ..."/>
+                <mkdir dir="${build.target.editor.js.dir}/merged"/>
+                <java jar="${lib.rhino.path}" failonerror="true" fork="true">
+                    <arg value="${build.js.dir}/concatEditorService.js"/>
+                    <arg value="${build.target.editor.js.dir}/merged/editor.js"/>
+                    <arg value="${src.editor.js.dir}"/>
+                    <arg value="editor.js,import_lib.js"/>
+                </java>
+            </target>
+
+            <target name="merge_popup_js">
+                <echo message="Merge popup.js ..." />
+                <mkdir dir="${build.target.editor.js.dir}/merged"/>
+                <java jar="${lib.rhino.path}" failonerror="true" fork="true">
+                    <arg value="${build.js.dir}/concatEditorService.js" />
+                    <arg value="${build.target.editor.js.dir}/merged/popup.js" />
+                    <arg value="${src.editor.js.dir}" />
+                    <arg value="popup.js" />
+                </java>
+            </target>
+
+            <target name="copy_etc_js_to_dist">
+                <echo message="copy etc to dist" />
+                <mkdir dir="${build.target.editor.js.dir}"/>
+                <copy file="${src.editor.js.dir}/global.js" todir="${build.target.editor.js.dir}/merged" />
+                <copy file="${src.editor.js.dir}/editor_loader.js" todir="${build.target.editor.js.dir}/merged" />
+
+                <echo message="copy async tools to ${build.target.editor.js.dir}" />
+                <copy todir="${build.target.editor.js.dir}/merged/${async.trex.dir}" overwrite="true">
+                    <fileset dir="${src.editor.js.dir}/${async.trex.dir}" />
+                </copy>
+            </target>
+
+
+        <!-- escaping -->
+        <target name="escape_and_delete_logging">
+            <echo message="Escape orig.editor.js" />
+            <mkdir dir="${build.target.editor.js.dir}/escaped"/>
+            <native2ascii encoding="utf-8" src="${build.target.editor.js.dir}/merged" dest="${build.target.editor.js.dir}/escaped"
+                          includes="**/*.js"/>
+
+            <echo message="Delete console message" />
+            <replaceregexp match="(console\.[^;]*;)" replace="" flags="g" byline="true" encoding="utf-8">
+                <fileset dir="${build.target.editor.js.dir}/escaped" includes="**/*.js" />
+            </replaceregexp>
+            <replaceregexp match="(StopWatch\.lap\([^;]*;)" replace="" flags="g" byline="true" encoding="utf-8">
+                <fileset dir="${build.target.editor.js.dir}/escaped" includes="**/*.js" />
+            </replaceregexp>
+        </target>
+
+
+        <!-- minifying -->
+        <target name="minify_javascripts">
+            <foreach target="_minify_javascript" param="file">
+                <path>
+                    <fileset dir="${build.target.editor.js.dir}/escaped" includes="**/*.js"/>
+                </path>
+            </foreach>
+        </target>
+
+            <target name="_minify_javascript">
+                <dirname property="target_dir_escaped" file="${file}"/>
+                <propertyregex property="target_dir" input="${target_dir_escaped}" regexp="\/escaped" replace=""/>
+
+                <basename property="target_filename" file="${file}"/>
+                <!--  suffix=".escaped.js" -->
+                <mkdir dir="${target_dir}"/>
+                <echo message="minify ${file} to ${target_dir}/${target_filename}"/>
+                <java classname="com.yahoo.platform.yui.compressor.YUICompressor" classpath="${lib.yuicompressor.path}"
+                      failonerror="true">
+                    <arg value="--charset"/>
+                    <arg value="utf-8"/>
+                    <arg value="--line-break"/>
+                    <arg value="1000"/>
+                    <arg file="${file}"/>
+                    <arg value="-o"/>
+                    <arg file="${target_dir}/${target_filename}"/>
+                </java>
+            </target>
+
+    <!-- build css tasks ================================================= -->
 	<target name="build-css">
-		<echo message="Building CSS... --------------------------------------------------" />
 		<mkdir dir="${build.target.editor.css.dir}" />
-		<ant antfile="build_css.xml" target="merge_editor_css" />
-		<ant antfile="build_css.xml" target="merge_content_css" />
-		<ant antfile="build_css.xml" target="minify_stylesheets" />
+		<ant target="merge_editor_css" />
+		<ant target="merge_content_css" />
+		<ant target="minify_stylesheets" />
 	</target>
 
+
+        <!-- merge & minify css -->
+        <target name="merge_editor_css">
+            <echo message="Merge editor.css ..."/>
+            <mkdir dir="${build.target.editor.css.dir}/merged"/>
+            <java jar="${lib.rhino.path}" failonerror="true" fork="true">
+                <arg value="${build.js.dir}/concatStylesheet.js"/>
+                <arg value="${build.target.editor.css.dir}/merged/editor.css"/>
+                <arg value="${src.editor.css.dir}"/>
+                <arg value="editor.css"/>
+            </java>
+
+            <copy file="${src.editor.css.dir}/popup.css"
+                tofile="${build.target.editor.css.dir}/merged/popup.css" overwrite="true"/>
+        </target>
+
+        <target name="merge_content_css">
+            <mkdir dir="${build.target.editor.css.dir}/merged"/>
+
+            <echo message="Merge content_view.css ..."/>
+            <java jar="${lib.rhino.path}" failonerror="true" fork="true">
+                <arg value="${build.js.dir}/concatStylesheet.js"/>
+                <arg value="${build.target.editor.css.dir}/merged/content_view.css"/>
+                <arg value="${src.editor.css.dir}"/>
+                <arg value="content_view.css"/>
+            </java>
+
+            <java jar="${lib.rhino.path}" failonerror="true" fork="true">
+                <arg value="${build.js.dir}/concatStylesheet.js"/>
+                <arg value="${build.target.editor.css.dir}/merged/content_wysiwyg.css"/>
+                <arg value="${src.editor.css.dir}"/>
+                <arg value="content_wysiwyg.css"/>
+            </java>
+        </target>
+
+
+        <target name="minify_stylesheets">
+            <foreach list="${css.list}" param="css_fname" target="    _minify_stylesheet" />
+        </target>
+
+
+        <target name="    _minify_stylesheet">
+            <!--suppress AntResolveInspection -->
+            <echo message="Minify ${css_fname}.css"/>
+
+            <java classname="com.yahoo.platform.yui.compressor.YUICompressor"
+                  classpath="${lib.yuicompressor.path}" failonerror="true">
+                <arg value="--type"/>
+                <arg value="css"/>
+                <arg value="--charset"/>
+                <arg value="utf-8"/>
+                <arg value="--line-break"/>
+                <arg value="1000"/>
+
+                <arg file="${build.target.editor.css.dir}/merged/${css_fname}.css"/>
+                <arg value="-o"/>
+                <arg file="${build.target.editor.css.dir}/${css_fname}.css"/>
+            </java>
+        </target>
 </project>
