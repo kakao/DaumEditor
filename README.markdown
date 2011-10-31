@@ -1,9 +1,9 @@
 Daum Editor - The Daum Open Source WYSIWYG Web Editor
 ======================================================
 
-- www/editor.html
-- daumeditor/js/editor.js
-- daumeditor/css/editor.css
+- `www/editor.html`
+- `daumeditor/js/editor.js`
+- `daumeditor/css/editor.css`
 
 
 Setting up a development environment
@@ -11,18 +11,22 @@ Setting up a development environment
 1. Install any kind of web server on your desktop
 2. mapping project root directory
 
-e.g. httpd.conf
+e.g. `httpd.conf`
 
-Alias /DaumEditor /Users/daumeditor/workspace/DaumEditor
+`Alias /DaumEditor /Users/daumeditor/workspace/DaumEditor`
 
 3. Open Test Page
 
 Test Case
-e.g. http://yourhostname/DaumEditor/www/testrunner.html
+
+e.g. `http://yourhostname/DaumEditor/www/testrunner.html`
 
 Sample
-e.g. http://yourhostname/DaumEditor/www/editor.html
 
+e.g. `http://yourhostname/DaumEditor/www/editor.html`
+
+
+*ACCESS WITH LOCAL URL(file://) NOT RECOMMENDED!*
 
 
 Build & Packaging
@@ -32,12 +36,16 @@ Build & Packaging
 * JRE
 * Apache Ant
 
-2. cd DaumEditor
+2. move to DaumEditor directory
+`$ cd DaumEditor`
+
 3. run ant task
 
 e.g.
-DaumEditor$ ant
+`DaumEditor$ ant`
 
+4. test
+`open 'build/dist/www/editor.html' in your browser`
 
 Install
 ------------------------------------------
