@@ -1,4 +1,4 @@
-load("build/src/io.js");
+load("build/script/io.js");
 
 var mergedFile = arguments[0],
     inputPath = arguments[1],

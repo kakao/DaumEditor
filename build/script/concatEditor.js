@@ -1,4 +1,4 @@
-load("build/src/io.js");
+load("build/script/io.js");
 
 EDITOR_PROJECT_NAME = "__UNDEFINED__";
 var document = {
