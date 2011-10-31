@@ -70,7 +70,7 @@
                 <echo message="Merge editor.js ..."/>
                 <mkdir dir="${build.target.editor.js.dir}/merged"/>
                 <java jar="${build.lib.rhino}" failonerror="true" fork="true">
-                    <arg value="${build.script.dir}/concatEditorService.js"/>
+                    <arg value="${build.script.dir}/merge_javascript.js"/>
                     <arg value="${build.target.editor.js.dir}/merged/editor.js"/>
                     <arg value="${src.editor.js.dir}"/>
                     <arg value="editor.js,import_lib.js"/>
@@ -81,7 +81,7 @@
                 <echo message="Merge popup.js ..." />
                 <mkdir dir="${build.target.editor.js.dir}/merged"/>
                 <java jar="${build.lib.rhino}" failonerror="true" fork="true">
-                    <arg value="${build.script.dir}/concatEditorService.js" />
+                    <arg value="${build.script.dir}/merge_javascript.js" />
                     <arg value="${build.target.editor.js.dir}/merged/popup.js" />
                     <arg value="${src.editor.js.dir}" />
                     <arg value="popup.js" />
@@ -161,7 +161,7 @@
             <echo message="Merge editor.css ..."/>
             <mkdir dir="${build.target.editor.css.dir}/merged"/>
             <java jar="${build.lib.rhino}" failonerror="true" fork="true">
-                <arg value="${build.script.dir}/concatStylesheet.js"/>
+                <arg value="${build.script.dir}/merge_css.js"/>
                 <arg value="${build.target.editor.css.dir}/merged/editor.css"/>
                 <arg value="${src.editor.css.dir}"/>
                 <arg value="editor.css"/>
@@ -176,14 +176,14 @@
 
             <echo message="Merge content_view.css ..."/>
             <java jar="${build.lib.rhino}" failonerror="true" fork="true">
-                <arg value="${build.script.dir}/concatStylesheet.js"/>
+                <arg value="${build.script.dir}/merge_css.js"/>
                 <arg value="${build.target.editor.css.dir}/merged/content_view.css"/>
                 <arg value="${src.editor.css.dir}"/>
                 <arg value="content_view.css"/>
             </java>
 
             <java jar="${build.lib.rhino}" failonerror="true" fork="true">
-                <arg value="${build.script.dir}/concatStylesheet.js"/>
+                <arg value="${build.script.dir}/merge_css.js"/>
                 <arg value="${build.target.editor.css.dir}/merged/content_wysiwyg.css"/>
                 <arg value="${src.editor.css.dir}"/>
                 <arg value="content_wysiwyg.css"/>
