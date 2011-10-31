@@ -2,15 +2,14 @@
 <project name="trex_build_css">
     <property file="build.properties"/>
 
-    <path id="ant.contrib.classpath">
-        <fileset dir="${lib.dir}/ant-contrib">
-            <include name="ant-contrib-1.0b3.jar"/>
-        </fileset>
-    </path>
-    <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="ant.contrib.classpath"/>
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="${lib.dir}/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
 
 
-	<!-- merge & minify css -->
+    <!-- merge & minify css -->
     <target name="merge_editor_css">
     	<!--suppress AntResolveInspection -->
         <echo message="Merge editor.css ..."/>

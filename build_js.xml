@@ -2,13 +2,12 @@
 <project name="trex_build_js">
 	<property file="build.properties" />
 
-	<path id="ant.contrib.classpath">
-		<fileset dir="${lib.dir}/ant-contrib">
-			<include name="ant-contrib-1.0b3.jar" />
-		</fileset>
-	</path>
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="ant.contrib.classpath" />
-
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="${lib.dir}/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+    
 	<!-- editor.js : merge & minify javascript -->
 	<target name="merge_javascripts">
 		<antcall target="merge_editor_js" />

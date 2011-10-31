@@ -2,13 +2,6 @@
 <project name="DaumEditor" basedir="." default="build_local">
 	<property file="build.properties" />
 
-    <path id="ant.contrib.classpath">
-        <fileset dir="${lib.dir}/ant-contrib">
-            <include name="ant-contrib-1.0b3.jar"/>
-        </fileset>
-    </path>
-    <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="ant.contrib.classpath"/>
-
 	<target name="workingcopy" depends="clean" description="workingcopy current files from local directory">
 		<echo message="Workingcopy from local dorectory" />
 		<mkdir dir="${working.dir}" />
@@ -27,7 +20,7 @@
 		<antcall target="build_js" />
 	</target>
 
-	
+
 	<!-- TODO local에서 build 과정을 모두 하는 것이 아니라, packaging 까지만 진행한다 -->
     <!-- TODO package, build, deploy 등의 정확한 기능을 지정한다 -->
 	<target name="build_local" description="workingcopy and packaging from local directory">
@@ -53,7 +46,7 @@
             </fileset>
 		</copy>
 	</target>
-	
+
 	<target name="build_js">
 		<echo message="Building JS... ---------------------------------------------------" />
 		<ant antfile="build_js.xml" target="merge_javascripts" />
