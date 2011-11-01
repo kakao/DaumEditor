@@ -20,9 +20,9 @@ function exists(file) {
 
 
 
-var mergedFile = arguments[0],
-    inputPath = arguments[1],
-    inputFile = arguments[2];
+var mergedFile = this.arguments[0],
+    inputPath = this.arguments[1],
+    inputFile = this.arguments[2];
 
 print("build " + mergedFile);
 

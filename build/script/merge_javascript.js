@@ -37,9 +37,9 @@ var EditorJSLoader = {
 
 var i;
 
-var mergedFile = arguments[0],
-    srcDir = arguments[1],
-    seedFile = arguments[2];
+var mergedFile = this.arguments[0],
+    srcDir = this.arguments[1],
+    seedFile = this.arguments[2];
 
 var getSourcePath = function(filename){
 	return srcDir + '/' + filename;
