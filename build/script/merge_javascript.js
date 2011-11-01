@@ -139,10 +139,10 @@ if (typeof EXT_FILES === "object") {
 }
 
 // 6. write service list
-if (typeof PROJECTLIBS === "object") {
-    for (i = 0; i < PROJECTLIBS.length; i++) {
-        if (!isExcludeFile(PROJECTLIBS[i])) {
-            _importScript(PROJECTLIBS[i]);
+if (typeof SERVICE_FILES === "object") {
+    for (i = 0; i < SERVICE_FILES.length; i++) {
+        if (!isExcludeFile(SERVICE_FILES[i])) {
+            _importScript(SERVICE_FILES[i]);
         }
     }
 }
