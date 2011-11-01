@@ -91,11 +91,11 @@ addGlobalCount();
 //writeFile(mergedFile, '(function(){');
 //
 //// add files
-//for (i = 0; i < DEVELLIBS.length; i++) {
-//    if (isExcludeFile(DEVELLIBS[i]) === true) {
+//for (i = 0; i < CORE_FILES.length; i++) {
+//    if (isExcludeFile(CORE_FILES[i]) === true) {
 //        continue;
 //    }
-//    var content = readFileContent(DEVELLIBS[i]);
+//    var content = readFileContent(CORE_FILES[i]);
 //    if(content){
 //    	addGlobalCount();
 //    	writeFile(mergedFile, content);
@@ -123,9 +123,9 @@ writeFile(mergedFile, '\r\n(function(){\r\n');
 _importScript(DE_PREFIX + "trex/header.js");
 
 // 4. write trex list
-for (i = 0; i < DEVELLIBS.length; i++) {
-    if (!isExcludeFile(DEVELLIBS[i])) {
-        _importScript(DE_PREFIX + DEVELLIBS[i]);
+for (i = 0; i < CORE_FILES.length; i++) {
+    if (!isExcludeFile(CORE_FILES[i])) {
+        _importScript(DE_PREFIX + CORE_FILES[i]);
     }
 }
 

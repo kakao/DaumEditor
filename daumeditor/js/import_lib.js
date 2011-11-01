@@ -10,8 +10,8 @@
     _importScript("trex/header.js");
 
     // 2. import trex
-    for (i = 0; i < DEVELLIBS.length; i++) {
-        _importScript(DEVELLIBS[i]);
+    for (i = 0; i < CORE_FILES.length; i++) {
+        _importScript(CORE_FILES[i]);
     }
 
     // 3. import footer

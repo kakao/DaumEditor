@@ -1,4 +1,4 @@
-var DEVELLIBS = [
+var CORE_FILES = [
     "scopeVariable.js",
     "global.js",
     /** debugging library */
@@ -31,9 +31,9 @@ var DEVELLIBS = [
     "popuputil.js"
 ];
 
-for (var i = 0; i < DEVELLIBS.length; i++) {
-    if (DEVELLIBS[i]) {
-        var src = '/daumeditor/js/' + DEVELLIBS[i] + '?v=' + new Date().getTime();
+for (var i = 0; i < CORE_FILES.length; i++) {
+    if (CORE_FILES[i]) {
+        var src = '/daumeditor/js/' + CORE_FILES[i] + '?v=' + new Date().getTime();
         document.write('<script type="text/javascript" src="' + src + '" charset="utf-8"></script>');
     }
 }

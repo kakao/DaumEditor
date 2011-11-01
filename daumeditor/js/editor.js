@@ -1,5 +1,5 @@
 // TODO duplicated with editor_common.js
-var DEVELLIBS = [
+var CORE_FILES = [
     "scopeVariable.js",
     "global.js",
     /** debugging library */
