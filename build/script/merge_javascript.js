@@ -48,30 +48,65 @@ var readFileContent = function(filepath){
     if (exists(_filename)) {
         return readFile(_filename, "utf-8");
     }
-    return false;
+    throw "failed to read file. " + _filename;
 };
 
 // -------------------------------------------------------
 // add eval.js
 addGlobalCount();
-writeFile(mergedFile, readFileContent("trex/eval.js"), false);
+//writeFile(mergedFile, readFileContent("trex/eval.js"), false);
+//
+//// add editor scope
+//writeFile(mergedFile, '(function(){');
+//
+//// add files
+//for (i = 0; i < DEVELLIBS.length; i++) {
+//    if (isExcludeFile(DEVELLIBS[i]) === true) {
+//        continue;
+//    }
+//    var content = readFileContent(DEVELLIBS[i]);
+//    if(content){
+//    	addGlobalCount();
+//    	writeFile(mergedFile, content);
+//    }
+//}
+//
+//// add end scope
+//writeFile(mergedFile, '})()');
 
-// add editor scope
-writeFile(mergedFile, '(function(){');
+function _importScript(filename, overwrite) {
+    writeFile(mergedFile, readFileContent(filename), !overwrite);
+}
 
-// add files
+var DE_PREFIX = "../../../DaumEditor/daumeditor/js/"
+// 1. import header
+_importScript(DE_PREFIX + "trex/header.js", true);
+addGlobalCount();
+
+// 2. import trex
 for (i = 0; i < DEVELLIBS.length; i++) {
-    if (isExcludeFile(DEVELLIBS[i]) === true) {
-        continue;
-    }
-    var content = readFileContent(DEVELLIBS[i]);
-    if(content){
-    	addGlobalCount();
-    	writeFile(mergedFile, content);
+    _importScript(DE_PREFIX + DEVELLIBS[i]);
+    addGlobalCount();
+}
+
+// 3. import daumx
+if (typeof daumx === "object") {
+    for (i = 0; i < daumx.length; i++) {
+        _importScript(daumx[i]);
+        addGlobalCount();
     }
 }
 
-// add end scope
-writeFile(mergedFile, '})()');
+// 4. import projectlib
+if (typeof PROJECTLIBS === "object") {
+    for (i = 0; i < PROJECTLIBS.length; i++) {
+        _importScript(PROJECTLIBS[i]);
+        addGlobalCount();
+    }
+}
+
+// 5. import footer
+_importScript(DE_PREFIX + "trex/footer.js");
+addGlobalCount();
 
 print(count + " js files has been wrote");
