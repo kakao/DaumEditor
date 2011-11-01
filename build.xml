@@ -61,30 +61,18 @@
 	</target>
 
         <target name="merge_javascripts">
-            <antcall target="merge_editor_js" />
-            <antcall target="merge_popup_js" />
+            <foreach list="${js.list}" param="module_name" target="_merge_js" />
             <antcall target="copy_etc_js_to_dist" />
         </target>
 
-            <target name="merge_editor_js">
-                <echo message="Merge editor.js ..."/>
+            <target name="_merge_js">
+                <echo message="Merge ${module_name}.js ..."/>
                 <mkdir dir="${build.target.editor.js.dir}/merged"/>
                 <java jar="${build.lib.rhino}" failonerror="true" fork="true">
                     <arg value="${build.script.dir}/merge_javascript.js"/>
-                    <arg value="${build.target.editor.js.dir}/merged/editor.js"/>
+                    <arg value="${build.target.editor.js.dir}/merged/${module_name}.js"/>
                     <arg value="${src.editor.js.dir}"/>
-                    <arg value="editor.js"/>
-                </java>
-            </target>
-
-            <target name="merge_popup_js">
-                <echo message="Merge popup.js ..." />
-                <mkdir dir="${build.target.editor.js.dir}/merged"/>
-                <java jar="${build.lib.rhino}" failonerror="true" fork="true">
-                    <arg value="${build.script.dir}/merge_javascript.js" />
-                    <arg value="${build.target.editor.js.dir}/merged/popup.js" />
-                    <arg value="${src.editor.js.dir}" />
-                    <arg value="popup.js" />
+                    <arg value="${module_name}.js"/>
                 </java>
             </target>
 
@@ -99,7 +87,6 @@
                     <fileset dir="${src.editor.js.dir}/${async.trex.dir}" />
                 </copy>
             </target>
-
 
         <!-- escaping -->
         <target name="escape_and_delete_logging">
