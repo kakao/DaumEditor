@@ -28,16 +28,8 @@ var DEVELLIBS = [
     /** trex common */
     "trex/common/blackbox.js",
     "trex/common/noticebox.js",
-    "popuputil.js",
-    '' /*dummy*/
+    "popuputil.js"
 ];
-
-var daumx = [
-    "daumx/common/logger.js",
-    "daumx/common/daumlogin.js",
-    '' /*dummy*/
-];
-DEVELLIBS = DEVELLIBS.concat(daumx);
 
 for (var i = 0; i < DEVELLIBS.length; i++) {
     if (DEVELLIBS[i]) {
