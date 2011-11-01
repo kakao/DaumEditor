@@ -129,11 +129,11 @@ for (i = 0; i < CORE_FILES.length; i++) {
     }
 }
 
-// 5. write daumx list
-if (typeof daumx === "object") {
-    for (i = 0; i < daumx.length; i++) {
-        if (!isExcludeFile(daumx[i])) {
-            _importScript(daumx[i]);
+// 5. write EXT_FILES list
+if (typeof EXT_FILES === "object") {
+    for (i = 0; i < EXT_FILES.length; i++) {
+        if (!isExcludeFile(EXT_FILES[i])) {
+            _importScript(EXT_FILES[i]);
         }
     }
 }
