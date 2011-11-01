@@ -53,9 +53,20 @@ for (i = 0; i < seeds.length; i++) {
 var isExcludeFile = function(filepath) {
     return (filepath === "" ||
         filepath === "lib/firebug/firebug.js" ||
-        filepath === "trex/eval.js");
+        filepath === "trex/eval.js" ||
+        isInExcludeList(filepath));
 };
 
+function isInExcludeList(file) {
+    if (typeof EXCLUDE_LIBS === "object") {
+        for (var i = 0; i < EXCLUDE_LIBS.length; i++) {
+            if (EXCLUDE_LIBS[i] == file) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
 
 var count = 0;
@@ -96,37 +107,50 @@ addGlobalCount();
 
 function _importScript(filename, overwrite) {
     writeFile(mergedFile, readFileContent(filename), !overwrite);
-}
-
-var DE_PREFIX = "../../../DaumEditor/daumeditor/js/"
-// 1. import header
-_importScript(DE_PREFIX + "trex/header.js", true);
-addGlobalCount();
-
-// 2. import trex
-for (i = 0; i < DEVELLIBS.length; i++) {
-    _importScript(DE_PREFIX + DEVELLIBS[i]);
     addGlobalCount();
 }
 
-// 3. import daumx
+
+var DE_PREFIX = "../../../DaumEditor/daumeditor/js/"
+
+// 1. write trex/eval
+_importScript(DE_PREFIX + "trex/eval.js", true);
+
+// 2. open local scope
+writeFile(mergedFile, '\r\n(function(){\r\n');
+
+// 3. write header
+_importScript(DE_PREFIX + "trex/header.js");
+
+// 4. write trex list
+for (i = 0; i < DEVELLIBS.length; i++) {
+    if (!isExcludeFile(DEVELLIBS[i])) {
+        _importScript(DE_PREFIX + DEVELLIBS[i]);
+    }
+}
+
+// 5. write daumx list
 if (typeof daumx === "object") {
     for (i = 0; i < daumx.length; i++) {
-        _importScript(daumx[i]);
-        addGlobalCount();
+        if (!isExcludeFile(daumx[i])) {
+            _importScript(daumx[i]);
+        }
     }
 }
 
-// 4. import projectlib
+// 6. write service list
 if (typeof PROJECTLIBS === "object") {
     for (i = 0; i < PROJECTLIBS.length; i++) {
-        _importScript(PROJECTLIBS[i]);
-        addGlobalCount();
+        if (!isExcludeFile(PROJECTLIBS[i])) {
+            _importScript(PROJECTLIBS[i]);
+        }
     }
 }
 
-// 5. import footer
+// 7. write footer
 _importScript(DE_PREFIX + "trex/footer.js");
-addGlobalCount();
+
+// 8. close local scope
+writeFile(mergedFile, '\r\n})();');
 
 print(count + " js files has been wrote");

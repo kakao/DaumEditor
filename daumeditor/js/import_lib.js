@@ -1,12 +1,4 @@
 (function() {
-    function indexOf(a, _find) {
-        for (var i = 0; i < a.length; i += 1) {
-            if (a[i] === _find) {
-                return i;
-            }
-        }
-        return -1;
-    }
 
     function _importScript(filename) {
         if (filename) {
@@ -14,26 +6,16 @@
         }
     }
 
-    if (typeof PROJECTLIBS === "object") {
-        DEVELLIBS = DEVELLIBS.concat(PROJECTLIBS);
-    }
+    // 1. import header
+    _importScript("trex/header.js");
 
-    var i = 0;
-    if (typeof EXCLUDE_LIBS === "object") {
-        for (i = 0; i < EXCLUDE_LIBS.length; i++) {
-            var filename = EXCLUDE_LIBS[i];
-            var index = indexOf(DEVELLIBS, filename);
-            if (index >= 0) {
-                DEVELLIBS.splice(index, 1);
-            }
-        }
-    }
-
-    DEVELLIBS.splice(0, 0, "trex/header.js");
-    DEVELLIBS.push("trex/footer.js");
+    // 2. import trex
     for (i = 0; i < DEVELLIBS.length; i++) {
         _importScript(DEVELLIBS[i]);
     }
+
+    // 3. import footer
+    _importScript("trex/footer.js");
 })();
 
 (function() {

@@ -73,7 +73,7 @@
                     <arg value="${build.script.dir}/merge_javascript.js"/>
                     <arg value="${build.target.editor.js.dir}/merged/editor.js"/>
                     <arg value="${src.editor.js.dir}"/>
-                    <arg value="editor.js,import_lib.js"/>
+                    <arg value="editor.js"/>
                 </java>
             </target>
 
