@@ -58,9 +58,9 @@ var isExcludeFile = function(filepath) {
 };
 
 function isInExcludeList(file) {
-    if (typeof EXCLUDE_LIBS === "object") {
-        for (var i = 0; i < EXCLUDE_LIBS.length; i++) {
-            if (EXCLUDE_LIBS[i] == file) {
+    if (typeof EXCLUDE_FILES === "object") {
+        for (var i = 0; i < EXCLUDE_FILES.length; i++) {
+            if (EXCLUDE_FILES[i] == file) {
                 return true;
             }
         }
