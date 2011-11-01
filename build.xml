@@ -137,45 +137,25 @@
     <!-- build css tasks ================================================= -->
 	<target name="build-css">
 		<mkdir dir="${build.target.editor.css.dir}" />
-		<ant target="merge_editor_css" />
-		<ant target="merge_content_css" />
+		<ant target="merge_css" />
 		<ant target="minify_stylesheets" />
 	</target>
 
 
         <!-- merge & minify css -->
-        <target name="merge_editor_css">
-            <echo message="Merge editor.css ..."/>
+        <target name="merge_css">
             <mkdir dir="${build.target.editor.css.dir}/merged"/>
-            <java jar="${build.lib.rhino}" failonerror="true" fork="true">
-                <arg value="${build.script.dir}/merge_css.js"/>
-                <arg value="${build.target.editor.css.dir}/merged/editor.css"/>
-                <arg value="${src.editor.css.dir}"/>
-                <arg value="editor.css"/>
-            </java>
-
-            <copy file="${src.editor.css.dir}/popup.css"
-                tofile="${build.target.editor.css.dir}/merged/popup.css" overwrite="true"/>
+            <foreach list="${css.list}" param="module_name" target="_merge_css" />
         </target>
-
-        <target name="merge_content_css">
-            <mkdir dir="${build.target.editor.css.dir}/merged"/>
-
-            <echo message="Merge content_view.css ..."/>
-            <java jar="${build.lib.rhino}" failonerror="true" fork="true">
-                <arg value="${build.script.dir}/merge_css.js"/>
-                <arg value="${build.target.editor.css.dir}/merged/content_view.css"/>
-                <arg value="${src.editor.css.dir}"/>
-                <arg value="content_view.css"/>
-            </java>
-
-            <java jar="${build.lib.rhino}" failonerror="true" fork="true">
-                <arg value="${build.script.dir}/merge_css.js"/>
-                <arg value="${build.target.editor.css.dir}/merged/content_wysiwyg.css"/>
-                <arg value="${src.editor.css.dir}"/>
-                <arg value="content_wysiwyg.css"/>
-            </java>
-        </target>
+            <target name="_merge_css">
+                <echo message="Merge ${module_name}.css ..."/>
+                <java jar="${build.lib.rhino}" failonerror="true" fork="true">
+                    <arg value="${build.script.dir}/merge_css.js"/>
+                    <arg value="${build.target.editor.css.dir}/merged/${module_name}.css"/>
+                    <arg value="${src.editor.css.dir}"/>
+                    <arg value="${module_name}.css"/>
+                </java>
+            </target>
 
 
         <target name="minify_stylesheets">
