@@ -5,7 +5,7 @@
     <!-- 'foreach', 'propertyregex' task definition -->
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
-            <pathelement location="${build.lib.dir}/ant-contrib-1.0b3.jar"/>
+            <pathelement location="${build.lib.antcontrib}"/>
         </classpath>
     </taskdef>
 
