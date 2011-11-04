@@ -6,7 +6,7 @@
 			switched: _FALSE,
 			minHeight: 200,
 			minWidth: 766,
-			asyncUrl: EditorJSLoader.getJSBasePath()+"trex/tool/async/fullscreen.js"
+			asyncUrl: "trex/tool/async/fullscreen.js"
 		}
 	);
 	

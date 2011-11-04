@@ -422,11 +422,21 @@ Trex.AsyncTool = Trex.Class.draft(/** @lends Trex.Tool.prototype */{
 	oninitialized: function() {
 		throw new Error("[Exception]Trex.AsyncTool : not implements function(oninitialized)");
 	},
-	onLoadModule: function(){
+	onLoadModule: function() {
+        var url = this.getJSBasePath() + this.config.asyncUrl;
 		EditorJSLoader.asyncLoadModule({
-    		url: TrexConfig.getUrl(this.config.asyncUrl),
+    		url: TrexConfig.getUrl(url),
     		callback: function(){}
     	});
-	}
+	},
+    getJSBasePath: function() {
+        var basePath;
+        try {
+            basePath = EditorJSLoader.getJSBasePath("editor.js");
+        } catch (e) {
+            basePath = EditorJSLoader.getJSBasePath();
+        }
+        return basePath;
+    }
 });
 	

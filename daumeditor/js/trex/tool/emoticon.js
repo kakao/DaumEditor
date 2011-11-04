@@ -47,7 +47,7 @@
                     options: createEmoticonURLs("etc", 29)
                 }
             ],
-            asyncUrl: EditorJSLoader.getJSBasePath() + "trex/tool/async/emoticon.js"
+            asyncUrl: "trex/tool/async/emoticon.js"
         },
         function(root) {
             var emoticonConfig = TrexConfig.getTool("emoticon", root);
