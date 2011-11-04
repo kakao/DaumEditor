@@ -88,6 +88,7 @@
                 </copy>
             </target>
 
+
         <!-- escaping -->
         <target name="escape_and_delete_logging">
             <echo message="Escape orig.editor.js" />
@@ -138,7 +139,7 @@
 	<target name="build-css">
 		<mkdir dir="${build.target.editor.css.dir}" />
 		<ant target="merge_css" />
-		<ant target="minify_stylesheets" />
+		<ant target="minify_css" />
 	</target>
 
 
@@ -158,27 +159,32 @@
             </target>
 
 
-        <target name="minify_stylesheets">
-            <foreach list="${css.list}" param="css_fname" target="    _minify_stylesheet" />
+        <target name="minify_css">
+            <!--<foreach list="${css.list}" param="css_fname" target="    _minify_stylesheet" />-->
+            <foreach target="_minify_css" param="file">
+                <path>
+                    <fileset dir="${build.target.editor.css.dir}/merged" includes="**/*.css"/>
+                </path>
+            </foreach>
         </target>
 
+            <target name="_minify_css">
+                <basename property="target_filename" file="${file}"/>
 
-        <target name="    _minify_stylesheet">
-            <!--suppress AntResolveInspection -->
-            <echo message="Minify ${css_fname}.css"/>
+                <echo message="Minify ${target_filename}"/>
 
-            <java classname="com.yahoo.platform.yui.compressor.YUICompressor"
-                  classpath="${build.lib.yuicompressor}" failonerror="true">
-                <arg value="--type"/>
-                <arg value="css"/>
-                <arg value="--charset"/>
-                <arg value="utf-8"/>
-                <arg value="--line-break"/>
-                <arg value="1000"/>
+                <java classname="com.yahoo.platform.yui.compressor.YUICompressor"
+                      classpath="${build.lib.yuicompressor}" failonerror="true">
+                    <arg value="--type"/>
+                    <arg value="css"/>
+                    <arg value="--charset"/>
+                    <arg value="utf-8"/>
+                    <arg value="--line-break"/>
+                    <arg value="1000"/>
 
-                <arg file="${build.target.editor.css.dir}/merged/${css_fname}.css"/>
-                <arg value="-o"/>
-                <arg file="${build.target.editor.css.dir}/${css_fname}.css"/>
-            </java>
-        </target>
+                    <arg file="${build.target.editor.css.dir}/merged/${target_filename}"/>
+                    <arg value="-o"/>
+                    <arg file="${build.target.editor.css.dir}/${target_filename}"/>
+                </java>
+            </target>
 </project>
