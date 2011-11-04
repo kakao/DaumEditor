@@ -31,7 +31,12 @@ var CORE_FILES = [
     "popuputil.js"
 ];
 
-var basePath = opener.EditorJSLoader.getBasePath();
+try {
+    var basePath = opener.EditorJSLoader.getBasePath();
+} catch (e) {
+    // ignore error when loaded from build script
+}
+
 for (var i = 0; i < CORE_FILES.length; i++) {
     if (CORE_FILES[i]) {
         var src = basePath + CORE_FILES[i] + '?v=' + new Date().getTime();
