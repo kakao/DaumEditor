@@ -31,9 +31,10 @@ var CORE_FILES = [
     "popuputil.js"
 ];
 
+var basePath = opener.EditorJSLoader.getBasePath();
 for (var i = 0; i < CORE_FILES.length; i++) {
     if (CORE_FILES[i]) {
-        var src = '/daumeditor/js/' + CORE_FILES[i] + '?v=' + new Date().getTime();
+        var src = basePath + CORE_FILES[i] + '?v=' + new Date().getTime();
         document.write('<script type="text/javascript" src="' + src + '" charset="utf-8"></script>');
     }
 }
