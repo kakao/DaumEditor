@@ -50,23 +50,19 @@ for (i = 0; i < seeds.length; i++) {
     load(getSourcePath(seeds[i]));
 }
 
-var isExcludeFile = function(filepath) {
-    return (filepath === "" ||
-        filepath === "lib/firebug/firebug.js" ||
-        filepath === "trex/eval.js" ||
-        isInExcludeList(filepath));
-};
 
-function isInExcludeList(file) {
-    if (typeof EXCLUDE_FILES === "object") {
-        for (var i = 0; i < EXCLUDE_FILES.length; i++) {
-            if (EXCLUDE_FILES[i] == file) {
-                return true;
-            }
+EXCLUDE_FILES = (typeof EXCLUDE_FILES == "object") ? EXCLUDE_FILES : [];
+EXCLUDE_FILES.push("lib/firebug/firebug.js");
+EXCLUDE_FILES.push("trex/eval.js");
+
+var isExcludeFile = function(filepath) {
+    for (var i = 0; i < EXCLUDE_FILES.length; i++) {
+        if (EXCLUDE_FILES[i] == filepath) {
+            return true;
         }
     }
     return false;
-}
+};
 
 
 var count = 0;
