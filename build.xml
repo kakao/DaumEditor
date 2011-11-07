@@ -187,4 +187,67 @@
                     <arg file="${build.target.editor.css.dir}/${target_filename}"/>
                 </java>
             </target>
+
+    <!-- versioning tasks ================================================= -->
+	<target name="version_up_patch" description="update version. increase 'patch' sequence number.">
+		<antcall target="increase_patch_number" />
+	</target>
+        <target name="increase_patch_number" depends="check_version_postfix">
+            <if>
+                <not>
+                    <equals arg1="${hasVersionPostfix}" arg2="true" />
+                </not>
+                <then>
+                    <propertyfile file="${build.version.properties}">
+                        <entry key="version.patch.number" type="int" operation="+" value="1" pattern="0" />
+                    </propertyfile>
+                </then>
+            </if>
+        </target>
+
+
+	<target name="version_up_minor"
+            description="update version. increase 'minor' sequence number and reset 'patch' sequence number.">
+		<antcall target="increase_minor_number" />
+		<antcall target="reset_patch_number" />
+		<!--<antcall target="update_pom" />-->
+	</target>
+        <target name="increase_minor_number">
+            <propertyfile file="${build.version.properties}">
+                <entry key="version.minor.number" type="int" operation="+" value="1" pattern="0" />
+            </propertyfile>
+        </target>
+        <target name="reset_patch_number">
+            <propertyfile file="${build.version.properties}">
+                <entry key="version.patch.number" type="int" operation="=" value="0" pattern="0" />
+            </propertyfile>
+        </target>
+
+
+    <target name="load_version_information" unless="editor.version"
+            depends="check_version_postfix">
+        <property file="${build.version.properties}" />
+        <if>
+            <equals arg1="${hasVersionPostfix}" arg2="true" />
+            <then>
+                <property name="editor.version" value="${version.major.number}.${version.minor.number}.${version.patch.number}-${version.postfix}" />
+            </then>
+            <else>
+                <property name="editor.version" value="${version.major.number}.${version.minor.number}.${version.patch.number}" />
+            </else>
+        </if>
+        <echo message="version information loaded : ${editor.version}" />
+    </target>
+
+    <target name="check_version_postfix">
+        <condition property="hasVersionPostfix">
+            <and>
+                <isset property="version.postfix" />
+                <not>
+                    <equals arg1="${version.postfix}" arg2="" trim="true" />
+                </not>
+            </and>
+        </condition>
+    </target>
+
 </project>
