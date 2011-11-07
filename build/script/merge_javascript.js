@@ -19,6 +19,18 @@ function exists(file) {
 }
 
 
+function readVersion() {
+    importPackage(java.util);
+    var pro = new Properties();
+    pro.load(new FileInputStream('build/version.properties'));
+    var versions = [
+        pro.getProperty('version.major.number'),
+        pro.getProperty('version.minor.number'),
+        pro.getProperty('version.patch.number')
+    ];
+    return versions.join(".");
+}
+
 
 var EDITOR_PROJECT_NAME = "__UNDEFINED__";
 var document = {
@@ -142,6 +154,8 @@ if (typeof SERVICE_FILES === "object") {
         }
     }
 }
+
+writeFile(mergedFile, 'Editor.version = "' + readVersion() + '";\r\n');
 
 // 7. write footer
 _importScript(DE_PREFIX + "trex/footer.js");

@@ -4,7 +4,6 @@
 	module("editor loader", {
         setup: function() {
             appendScriptInHead("fixture_script", "https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js");
-	        appendScriptInHead("version_script", "../daumeditor/js/version.js");
 
             EditorJSLoader.NAME = "editor_loader.js";
 
@@ -105,7 +104,7 @@
             ok(Editor, "load 완료시 argument로 Editor 객체 제공");
             continueTest();
         });
-        document.cookie = "tx_version="+Editor.version;
+        document.cookie = "tx_version=7.1.11";
         EditorJSLoader.loadPackage("editor_basic.js");
         waitTest();
     });
@@ -136,7 +135,7 @@
         link.rel = "stylesheet";
         link.type = "text/css";
         link.charse = "utf-8";
-        link.href = "http://s1.daumcdn.net/editor/releases/"+Editor.version+"/css/editor_basic.css";
+        link.href = "http://s1.daumcdn.net/editor/releases/7.1.11/css/editor_basic.css";
         document.body.appendChild(link);
 
         EditorJSLoader.reloadDevelopmentCSS();

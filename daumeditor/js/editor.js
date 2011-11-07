@@ -44,7 +44,6 @@ var CORE_FILES = [
 
     /** editor core */
     "trex/editor.js",
-    "version.js",
     "trex/toolbar.js",
     "trex/sidebar.js",
     "trex/docparser.js",
