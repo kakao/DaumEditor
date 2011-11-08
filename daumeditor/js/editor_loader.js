@@ -12,8 +12,7 @@
             MILLISECOND = 1000,
             DEFAULT_TIMEOUT = 5;
     
-    var REGX_MATCH_VERSION = /\/([6-9][a-z.]?\.[a-z0-9\-]+\.[\-\w]+)\//,
-    	REGX_TEST_CSS = /\/css\/editor(_[a-z]+)?\.css/;
+    var REGX_MATCH_VERSION = /\/([6-9][a-z.]?\.[a-z0-9\-]+\.[\-\w]+)\//;
 
     var DEFAULT_OPTIONS = {
         "environment" : ENV_PRODUCTION,
@@ -158,23 +157,6 @@
     }
 
 
-    function findCSSElement() {
-        var links = DOC.getElementsByTagName("link");
-        var found;
-        for (var i = 0; i < links.length; i++) {
-            if (REGX_TEST_CSS.test(links[i].href)) {
-                found = links[i];
-                break;
-            }
-        }
-        return found;
-    }
-
-    function getCSSDevelopmentURL() {
-        var cssBasePath = Loader.getCSSBasePath();
-        return cssBasePath + "editor" + Loader.getServicePostfix() + ".css";
-    }
-    
     var AsyncLoader = function(config){
     	this.TIMEOUT = DEFAULT_TIMEOUT * MILLISECOND;
     	this.readyState = STATUS_UNINITIALIZED;
@@ -273,18 +255,6 @@
 //            Loader.startErrorTimer();
         },
         
-        /**
-         * <p>CSS를 개발 환경 CSS 로 다시 불러온다.</p>
-         */
-        reloadDevelopmentCSS: function() {
-            var link = findCSSElement();
-            if (link) {
-                link.href = getCSSDevelopmentURL();
-            } else {
-                console.log("Editor CSS was not replaced for development. production CSS doesn't exists.");
-            }
-        },
-
         /**
          * <p>editor javascript 파일이 로딩 완료되었을 때 호출될 함수를 등록한다.</p>
          * @param fn {function} 실행될 함수
@@ -386,7 +356,6 @@
             Loader.loadPackage(jsModuleName);
         } else {
             Loader.loadModule(jsModuleName);
-            Loader.reloadDevelopmentCSS();
         }
     }
 
