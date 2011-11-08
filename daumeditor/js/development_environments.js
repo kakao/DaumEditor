@@ -1,14 +1,14 @@
+/* load editor js files as development environments */
 (function() {
     var DE_PREFIX = EditorJSLoader.getJSBasePath("editor.js");
+
     function _importScript(filename) {
         if (filename) {
             EditorJSLoader.loadModule(filename);
         }
     }
 
-
     EXCLUDE_FILES = (typeof EXCLUDE_FILES == "object") ? EXCLUDE_FILES : [];
-
     var isExcludeFile = function(filepath) {
         for (var i = 0; i < EXCLUDE_FILES.length; i++) {
             if (EXCLUDE_FILES[i] == filepath) {
@@ -17,7 +17,6 @@
         }
         return false;
     };
-
 
     // 1. import header
     _importScript(DE_PREFIX + "trex/header.js");
@@ -51,6 +50,7 @@
     _importScript(DE_PREFIX + "trex/footer.js");
 })();
 
+/* show development environments indicator */
 (function() {
     function addEditorEnvIndicator() {
         if (window.Editor && Editor.__EDITOR_LOADED) {
