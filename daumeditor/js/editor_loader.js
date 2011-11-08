@@ -242,16 +242,16 @@
          * @param moduleName {string} e.g. trex/header.js
          */
         loadModule: function(moduleName) {
-            var url;
-            if (moduleName.match(/^http:\/\//)) {
-                url = moduleName;
-            } else {
-                url = this.getBasePath() + moduleName;
+            function isModuleNameNotPath(name) {
+                return !name.match(/^(http:\/\/|\.\.\/|\/)/);
             }
-            var url = url + '?dummy=' + new Date().getTime();
+            
+            var url = isModuleNameNotPath(moduleName) ? this.getBasePath() + moduleName : moduleName;
+
+            url = url + '?dummy=' + new Date().getTime();
             DOC.write('<script type="text/javascript" src="' + url + '" charset="utf-8"></script>');
         },
-        
+
         /**
          * <p>페이지 로딩 완료 후 module 불러오기</p>
          */

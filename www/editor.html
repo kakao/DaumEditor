@@ -484,7 +484,10 @@
         }
     };
 
-    var editor = new Editor(config);
+    EditorJSLoader.ready(function(Editor) {
+        var editor = new Editor(config);
+    });
+    
 </script>
 </body>
 </html>
