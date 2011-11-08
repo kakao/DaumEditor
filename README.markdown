@@ -26,7 +26,7 @@ Sample
 e.g. `http://yourhostname/DaumEditor/www/editor.html`
 
 
-*ACCESS WITH LOCAL URL(file://) NOT RECOMMENDED!*
+Accessing with local url(file://) is also supported. but not recommended.
 
 
 Build & Packaging
