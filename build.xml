@@ -77,14 +77,16 @@
             </target>
 
             <target name="copy_etc_js_to_dist">
-                <echo message="copy etc to dist" />
+                <echo message="copy etc. js files" />
                 <mkdir dir="${build.target.editor.js.dir}"/>
                 <copy file="${src.editor.js.dir}/global.js" todir="${build.target.editor.js.dir}/merged" />
                 <copy file="${src.editor.js.dir}/editor_loader.js" todir="${build.target.editor.js.dir}/merged" />
 
-                <echo message="copy async tools to ${build.target.editor.js.dir}" />
-                <copy todir="${build.target.editor.js.dir}/merged/${async.trex.dir}" overwrite="true">
-                    <fileset dir="${src.editor.js.dir}/${async.trex.dir}" />
+                <echo message="copy core async tools" />
+                <copy todir="${build.target.editor.js.dir}/merged/" overwrite="true">
+                    <fileset dir="${src.editor.js.dir}">
+                        <include name="**/tool/async/**/*" />
+                    </fileset>
                 </copy>
             </target>
 
