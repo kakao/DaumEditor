@@ -54,26 +54,22 @@
 (function() {
     function addEditorEnvIndicator() {
         if (window.Editor && Editor.__EDITOR_LOADED) {
-            var canvas = Editor.getCanvas().elContainer; //$tx("tx_canvas");
             var indicator = document.createElement("span");
-            indicator.innerHTML = "developer editor";
+            indicator.innerHTML = "DEVELOPMENT MODE";
             $tx.setStyle(indicator, {
                 position: "absolute",
-                fontSize: "12px",
-                color: "#ee82ee",
-                fontWeight: "bold",
+                fontSize: "13px",
+                color: "green",
+                fontFamily: "courier,serif",
                 right: "10px",
                 bottom : "10px"
             });
+            var canvas = Editor.getCanvas().elContainer; //$tx("tx_canvas");
             canvas.appendChild(indicator);
         } else {
-            setTimeout(arguments.callee, 1000);
+            setTimeout(arguments.callee, 500);
         }
     }
 
-    if (window.addEventListener) {
-        window.addEventListener("load", addEditorEnvIndicator, false);
-    } else {
-        window.attachEvent("onload", addEditorEnvIndicator);
-    }
+    EditorJSLoader.ready(addEditorEnvIndicator);
 })();
