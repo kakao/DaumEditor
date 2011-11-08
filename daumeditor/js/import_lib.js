@@ -1,21 +1,54 @@
 (function() {
-
+    var DE_PREFIX = EditorJSLoader.getJSBasePath("editor.js");
     function _importScript(filename) {
         if (filename) {
             EditorJSLoader.loadModule(filename);
         }
     }
 
+
+    EXCLUDE_FILES = (typeof EXCLUDE_FILES == "object") ? EXCLUDE_FILES : [];
+
+    var isExcludeFile = function(filepath) {
+        for (var i = 0; i < EXCLUDE_FILES.length; i++) {
+            if (EXCLUDE_FILES[i] == filepath) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+
     // 1. import header
-    _importScript("trex/header.js");
+    _importScript(DE_PREFIX + "trex/header.js");
 
     // 2. import trex
-    for (i = 0; i < CORE_FILES.length; i++) {
-        _importScript(CORE_FILES[i]);
+    for (var i = 0; i < CORE_FILES.length; i++) {
+        if (!isExcludeFile(CORE_FILES[i])) {
+            _importScript(DE_PREFIX + CORE_FILES[i]);
+        }
     }
 
-    // 3. import footer
-    _importScript("trex/footer.js");
+    // 3. import EXT_FILES
+    if (typeof EXT_FILES == "object") {
+        for (i = 0; i < EXT_FILES.length; i++) {
+            if (!isExcludeFile(EXT_FILES[i])) {
+                _importScript(EXT_FILES[i]);
+            }
+        }
+    }
+
+    // 4. import projectlib
+    if (typeof SERVICE_FILES == "object") {
+        for (i = 0; i < SERVICE_FILES.length; i++) {
+            if (!isExcludeFile(SERVICE_FILES[i])) {
+                _importScript(SERVICE_FILES[i]);
+            }
+        }
+    }
+
+    // 5. import footer
+    _importScript(DE_PREFIX + "trex/footer.js");
 })();
 
 (function() {

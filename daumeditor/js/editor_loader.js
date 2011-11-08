@@ -242,7 +242,13 @@
          * @param moduleName {string} e.g. trex/header.js
          */
         loadModule: function(moduleName) {
-            var url = this.getBasePath() + moduleName + '?dummy=' + new Date().getTime();
+            var url;
+            if (moduleName.match(/^http:\/\//)) {
+                url = moduleName;
+            } else {
+                url = this.getBasePath() + moduleName;
+            }
+            var url = url + '?dummy=' + new Date().getTime();
             DOC.write('<script type="text/javascript" src="' + url + '" charset="utf-8"></script>');
         },
         
@@ -372,7 +378,7 @@
 
     function initialize() {
         var env = Loader.getOption("environment");
-        var jsModuleName = "editor_" + Loader.getOption("service") + ".js";
+        var jsModuleName = "editor" + Loader.getServicePostfix() + ".js";
         
         DEFAULT_OPTIONS["version"] = readCurrentURLVersion(Loader.NAME);
         

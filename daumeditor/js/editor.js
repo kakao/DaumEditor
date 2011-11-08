@@ -179,5 +179,5 @@ var CORE_FILES = [
 	
 	"trex/modules/tabledragger.js"
 ];
-
-EditorJSLoader.loadModule("import_lib.js");
+var DE_PREFIX = EditorJSLoader.getJSBasePath("editor.js");
+EditorJSLoader.loadModule(DE_PREFIX + "import_lib.js");
