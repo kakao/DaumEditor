@@ -52,10 +52,6 @@
 })();
 
 (function() {
-    if (typeof window !== "object") {
-        return;
-    }
-
     function addEditorEnvIndicator() {
         if (window.Editor && Editor.__EDITOR_LOADED) {
             var canvas = Editor.getCanvas().elContainer; //$tx("tx_canvas");
