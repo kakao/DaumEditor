@@ -44,6 +44,9 @@ var window = {
 
 var EditorJSLoader = {
     loadModule: function() {
+    },
+    getJSBasePath: function() {
+        return "";
     }
 };
 
