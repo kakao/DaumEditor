@@ -1,5 +1,6 @@
 (function() {
     // TODO option parameter 문서 정리
+    // TODO bookmarklet 작성
     var DEFAULT_UNKNOWN_OPTION_VALUE = "",
             PREFIX_COOKIE = "tx_",
             DOC = document,
@@ -327,20 +328,20 @@
 //            }
 //        },
 
-        getBasePath: function() {
+        getBasePath: function(filename) {
             var basePath = getCookieOption("base_path");
             if (!basePath) {
-                var script = findLoaderScriptElement(Loader.NAME);
+                var script = findLoaderScriptElement(filename || Loader.NAME);
                 basePath = getBasePath(script.src);
             }
             return basePath;
         },
         
-        getJSBasePath: function() {
+        getJSBasePath: function(filename) {
         	if (Loader.getOption("environment") === ENV_PRODUCTION) {
                 return Loader.getOption("host") + "releases/" + Loader.getOption("version") + "/js/";
             } else {
-                return this.getBasePath();
+                return this.getBasePath(filename);
             }
         },
 
@@ -371,7 +372,7 @@
 
     function initialize() {
         var env = Loader.getOption("environment");
-        var jsModuleName = "editor" + Loader.getServicePostfix() + ".js";
+        var jsModuleName = "editor_" + Loader.getOption("service") + ".js";
         
         DEFAULT_OPTIONS["version"] = readCurrentURLVersion(Loader.NAME);
         
