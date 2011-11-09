@@ -37,7 +37,12 @@
             _WIN.__tx_wysiwyg_iframe_load_complete = function() {
                 self.loadLocalIframe(callback);
             };
-            this.iframe.src = EditorJSLoader.getPageBasePath() +
+            try { // core dev mode, core production mode, dex dev mode
+                var basePath = EditorJSLoader.getPageBasePath('editor.js');
+            } catch (e) { // dex production mode
+                basePath = EditorJSLoader.getPageBasePath();
+            }
+            this.iframe.src = basePath +
                               "trex/iframe_loader_catalyst.html?" +
                               document.domain;
         },
