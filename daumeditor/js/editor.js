@@ -1,7 +1,6 @@
 // TODO duplicated with editor_common.js
 var CORE_FILES = [
     "scopeVariable.js",
-    "global.js",
     /** debugging library */
     "lib/firebug/firebugx.js",
     "lib/stopwatch.js",

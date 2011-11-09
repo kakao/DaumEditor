@@ -1,6 +1,5 @@
 var CORE_FILES = [
     "scopeVariable.js",
-    "global.js",
     /** debugging library */
     "lib/firebug/firebugx.js",
     "lib/stopwatch.js",
