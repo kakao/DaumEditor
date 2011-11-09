@@ -331,7 +331,7 @@
                 return "http://editor.daum.net/releases/" + Loader.getOption("version") + "/pages/daumx/";
             } else {
                 var jsBasePath = this.getBasePath();
-                return jsBasePath.replace(/\/js\//g, "/pages/") + "daumx/";
+                return jsBasePath.replace(/\/js\//g, "/pages/");
             }
         },
 

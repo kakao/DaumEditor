@@ -32,11 +32,14 @@
         },
 
         reloadUsingCatalyst: function(callback) {
+            console.log("retry with xss iframe catalyst");
             var self = this;
             _WIN.__tx_wysiwyg_iframe_load_complete = function() {
                 self.loadLocalIframe(callback);
             };
-            this.iframe.src = EditorJSLoader.getPageBasePath() + "iframe_loader_catalyst.html";
+            this.iframe.src = EditorJSLoader.getPageBasePath() +
+                              "trex/iframe_loader_catalyst.html?" +
+                              document.domain;
         },
 
         // 옛날 스타일
