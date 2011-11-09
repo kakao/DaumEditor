@@ -158,7 +158,7 @@ if (typeof SERVICE_FILES === "object") {
     }
 }
 
-writeFile(mergedFile, 'Editor.version = "' + readVersion() + '";\r\n');
+writeFile(mergedFile, 'if (typeof Editor !== "undefined") Editor.version = "' + readVersion() + '";\r\n');
 
 // 7. write footer
 _importScript(DE_PREFIX + "trex/footer.js");
