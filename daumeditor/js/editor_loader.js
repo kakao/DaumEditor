@@ -110,6 +110,19 @@
         return script;
     }
 
+    function absolutizeURL(url) {
+        var location = document.location;
+        if (url.indexOf("http://") === 0) {
+        } else if (url.indexOf("file://") === 0) {
+        } else if (url.indexOf("/") === 0) {
+            url = "http://" + location.host + url;
+        } else {
+            var href = location.href;
+            var cutPos = href.lastIndexOf("/");
+            url = href.substring(0, cutPos + 1) + url;
+        }
+        return url;
+    }
 
     function loadScriptDOMElement(src, callback) {
         var script = createScriptDOMElement(src);
@@ -310,9 +323,9 @@
                 var script = findLoaderScriptElement(filename || Loader.NAME);
                 basePath = getBasePath(script.src);
             }
-            return basePath;
+            return absolutizeURL(basePath);
         },
-        
+
         getJSBasePath: function(filename) {
         	if (Loader.getOption("environment") === ENV_PRODUCTION) {
                 return Loader.getOption("host") + "releases/" + Loader.getOption("version") + "/js/";

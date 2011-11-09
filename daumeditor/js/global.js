@@ -15,10 +15,5 @@
  * @property
  */
 _WIN.__TX_GLOBAL = {
-		domain: "daum.net",
 		session_id: _NULL
 };
-
-if (_DOC && __TX_GLOBAL.domain && !_WIN.Jaxer && (new RegExp(__TX_GLOBAL.domain + "$")).test(_DOC.domain)) {
-	_DOC.domain = __TX_GLOBAL.domain;
-}

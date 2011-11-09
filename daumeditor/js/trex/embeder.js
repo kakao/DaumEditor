@@ -91,6 +91,11 @@ Trex.Embeder = Trex.Class.draft({
 		} else {
 			try {
 				var _url = this.config.popPageUrl;
+                var isDocumentDomainDeclaredExplicitly = (document.location.hostname != document.domain);
+                if (isDocumentDomainDeclaredExplicitly) {
+                    _url = _url + ((_url.indexOf("?") > -1) ? "&" : "?") + "xssDomain=" + document.domain;
+                }
+
 				_url = (this.pvUrl? this.pvUrl + ((this.pvUrl.indexOf("?") > -1) ? "&" : "?") + "u="+escape(_url): _url);
 				var win = _WIN.open(_url, "at" + this.name, this.config.features);
 				win.focus();
