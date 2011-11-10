@@ -112,8 +112,7 @@
 
     function absolutizeURL(url) {
         var location = document.location;
-        if (url.indexOf("http://") === 0) {
-        } else if (url.indexOf("file://") === 0) {
+        if (url.match(/^(https?|file):\/\//)) {
         } else if (url.indexOf("/") === 0) {
             url = "http://" + location.host + url;
         } else {

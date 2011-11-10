@@ -35,13 +35,12 @@
     });
 
     test("editor.js loader", function() {
-        equal(typeof EditorJSLoader, "object")
+        equal(typeof EditorJSLoader, "object");
     });
 
     test("editor loader의 base path 찾기", function() {
         ok(EditorJSLoader.getBasePath().match(/\/daumeditor\/js\/$/), "일반적인 경우");
-        EditorJSLoader.NAME = "jquery.js";
-        equal(EditorJSLoader.getBasePath(), "https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/", "custom 한 js의 base path 찾기");
+        equal(EditorJSLoader.getBasePath("jquery.js"), "https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/", "custom 한 js의 base path 찾기");
     });
 
     test("editor loader를 찾기 실패했을 경우", function() {
@@ -128,23 +127,22 @@
         });
     });
 
-    // TODO production : css version 이 다르면 css 갱신
-
-    test("CSS를 개발 모드(development)로 변경", function() {
-        var link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.type = "text/css";
-        link.charse = "utf-8";
-        link.href = "http://s1.daumcdn.net/editor/releases/7.1.11/css/editor_basic.css";
-        document.body.appendChild(link);
-
-        EditorJSLoader.reloadDevelopmentCSS();
-//        ok(link.href.endsWith("editor_basic.css"), "파일 이름 자체는 바뀌면 안된다.");
-        equal(link.href.indexOf(Editor.version), -1, "개발환경이니 version 같은 거 없다.");
-        equal(link.href.indexOf("s1.daumcdn.net"), -1, "개발 host로 바뀌어야 한다.");
-
-        document.body.removeChild(link);
-    });
+    // TODO 아래 테스트는 dex 요구사항임.
+//    test("CSS를 개발 모드(development)로 변경", function() {
+//        var link = document.createElement("link");
+//        link.rel = "stylesheet";
+//        link.type = "text/css";
+//        link.charse = "utf-8";
+//        link.href = "http://s1.daumcdn.net/editor/releases/7.1.11/css/editor_basic.css";
+//        document.body.appendChild(link);
+//
+//        EditorJSLoader.reloadDevelopmentCSS();
+////        ok(link.href.endsWith("editor_basic.css"), "파일 이름 자체는 바뀌면 안된다.");
+//        equal(link.href.indexOf(Editor.version), -1, "개발환경이니 version 같은 거 없다.");
+//        equal(link.href.indexOf("s1.daumcdn.net"), -1, "개발 host로 바뀌어야 한다.");
+//
+//        document.body.removeChild(link);
+//    });
     
     test("Editor가 호출되는 host와 path를 외부로 제공", function(){
     	ok("getBasePath" in EditorJSLoader, "기본 경로");
@@ -153,6 +151,7 @@
     });
     
     test("동적으로 js파일을 로딩하는 함수를 외부로 제공", function(){
+        expect(3);
     	ok("asyncLoadModule" in EditorJSLoader, "호출함수 존재");
     	EditorJSLoader.asyncLoadModule({
     		url: "testcase/fixture/value1.js",
@@ -167,6 +166,7 @@
     });
     
     test("동적 모듈로딩은 여러 파일을 한꺼번에 호출이 가능해야 한다", function(){
+        expect(4);
     	EditorJSLoader.asyncLoadModule({
     		url: "testcase/fixture/value1.js",
     		callback: function(){
@@ -187,10 +187,6 @@
     		id: "fixture_script3"
     	});
     	waitTest();
-    });
-    
-    test("에디터의 버전 정규식 매칭 확인", function(){
-    	
     });
     
 //    TODO: 아래 테스트 동작하도록 하기
