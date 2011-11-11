@@ -49,6 +49,27 @@
                 </fileset>
             </copy>
 
+        <echo message="make a archive file(daumeditor.zip)"/>
+            <zip destfile="${build.dist.dir}/daumeditor.zip">
+                <fileset dir="${build.dist.dir}">
+                    <exclude name="*.zip"/>
+                </fileset>
+            </zip>
+    </target>
+
+    <target name="deploy" depends="packaging, load_version_information"
+            description="upload the artifact on googlecode hosting">
+        <property file="${user.home}/daumeditor.credentials.properties" />
+        <!-- TODO echo usage if properties was not found... 동일님 해줘... -->
+
+        <taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${build.lib.gcuploader}" name="gcupload"/>
+        <gcupload
+                username="${gc.username}"
+                password="${gc.password}"
+                projectname="daumopeneditor"
+                filename="${build.dist.dir}/daumeditor.zip"
+                targetfilename="daumeditor-${editor.version}.zip"
+                summary="${editor.version} release zip file"/>
     </target>
 
 
