@@ -1,10 +1,6 @@
 Daum Editor - The Daum Open Source WYSIWYG Web Editor
 ======================================================
 
-- `www/editor.html`
-- `daumeditor/js/editor.js`
-- `daumeditor/css/editor.css`
-
 
 Setting up a development environment
 ------------------------------------
@@ -19,11 +15,11 @@ e.g. `httpd.conf`
 
 Test Case
 
-e.g. `http://yourhostname/DaumEditor/www/testrunner.html`
+e.g. `http://yourhostname/DaumEditor/test/testrunner.html`
 
 Sample
 
-e.g. `http://yourhostname/DaumEditor/www/editor.html`
+e.g. `http://yourhostname/DaumEditor/src/pages/editor.html`
 
 
 Accessing with local url(file://) is also supported. but not recommended.
@@ -45,7 +41,7 @@ e.g.
 `DaumEditor$ ant`
 
 4. test
-`open 'build/dist/www/editor.html' in your browser`
+`open 'build/dist/pages/editor.html' in your browser`
 
 Install
 ------------------------------------------
