@@ -19,7 +19,7 @@ e.g. `http://yourhostname/DaumEditor/test/testrunner.html`
 
 Sample
 
-e.g. `http://yourhostname/DaumEditor/src/pages/editor.html`
+e.g. `http://yourhostname/DaumEditor/daumeditor/pages/editor.html`
 
 
 Accessing with local url(file://) is also supported. but not recommended.
