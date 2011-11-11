@@ -44,11 +44,6 @@
                 <fileset dir="${src.editor.pages.dir}" />
             </copy>
 
-            <copy encoding="UTF-8" todir="${build.dist.dir}/www" overwrite="true">
-                <fileset dir="${src.web.dir}">
-                    <include name="editor.html" />
-                </fileset>
-            </copy>
     </target>
 
 
@@ -79,7 +74,6 @@
             <target name="copy_etc_js_to_dist">
                 <echo message="copy etc. js files" />
                 <mkdir dir="${build.target.editor.js.dir}"/>
-                <copy file="${src.editor.js.dir}/global.js" todir="${build.target.editor.js.dir}/merged" />
                 <copy file="${src.editor.js.dir}/editor_loader.js" todir="${build.target.editor.js.dir}/merged" />
 
                 <echo message="copy core async tools" />
