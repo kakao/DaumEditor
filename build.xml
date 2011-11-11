@@ -24,7 +24,7 @@
 
     <target name="packaging" description="packaging distribution files"
             depends="build">
-        <echo message="copy javascript and css files" level="info"/>
+        <echo message="copy javascript, css files"/>
             <copy todir="${build.dist.dir}" overwrite="true">
                 <fileset dir="${build.target.editor.dir}">
                     <exclude name="**/merged/"/>
@@ -39,9 +39,14 @@
                 <fileset dir="${src.editor.images.dir}"/>
             </copy>
 
-        <echo message="copy HTML files"/>
+        <echo message="copy html files"/>
             <copy encoding="UTF-8" todir="${build.dist.dir}/pages" overwrite="true">
                 <fileset dir="${src.editor.pages.dir}" />
+            </copy>
+            <copy todir="${build.dist.dir}" overwrite="true">
+                <fileset dir="${src.editor.dir}">
+                    <include name="editor.html"/>
+                </fileset>
             </copy>
 
     </target>
