@@ -9,7 +9,7 @@ function writeFile(file, stream) {
     }
 
     var fw = new OutputStreamWriter(new FileOutputStream(file, append), "UTF-8");
-    fw.write(stream);
+    fw.write('\r\n' + stream);
     fw.close();
 }
 
@@ -94,27 +94,8 @@ var readFileContent = function(filepath){
 };
 
 // -------------------------------------------------------
-// add eval.js
+
 addGlobalCount();
-//writeFile(mergedFile, readFileContent("trex/eval.js"), false);
-//
-//// add editor scope
-//writeFile(mergedFile, '(function(){');
-//
-//// add files
-//for (i = 0; i < CORE_FILES.length; i++) {
-//    if (isExcludeFile(CORE_FILES[i]) === true) {
-//        continue;
-//    }
-//    var content = readFileContent(CORE_FILES[i]);
-//    if(content){
-//    	addGlobalCount();
-//    	writeFile(mergedFile, content);
-//    }
-//}
-//
-//// add end scope
-//writeFile(mergedFile, '})()');
 
 function _importScript(filename, overwrite) {
     writeFile(mergedFile, readFileContent(filename), !overwrite);
@@ -128,7 +109,7 @@ var DE_PREFIX = "../../../DaumEditor/daumeditor/js/"
 _importScript(DE_PREFIX + "trex/eval.js", true);
 
 // 2. open local scope
-writeFile(mergedFile, '\r\n(function(){\r\n');
+writeFile(mergedFile, '(function(){');
 
 // 3. write header
 _importScript(DE_PREFIX + "trex/header.js");
@@ -158,12 +139,12 @@ if (typeof SERVICE_FILES === "object") {
     }
 }
 
-writeFile(mergedFile, 'if (typeof Editor !== "undefined") Editor.version = "' + readVersion() + '";\r\n');
+writeFile(mergedFile, 'if (typeof Editor !== "undefined") Editor.version = "' + readVersion() + '";');
 
 // 7. write footer
 _importScript(DE_PREFIX + "trex/footer.js");
 
 // 8. close local scope
-writeFile(mergedFile, '\r\n})();');
+writeFile(mergedFile, '})();');
 
 print(count + " js files has been wrote");
