@@ -46,3 +46,7 @@ e.g.
 Install
 ------------------------------------------
 TODO Wiki에 installation guide 를 정리하고 link를 걸자
+
+
+TODO /daumeditor -> /src
+TODO packaging to build/dist directly, not build/dist/daumeditor
