@@ -139,7 +139,7 @@
 
             <target name="_minify_javascript">
                 <dirname property="target_dir_escaped" file="${file}"/>
-                <propertyregex property="target_dir" input="${target_dir_escaped}" regexp="\/escaped" replace=""/>
+                <propertyregex property="target_dir" input="${target_dir_escaped}" regexp="[\/|\\]escaped" replace=""/>
 
                 <basename property="target_filename" file="${file}"/>
                 <!--  suffix=".escaped.js" -->

@@ -9,23 +9,23 @@
         border-top: 1px dotted #666;
         display: block;}
 	
-	div.tx-hr-image-1 { border: 0 none; height: 15px; background:url(http://i1.daumcdn.net/deco/contents/horizontalrule/line03.gif?v=2) repeat-x scroll left; width:99%;}
+	div.tx-hr-image-1 { border: 0 none; height: 15px; background:url(../../../images/deco/contents/horizontalrule/line03.gif?v=2) repeat-x scroll left; width:99%;}
 	div.tx-hr-image-1 hr { position:relative; top: -999px; left: -999px; border: 0 none; }
 	
-	div.tx-hr-image-2 { border: 0 none; height: 15px; background:url(http://i1.daumcdn.net/deco/contents/horizontalrule/line05.gif?v=2) repeat-x scroll left; width:99%;}
+	div.tx-hr-image-2 { border: 0 none; height: 15px; background:url(../../../images/deco/contents/horizontalrule/line05.gif?v=2) repeat-x scroll left; width:99%;}
 	div.tx-hr-image-2 hr { position:relative; top: -999px; left: -999px; border: 0 none; }
 	
-	div.tx-hr-image-3 { border: 0 none; height: 15px; background:url(http://i1.daumcdn.net/deco/contents/horizontalrule/line06.gif?v=2) repeat-x scroll left; width:99%;}
+	div.tx-hr-image-3 { border: 0 none; height: 15px; background:url(../../../images/deco/contents/horizontalrule/line06.gif?v=2) repeat-x scroll left; width:99%;}
 	div.tx-hr-image-3 hr { position:relative; top: -999px; left: -999px; border: 0 none; }
 	
-	div.tx-hr-image-4 { border: 0 none; height: 15px; background:url(http://i1.daumcdn.net/deco/contents/horizontalrule/line08.gif?v=2) no-repeat scroll center; width:99%;}
+	div.tx-hr-image-4 { border: 0 none; height: 15px; background:url(../../../images/deco/contents/horizontalrule/line08.gif?v=2) no-repeat scroll center; width:99%;}
 	div.tx-hr-image-4 hr { position:relative; top: -999px; left: -999px; border: 0 none; }
 
 /*==== quotation ====*/
 	blockquote.tx-quote1 { border: 1px solid #dbdbdb; margin: 10px; padding: 10px; }
 	blockquote.tx-quote2 { border: 3px solid #dbdbdb; margin: 10px; padding: 10px; }		
 	blockquote.tx-quote3 { border: 1px dashed #dbdbdb; margin: 10px; padding: 10px; }
-	blockquote.tx-quote4 { border: none; background: url(http://i1.daumcdn.net/deco/contents/quote/titation01.gif?v=2) top left no-repeat; padding: 0 20px 10px 20px; margin: 10px; }
+	blockquote.tx-quote4 { border: none; background: url(../../../images/deco/contents/quote/titation01.gif?v=2) top left no-repeat; padding: 0 20px 10px 20px; margin: 10px; }
 	blockquote.tx-quote5 { border: none; border-left: 2px solid #dbdbdb; margin: 10px; padding: 10px; }
 
 /*==== textbox ====*/

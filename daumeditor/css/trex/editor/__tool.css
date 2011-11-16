@@ -6,7 +6,7 @@
 	
 	.tx-switchtoggle a,.tx-switchtoggle-hovered a, .tx-switchtoggle-pushed a { width: 52px; height: 25px; text-indent: -100em; overflow: hidden; display:block; font-size: 12px} 
 	.tx-switchtoggle a, .tx-switchtoggle-hovered a, .tx-switchtoggle-pushed a {
-		background-image: url(http://i1.daumcdn.net/icon/editor/skin/06/tx_text.gif);
+		background-image: url(../../../images/icon/editor/skin/06/tx_text.gif);
 		background-repeat: no-repeat;
 		font-size: 0;
 		line-height: 0px;
@@ -127,7 +127,7 @@
 	
 	.tx-styledlist-menu { width:25px; }
 	.tx-styledlist-menu li.tx-menu-list-item a {
-		background-image:url(http://i1.daumcdn.net/icon/editor/skin/05/tx_icon.gif?v=2); 
+		background-image:url(../../../images/icon/editor/skin/05/tx_icon.gif?v=2); 
 		background-repeat:no-repeat;
 		height:18px;
 		text-indent:-1000px;	
@@ -142,7 +142,7 @@
 	
 	.tx-cellslineheight-menu { width:100px; }
 	.tx-cellslineheight-menu li.tx-menu-list-item a {
-		background-image:url(http://i1.daumcdn.net/icon/editor/skin/05/icon_table_layer02.gif); 
+		background-image:url(../../../images/icon/editor/skin/05/icon_table_layer02.gif); 
 		background-repeat:no-repeat;
 		height:18px;
 		text-indent:-1000px;	
@@ -158,7 +158,7 @@
 	
 	.tx-cellslinestyle-menu { width:100px; }
 	.tx-cellslinestyle-menu li.tx-menu-list-item a {
-		background-image:url(http://i1.daumcdn.net/icon/editor/skin/05/icon_table_layer02.gif); 
+		background-image:url(../../../images/icon/editor/skin/05/icon_table_layer02.gif); 
 		background-repeat:no-repeat;
 		height:17px;
 		text-indent:-1000px;	
@@ -171,7 +171,7 @@
 	
 	.tx-cellsoutline-menu { width:112px; }
 	.tx-cellsoutline-menu li.tx-menu-list-item a {
-		background-image:url(http://i1.daumcdn.net/icon/editor/skin/05/icon_table_layer01.gif);
+		background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01.gif);
 		background-repeat:no-repeat;
 		height:19px;
 		text-indent:10px;	
@@ -189,7 +189,7 @@
 	
 	.tx-mergecells-menu { width:68px; }
 	.tx-mergecells-menu li.tx-menu-list-item a {
-		background-image:url(http://i1.daumcdn.net/icon/editor/skin/05/icon_table_layer1.gif); 
+		background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01.gif); 
 		background-repeat:no-repeat;
 		height:17px;
 		text-indent:20px;	
@@ -204,7 +204,7 @@
 	
 	.tx-deletecells-menu { width:74px; }
 	.tx-deletecells-menu li.tx-menu-list-item a {
-		background-image:url(http://i1.daumcdn.net/icon/editor/skin/05/icon_table_layer1.gif); 
+		background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01.gif); 
 		background-repeat:no-repeat;
 		height:17px;
 		text-indent:20px;	
@@ -219,7 +219,7 @@
 	
 	.tx-insertcells-menu { width:98px; }
 	.tx-insertcells-menu li.tx-menu-list-item a {
-		background-image:url(http://i1.daumcdn.net/icon/editor/skin/05/icon_table_layer1.gif); 
+		background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01.gif); 
 		background-repeat:no-repeat;
 		height:17px;
 		text-indent:20px;	
@@ -237,7 +237,7 @@
 	
 	.tx-tabletemplate-menu { width:348px; left:-250px;}
 	.tx-tabletemplate-menu td.tx-menu-list-item a span {
-		background-image:url(http://i1.daumcdn.net/icon/editor/table/icon_form.gif); background-repeat:no-repeat;
+		background-image:url(../../../images/icon/editor/table/icon_form.gif); background-repeat:no-repeat;
 		height:31px;
 		text-indent:-1000px;	
 		width:29px;
@@ -331,7 +331,7 @@
 		width:68px; 
 		height:11px; 
 		text-indent:-10000px; 
-		background:url(http://i1.daumcdn.net/icon/editor/table/btn_direct_setting.gif?v=2) no-repeat;
+		background:url(../../../images/icon/editor/table/btn_direct_setting.gif?v=2) no-repeat;
 		padding:0;
 	}
 	.tx-table-menu .tx-dynamic-sizer-context{ 
@@ -424,18 +424,18 @@
 	}
 	.tx-table-menu .tx-btn-add{
 		top:1px;
-		background:url(http://i1.daumcdn.net/icon/editor/btn_plus.gif?v=2) no-repeat;
+		background:url(../../../images/icon/editor/btn_plus.gif?v=2) no-repeat;
 	}
 	.tx-table-menu .tx-btn-sub{
 		top:9px;
-		background:url(http://i1.daumcdn.net/icon/editor/btn_minus.gif?v=2)
+		background:url(../../../images/icon/editor/btn_minus.gif?v=2)
 	}
 	
 	.tx-table-menu .tx-menu-enter div{
 		margin-top:4px;
 	}
 	.tx-table-menu .tx-btn-confirm{
-		background:url(http://i1.daumcdn.net/icon/editor/btn_confirm_s1.gif?v=2) no-repeat;
+		background:url(../../../images/icon/editor/btn_confirm_s1.gif?v=2) no-repeat;
 		width:41px;
 		height:21px;
 		text-indent:-1000em;	
@@ -443,7 +443,7 @@
 		margin-left:35px;
 	}
 	.tx-table-menu .tx-btn-cancel{
-		background:url(http://i1.daumcdn.net/icon/editor/btn_cancel_s1.gif?v=2) no-repeat;
+		background:url(../../../images/icon/editor/btn_cancel_s1.gif?v=2) no-repeat;
 		width:41px;
 		height:21px;
 		text-indent:-1000em;
@@ -468,17 +468,17 @@
 	}
 	a.tx-table-remove{
 		width:14px; height:14px; margin:3px 2px;
-		background:url(http://i1.daumcdn.net/icon/editor/btn_a_delete6.gif?v=2) no-repeat;
+		background:url(../../../images/icon/editor/btn_a_delete6.gif?v=2) no-repeat;
 	}
 	a.tx-table-edit-layout{
 		width:81px; 
 		height:25px; 
-		background:url(http://i1.daumcdn.net/icon/editor/table/btn_layout.gif) no-repeat;
+		background:url(../../../images/icon/editor/table/btn_layout.gif) no-repeat;
 	}
 	a.tx-table-edit-template{
 		width:81px; 
 		height:25px; 
-		background:url(http://i1.daumcdn.net/icon/editor/table/btn_form.gif) no-repeat;
+		background:url(../../../images/icon/editor/table/btn_form.gif) no-repeat;
 	}
 	
 	.tx-table-edit-container{
@@ -539,10 +539,10 @@
 		text-indent: -1000em;
 	}
 	.tx-table-edit .tx-table-edit-selecttoggle .tx-table-edit-allselect a{
-		background-image:url(http://i1.daumcdn.net/icon/editor/table/btn_tselect.gif);
+		background-image:url(../../../images/icon/editor/table/btn_tselect.gif);
 	}
 	.tx-table-edit .tx-table-edit-selecttoggle .tx-table-edit-alldeselect a{
-		background-image:url(http://i1.daumcdn.net/icon/editor/table/btn_tcancel.gif);
+		background-image:url(../../../images/icon/editor/table/btn_tcancel.gif);
 	}
 	
 	.tx-table-edit .tx-tab {
@@ -561,24 +561,24 @@
 		text-indent:-1000em;
 	}
 	.tx-table-edit ul.tx-tab-menu1 {
-		background: url(http://i1.daumcdn.net/icon/editor/table/tab_01.gif) no-repeat;
+		background: url(../../../images/icon/editor/table/tab_01.gif) no-repeat;
 	}
 	.tx-table-edit ul.tx-tab-menu2 {
-		background: url(http://i1.daumcdn.net/icon/editor/table/tab_02.gif) no-repeat;
+		background: url(../../../images/icon/editor/table/tab_02.gif) no-repeat;
 	}
 	.tx-table-edit ul.tx-tab-menu3 {
-		background: url(http://i1.daumcdn.net/icon/editor/table/tab_03.gif) no-repeat;
+		background: url(../../../images/icon/editor/table/tab_03.gif) no-repeat;
 	}
 	
 	.tx-table-edit .tx-table-edit-layout {
 		float:left;
 		clear:both;
-		background:url(http://i1.daumcdn.net/icon/editor/table/box1_left.gif) no-repeat;
+		background:url(../../../images/icon/editor/table/box1_left.gif) no-repeat;
 		height:93px;
 		width:389px;
 	}
 	.tx-table-edit .tx-table-edit-layout .tx-table-edit-layout-wrapper {
-		background:url(http://i1.daumcdn.net/icon/editor/table/box1_right.gif) no-repeat scroll top right;
+		background:url(../../../images/icon/editor/table/box1_right.gif) no-repeat scroll top right;
 		padding:0;
 		margin:0;
 		height:100%;
@@ -620,7 +620,7 @@
 		font-weight:normal;
 		margin:0 !important;
 		padding-left:6px;
-		background:url(http://i1.daumcdn.net/icon/editor/ic_dot.gif) no-repeat scroll 0 5px;
+		background:url(../../../images/icon/editor/ic_dot.gif) no-repeat scroll 0 5px;
 	}
 	
 	.tx-table-edit .tx-table-edit-layout li a{
@@ -631,29 +631,29 @@
 	}
 	
 	.tx-table-edit .tx-table-edit-layout .tx-2cell{
-		background:url(http://i1.daumcdn.net/icon/editor/table/img_layout_bg.gif) no-repeat -7px -7px;
+		background:url(../../../images/icon/editor/table/img_layout_bg.gif) no-repeat -7px -7px;
 	}
 	.tx-table-edit .tx-table-edit-layout .tx-2cell-left{
-		background:url(http://i1.daumcdn.net/icon/editor/table/img_layout_bg.gif) no-repeat -67px -7px;
+		background:url(../../../images/icon/editor/table/img_layout_bg.gif) no-repeat -67px -7px;
 	}
 	.tx-table-edit .tx-table-edit-layout .tx-2cell-right{
-		background:url(http://i1.daumcdn.net/icon/editor/table/img_layout_bg.gif) no-repeat -127px -7px;
+		background:url(../../../images/icon/editor/table/img_layout_bg.gif) no-repeat -127px -7px;
 	}
 	.tx-table-edit .tx-table-edit-layout .tx-3cell{
-		background:url(http://i1.daumcdn.net/icon/editor/table/img_layout_bg.gif) no-repeat -458px -7px;
+		background:url(../../../images/icon/editor/table/img_layout_bg.gif) no-repeat -458px -7px;
 	}
 	.tx-table-edit .tx-table-edit-layout .tx-3cell-left{
-		background:url(http://i1.daumcdn.net/icon/editor/table/img_layout_bg.gif) no-repeat -200px -7px;
+		background:url(../../../images/icon/editor/table/img_layout_bg.gif) no-repeat -200px -7px;
 	}
 	.tx-table-edit .tx-table-edit-layout .tx-3cell-right{
-		background:url(http://i1.daumcdn.net/icon/editor/table/img_layout_bg.gif) no-repeat -372px -7px;
+		background:url(../../../images/icon/editor/table/img_layout_bg.gif) no-repeat -372px -7px;
 	}
 	.tx-table-edit .tx-table-edit-layout .tx-3cell-center{
-		background:url(http://i1.daumcdn.net/icon/editor/table/img_layout_bg.gif) no-repeat -286px -7px;
+		background:url(../../../images/icon/editor/table/img_layout_bg.gif) no-repeat -286px -7px;
 	}
 	
 	.tx-table-edit .tx-table-edit-layout li a{
-		background:url(http://i1.daumcdn.net/icon/editor/table/icon_layout_hovered.gif) no-repeat;
+		background:url(../../../images/icon/editor/table/icon_layout_hovered.gif) no-repeat;
 	}
 	.tx-table-edit .tx-table-edit-layout li a.tx-up{background-position:-3px -3px;}
 	.tx-table-edit .tx-table-edit-layout li a.tx-down{background-position:-30px -3px;}
@@ -698,14 +698,14 @@
 		width:389px;
 		float:left;
 		clear:both;
-		background:url(http://i1.daumcdn.net/icon/editor/table/box2_left.gif) no-repeat;
+		background:url(../../../images/icon/editor/table/box2_left.gif) no-repeat;
 		height:55px;
 		font-size:11px;
 		font-family: dotum, sans-serif;
 		padding:0;
 	}
 	.tx-table-edit .tx-table-edit-design .tx-table-edit-design-wrapper{
-		background:url(http://i1.daumcdn.net/icon/editor/table/box2_right.gif) no-repeat top right;
+		background:url(../../../images/icon/editor/table/box2_right.gif) no-repeat top right;
 		height:100%;
 		width:100%;
 	}
@@ -724,7 +724,7 @@
 		font-size:11px;
 		font-family: dotum, sans-serif;
 		padding-left:6px;
-		background:url(http://i1.daumcdn.net/icon/editor/ic_dot.gif) no-repeat scroll 0 5px;
+		background:url(../../../images/icon/editor/ic_dot.gif) no-repeat scroll 0 5px;
 	}
 	.tx-table-edit .tx-table-edit-design dt,
 		.tx-table-edit .tx-table-edit-design dd{
@@ -738,7 +738,7 @@
 	
 	.tx-table-edit .tx-table-edit-design dd{
 		position:relative;
-		background:url(http://i1.daumcdn.net/icon/editor/table/img_des_bg.gif) no-repeat;
+		background:url(../../../images/icon/editor/table/img_des_bg.gif) no-repeat;
 	}	
 	.tx-table-edit  dd.tx-btn-widget{
 		background-position:-51px -8px;
@@ -766,7 +766,7 @@
 	
 	.tx-table-edit .tx-table-edit-design a.tx-icon{
 		text-indent:-1000em;
-		background:url(http://i1.daumcdn.net/icon/editor/table/icon_design.gif) no-repeat;
+		background:url(../../../images/icon/editor/table/icon_design.gif) no-repeat;
 		width:25px;
 		height:23px;
 		display:block;
@@ -780,7 +780,7 @@
 		display:block;
 	}
 	.tx-table-edit .tx-table-edit-design .tx-table-edit-borderrange .tx-icon{
-		background:url(http://i1.daumcdn.net/icon/editor/table/button_line.gif) no-repeat 0 -1px;
+		background:url(../../../images/icon/editor/table/button_line.gif) no-repeat 0 -1px;
 	}
 	.tx-table-edit .tx-table-edit-design .tx-table-edit-borderrange .tx-icon.tx-range-all{
 		background-position:0 -1px;
@@ -839,7 +839,7 @@
 	.tx-table-edit .tx-table-edit-design .tx-table-edit-borderrange .tx-menu a{
 		display: block;
 		margin-left: 3px;
-		background: url(http://i1.daumcdn.net/icon/editor/table/menu_line.gif) no-repeat;
+		background: url(../../../images/icon/editor/table/menu_line.gif) no-repeat;
 		padding: 1px 0 1px 25px;
 	}
 	.tx-table-edit .tx-table-edit-design .tx-table-edit-borderrange .tx-menu a.tx-all{background-position:-1px -3px;}
@@ -858,7 +858,7 @@
 		height:17px;
 		width:100px;
 		margin-left:3px;
-		background:url(http://i1.daumcdn.net/icon/editor/menu_border_width.gif) no-repeat;
+		background:url(../../../images/icon/editor/menu_border_width.gif) no-repeat;
 		text-indent:-1000em;
 	}
 	.tx-table-edit .tx-table-edit-design .tx-table-edit-borderwidth .tx-menu a.tx-1px{background-position:-1px 3px;}
@@ -877,7 +877,7 @@
 		margin-left:5px;
 		height:17px;
 		width:100px;
-		background:url(http://i1.daumcdn.net/icon/editor/menu_border_style.gif) no-repeat;
+		background:url(../../../images/icon/editor/menu_border_style.gif) no-repeat;
 		text-indent:-1000em;
 	}
 	
@@ -890,12 +890,12 @@
 		width:389px;
 		float:left;
 		clear:both;
-		background:url(http://i1.daumcdn.net/icon/editor/table/box2_left.gif) no-repeat;
+		background:url(../../../images/icon/editor/table/box2_left.gif) no-repeat;
 		padding:0;
 		margin:0;
 	}
 	.tx-table-edit .tx-table-edit-template .tx-table-edit-template-wrapper{
-		background:url(http://i1.daumcdn.net/icon/editor/table/box2_right.gif) no-repeat top right;
+		background:url(../../../images/icon/editor/table/box2_right.gif) no-repeat top right;
 		padding:0;
 		height:100%;
 		width:100%;
@@ -907,7 +907,7 @@
 		float: left;
 	}
 	.tx-table-edit .tx-table-edit-template a.tx-button{
-		background:url(http://i1.daumcdn.net/icon/editor/table/btn_down.gif) no-repeat; 
+		background:url(../../../images/icon/editor/table/btn_down.gif) no-repeat; 
 		width:13px;
 		height:39px;
 		display:block;
@@ -916,7 +916,7 @@
 		float:left;
 	}
 	.tx-table-edit .tx-table-edit-template a.tx-button-on{
-		background:url(http://i1.daumcdn.net/icon/editor/table/btn_up.gif) no-repeat; 
+		background:url(../../../images/icon/editor/table/btn_up.gif) no-repeat; 
 		width:13px;
 		height:38px;
 		display:block;
@@ -932,7 +932,7 @@
 		background-repeat:no-repeat;
 		margin-left: 10px;
 		margin-top:7px;
-		background-image:url(http://i1.daumcdn.net/icon/editor/table/icon_form.gif); 
+		background-image:url(../../../images/icon/editor/table/icon_form.gif); 
 		width:30px;
 		height:32px;
 	}
@@ -1021,10 +1021,10 @@
 		text-indent:-1000em;
 	}
 	.tx-table-edit .tx-table-edit-main .tx-confirm{
-		background:url(http://i1.daumcdn.net/icon/editor/btn_confirm_s1.gif?v=2) no-repeat;
+		background:url(../../../images/icon/editor/btn_confirm_s1.gif?v=2) no-repeat;
 	}	
 	.tx-table-edit .tx-table-edit-main .tx-cancel{
-		background:url(http://i1.daumcdn.net/icon/editor/btn_cancel_s1.gif?v=2) no-repeat;
+		background:url(../../../images/icon/editor/btn_cancel_s1.gif?v=2) no-repeat;
 	}
 	
 	/* IE7 hack */
@@ -1051,10 +1051,10 @@
 	.tx-emoticon-menu div.tx-menu-matrix-list td a:hover { border:2px solid #768fbd; } 
 	.tx-emoticon-menu div.tx-menu-matrix-list td span { display:block; width:23px; height:23px; text-align:center; color:#333; cursor:pointer; overflow:hidden; text-indent:-100em; }
 	
-	.tx-emoticon-menu div.tx-menu-matrix-per table { background:url(http://i1.daumcdn.net/icon/editor/emoticon/emoticon_01.gif?v=2) no-repeat; }
-	.tx-emoticon-menu div.tx-menu-matrix-ani table { background:url(http://i1.daumcdn.net/icon/editor/emoticon/emoticon_02.gif?v=2) no-repeat; }
-	.tx-emoticon-menu div.tx-menu-matrix-things table { background:url(http://i1.daumcdn.net/icon/editor/emoticon/emoticon_03.gif?v=2) no-repeat; }
-	.tx-emoticon-menu div.tx-menu-matrix-etc table { background:url(http://i1.daumcdn.net/icon/editor/emoticon/emoticon_04.gif?v=2) no-repeat; }
+	.tx-emoticon-menu div.tx-menu-matrix-per table { background:url(../../../images/icon/editor/emoticon/emoticon_01.gif?v=2) no-repeat; }
+	.tx-emoticon-menu div.tx-menu-matrix-ani table { background:url(../../../images/icon/editor/emoticon/emoticon_02.gif?v=2) no-repeat; }
+	.tx-emoticon-menu div.tx-menu-matrix-things table { background:url(../../../images/icon/editor/emoticon/emoticon_03.gif?v=2) no-repeat; }
+	.tx-emoticon-menu div.tx-menu-matrix-etc table { background:url(../../../images/icon/editor/emoticon/emoticon_04.gif?v=2) no-repeat; }
 
 /*==== dictionary ====*/
 	.tx-dictionary a.tx-icon {background-position:-104px -69px;}
@@ -1108,7 +1108,7 @@
 	.tx-cellslineheight a.tx-icon2 {background-position:-5px -135px;}
 	
 /*==== createtable ====*/
-	.tx-tableedit-title {background:url(http://i1.daumcdn.net/icon/editor/skin/05/icon_add_table01.gif);
+	.tx-tableedit-title {background:url(../../../images/icon/editor/skin/05/icon_add_table01.gif);
 	 background-position:40px 215px; width:38px; height: 20px;}
 
 /*==== cellslinepreview ====*/
@@ -1140,7 +1140,7 @@
 	.tx-textbox-menu { width:161px; }
 	.tx-textbox-menu div.tx-menu-inner { padding:5px; background:#f9f9f9; }
 	
-	.tx-textbox-menu div.tx-menu-list table { border-collapse:collapse; background-image:url(http://i1.daumcdn.net/icon/editor/textbox/textbox.gif?v=2); background-repeat:no-repeat; background-position:-2px -2px;}
+	.tx-textbox-menu div.tx-menu-list table { border-collapse:collapse; background-image:url(../../../images/icon/editor/textbox/textbox.gif?v=2); background-repeat:no-repeat; background-position:-2px -2px;}
 	*+ html .tx-textbox-menu div.tx-menu-list table { background-position:-1px -1px;}
 	* html .tx-textbox-menu div.tx-menu-list table { background-position:-1px -1px;}
 	.tx-textbox-menu div.tx-menu-list td { padding:0; border:1px solid #f9f9f9; height:auto;}

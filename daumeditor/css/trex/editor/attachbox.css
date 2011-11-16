@@ -11,19 +11,19 @@
 	.tx-attach-box p.tx-thumb-pie {
 		position:absolute; display:block; z-index:10; top:82px; left:8px;
 		width:13px; height:13px;
-		background:url(http://i1.daumcdn.net/icon/editor/ic_pie.gif?v=2) no-repeat;
+		background:url(../../../images/icon/editor/ic_pie.gif?v=2) no-repeat;
 	}
 	.tx-attach-box p.tx-thumb-movie {
 		position:absolute; display:block; z-index:10; top:73px; left:22px;
 		width:13px; height:13px;
-		background:url(http://i1.daumcdn.net/icon/editor/ic_play01.gif?v=2) no-repeat;
+		background:url(../../../images/icon/editor/ic_play01.gif?v=2) no-repeat;
 	}
 
 	.tx-attach-box .tx-attach-main { height:118px; position:relative;}
 	.tx-attach-box .tx-upload-progress { position:absolute; z-index:20; top:45px; left:320px; width:300px; height:40px; padding:10px; border:1px #aaa solid; background:#fff; display:none; }
 	*+html .tx-attach-box .tx-upload-progress { left:150px;}
 	* html .tx-attach-box .tx-upload-progress { left:150px;}
-	.tx-attach-box .tx-upload-progress div { border:1px #ddd solid; background:#FB6235 url(http://i1.daumcdn.net/icon/editor/progress_01.gif?v=2); width:10px; height:15px; font-size:11px; font-family:dotum,verdana; color:#fff; text-align:center; padding: 3px 0 2px; }
+	.tx-attach-box .tx-upload-progress div { border:1px #ddd solid; background:#FB6235 url(../../../images/icon/editor/progress_01.gif?v=2); width:10px; height:15px; font-size:11px; font-family:dotum,verdana; color:#fff; text-align:center; padding: 3px 0 2px; }
 	.tx-attach-box .tx-upload-progress p { font-size:11px; font-family:dotum,verdana; color:#666; text-align:center; }
 
 	.tx-attach-box .tx-attach-top { height:21px; margin:1px 0 4px 0; }
@@ -31,7 +31,7 @@
 
 	.tx-attach-box .tx-attach-delete a {
 		display:block; margin:0 4px; width:57px; height:21px; text-indent:-100em; overflow:hidden;
-		background:url(http://i1.daumcdn.net/icon/editor/btn_deletefile.gif?v=2) no-repeat; cursor:pointer;
+		background:url(../../../images/icon/editor/btn_deletefile.gif?v=2) no-repeat; cursor:pointer;
 	}
 
 	.tx-attach-box li.tx-attach-size { float:right; padding:5px 5px 0 0; }
@@ -71,22 +71,22 @@
 	.tx-attach-box .tx-attach-list li a.tx-insert {
 		float:left; display:block; width:15px; height:15px; margin:0 0 0 3px;
 		text-indent:-100em; overflow:hidden;
-		background:url(http://i1.daumcdn.net/icon/editor/btn_a_upload.gif?v=2) no-repeat; cursor:pointer;
+		background:url(../../../images/icon/editor/btn_a_upload.gif?v=2) no-repeat; cursor:pointer;
 	}
 	.tx-attach-box .tx-attach-list li a.tx-delete {
 		float:left; display:none; width:15px; height:15px;
 		text-indent:-100em; overflow:hidden;
-		background:url(http://i1.daumcdn.net/icon/editor/btn_a_delete.gif?v=2) no-repeat; cursor:pointer;
+		background:url(../../../images/icon/editor/btn_a_delete.gif?v=2) no-repeat; cursor:pointer;
 	}
 	.tx-attach-box .tx-attach-list li.tx-hovered a.tx-delete { display:block; }
 	.tx-attach-box .tx-attach-list li.tx-clicked a.tx-delete { display:block; }
 
 	.tx-attach-box a.tx-attach-two-images {
 		float:left; margin-right: 4px; width:21px; height:20px; text-indent:-100em; overflow:hidden;
-		background:url(http://i1.daumcdn.net/icon/editor/btn_images_two.gif?v=2) no-repeat; cursor:pointer;
+		background:url(../../../images/icon/editor/btn_images_two.gif?v=2) no-repeat; cursor:pointer;
 	}
 
 	.tx-attach-box a.tx-attach-three-images {
 		float:left; margin: 0; width:24px; height:20px; text-indent:-100em; overflow:hidden;
-		background:url(http://i1.daumcdn.net/icon/editor/btn_images_three.gif?v=2) no-repeat; cursor:pointer;
+		background:url(../../../images/icon/editor/btn_images_three.gif?v=2) no-repeat; cursor:pointer;
 	}

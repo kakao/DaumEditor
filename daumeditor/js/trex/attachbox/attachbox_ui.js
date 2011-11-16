@@ -1,7 +1,7 @@
 TrexMessage.addMsg({
 	'@attacher.ins': "삽입",
 	'@attacher.del': "삭제",
-	'@attacher.preview.image': "#iconpath/pn_preview.gif",
+	'@attacher.preview.image': "#iconpath/editor/pn_preview.gif",
 	'@attacher.delete.confirm': "삭제하시면 본문에서도 삭제됩니다. 계속하시겠습니까?",
 	'@attacher.delete.all.confirm': "선택한 첨부파일을 삭제하시겠습니까? 삭제하시면 본문에서도 삭제됩니다.",
 	'@attacher.exist.alert': "이미 본문에 삽입되어 있습니다."

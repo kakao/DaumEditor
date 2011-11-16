@@ -50,7 +50,7 @@
 	.tx-noticebox dt span {float:left;}
 	.tx-noticebox dt a {
 		width:14px; height:13px; float:right; text-indent:-100em;
-		background:url(http://i1.daumcdn.net/icon/editor/btn_a_close.gif?v=2) no-repeat left top;
+		background:url(../../../images/icon/editor/btn_a_close.gif?v=2) no-repeat left top;
 	}
 	.tx-noticebox dd {
 		margin:0; padding:10px 10px 0 10px;

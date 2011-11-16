@@ -8,24 +8,24 @@
 		font-family:dotum,verdana; font-size:11px; height:20px; min-width:800px; padding:10px 0 0 10px; white-space:nowrap;
 	 }
 	.tx-editor-container .tx-fullscreen-notice a {
-		background:transparent url(http://i1.daumcdn.net/icon/editor/ic_arrow02.gif?v=2) no-repeat scroll right 2px;
+		background:transparent url(../../../images/icon/editor/ic_arrow02.gif?v=2) no-repeat scroll right 2px;
 		font-family:dotum,verdana; font-size:11px; padding:0 7px 0 5px; text-decoration:underline; color: #ffffff; font-weight:bold
 	 }
 	.tx-fullscreen-notice a:hover{
 		color: #ffffff;
 	}
-	.tx-fullscreen-line { display:none; background:transparent url(http://i1.daumcdn.net/icon/editor/w_bgimg_02.gif?v=2) repeat-x; height:17px; font-size:0; }
-	.tx-fullscreen-line .tx-fullscreen-line-division { background:transparent url(http://i1.daumcdn.net/icon/editor/skin/01/bot_bg.gif) repeat-x; height:7px; overflow:hidden; text-indent:-100em; }
-	.tx-fullscreen-line-division .tx-fullscreen-line-left { background:transparent url(http://i1.daumcdn.net/icon/editor/skin/01/bot_left.gif) no-repeat left top; width:7px; height:7px; float:left; overflow:hidden; text-indent:-100em; }
-	.tx-fullscreen-line-division .tx-fullscreen-line-right { background:transparent url(http://i1.daumcdn.net/icon/editor/skin/01/bot_right.gif) no-repeat right top; width:7px; height:7px; float:right; overflow:hidden; text-indent:-100em; }
-	.tx-fullscreen-line .tx-fullscreen-line-box { background:transparent url(http://i1.daumcdn.net/icon/editor/w_bgimg.gif) repeat-x; height:10px; overflow:hidden; text-indent:-100em; font-size: 0; }
-	.tx-fullscreen-line-box .tx-fullscreen-line-left { background:transparent url(http://i1.daumcdn.net/icon/editor/w_leftimg.gif) no-repeat left top; width:4px; height:10px; float:left; overflow:hidden; text-indent:-100em; }
-	.tx-fullscreen-line-box .tx-fullscreen-line-right { background:transparent url(http://i1.daumcdn.net/icon/editor/w_rightimg.gif) no-repeat right top; width:4px; height:10px; float:right; overflow:hidden; text-indent:-100em; }
+	.tx-fullscreen-line { display:none; background:transparent url(../../../images/icon/editor/w_bgimg_02.gif?v=2) repeat-x; height:17px; font-size:0; }
+	.tx-fullscreen-line .tx-fullscreen-line-division { background:transparent url(../../../images/icon/editor/skin/01/bot_bg.gif) repeat-x; height:7px; overflow:hidden; text-indent:-100em; }
+	.tx-fullscreen-line-division .tx-fullscreen-line-left { background:transparent url(../../../images/icon/editor/skin/01/bot_left.gif) no-repeat left top; width:7px; height:7px; float:left; overflow:hidden; text-indent:-100em; }
+	.tx-fullscreen-line-division .tx-fullscreen-line-right { background:transparent url(../../../images/icon/editor/skin/01/bot_right.gif) no-repeat right top; width:7px; height:7px; float:right; overflow:hidden; text-indent:-100em; }
+	.tx-fullscreen-line .tx-fullscreen-line-box { background:transparent url(../../../images/icon/editor/w_bgimg.gif) repeat-x; height:10px; overflow:hidden; text-indent:-100em; font-size: 0; }
+	.tx-fullscreen-line-box .tx-fullscreen-line-left { background:transparent url(../../../images/icon/editor/w_leftimg.gif) no-repeat left top; width:4px; height:10px; float:left; overflow:hidden; text-indent:-100em; }
+	.tx-fullscreen-line-box .tx-fullscreen-line-right { background:transparent url(../../../images/icon/editor/w_rightimg.gif) no-repeat right top; width:4px; height:10px; float:right; overflow:hidden; text-indent:-100em; }
 	.tx-fullscreen-line-box a {
 		display:block; width:59px; height:10px; margin:0 auto; overflow:hidden; text-indent:-10000em; -moz-user-select:none; cursor:pointer;
-		background:transparent url(http://i1.daumcdn.net/icon/editor/skin/01/btn_spread_box.gif) no-repeat;
+		background:transparent url(../../../images/icon/editor/skin/01/btn_spread_box.gif) no-repeat;
 	}
-	.tx-fullscreen-line-box a.tx-attach-close { background:transparent url(http://i1.daumcdn.net/icon/editor/skin/01/btn_fold_box.gif?v=2) no-repeat; }
+	.tx-fullscreen-line-box a.tx-attach-close { background:transparent url(../../../images/icon/editor/skin/01/btn_fold_box.gif?v=2) no-repeat; }
 
 	.tx-editor-fullscreen { background-color:#FFFFFF; left:0; min-width:800px; position:absolute; top:0; width:100%; z-index:999999; }
 	.tx-editor-fullscreen .tx-fullscreen{ background-position:-331px -132px; }
@@ -39,9 +39,9 @@
 
 	.tx-fullscreen_attachbox-bar {cursor:default;display:none;}
 	.tx-fullscreen_attachbox-bar img {-moz-user-select:none;-khtml-user-select:none;}
-	.tx-fullscreen_attachbox-bar div.tx-fullscreen_attachbox-bar-left{width:100%; height:7px; background:url(http://i1.daumcdn.net/icon/editor/skin/01/bot_left.gif?v=2) no-repeat; }
-	.tx-fullscreen_attachbox-bar div.tx-fullscreen_attachbox-bar-right{height:7px; background:url(http://i1.daumcdn.net/icon/editor/skin/01/bot_right.gif?v=2) no-repeat top right; }
-	.tx-fullscreen_attachbox-bar div.tx-fullscreen_attachbox-bar-bg{height:7px; margin:0 7px; background:url(http://i1.daumcdn.net/icon/editor/skin/01/bot_bg.gif?v=2) repeat-x; text-align:center; }
+	.tx-fullscreen_attachbox-bar div.tx-fullscreen_attachbox-bar-left{width:100%; height:7px; background:url(../../../images/icon/editor/skin/01/bot_left.gif?v=2) no-repeat; }
+	.tx-fullscreen_attachbox-bar div.tx-fullscreen_attachbox-bar-right{height:7px; background:url(../../../images/icon/editor/skin/01/bot_right.gif?v=2) no-repeat top right; }
+	.tx-fullscreen_attachbox-bar div.tx-fullscreen_attachbox-bar-bg{height:7px; margin:0 7px; background:url(../../../images/icon/editor/skin/01/bot_bg.gif?v=2) repeat-x; text-align:center; }
 
 	/* IE6 hack */
 	.tx-fullscreen{ _position:absolute; _right:0; }

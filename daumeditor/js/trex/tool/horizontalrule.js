@@ -13,31 +13,31 @@ TrexConfig.addTool(
 		top: _NULL,
 		left: _NULL,
 		options: [{	data: 'tx-hr-border-1', 
-			image: '#iconpath/line01.gif?v=2',
+			image: '#iconpath/horizontalrule/line01.gif?v=2',
 			html: '<hr style="border: black 0 none; border-top: black 1px solid; height: 1px"/>'
 		},
 		{	data: 'tx-hr-border-2',
-			image: '#iconpath/line02.gif?v=2',
+			image: '#iconpath/horizontalrule/line02.gif?v=2',
 			html: '<hr style="border: black 0 none; border-top: black 1px solid; border-bottom: black 3px solid; height: 7px"/>'
 		},
 		{	data: 'tx-hr-border-3',
-			image: '#iconpath/line04.gif?v=2',
+			image: '#iconpath/horizontalrule/line04.gif?v=2',
 			html: '<hr style="border: black 0 none; border-top: black 1px dotted; height: 1px"/>'
 		},
 		{	data: 'tx-hr-image-1',
-			image: '#iconpath/line03.gif?v=2',
+			image: '#iconpath/horizontalrule/line03.gif?v=2',
 			html: '<div style="background: url(#decopath/line03.gif?v=2) repeat-x scroll left;  width: 99%; height: 15px"><hr style="border: black 0 none; left: -9999px; position: relative; top: -9999px"></div>'
 		},
 		{	data: 'tx-hr-image-2',
-			image: '#iconpath/line05.gif?v=2',
+			image: '#iconpath/horizontalrule/line05.gif?v=2',
 			html: '<div style="background: url(#decopath/line05.gif?v=2) repeat-x scroll left;  width: 99%; height: 15px"><hr style="border: black 0 none; left: -9999px; position: relative; top: -9999px"></div>'
 		},
 		{	data: 'tx-hr-image-3',
-			image: '#iconpath/line06.gif?v=2',
+			image: '#iconpath/horizontalrule/line06.gif?v=2',
 			html: '<div style="background: url(#decopath/line06.gif?v=2) repeat-x scroll left;  width: 99%; height: 15px"><hr style="border: black 0 none; left: -9999px; position: relative; top: -9999px"></div>'
 		},
 		{	data: 'tx-hr-image-4',
-			image: '#iconpath/line07.gif?v=2',
+			image: '#iconpath/horizontalrule/line07.gif?v=2',
 			html: '<div style="background: url(#decopath/line08.gif?v=2) repeat-x scroll left;  width: 99%; height: 15px"><hr style="border: black 0 none; left: -9999px; position: relative; top: -9999px"></div>'
 		}]
 	},

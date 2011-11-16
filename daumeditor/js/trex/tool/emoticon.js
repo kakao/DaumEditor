@@ -9,7 +9,7 @@
     var createEmoticonURLs = function (category, maxNum){
         var urls = [];
         for (var i = 1; i <= maxNum; i++) {
-            urls.push('#decopath/' + category + '_' + addZeroPadding(i) + '.gif?v=2');
+            urls.push('#decopath/emoticon/' + category + '_' + addZeroPadding(i) + '.gif?v=2');
         }
         return urls;
     };
