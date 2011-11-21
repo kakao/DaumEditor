@@ -1,33 +1,9 @@
 Trex.Table.Template = Trex.Class.create({
 	initialize: function(){
 		this.currentTemplate = _NULL;
-		this.loadTemplate();
-		this.templateList = (typeof getTableTemplateList == "function")? getTableTemplateList() : [{
-			klass: "ex1",
-			common: {
-			backgroundColor:"transparent",
-			borderTop:"none",
-			borderLeft:"none",
-			borderRight: "1px solid #d9d9d9",
-			borderBottom: "1px solid #d9d9d9"
-		},
-		firstRow: {
-			borderTop: "1px solid #000"
-		},
-		firstCol: {
-			borderLeft: "1px solid #000"
-		},
-		lastCol: {
-			borderRight: "1px solid #000"
-		},
-		lastRow: {
-			borderBottom: "1px solid #000"
-		},
-		evenRow: {},
-		oddRow: {}
-		}];
+        this.templateList = _NULL;
 	},
-	applyStyle: function(table, templateIndex){
+	applyStyle: function(table, templateIndex, callback){
 		
 		if ( isNaN( templateIndex ) ){
 			return ;
@@ -35,18 +11,24 @@ Trex.Table.Template = Trex.Class.create({
 		
 		var tableMatrixer = new Trex.Tool.Table.TableCellMatrixer(table);
 		var tdMatrix = tableMatrixer.getTdMatrix();
-		this.currentTemplate = this.templateList[templateIndex];
-		for( var i = 0; i < tdMatrix.length; i++){
-			for( var j = 0; j < tdMatrix[i].length; j++){
-				this.setCellStyle(tdMatrix[i][j], {
-					isEvenRow: (i % 2) == 1,
-					isFirstRow: i == 0,
-					isLastRow: i == tdMatrix.length - 1, 
-					isFirstCol: j == 0,
-					isLastCol: (j == tdMatrix[i].length - 1)  
-				});	
-			}
-		}
+
+        var self = this;
+        this.onLoadTemplateList(function(templateList) {
+            self.currentTemplate = templateList[templateIndex];
+            for (var i = 0; i < tdMatrix.length; i++) {
+                for (var j = 0; j < tdMatrix[i].length; j++) {
+                    self.setCellStyle(tdMatrix[i][j], {
+                        isEvenRow: (i % 2) == 1,
+                        isFirstRow: i == 0,
+                        isLastRow: i == tdMatrix.length - 1,
+                        isFirstCol: j == 0,
+                        isLastCol: (j == tdMatrix[i].length - 1)
+                    });
+                }
+            }
+            callback();
+        });
+
 	},
 	setCellStyle: function(elTd, truthMap){
 		var t = this.currentTemplate;
@@ -60,19 +42,37 @@ Trex.Table.Template = Trex.Class.create({
 	getTemplateList: function(){
 		return this.templateList;
 	},
-	
-	loadTemplate: function(){
-		var listseturl = TrexConfig.getUrl('#cdnhost/view/listset/5.1/tabletemplate.js');
-        if (!(typeof getTableTemplateList == "function")) {
-		    new (Trex.Class.create({
-                $mixins: [Trex.I.JSRequester],
-                initialize: function(){
-					this.importScript(listseturl, 'utf-8', _DOC, function(){
-						getTableTemplateList();
-					});
-                }
-            }))();
-            return;
+
+    onLoadTemplateList: function(fn) {
+        if (this.templateList) {
+            fn(this.templateList);
+        } else {
+            var self = this;
+            this.loadTemplate(function (templateList) {
+                self.templateList = templateList;
+                fn(templateList);
+            });
         }
-	}
+    },
+
+    loadTemplate: function(fn) {
+        var url = this.getJSBasePath() + "trex/modules/table/async/template_data.js";
+        EditorJSLoader.asyncLoadModule({
+            url: TrexConfig.getUrl(url),
+            callback: function() {
+                var templateList = getTableTemplateList();
+                fn(templateList);
+            }
+        });
+    },
+
+    getJSBasePath: function() {
+        var basePath;
+        try {
+            basePath = EditorJSLoader.getJSBasePath("editor.js");
+        } catch (e) {
+            basePath = EditorJSLoader.getJSBasePath();
+        }
+        return basePath;
+    }
 });
