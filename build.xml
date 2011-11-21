@@ -105,7 +105,7 @@
                 <echo message="copy core async tools" />
                 <copy todir="${build.target.editor.js.dir}/merged/" overwrite="true">
                     <fileset dir="${src.editor.js.dir}">
-                        <include name="**/tool/async/**/*" />
+                        <include name="**/async/**/*" />
                     </fileset>
                 </copy>
             </target>
