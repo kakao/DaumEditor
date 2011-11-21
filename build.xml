@@ -59,19 +59,27 @@
 
     <target name="deploy" depends="packaging, load_version_information"
             description="upload the artifact on googlecode hosting">
-        <property file="${user.home}/daumeditor.credentials.properties" />
-        <!-- TODO echo usage if properties was not found... 동일님 해줘... -->
-
-        <taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${build.lib.gcuploader}" name="gcupload"/>
-        <gcupload
-                username="${gc.username}"
-                password="${gc.password}"
-                projectname="daumopeneditor"
-                filename="${build.dist.dir}/daumeditor.zip"
-                targetfilename="daumeditor-${editor.version}.zip"
-                summary="${editor.version} release zip file"/>
+    	<trycatch>
+    	  <try>
+    	  	<property file="${user.home}/daumeditor.credentials.properties" />
+    	  	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${build.lib.gcuploader}" name="gcupload"/>
+  	        <gcupload
+  	                username="${gc.username}"
+  	                password="${gc.password}"
+  	                projectname="daumopeneditor"
+  	                filename="${build.dist.dir}/daumeditor.zip"
+  	                targetfilename="daumeditor-${editor.version}.zip"
+  	                summary="${editor.version} release zip file"
+  	        		verbose="true"/>
+    	  </try>
+    	  <catch>
+    	  	<echo> Write your google account in ${user.home}/daumeditor.credentials.properties  </echo>
+    	  	<echo> in daumeditor.credentials.properties </echo>
+        	<echo> gc.username=[your google account Id]  </echo>
+        	<echo> gc.password=[your google account password]  </echo>
+    	  </catch>
+    	</trycatch>       
     </target>
-
 
 	<!-- build javascript tasks ========================================== -->
 	<target name="build-js">
