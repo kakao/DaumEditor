@@ -21,15 +21,15 @@ Trex.module("table selector", function (editor, toolbar, sidebar, canvas, config
 		$tx.hide(rowDragger);
 	};
 	canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function () {
-		var tableSelect, tableMerge, tableInsert, tableDelete, tableBorder, tableTemplate;
+		var tableSelect, tableMerge, tableInsert, tableDelete, tableBorder, tableTemplateLoader;
 	
 		tableSelect = new Trex.Table.Selector(editor, config);
 		tableMerge = new Trex.Table.Merge(editor, config);
 		tableInsert = new Trex.Table.Insert(editor, config);
 		tableDelete = new Trex.Table.Delete(editor, config);
 		tableBorder = new Trex.Table.Border(editor, config);
-		tableTemplate = new Trex.Table.Template();
-		
+        tableTemplateLoader = new Trex.Table.TemplateLoader();
+
 		initDragger(canvas);
 		
 		var wysiwygPanel = canvas.getPanel(Trex.Canvas.__WYSIWYG_MODE);
@@ -243,11 +243,11 @@ Trex.module("table selector", function (editor, toolbar, sidebar, canvas, config
 			},
 			
 			setTemplateStyle: function (table, templateIndex) {
-				var template;
 				if (table) {
-					template = new Trex.Table.Template();
-					template.applyStyle(table, templateIndex);
-					tableSelect.reset();
+                    tableTemplateLoader.getTemplate(templateIndex, function(template) {
+                        template.apply(table);
+                        tableSelect.reset();
+                    });
 				} else {
 					alertFromNoSelect();
 				}
