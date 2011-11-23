@@ -231,7 +231,7 @@
          */
         loadModule: function(moduleName) {
             function isModuleNameNotPath(name) {
-                return !name.match(/^(http:\/\/|\.\.\/|\/)/);
+                return !name.match(/^((https?|file):\/\/|\.\.\/|\/)/);
             }
             
             var url = isModuleNameNotPath(moduleName) ? this.getBasePath() + moduleName : moduleName;
