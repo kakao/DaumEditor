@@ -15,10 +15,9 @@
     var REGX_MATCH_VERSION = /\/([6-9][a-z.]?\.[a-z0-9\-]+\.[\-\w]+)\//;
 
     var DEFAULT_OPTIONS = {
-        "environment" : ENV_PRODUCTION,
-        "service": "",
+        "service": "core",
         "version": "",
-        "host" : "http://s1.daumcdn.net/editor/"
+        "host" : ""
     };
 
     function getBasePath(url) {
@@ -34,11 +33,6 @@
             }
         }
         throw "cannot find '" + filename + "' script element";
-    }
-
-    function getProductionURL(moduleName) {
-        return Loader.getOption("host") + "releases/" + Loader.getOption("version") + "/js/" +
-                moduleName + (isRetry ? "?dummy=" + (new Date().toString()) : "");
     }
 
     function readURLParam(filename) {
@@ -254,20 +248,6 @@
         },
 
         /**
-         * <p>실서비스 환경에서의 module 불러오기</p>
-         * <p>static farm에 배포된 파일을 대상으로 한다.</p>
-         * @param moduleName {string} e.g. editor_basic.js
-         */
-        loadPackage: function(moduleName) {
-        	return new AsyncLoader({
-        		url: getProductionURL(moduleName)
-        	});
-//            Loader.readyState = STATUS_UNINITIALIZED;
-//            loadScriptDOMElement(getProductionURL(moduleName));
-//            Loader.startErrorTimer();
-        },
-        
-        /**
          * <p>editor javascript 파일이 로딩 완료되었을 때 호출될 함수를 등록한다.</p>
          * @param fn {function} 실행될 함수
          */
@@ -326,11 +306,7 @@
         },
 
         getJSBasePath: function(filename) {
-        	if (Loader.getOption("environment") === ENV_PRODUCTION) {
-                return Loader.getOption("host") + "releases/" + Loader.getOption("version") + "/js/";
-            } else {
-                return this.getBasePath(filename);
-            }
+            return this.getBasePath(filename);
         },
 
         getCSSBasePath: function() {
@@ -339,36 +315,22 @@
         },
 
         getPageBasePath: function() {
-            if (Loader.getOption("environment") === ENV_PRODUCTION) {
-                return "http://editor.daum.net/releases/" + Loader.getOption("version") + "/pages/daumx/";
-            } else {
-                var jsBasePath = this.getBasePath();
-                return jsBasePath.replace(/\/js\//g, "/pages/");
-            }
+            var jsBasePath = this.getBasePath();
+            return jsBasePath.replace(/\/js\//g, "/pages/");
         },
 
         getOption: function(name) {
             return getCookieOption(name) || getUserOption(name) || getDefaultOption(name);
-        },
-
-        getServicePostfix: function() {
-            var service = Loader.getOption("service");
-            return service ? '_' + service : '';
         }
     };
     window.EditorJSLoader = Loader;
 
     function initialize() {
-        var env = Loader.getOption("environment");
-        var jsModuleName = "editor" + Loader.getServicePostfix() + ".js";
+        var jsModuleName = "editor.js";
         
         DEFAULT_OPTIONS["version"] = readCurrentURLVersion(Loader.NAME);
         
-        if (env === ENV_PRODUCTION) {
-            Loader.loadPackage(jsModuleName);
-        } else {
-            Loader.loadModule(jsModuleName);
-        }
+        Loader.loadModule(jsModuleName);
     }
 
     initialize();
