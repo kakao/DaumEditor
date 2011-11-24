@@ -133,7 +133,7 @@
 					
 					// Handle memory leak in IE
                     if (/MSIE/i.test(navigator.userAgent)) {
-                        script.onload = script.onreadystatechange = null;
+                        script.onload = script.onreadystatechange = _NULL;
                         if ( head && script.parentNode ) {
                             head.removeChild( script );
                         }

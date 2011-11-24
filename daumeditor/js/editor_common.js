@@ -15,6 +15,7 @@ var DEVELLIBS = [
     "lib/xgetty.js",
     "lib/dateformat.js",
     "lib/swfobject.js",
+    "lib/font_css_property.js",
     "lib/htmlparser.js",
     /** trex engine & config */
     "trex/eval.js",
@@ -92,6 +93,7 @@ var DEVELLIBS = [
     "trex/attachment.js",
     "trex/attachbox.js",
     "trex/attachbox/attachbox_ui.js",
+    "trex/attachbox/filecapacity.js",
     "trex/attacher.js",
 
     /** embeder */
@@ -178,6 +180,8 @@ var DEVELLIBS = [
 	"trex/modules/table/template.js",
 	
 	"trex/modules/tabledragger.js",
+
+    "trex/modules/ie_paste.js",
     /** each > plugin */
 
     '' /*dummy*/

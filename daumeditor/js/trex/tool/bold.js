@@ -33,8 +33,5 @@ Trex.Tool.Bold = Trex.Class.create({
     },
     isStyleApplied: function(node) {
         return ["bold", "700"].contains($tx.getStyle(node, "fontWeight"));
-    },
-    toggleFontStyle: function(status) {
-        return { fontWeight: status ? _NULL : "bold" };
     }
 });

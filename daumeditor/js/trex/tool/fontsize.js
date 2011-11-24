@@ -29,7 +29,7 @@ Trex.Tool.FontSize = Trex.Class.create({
 		__Identity: 'fontsize'
 	},
 	$extend: Trex.Tool,
-    $mixins: [Trex.I.FontTool, Trex.I.MenuFontTool],
+    $mixins: [Trex.I.FontTool, Trex.I.MenuFontTool, Trex.I.WrappingSpanFontTool],
     beforeOnInitialized: function(config) {
         this.createFontSizeMap(config);
     },
@@ -49,8 +49,8 @@ Trex.Tool.FontSize = Trex.Class.create({
             fontSizeMap[option.data] = option.title;
         });
         [
-            { title: '8pt', data: '1' },
             //NOTE: font tag의 속성으로 글자 크기를 지정했을 경우
+            { title: '8pt', data: '1' },
             { title: '10pt', data: '2' },
             { title: '12pt', data: '3' },
             { title: '14pt', data: '4' },
@@ -98,47 +98,10 @@ Trex.Tool.FontSize = Trex.Class.create({
     getDefaultProperty: function() {
         return this.canvas.getStyleConfig().fontSize;
     },
-    queryElementCurrentStyle: function(element) {
-        var processor = this.canvas.getProcessor();
-        if (element) {
-            return processor.queryStyle(element, this.getCssPropertyName()) || processor.queryAttr(element, 'size');
-        } else {
-            return _NULL;
-        }
+    getFontTagAttribute: function() {
+        return "size";
     },
-    winSafariExecutor: function(processor, newStyle) {
-        var ptFontSize = newStyle[this.getCssPropertyName()];
-        var newFontSize = { '8pt': 1, '10pt': 2, '12pt': 3, '14pt': 4, '18pt': 5, '24pt': 6, '36pt': 7 }[ptFontSize];
-        if (newFontSize) {
-            processor.execCommand(this.getQueryCommandName(), newFontSize);
-        } else {
-            // TODO 9pt, 11pt 에 대한 처리가 있어야 함니다.
-            /*
-            var node = processor.newNode("span");
-            goog_range.insertNode(node);
-            this.setStylesForFont(node., newStyle);
-            node.innerHTML = "&nbsp;";
-            */
-        }
-    },
-    legacyModeExecutor: function(processor, newStyle) {
-        var nodes = processor.inlines(function(type) {
-            if (type === 'control') {
-                return 'img,hr,table';
-            }
-            return '%text,span,font';
-        });
-        nodes.each(function(node) {
-            $tom.descendants(node, 'span,font').each(function(inNode) {
-                $tom.applyAttributes(inNode, {
-                    style: { fontSize: null },
-                    size: null
-                });
-            });
-        });
-        processor.apply(nodes, {
-            style: newStyle,
-            size: null
-        });
+    rangeExecutor: function(processor, newStyle, range) {
+        this.wrapTextAsStyledSpan(processor, newStyle, range);
     }
 });

@@ -64,27 +64,68 @@ Trex.I.AttachBox = {
 		});
 		this.observeJob(Trex.Ev.__ENTRYBOX_ENTRY_MODIFIED, function(entry){
 			_entryBox.modifyEntryNode(entry);
+            _entryBox.refreshPreview();
 		});
 		this.observeJob(Trex.Ev.__ENTRYBOX_ENTRY_REMOVED, function(entry){
 			_entryBox.removeEntryNode(entry);
 			_entryBox.displayBox();
-			if(_entryBox.lastSelectedEntry && _entryBox.lastSelectedEntry.key == _entryBox.key) {
-				_entryBox.imageResizer.execResize(TXMSG("@attacher.preview.image"));
+			if(_entryBox.lastSelectedEntry && _entryBox.lastSelectedEntry.key == entry.key) {
+                _entryBox.refreshPreview();
 			}
+
 		});	
 		this.observeJob(Trex.Ev.__ENTRYBOX_ALL_ENTRY_REMOVED, function() {
 			_entryBox.datalist.each(function(entry) {
 				_entryBox.removeEntryNode(entry, _TRUE);
 			});
 			_entryBox.displayBox();
-			if(_entryBox.lastSelectedEntry && _entryBox.lastSelectedEntry.key == _entryBox.key) {
-				_entryBox.imageResizer.execResize(TXMSG("@attacher.preview.image"));
+			if(_entryBox.lastSelectedEntry) {
+                _entryBox.refreshPreview();
 			}
-		});	
+		});
 		this.observeJob(Trex.Ev.__ENTRYBOX_ENTRY_REFRESH, function(entry){
 			_entryBox.displayBox();
 			_entryBox.refreshEntryNode(entry);
-		})
+		});
+
+        var _elUploadedSize = $tx('tx_attach_up_size' + _initializedId),
+		    _elMaximumSize = $tx('tx_attach_max_size' + _initializedId),
+            _elGroupUsedSize = $tx('tx_attach_group_used_size' + _initializedId),
+			_elGroupMaximumSize = $tx('tx_attach_group_max_size' + _initializedId);
+
+        this.observeJob(Trex.Ev.__ENTRYBOX_CAPACITY_UPDATE, function(){
+            var capacity = config.sidebar.capacity;
+            if( capacity.show == _FALSE ){
+                return;
+            }
+
+            if( _elUploadedSize ){
+                _elUploadedSize.innerText = capacity.uploaded.toByteUnit();
+            }
+            if( _elMaximumSize ){
+                // maximum을 안쓰고 available을 사용하는 이유는 group 값 이용시 group.used의 사용여하에 따라 최대치가 달라지기 때문
+                _elMaximumSize.innerText = capacity.available.toByteUnit();
+            }
+            if( capacity.group ){
+                if( _elGroupUsedSize ){
+                    _elGroupUsedSize.innerText = ( capacity.group.used + capacity.uploaded ).toByteUnit();
+                }
+                if( _elGroupMaximumSize ){
+                    _elGroupMaximumSize.innerText = capacity.group.maximum.toByteUnit();
+                }
+            }
+        });
+
+        // canvas에서 제거된 첨부파일은 첨부박스에는 1차로는 남아있기 때문에 아래와 같은 삭제 과정이 필요하지 않다
+//        canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DELETE_SOMETHING, function(ev){
+//            // 데이터중에 존재하지 stage에 존재하지 않는 entry는 박스에서 바로 제거
+//            _entryBox.datalist.each(function (entry) {
+//                if (entry.type =='image' && entry.actor.name == 'image' && entry.existStage == false) {
+//                    entry.execRemove();
+//                }
+//            });
+//            _entryBox.refreshPreview();
+//        });
 	},
 	onDeleteAll: function(force) {
 		if (this.datalist.length === 0) {
@@ -94,9 +135,12 @@ Trex.I.AttachBox = {
 			return;
 		}
 		this.datalist.each(function(entry) {
-			entry.execRemove();
+            if( entry.deletedMark == _FALSE ){
+                entry.execRemove();
+            }
 		});
-		this.imageResizer.execResize(TXMSG("@attacher.preview.image"));
+//		this.imageResizer.execResize(TXMSG("@attacher.preview.image"));
+        this.initPreviewImage();
 	},
 	checkDisplay: function() {
 		return this.isDisplay;
@@ -213,6 +257,37 @@ Trex.I.AttachBox = {
 			$tx.show(entry.elData);
 		}
 	},
+    refreshPreview: function(){
+        // reload last selected entry
+        for( var i=0, l=this.datalist.length-1; i<l; ++i ){
+            var entry = this.datalist[i];
+            if( this.lastSelectedEntry && this.lastSelectedEntry.key == entry.key && entry.deleteMark == false ){
+                this.setPreivewImage(entry);
+                return _TRUE;
+            }
+        }
+
+        // reselect
+        for( var i=0, l=this.datalist.length-1; i<l; ++i ){
+            var entry = this.datalist[i];
+            if( entry.deletedMark == false && $tx.hasClassName(entry.elData, "tx-clicked") ){
+                this.setPreivewImage(entry);
+                return _TRUE;
+            }
+        }
+
+        // init
+        this.initPreviewImage();
+        return _FALSE;
+    },
+    setPreivewImage: function( entry ){
+        this.imageResizer.execResize(entry.boxAttr.image);
+        this.lastSelectedEntry = entry;
+    },
+    initPreviewImage: function(){
+        this.imageResizer.execResize(TXMSG("@attacher.preview.image"));
+        this.lastSelectedEntry = _NULL;
+    },
 	showEntryThumb: function(entry) {
 		$tx.addClassName(entry.elData, "tx-clicked");
 		$tx.removeClassName(entry.elData, "tx-hovered");
@@ -253,18 +328,16 @@ Trex.I.AttachBox = {
 		}
 		this.elPreviewKind.className = ((entry.boxAttr.className)? entry.boxAttr.className: "");
 		entry.makeSelection(_TRUE);
-		this.imageResizer.execResize(entry.boxAttr.image);
-		this.lastSelectedEntry = entry;
+        this.setPreivewImage(entry);
 	},
 	clickEntryWithCtrl: function(entry) {
 		if ($tx.hasClassName(entry.elData, 'tx-clicked')) {
 			entry.makeSelection(_FALSE);
-			this.lastSelectedEntry = _NULL;
+            this.refreshPreview();
 		}else {
 			this.elPreviewKind.className = ((entry.boxAttr.className) ? entry.boxAttr.className : "");
 			entry.makeSelection(_TRUE);
-			this.imageResizer.execResize(entry.boxAttr.image);
-			this.lastSelectedEntry = entry;
+            this.setPreivewImage(entry);
 		}
 	},
 	clickEntryWithShift: function(entry) {
@@ -290,9 +363,7 @@ Trex.I.AttachBox = {
 			for(var i = from; i < to + 1 ; i++){
 				this.datalist[i].makeSelection(_TRUE);
 			}
-			
-			this.imageResizer.execResize(entry.boxAttr.image);
-			this.lastSelectedEntry = entry;
+            this.setPreivewImage(entry);
 		}
 	},
 	getIndexOf: function(entry){

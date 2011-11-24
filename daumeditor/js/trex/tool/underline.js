@@ -35,8 +35,5 @@ Trex.Tool.Underline = Trex.Class.create({
     },
     isStyleApplied: function(node) {
         return $tx.getStyle(node, "textDecoration").include("underline");
-    },
-    toggleFontStyle: function(status) {
-        return { textDecoration: status ? "-underline" : "underline" };
     }
 });

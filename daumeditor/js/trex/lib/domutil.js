@@ -920,9 +920,9 @@ Object.extend($tom, /** @lends $tom */{
 		if(!node) {
 			return;
 		}
-		while (node.firstChild) {
-			node.parentNode.insertBefore(node.firstChild, node);
-		}
+        while (node.firstChild) {
+            node.parentNode.insertBefore(node.firstChild, node);
+        }
 	}
 });
 
@@ -991,10 +991,10 @@ Object.extend($tom, /** @lends $tom */{
 		if (!wNode || !pNodes) {
 			return _NULL;
 		}
-		if(!pNodes.length) {
+        if (pNodes instanceof Array == _FALSE) {
 			pNodes = [].concat(pNodes);
 		}
-		
+
 		$tom.insertAt(wNode, pNodes[0]);
 		pNodes.each((function(pNode){
 			$tom.append(wNode, pNode);
@@ -1009,10 +1009,14 @@ Object.extend($tom, /** @lends $tom */{
 		if (!node) {
 			return _NULL;
 		}
-		var _nNode = $tom.first(node);
-		$tom.moveChildToParent(node);
-		$tom.remove(node);
-		return _nNode;
+        var _nNode = $tom.first(node);
+        if ($tx.msie) {
+            node.removeNode();  // IE에서는 이게 더 빠름
+        } else {
+            $tom.moveChildToParent(node);
+            $tom.remove(node);
+        }
+        return _nNode;
 	}
 });
 
@@ -1118,7 +1122,7 @@ Object.extend($tom, /** @lends $tom */{
         var inlineNodes = $tom.extract(ancestorBlock || ownerDocument.body, inline, '%text,%inline,img,object,embed,hr');
         // caret은 곧 사라지기 때문에P로 감쌀 필요가 없다
         if (this.hasOnlySavedCaret(inlineNodes, inline)) {
-            return null;
+            return _NULL;
         }
         var newParagraph = ownerDocument.createElement("p");
         $tom.wrap(newParagraph, inlineNodes);

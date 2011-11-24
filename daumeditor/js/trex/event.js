@@ -207,6 +207,13 @@
 		 *	});
 		 */
 		__ENTRYBOX_ALL_ENTRY_REMOVED: 'entrybox.removed.all.perfectly',
+        /**
+		 * Entry Box에서 Entry의 추가/수정/삭제로 capacity가 변경 될 때 발생하는 사용자 정의 이벤트
+		 * @example
+		 * 	attachbox.observeJob(Trex.Ev.__ENTRYBOX_CAPACITY_UPDATE, function(capacity) {
+		 *	});
+		 */
+		__ENTRYBOX_CAPACITY_UPDATE: 'entrybox.capacity.update',
 		/** 
 		 * Attach Box가 보여질 때 발생하는 사용자 정의 이벤트
 		 * @example

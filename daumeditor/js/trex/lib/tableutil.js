@@ -15,7 +15,7 @@ Trex.TableUtil = {
 	 */
 	cloneNodeForEmptyTd: function (node) {
 		var newNode;
-		newNode = node.cloneNode(false);
+		newNode = node.cloneNode(_FALSE);
 		Trex.TableUtil.emptyTd(newNode);
 		return newNode;
 	},
@@ -32,7 +32,7 @@ Trex.TableUtil = {
 			styleWidth = parseInt(td.style.width, 10);
 			$tom.setStyles(td, {
 				width: Math.floor(styleWidth / td.colSpan) + "px"
-			}, true);
+			}, _TRUE);
 		}
 	},
 	/**
@@ -45,7 +45,7 @@ Trex.TableUtil = {
 			styleHeight = parseInt(td.style.height, 10);
 			$tom.setStyles(td, {
 				height: Math.floor(styleHeight / td.rowSpan) + "px"
-			}, true);
+			}, _TRUE);
 		}
 	},
 	/**

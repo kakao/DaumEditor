@@ -10,6 +10,7 @@ Trex.MarkupTemplate.add(
 );
 Trex.MarkupTemplate.add(
     "menu.colorpallete.thumb",
+    // TODO forecolor,backcolor에서 <li class="tx-menu-list-item" unselectable="on" style="background-color:#FF0000;border:none;#{if:image!=null}background-image:url(#{image})#{/if:image};"></li> 이렇게 결과가 나온다.
     '#{for:items}<li class="tx-menu-list-item" unselectable="on" style="background-color:#{color};border:none;#{if:image!=null}background-image:url(#{image})#{/if:image};"></li>#{/for:items}'
 );
 Trex.MarkupTemplate.add(

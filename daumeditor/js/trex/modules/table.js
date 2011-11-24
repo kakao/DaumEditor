@@ -40,7 +40,7 @@ Trex.module("table selector", function (editor, toolbar, sidebar, canvas, config
 		 */
 		var selectCellByCaret = function () {
 			var node, td;
-			if (tableSelect.getSelected().isValid() === false) {
+			if (tableSelect.getSelected().isValid() === _FALSE) {
 				node = processor.getNode();
 				td = Trex.TableUtil.getClosestByTagNames(["td", "th"], node);
 				if (td) {
@@ -116,7 +116,7 @@ Trex.module("table selector", function (editor, toolbar, sidebar, canvas, config
 			merge: function () {
 				this.execute(function () {
 					tableMerge.merge(tableSelect);
-				}, true);
+				}, _TRUE);
 			},
 			resetMerge: function () {
 				this.execute(function () {
@@ -288,7 +288,7 @@ Trex.module("table selector", function (editor, toolbar, sidebar, canvas, config
 				"cellslinepreview",
 				"tablebackcolor",
 				"tabletemplate"
-			].contains(identity) === false) {
+			].contains(identity) === _FALSE) {
 				tableSelect.reset();
 			}
 			if (identity === "tablebackcolor") {

@@ -33,7 +33,7 @@ Trex.Tool.Cellsoutline = Trex.Class.create({
         var self = this;
 		
 		this.twinkleCount = 0;
-		this.twinkleTimer = null;
+		this.twinkleTimer = _NULL;
 		
 		self.createListStyleMap(config);
         self.weave(
@@ -84,7 +84,7 @@ Trex.Tool.Cellsoutline = Trex.Class.create({
 		
 		if (this.twinkleTimer) {
 			clearInterval(this.twinkleTimer);
-			this.twinkleTimer = null;
+			this.twinkleTimer = _NULL;
 		}
 		this.twinkleCount = 4;
 		this.twinkleTimer = setInterval(function(){
@@ -98,7 +98,7 @@ Trex.Tool.Cellsoutline = Trex.Class.create({
 			} else {
 				self.button.normalState();
 				clearInterval(self.twinkleTimer);
-				self.twinkleTimer = null;
+				self.twinkleTimer = _NULL;
 			}
 		}, 500);
 	}

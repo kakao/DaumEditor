@@ -120,7 +120,7 @@ Trex.Table.Delete = Trex.Class.create({
 			if (0 < newHeight) {
 				$tom.setStyles(td, {
 					height: newHeight + "px"
-				}, true);
+				}, _TRUE);
 			}
 		}
 	},
@@ -159,7 +159,7 @@ Trex.Table.Delete = Trex.Class.create({
 				return cell;
 			}
 		}
-		return null;
+		return _NULL;
 	},
 	/**
 	 * @private

@@ -81,7 +81,7 @@ Trex.Table.Selector = Trex.Class.create({
 	onmousedown: function (elem) {
 		var td;
 		this.reset();
-		if (this.canvas.config.readonly === false) {
+		if (this.canvas.config.readonly === _FALSE) {
 			td = Trex.TableUtil.getClosestByTagNames(["td", "th"], elem);
 			if (td) {
 				this.selectStart(td);
@@ -244,7 +244,7 @@ Trex.Table.Selector = Trex.Class.create({
 			$tx.removeClassName(td, self.SELECTED_CLASS_NAME);
 			if (td.className === "") {
 				removeAttrResult = td.removeAttribute("class");
-				if (removeAttrResult === false) { //for IE6, IE7.
+				if (removeAttrResult === _FALSE) { //for IE6, IE7.
 					td.removeAttribute("className");
 				}
 			}

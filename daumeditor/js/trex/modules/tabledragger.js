@@ -412,7 +412,7 @@ Trex.module("table resize dragger", function(editor, toolbar, sidebar, canvas) {
 						right: left + node.offsetWidth
 					};
 				} catch (e) {
-					rect = null;
+					rect = _NULL;
 				}
 			}
 			//기존 코드는 fallback.

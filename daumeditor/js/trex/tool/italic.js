@@ -35,8 +35,5 @@ Trex.Tool.Italic = Trex.Class.create({
     },
     isStyleApplied: function(node) {
         return $tx.getStyle(node, "fontStyle") == "italic";
-    },
-    toggleFontStyle: function(status) {
-        return { fontStyle: status ? _NULL : "italic" };
     }
 });
