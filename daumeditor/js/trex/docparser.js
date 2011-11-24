@@ -83,7 +83,7 @@ Trex.Docparser =Trex.Class.create( {
 			if (oldMode == newMode) {
 				return contents;
 			}
-			contents = contents || "";
+			contents = contents.trim() || "";
 			return this.executeFilters(oldMode.concat("2").concat(newMode), contents);
 		},
 		convertAtLoad: function(contents, editorMode, inputMode) { // For Display

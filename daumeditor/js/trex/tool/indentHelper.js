@@ -194,7 +194,7 @@
                 var iterator = new goog.dom.TagIterator(cell);
                 var blockNodes = indentHelper.findBlocksToIndentFromIterator(processor, iterator);
                 blockNodes.each(function(node) {
-                    self.handler.handle(node, processor, null);
+                    self.handler.handle(node, processor, _NULL);
                 });
             });
         }
@@ -222,10 +222,10 @@
                 // TODO: depth계산을 할 것이냐 부모/조상만 확인하여 return 할 것이냐 고민..
                 var listBuilder = new Trex.Tool.StyledList.ListBuilder();
                 if (listBuilder.countDepthOfList(node) == 1) {
-                    return true;
+                    return _TRUE;
                 }
             }
-            return false;
+            return _FALSE;
         },
         IndentedBlockNode: function(node) {
             return $tom.kindOf(node, "%block") && node.style && node.style.marginLeft != "";

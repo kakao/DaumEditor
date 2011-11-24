@@ -3,10 +3,9 @@ var testCases = [
     "testcase/txlib_test.js",
     "testcase/richtextbox_test.js",
     "testcase/fontTool_test.js",
-    "testcase/bold_test.js",
+    "testcase/fontExecCommand_test.js",
     "testcase/fontsize_test.js",
     "testcase/fontfamily_test.js",
-    "testcase/underline_test.js",
     "testcase/forecolor_test.js",
     "testcase/backcolor_test.js",
     "testcase/flatten_test.js",
@@ -23,6 +22,7 @@ var testCases = [
     "testcase/processor_webkit_test.js",
     "testcase/webfontloader_test.js",
     "testcase/fixing_test.js",
-    "testcase/well_formed_test.js",
+    "testcase/htmlparser_test.js",
+    "testcase/FontCssProperty_test.js",
     "testcase/paste_test.js"
 ];

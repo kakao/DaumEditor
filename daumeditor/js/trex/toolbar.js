@@ -391,9 +391,9 @@ Trex.Tool = Trex.Class.draft(/** @lends Trex.Tool.prototype */{
 	resetWeave: function(){
 		this.button.removeHandler();
 		this.button.normalState();
-		this.button = null;
-		this.menu = null;
-		this.execute = null;
+		this.button = _NULL;
+		this.menu = _NULL;
+		this.execute = _NULL;
 	},
 	/**
 	 * 활성화 상태를 강제한다. 

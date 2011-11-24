@@ -15,6 +15,16 @@
         $: function(id) {
             return this.doc.getElementById(id);
         },
+        $$: function(selector, context) {
+            context = context || this.doc;
+            if (context.querySelectorAll) {
+                return context.querySelectorAll(selector);
+            } else if (typeof Sizzle == 'function') {
+                return Sizzle(selector, context);
+            } else {
+                throw new Error("not supported operation");
+            }
+        },
         byTag: function(tagName, index) {
             return this.doc.getElementsByTagName(tagName)[index || 0];
         },

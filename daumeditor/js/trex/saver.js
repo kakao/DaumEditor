@@ -112,14 +112,9 @@ Trex.Save = Trex.Class.create({
 			this.editor.fireJobs(Trex.Ev.__ON_SUBMIT, this.editor);
 			if ( this.config.save && typeof this.config.save.onSave == "function" ){
 				var externalSaveHandler = this.config.save.onSave;
-				setTimeout(function(){
-					externalSaveHandler();
-				}, 500);
-			}else{
-				var _form = this.form;
-				setTimeout(function(){
-					_form.submit();
-				}, 500);
+				externalSaveHandler();
+			} else {
+				this.form.submit();
 			}
 		}		
 	},

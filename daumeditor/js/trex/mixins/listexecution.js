@@ -24,7 +24,7 @@ Trex.I.ListExecution = Trex.Mixin.create(/** @lends Trex.I.ListExecution */{
 		});
 	},
 	_wrapList: function(processor, nodes) {
-		var _curGrpNode = null;
+		var _curGrpNode = _NULL;
 		var _tool = this;
 		$A(nodes).each(function(node) {
 			if($tom.kindOf(node, "td,th")) {

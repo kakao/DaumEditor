@@ -35,15 +35,15 @@
         equal(getTextContent(textNode.nextSibling.nextSibling), "o");
     });
 
-    test("IE8에서는 splitText를 두 번 해도3조각이 되지 않는다.", function() {
+    test("IE에서는 splitText를 두 번 해도3조각이 되지 않는다.", function() {
         p.innerHTML = "Hello";
         var textNode = p.firstChild;
 
         textNode.splitText(1);
         p.childNodes[1].splitText(1);
 
-        if ($tx.msie_ver == 8) {
-            equal(p.childNodes.length, 2, "IE8에서는 splitText를 2번 해서, 3조각이 되었는데도 childNodes.length가 2가 나온다");
+        if ($tx.msie) {
+            equal(p.childNodes.length, 2, "document.documentMode != 7에서는 splitText를 2번 해서, 3조각이 되었는데도 childNodes.length가 2가 나온다");
         } else {
             equal(p.childNodes.length, 3, "splitText 2번 해서, 3조각");
         }
@@ -108,7 +108,7 @@
         assi.setContentElement(div);
         var marker = assi.byTag("span");
         var divided = $tom.divideTree(div, marker);
-        htmlEqual(div.innerHTML, "<p>Hello</p>")
+        htmlEqual(div.innerHTML, "<p>Hello</p>");
         htmlEqual(divided.innerHTML, "<p><span></span>World</p>");
         equal(divided.tagName, "DIV");
         equal(div.nextSibling, divided);
@@ -142,7 +142,7 @@
         ok($tom.kindOf(div, 'div#id'), "div#id");
         ok(!$tom.kindOf(div, "%text"), "%text");
     });
-    
+
     test("text", function() {
         ok($tom.kindOf(text, "%text"), "%text");
         ok(!$tom.kindOf(text, "div"), "div");
@@ -164,5 +164,48 @@
         var span = ax.span({id: "new"});
         $tom.replace(font, span);
         ok(assi.getContent().indexOf("솔바람") >= 0);
+    });
+})();
+
+(function() {
+    module("domutil");
+
+    test("nested span", function() {
+        assi.setContent("<p><span id='s1'><span id='s2'>A</span></span></p>");
+        var p = assi.byTag('p');
+        var spans = $tom.descendants(p, "span");
+        equal(spans.length, 1);
+        equal(spans[0].id, "s1");
+    });
+
+    test("applyAttributes", function() {
+        assi.setContent("<span style='font-size: 10pt'>10pt<span style='font-size: 12pt'>12pt</span></span>");
+
+        var firstSpan = assi.byTag('span');
+        var secondSpan = assi.byTag('span', 1);
+
+        equal(firstSpan.style.fontSize, "10pt");
+        equal(secondSpan.style.fontSize, "12pt");
+
+        $tom.applyAttributes(firstSpan, {
+            style: {fontSize: null}
+        });
+
+        equal(firstSpan.style.fontSize, "");
+        equal(secondSpan.style.fontSize, "12pt");
+    });
+
+    test("inlines", function() {
+        assi.setContent("<span style='font-size: 10pt'>10pt<span style='font-size: 11pt'><span style='font-size: 12pt'>12pt</span></span></span>");
+        var spans = assi.$$('span');
+        var processor = assi.processor;
+        assi.selectForNodes(spans[0].firstChild, 2, spans[2], 1);
+        var inlines = processor.inlines(function(type) {
+            if (type === 'control') {
+                return 'img,hr,table';
+            }
+            return '%text,span,font';
+        });
+        console.log(inlines);
     });
 })();
