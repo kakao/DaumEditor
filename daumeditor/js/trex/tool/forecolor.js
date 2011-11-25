@@ -47,7 +47,7 @@ Trex.Tool.ForeColor = Trex.Class.create({
         }
     },
     getDefaultProperty: function() {
-        return this.config.defaultcolor;
+        return this.canvas.getStyleConfig().color;
     },
     getRelatedCssPropertyNames: function() {
         return [this.getCssPropertyName()];
@@ -57,6 +57,11 @@ Trex.Tool.ForeColor = Trex.Class.create({
     },
     getQueryCommandName: function() {
         return "forecolor";
+    },
+    computeNewStyle: function(data) {
+        var style = {};
+        style[this.getCssPropertyName()] = data || this.getDefaultProperty();
+        return style;
     },
     syncButton: function(color) {
         try {
