@@ -204,6 +204,12 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	 * 	processor.execCommand('forecolor', '#333');
 	 */
 	execCommand: function(command, data) {
+        if ($tx.gecko) {
+            // Firefox는 styleWithCSS 기본값이 true
+            try {
+                this.doc.execCommand('styleWithCSS', _FALSE, _FALSE);
+            } catch(e) {}
+        }
 		try {
 			this.doc.execCommand(command, _FALSE, data);
 		} catch(e) {}
