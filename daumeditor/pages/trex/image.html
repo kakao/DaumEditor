@@ -59,28 +59,51 @@
      https://developer.mozilla.org/en/Canvas_tutorial/Using_images
      */
 
-    // TODO file api support test
+    var imageDatas = [];
+
+    function isCanvasSupported() {
+        var elem = document.createElement('canvas');
+        return !!(elem.getContext && elem.getContext('2d'));
+    }
+
+    var dropZone = document.getElementById('drop_zone'),
+            fileSelector = document.getElementById('file_selector');
+
+    if (window.File && window.FileReader && window.FileList && isCanvasSupported()) {
+        dropZone.addEventListener('dragover', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
+        }, false);
+
+        dropZone.addEventListener('drop', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            onFilesAreAdded(e.dataTransfer.files);
+        }, false);
+
+        fileSelector.addEventListener('change', function (e) {
+            var files = e.target.files;
+            onFilesAreAdded(files);
+        }, false);
+    } else {
+        // fallback
+        dropZone.parentNode.innerHTML = "Your browser doesn't support HTML5 File API.<br>" +
+                "You can only see a sample image attachment.<br>" +
+                "Press the 'Register' button (blue one).";
+
+        var sampleData = {
+            'imageurl': 'https://a248.e.akamai.net/assets.github.com/images/modules/about_page/octocat.png?1310104853',
+            'filename': 'editor_bi.gif',
+            'filesize': 640,
+            'imagealign': 'C',
+            'originalurl': 'https://a248.e.akamai.net/assets.github.com/images/modules/about_page/octocat.png?1310104853',
+            'thumburl': 'https://a248.e.akamai.net/assets.github.com/images/modules/about_page/octocat.png?1310104853'
+        };
+        imageDatas.push(sampleData);
+    }
 
 
-    var dropZone = document.getElementById('drop_zone');
-
-    dropZone.addEventListener('dragover', function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'copy';
-    }, false);
-
-    dropZone.addEventListener('drop', function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        onFilesAreAdded(e.dataTransfer.files);
-    }, false);
-
-    document.getElementById('file_selector').addEventListener('change', function (e) {
-        var files = e.target.files;
-        onFilesAreAdded(files);
-    }, false);
-    
     function onFilesAreAdded(files) {
         eachImageFile(files, function(file) {
             convertFileToImage(file, function(image) {
@@ -126,7 +149,6 @@
         document.getElementById('list').insertBefore(span, null);
     }
 
-    var imageDatas = [];
     function recordImageData(file, dataURI) {
         imageDatas.push({
             'filename': file.name,
@@ -160,6 +182,7 @@
         }
         return ratio;
     }
+
 </script>
 
 <script type="text/javascript">
@@ -167,16 +190,6 @@
         if (typeof(execAttach) == 'undefined') { //Virtual Function
             return;
         }
-
-//        var _mockdata = {
-//            'imageurl': 'http://cfile284.uf.daum.net/image/116E89154AA4F4E2838948',
-//            'filename': 'editor_bi.gif',
-//            'filesize': 640,
-//            'imagealign': 'C',
-//            'originalurl': 'http://cfile284.uf.daum.net/original/116E89154AA4F4E2838948',
-//            'thumburl': 'http://cfile284.uf.daum.net/P150x100/116E89154AA4F4E2838948'
-//        };
-//        execAttach(_mockdata);
 
         if (typeof imageDatas !== "undefined") {
             for (var i = 0; i < imageDatas.length; i++) {
