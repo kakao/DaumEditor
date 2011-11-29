@@ -1,139 +1,165 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Daum에디터 - 이미지 첨부</title>
-<script src="../../js/popup.js" type="text/javascript" charset="utf-8"></script>
-<link rel="stylesheet" href="../../css/popup.css" type="text/css"  charset="utf-8"/>
-<style type="text/css">
-    #drop_zone {
-        border: dashed 1px silver;
-        padding: 10px;
-        height: 50px;
-        text-align: center;
-        font: 24px 'sans-serif';
-        line-height: 50px;
-    }
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Daum에디터 - 이미지 첨부</title>
+    <script src="../../js/popup.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="../../css/popup.css" type="text/css" charset="utf-8"/>
+    <style type="text/css">
+        #drop_zone {
+            border: dashed 1px silver;
+            padding: 10px;
+            height: 50px;
+            text-align: center;
+            font: 24px 'sans-serif';
+            line-height: 50px;
+        }
 
-    .thumb {
-        height: 75px;
-        border: 1px solid #000;
-        margin: 10px 5px 0 0;
-    }
-</style>
+        .thumb {
+            height: 75px;
+            border: 1px solid #000;
+            margin: 10px 5px 0 0;
+        }
+
+        #file_selector {
+            display: block;
+        }
+    </style>
 </head>
 <body onload="initUploader();">
 <div class="wrapper">
-	<div class="header">
-		<h1>사진 첨부</h1>
-	</div>
-	<div class="body">
-		<dl class="alert">
-		    <dt>사진 첨부 확인</dt>
-		    <dd>
-                <div id="drop_zone">Drop files here</div>
+    <div class="header">
+        <h1>사진 첨부</h1>
+    </div>
+    <div class="body">
+        <dl class="alert">
+            <dt>사진 첨부 확인</dt>
+            <dd>
+                <div id="drop_zone">Drop files here...</div>
+                <p>OR</p>
+                <input type="file" id="file_selector" name="files[]" multiple />
                 <output id="list"></output>
-			</dd>
-		</dl>
-	</div>
-	<div class="footer">
-		<p><a href="#" onclick="closeWindow();" title="닫기" class="close">닫기</a></p>
-		<ul>
-			<li class="submit"><a href="#" onclick="done();" title="등록" class="btnlink">등록</a> </li>
-			<li class="cancel"><a href="#" onclick="closeWindow();" title="취소" class="btnlink">취소</a></li>
-		</ul>
-	</div>
+            </dd>
+        </dl>
+    </div>
+    <div class="footer">
+        <p><a href="#" onclick="closeWindow();" title="닫기" class="close">닫기</a></p>
+        <ul>
+            <li class="submit"><a href="#" onclick="done();" title="등록" class="btnlink">등록</a></li>
+            <li class="cancel"><a href="#" onclick="closeWindow();" title="취소" class="btnlink">취소</a></li>
+        </ul>
+    </div>
 </div>
 
 <script type="text/javascript">
     /*
-    references.
-        http://www.html5rocks.com/en/tutorials/file/dndfiles/
-        http://www.w3.org/TR/file-upload/
-        https://developer.mozilla.org/en/Canvas_tutorial/Using_images
+     references.
+     http://www.html5rocks.com/en/tutorials/file/dndfiles/
+     http://www.w3.org/TR/file-upload/
+     https://developer.mozilla.org/en/Canvas_tutorial/Using_images
      */
 
     // TODO file api support test
 
-    var imageDatas = [];
 
     var dropZone = document.getElementById('drop_zone');
 
     dropZone.addEventListener('dragover', function(e) {
         e.stopPropagation();
         e.preventDefault();
-        e.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+        e.dataTransfer.dropEffect = 'copy';
     }, false);
 
     dropZone.addEventListener('drop', function(e) {
         e.stopPropagation();
         e.preventDefault();
+        onFilesAreAdded(e.dataTransfer.files);
+    }, false);
 
-        var files = e.dataTransfer.files,
-                output = [],
-                nonImageFileDetected = false,
-                i, file;
+    document.getElementById('file_selector').addEventListener('change', function (e) {
+        var files = e.target.files;
+        onFilesAreAdded(files);
+    }, false);
+    
+    function onFilesAreAdded(files) {
+        eachImageFile(files, function(file) {
+            convertFileToImage(file, function(image) {
+                var resizedDataURL = getResizedImageDataURI(image, 250, 250);
+                showThumbnail(file, resizedDataURL);
+                recordImageData(file, resizedDataURL);
+            });
+        });
+    }
 
-        for (i = 0; i < files.length; i++) {
-            file = files[i];
-
-            if (!file.type.match('image.*')) {
+    function eachImageFile(files, fn) {
+        var nonImageFileDetected = false;
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            if (file.type.match('image.*')) {
+                fn(file);
+            } else {
                 nonImageFileDetected = true;
-                continue;
             }
-
-            var reader = new FileReader();
-            reader.onload = (function(file) {
-                return function(e) {
-                    var img = document.createElement("img");
-                    img.onload = (function (img) {
-                        return function() {
-                            var width = img.width, height = img.height;
-                            var maxWidth = 250, maxHeight = 250;
-
-                            var ratio = 1;
-                            if (width > maxWidth) {
-                                ratio = maxWidth / width;
-                            } else if (height > maxHeight) {
-                                ratio = maxHeight / height;
-                            }
-
-                            var resizedCanvas = document.createElement('canvas');
-                            resizedCanvas.width = width * ratio;
-                            resizedCanvas.height = height * ratio;
-                            var resizedCtx = resizedCanvas.getContext("2d");
-                            resizedCtx.drawImage(img, 0, 0, resizedCanvas.width, resizedCanvas.height);
-
-                            var resizedData = resizedCanvas.toDataURL();
-
-                            var span = document.createElement('span');
-                            span.innerHTML = ['<img class="thumb" src="', resizedData,
-                                '" title="', file.name, '"/>'].join('');
-                            document.getElementById('list').insertBefore(span, null);
-
-                            imageDatas.push({
-                                'imageurl': resizedData,
-                                'filename': file.name,
-                                'filesize': resizedData.length,
-                                'imagealign': 'C',
-                                'originalurl': resizedData,
-                                'thumburl': resizedData
-                            });
-                        };
-                    })(img);
-                    img.src = e.target.result;
-
-                };
-            })(file);
-
-            // Read in the image file as a data URL.
-            reader.readAsDataURL(file);
         }
-
         if (nonImageFileDetected) {
             alert("allowed image files only");
         }
-    }, false);
+    }
+
+    function convertFileToImage(file, callback) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var dataURL = e.target.result;
+            var img = document.createElement("img");
+            img.onload = function() {
+                callback(img);
+            };
+            img.src = dataURL;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function showThumbnail(file, dataURI) {
+        var span = document.createElement('span');
+        span.innerHTML = ['<img class="thumb" src="', dataURI,
+            '" title="', file.name, '"/>'].join('');
+        document.getElementById('list').insertBefore(span, null);
+    }
+
+    var imageDatas = [];
+    function recordImageData(file, dataURI) {
+        imageDatas.push({
+            'filename': file.name,
+            'filesize': dataURI.length,
+            'imagealign': 'C',
+            'imageurl': dataURI,
+            'originalurl': dataURI,
+            'thumburl': dataURI
+        });
+    }
+
+    function getResizedImageDataURI(image, maxWidth, maxHeight) {
+        var width = image.width,
+                height = image.height,
+                canvas = document.createElement('canvas'),
+                ctx = canvas.getContext("2d"),
+                ratio = calculateResizeRatio(width, height, maxWidth, maxHeight);
+
+        canvas.width = width * ratio;
+        canvas.height = height * ratio;
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        return canvas.toDataURL();
+    }
+
+    function calculateResizeRatio(width, height, maxWidth, maxHeight) {
+        var ratio = 1;
+        if (width > maxWidth) {
+            ratio = maxWidth / width;
+        } else if (height > maxHeight) {
+            ratio = maxHeight / height;
+        }
+        return ratio;
+    }
 </script>
 
 <script type="text/javascript">
@@ -152,10 +178,12 @@
 //        };
 //        execAttach(_mockdata);
 
-        for (var i = 0; i < imageDatas.length; i++) {
-            execAttach(imageDatas[i]);
+        if (typeof imageDatas !== "undefined") {
+            for (var i = 0; i < imageDatas.length; i++) {
+                execAttach(imageDatas[i]);
+            }
         }
-                
+
         closeWindow();
     }
 
