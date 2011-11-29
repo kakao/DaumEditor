@@ -14,6 +14,12 @@
         font: 24px 'sans-serif';
         line-height: 50px;
     }
+
+    .thumb {
+        height: 75px;
+        border: 1px solid #000;
+        margin: 10px 5px 0 0;
+    }
 </style>
 <script type="text/javascript">
 // <![CDATA[
@@ -71,10 +77,18 @@
 	</div>
 </div>
 
-
 <script type="text/javascript">
-    // Setup the dnd listeners.
+    /*
+    references.
+        http://www.html5rocks.com/en/tutorials/file/dndfiles/
+        http://www.w3.org/TR/file-upload/
+        https://developer.mozilla.org/en/Canvas_tutorial/Using_images
+     */
+
+    // TODO file api support test
+
     var dropZone = document.getElementById('drop_zone');
+
     dropZone.addEventListener('dragover', function(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -85,16 +99,61 @@
         e.stopPropagation();
         e.preventDefault();
 
-        var files = e.dataTransfer.files; // FileList object.
+        var files = e.dataTransfer.files,
+                output = [],
+                nonImageFileDetected = false,
+                i, file;
 
-        // files is a FileList of File objects. List some properties.
-        var output = [];
-        for (var i = 0, f; f = files[i]; i++) {
-            output.push('<li><strong>', f.name, '</strong> (', f.type || 'n/a', ') - ',
-                    f.size, ' bytes, last modified: ',
-                    f.lastModifiedDate.toLocaleDateString(), '</li>');
+        for (i = 0; i < files.length; i++) {
+            file = files[i];
+
+            if (!file.type.match('image.*')) {
+                nonImageFileDetected = true;
+                continue;
+            }
+
+            var reader = new FileReader();
+            reader.onload = (function(file) {
+                return function(e) {
+                    var img = document.createElement("img");
+                    img.onload = (function (img) {
+                        return function() {
+                            var width = img.width, height = img.height;
+                            var maxWidth = 400, maxHeight = 300;
+
+                            var ratio = 1;
+                            if (width > maxWidth) {
+                                ratio = maxWidth / width;
+                            } else if (height > maxHeight) {
+                                ratio = maxHeight / height;
+                            }
+
+                            var resizedCanvas = document.createElement('canvas');
+                            resizedCanvas.width = width * ratio;
+                            resizedCanvas.height = height * ratio;
+                            var resizedCtx = resizedCanvas.getContext("2d");
+                            resizedCtx.drawImage(img, 0, 0, resizedCanvas.width, resizedCanvas.height);
+
+                            var resizedData = resizedCanvas.toDataURL();
+
+                            var span = document.createElement('span');
+                            span.innerHTML = ['<img class="thumb" src="', resizedData,
+                                '" title="', file.name, '"/>'].join('');
+                            document.getElementById('list').insertBefore(span, null);
+                        };
+                    })(img);
+                    img.src = e.target.result;
+
+                };
+            })(file);
+
+            // Read in the image file as a data URL.
+            reader.readAsDataURL(file);
         }
-        document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+
+        if (nonImageFileDetected) {
+            alert("allowed image files only");
+        }
     }, false);
 </script>
 </body>
