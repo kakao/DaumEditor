@@ -21,38 +21,6 @@
         margin: 10px 5px 0 0;
     }
 </style>
-<script type="text/javascript">
-// <![CDATA[
-
-	function done() {
-		if (typeof(execAttach) == 'undefined') { //Virtual Function
-	        return;
-	    }
-
-		var _mockdata = {
-			'imageurl': 'http://cfile284.uf.daum.net/image/116E89154AA4F4E2838948',
-			'filename': 'editor_bi.gif',
-			'filesize': 640,
-			'imagealign': 'C',
-			'originalurl': 'http://cfile284.uf.daum.net/original/116E89154AA4F4E2838948',
-			'thumburl': 'http://cfile284.uf.daum.net/P150x100/116E89154AA4F4E2838948'
-		};
-		execAttach(_mockdata);
-		closeWindow();
-	}
-
-	function initUploader(){
-	    var _opener = PopupUtil.getOpener();
-	    if (!_opener) {
-	        alert('잘못된 경로로 접근하셨습니다.');
-	        return;
-	    }
-
-	    var _attacher = getAttacher('image', _opener);
-	    registerAction(_attacher);
-	}
-// ]]>
-</script>
 </head>
 <body onload="initUploader();">
 <div class="wrapper">
@@ -87,6 +55,8 @@
 
     // TODO file api support test
 
+    var imageDatas = [];
+
     var dropZone = document.getElementById('drop_zone');
 
     dropZone.addEventListener('dragover', function(e) {
@@ -119,7 +89,7 @@
                     img.onload = (function (img) {
                         return function() {
                             var width = img.width, height = img.height;
-                            var maxWidth = 400, maxHeight = 300;
+                            var maxWidth = 250, maxHeight = 250;
 
                             var ratio = 1;
                             if (width > maxWidth) {
@@ -140,6 +110,15 @@
                             span.innerHTML = ['<img class="thumb" src="', resizedData,
                                 '" title="', file.name, '"/>'].join('');
                             document.getElementById('list').insertBefore(span, null);
+
+                            imageDatas.push({
+                                'imageurl': resizedData,
+                                'filename': file.name,
+                                'filesize': resizedData.length,
+                                'imagealign': 'C',
+                                'originalurl': resizedData,
+                                'thumburl': resizedData
+                            });
                         };
                     })(img);
                     img.src = e.target.result;
@@ -155,6 +134,41 @@
             alert("allowed image files only");
         }
     }, false);
+</script>
+
+<script type="text/javascript">
+    function done() {
+        if (typeof(execAttach) == 'undefined') { //Virtual Function
+            return;
+        }
+
+//        var _mockdata = {
+//            'imageurl': 'http://cfile284.uf.daum.net/image/116E89154AA4F4E2838948',
+//            'filename': 'editor_bi.gif',
+//            'filesize': 640,
+//            'imagealign': 'C',
+//            'originalurl': 'http://cfile284.uf.daum.net/original/116E89154AA4F4E2838948',
+//            'thumburl': 'http://cfile284.uf.daum.net/P150x100/116E89154AA4F4E2838948'
+//        };
+//        execAttach(_mockdata);
+
+        for (var i = 0; i < imageDatas.length; i++) {
+            execAttach(imageDatas[i]);
+        }
+                
+        closeWindow();
+    }
+
+    function initUploader() {
+        var _opener = PopupUtil.getOpener();
+        if (!_opener) {
+            alert('잘못된 경로로 접근하셨습니다.');
+            return;
+        }
+
+        var _attacher = getAttacher('image', _opener);
+        registerAction(_attacher);
+    }
 </script>
 </body>
 </html>
