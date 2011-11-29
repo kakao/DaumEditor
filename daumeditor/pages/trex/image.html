@@ -2,17 +2,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Daum에디터 - 이미지 첨부</title> 
+<title>Daum에디터 - 이미지 첨부</title>
 <script src="../../js/popup.js" type="text/javascript" charset="utf-8"></script>
 <link rel="stylesheet" href="../../css/popup.css" type="text/css"  charset="utf-8"/>
+<style type="text/css">
+    #drop_zone {
+        border: dashed 1px silver;
+        padding: 10px;
+        height: 50px;
+        text-align: center;
+        font: 24px 'sans-serif';
+        line-height: 50px;
+    }
+</style>
 <script type="text/javascript">
 // <![CDATA[
-	
+
 	function done() {
 		if (typeof(execAttach) == 'undefined') { //Virtual Function
 	        return;
 	    }
-		
+
 		var _mockdata = {
 			'imageurl': 'http://cfile284.uf.daum.net/image/116E89154AA4F4E2838948',
 			'filename': 'editor_bi.gif',
@@ -31,7 +41,7 @@
 	        alert('잘못된 경로로 접근하셨습니다.');
 	        return;
 	    }
-	    
+
 	    var _attacher = getAttacher('image', _opener);
 	    registerAction(_attacher);
 	}
@@ -42,13 +52,13 @@
 <div class="wrapper">
 	<div class="header">
 		<h1>사진 첨부</h1>
-	</div>	
+	</div>
 	<div class="body">
 		<dl class="alert">
 		    <dt>사진 첨부 확인</dt>
 		    <dd>
-		    	확인을 누르시면 임시 데이터가 사진첨부 됩니다.<br /> 
-				인터페이스는 소스를 확인해주세요.
+                <div id="drop_zone">Drop files here</div>
+                <output id="list"></output>
 			</dd>
 		</dl>
 	</div>
@@ -60,5 +70,32 @@
 		</ul>
 	</div>
 </div>
+
+
+<script type="text/javascript">
+    // Setup the dnd listeners.
+    var dropZone = document.getElementById('drop_zone');
+    dropZone.addEventListener('dragover', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+    }, false);
+
+    dropZone.addEventListener('drop', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        var files = e.dataTransfer.files; // FileList object.
+
+        // files is a FileList of File objects. List some properties.
+        var output = [];
+        for (var i = 0, f; f = files[i]; i++) {
+            output.push('<li><strong>', f.name, '</strong> (', f.type || 'n/a', ') - ',
+                    f.size, ' bytes, last modified: ',
+                    f.lastModifiedDate.toLocaleDateString(), '</li>');
+        }
+        document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+    }, false);
+</script>
 </body>
 </html>
