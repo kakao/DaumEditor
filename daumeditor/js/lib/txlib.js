@@ -977,11 +977,13 @@ $tx.extend($tx, /** @lends $tx */{
 			return this.replace(/(^\s*)|(\s*$)/g, "");
 		},
 		/**
-		 * 정규표현식에서 사용되는 메타문자를 이스케이프해서 반환한다.
+		 * 현재 문자열을 정규표현식의 일부로 사용하기 위하여,
+         * 정규표현식 특수문자(regexp special characters)를 escape하여 반환한다.
 		 * @function
 		 */
 		getRegExp: function() {
-			return this.replace(/\\/g, "\\\\").replace(/\./g, "\\.").replace(/\//g, "\\/").replace(/\?/g, "\\?").replace(/\^/g, "\\^").replace(/\)/g, "\\)").replace(/\(/g, "\\(").replace(/\]/g, "\\]").replace(/\[/g, "\\[").replace(/\$/g, "\\$").replace(/\+/g, "\\+").replace(/\|/g, "\\|").replace(/&/g, "(&|&amp;)");
+            var escaped = this.replace(/\\/g, "\\\\").replace(/\./g, "\\.").replace(/\//g, "\\/").replace(/\?/g, "\\?").replace(/\^/g, "\\^").replace(/\)/g, "\\)").replace(/\(/g, "\\(").replace(/\]/g, "\\]").replace(/\[/g, "\\[").replace(/\$/g, "\\$").replace(/\+/g, "\\+").replace(/\|/g, "\\|").replace(/&/g, "(&|&amp;)");
+            return getDataURISupportedRegex(escaped);
 		},
 		/**
 		 * 문자열을 정수형으로 반환한다. 숫자가 아닌 문자열은 0
@@ -1094,6 +1096,27 @@ $tx.extend($tx, /** @lends $tx */{
 			return this.replace(new RegExp(source, "gm"), target);
 		}
 	});
+
+    /**
+     * javascript의 regexp 길이 제한으로 인하여 datauri 를 regexp 로 변환하고자 할 때 문제가 발생한다.
+     * 주어진 문자열이 datauri 일 경우 prefix 300자만 취하고 base64 인코딩에 해당하는 regexp postfix 를 붙힌다.
+     * 단, base64 데이터 앞 300자가 같은 경우 구분하지 못하는 문제가 있다. (...)
+     */
+    function getDataURISupportedRegex(regexEscapedString) {
+        return regexEscapedString.replace(/data:([\w\\/]+)?(;\w+)?(;base64)?(,[a-zA-Z0-9\\\+\/]*={0,2})/, function(str, p1, p2, p3, p4) {
+            var buf = ['data:'];
+            p1 && buf.push(p1);
+            p2 && buf.push(p2);
+            p3 && buf.push(p3);
+            if (p4.length > 300) {
+                buf.push(p4.substr(0, 300));
+                buf.push("[a-zA-Z0-9+/]*={0,2}");
+            } else {
+                buf.push(p4);
+            }
+            return buf.join("");
+        });
+    }
 })();
 
 (function() {

@@ -169,4 +169,23 @@
         deepEqual($A(), []);
         deepEqual($A(null), []);
     });
+
+    var longDataURI = "data:image/gif;base64,R0lGODlhEAAOALMAAOazToeHh0tLS/7LZv/0jvb29t/f3//Ub//ge8WSLf/rhf/3kdbW1mxsbP//mf///yH5BAAAAAAALAAAAAAQAA4AAARe8L1Ekyky67QZ1hLnjM5UUde0ECwLJoExKcppV0aCcGCmTIHEIUEqjgaORCMxIC6e0CcguWw6aFjsVMkkIr7g77ZKPJjPZqIyd7sJAgVGoEGv2xsBxqNgYPjR0lGODlhEAAOALMAAOazToeHh0tLS/7LZv/0jvb29t/f3//Ub//ge8WSLf/rhf/3kdbW1mxsbP//mf///yH5BAAAAAAALAAAAAAQAA4AAARe8L1Ekyky67QZ1hLnjM5UUde0ECwLJoExKcppV0aCcGCmTIHEIUEqjgaORCMxIC6e0CcguWw6aFjsVMkkIr7g77ZKPJjPZqIyd7sJAgVGoEGv2xsBxqNgYPjR0lGODlhEAAOALMAAOazToeHh0tLS/7LZv/0jvb29t/f3//Ub//ge8WSLf/rhf/3kdbW1mxsbP//mf///yH5BAAAAAAALAAAAAAQAA4AAARe8L1Ekyky67QZ1hLnjM5UUde0ECwLJoExKcppV0aCcGCmTIHEIUEqjgaORCMxIC6e0CcguWw6aFjsVMkkIr7g77ZKPJjPZqIyd7sJAgVGoEGv2xsBxqNgYPj";
+    test('getRegExp() should support datauri even if datauri is too long', function () {
+        var dataURI = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+        var regexEscaped = dataURI.getRegExp();
+        equal("data:image\\/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4\\/\\/8\\/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==", regexEscaped, "short datauri");
+        ok(new RegExp(regexEscaped).test(dataURI), "self test");
+
+        regexEscaped = longDataURI.getRegExp();
+        ok(regexEscaped.indexOf("={0,2}") > 0, "should be replaced");
+        ok(new RegExp(regexEscaped).test(longDataURI), "self test");
+    });
+
+    test('getRegExp() should support datauri in middle of markup chunks', function () {
+        var chunk = '<p><img style="clear:none;float:none;" id="tx_entry_4002" src="' + longDataURI + '"></p>';
+        var escaped = chunk.getRegExp();
+        ok(escaped.indexOf("={0,2}") > 0, "should be replaced");
+        ok(new RegExp(escaped).test(chunk), "self test");
+    });
 })();
