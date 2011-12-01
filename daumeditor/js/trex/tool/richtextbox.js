@@ -16,10 +16,10 @@ TrexConfig.addTool(
 		bgcolor: '#ffffff',
 		padding: "10px",
 		styles: [ 
-			{	klass: "", image: "./images/icon/editor/textbox/thum_line01.gif?v=2", data: "solid" },
-			{	klass: "", image: "./images/icon/editor/textbox/thum_line02.gif?v=2", data: "double" },
-			{	klass: "", image: "./images/icon/editor/textbox/thum_line03.gif?v=2", data: "dashed" },
-			{	klass: "", image: "./images/icon/editor/textbox/thum_line04.gif?v=2", data: "none" }
+			{	klass: "", image: "#iconpath/textbox/thum_line01.gif?v=2", data: "solid" },
+			{	klass: "", image: "#iconpath/textbox/thum_line02.gif?v=2", data: "double" },
+			{	klass: "", image: "#iconpath/textbox/thum_line03.gif?v=2", data: "dashed" },
+			{	klass: "", image: "#iconpath/textbox/thum_line04.gif?v=2", data: "none" }
 		],
 		options: Trex.__CONFIG_COMMON.textbox.options,
 		thumbs: Trex.__CONFIG_COMMON.thumbs

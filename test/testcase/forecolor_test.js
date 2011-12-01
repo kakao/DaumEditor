@@ -24,10 +24,12 @@ test("selected에서 forecolor를 #0000ff에서 #ff0000로 변경하기", functi
     assertForeColorExecution("#ff0000", expected, "l");
 });
 
-test("기본색으로 기능은 잘 안된다", function() {
+test("기본색으로 변경하기", function() {
     var p = "<p><span style='color: red'><span style='color: blue'>Hello</span></span></p>";
     assi.setContent(p);
     assi.selectNodeContents(assi.$$('span')[1]);
-    var expected = '<p>Hello</p>';
+
+    var defaultColor = assi.canvas.getStyleConfig().color;
+    var expected = "<p><span style='color: red'><span style='color: " + defaultColor + "'>Hello</span></span></p>";
     assertForeColorExecution(null, expected, "Hello");
 });

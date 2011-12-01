@@ -1,12 +1,6 @@
 Trex.I.FontTool = Trex.Mixin.create({
     initialize: function(editor, toolbar, config) {
         this.$super.initialize(editor, toolbar, config);
-        if ($tx.gecko) {
-            // Firefox는 styleWithCSS 기본값이 true
-            try {
-                this.doc.execCommand('styleWithCSS', _FALSE, _FALSE);
-            } catch(e) {}
-        }
     },
     handler: function(data) {
         this.onBeforeHandler(data);
