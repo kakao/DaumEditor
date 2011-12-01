@@ -342,28 +342,6 @@
     });
 })();
 
-// from Sizzle.js
-function getTextContent(elems) {
-    var ret = "", elem;
-    if (typeof elems != 'Array') {
-        elems = [elems];
-    }
-
-    for (var i = 0; elems[i]; i++) {
-        elem = elems[i];
-
-        // Get the text from text nodes and CDATA nodes
-        if (elem.nodeType === 3 || elem.nodeType === 4) {
-            ret += elem.nodeValue;
-
-            // Traverse everything else, except comment nodes
-        } else if (elem.nodeType !== 8) {
-            ret += getTextContent(elem.childNodes);
-        }
-    }
-    return ret;
-}
-
 /* Qunit Helper Methods */
 (function() {
     function regexpEqual(actual, expectedRegexp) {

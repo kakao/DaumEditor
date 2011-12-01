@@ -23,16 +23,16 @@
         equal(p.childNodes.length, 2);
         equal(p.firstChild, textNode);
         equal(textNode.nextSibling, split);
-        equal(getTextContent(textNode), "Hell");
-        equal(getTextContent(textNode.nextSibling), "o");
+        equal(Sizzle.getText(textNode), "Hell");
+        equal(Sizzle.getText(textNode.nextSibling), "o");
 
         $tom.divideText(p.firstChild, 1);
 
         equal(p.innerHTML, "Hello");
         equal(p.childNodes.length, 3);
-        equal(getTextContent(textNode), "H");
-        equal(getTextContent(textNode.nextSibling), "ell");
-        equal(getTextContent(textNode.nextSibling.nextSibling), "o");
+        equal(Sizzle.getText(textNode), "H");
+        equal(Sizzle.getText(textNode.nextSibling), "ell");
+        equal(Sizzle.getText(textNode.nextSibling.nextSibling), "o");
     });
 
     test("IE에서는 splitText를 두 번 해도3조각이 되지 않는다.", function() {
