@@ -1,255 +1,205 @@
 <?xml version="1.0"?>
 <project name="DaumEditor" basedir="." default="buildall">
-	<property file="build.properties" />
-
+    <property file="build.properties"/>
     <!-- 'foreach', 'propertyregex' task definition -->
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
             <pathelement location="${build.lib.antcontrib}"/>
         </classpath>
     </taskdef>
-
     <!-- main tasks ====================================================== -->
-    <target name="buildall" description="clean and build all"
-            depends="clean, packaging">
+    <target name="buildall" description="clean and build all" depends="clean, packaging">
 	</target>
-
     <target name="clean" description="remove all artifacts">
-       <delete dir="${build.target.dir}" />
-       <delete dir="${build.dist.dir}" />
-   </target>
-
-    <target name="build" description="build artifacts"
-            depends="build-css,build-js"/>
-
-    <target name="packaging" description="packaging distribution files"
-            depends="build">
+        <delete dir="${build.target.dir}"/>
+        <delete dir="${build.dist.dir}"/>
+    </target>
+    <target name="build" description="build artifacts" depends="build-css,build-js"/>
+    <target name="packaging" description="packaging distribution files" depends="build">
         <echo message="copy javascript, css files"/>
-            <copy todir="${build.dist.dir}" overwrite="true">
-                <fileset dir="${build.target.editor.dir}">
-                    <exclude name="**/merged/"/>
-                    <exclude name="**/merged/*"/>
-                    <exclude name="**/escaped/"/>
-                    <exclude name="**/escaped/*"/>
-                </fileset>
-            </copy>
-
+        <copy todir="${build.dist.dir}" overwrite="true">
+            <fileset dir="${build.target.editor.dir}">
+                <exclude name="**/merged/"/>
+                <exclude name="**/merged/*"/>
+                <exclude name="**/escaped/"/>
+                <exclude name="**/escaped/*"/>
+            </fileset>
+        </copy>
         <echo message="copy image files"/>
-            <copy todir="${build.dist.dir}/images" overwrite="true">
-                <fileset dir="${src.editor.images.dir}"/>
-            </copy>
-
+        <copy todir="${build.dist.dir}/images" overwrite="true">
+            <fileset dir="${src.editor.images.dir}"/>
+        </copy>
         <echo message="copy html files"/>
-            <copy encoding="UTF-8" todir="${build.dist.dir}/pages" overwrite="true">
-                <fileset dir="${src.editor.pages.dir}" />
-            </copy>
-            <copy todir="${build.dist.dir}" overwrite="true">
-                <fileset dir="${src.editor.dir}">
-                    <include name="editor.html"/>
-                </fileset>
-            </copy>
-
+        <copy encoding="UTF-8" todir="${build.dist.dir}/pages" overwrite="true">
+            <fileset dir="${src.editor.pages.dir}"/>
+        </copy>
+        <copy todir="${build.dist.dir}" overwrite="true">
+            <fileset dir="${src.editor.dir}">
+                <include name="editor.html"/>
+            </fileset>
+        </copy>
         <echo message="make a archive file(daumeditor.zip)"/>
-            <zip destfile="${build.dist.dir}/daumeditor.zip">
-                <fileset dir="${build.dist.dir}">
-                    <exclude name="*.zip"/>
-                </fileset>
-            </zip>
+        <zip destfile="${build.dist.dir}/daumeditor.zip">
+            <fileset dir="${build.dist.dir}">
+                <exclude name="*.zip"/>
+            </fileset>
+        </zip>
     </target>
-
-    <target name="deploy" depends="packaging, load_version_information"
-            description="upload the artifact on googlecode hosting">
-    	<trycatch>
-    	  <try>
-    	  	<property file="${user.home}/daumeditor.credentials.properties" />
-    	  	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${build.lib.gcuploader}" name="gcupload"/>
-  	        <gcupload
-  	                username="${gc.username}"
-  	                password="${gc.password}"
-  	                projectname="daumopeneditor"
-  	                filename="${build.dist.dir}/daumeditor.zip"
-  	                targetfilename="daumeditor-${editor.version}.zip"
-  	                summary="${editor.version} release zip file"
-  	        		verbose="true"/>
-    	  </try>
-    	  <catch>
-    	  	<echo> Write your google account in ${user.home}/daumeditor.credentials.properties  </echo>
-    	  	<echo> in daumeditor.credentials.properties </echo>
-        	<echo> gc.username=[your google account Id]  </echo>
-        	<echo> gc.password=[your google account password]  </echo>
-    	  </catch>
-    	</trycatch>       
+    <target name="deploy" depends="packaging, load_version_information" description="upload the artifact on googlecode hosting">
+        <trycatch>
+            <try>
+                <property file="${user.home}/daumeditor.credentials.properties"/>
+                <taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${build.lib.gcuploader}" name="gcupload"/>
+                <gcupload username="${gc.username}" password="${gc.password}" projectname="daumopeneditor" filename="${build.dist.dir}/daumeditor.zip" targetfilename="daumeditor-${editor.version}.zip" summary="${editor.version} release zip file" verbose="true"/>
+            </try>
+            <catch>
+                <echo> Write your google account in ${user.home}/daumeditor.credentials.properties  </echo>
+                <echo> in daumeditor.credentials.properties </echo>
+                <echo> gc.username=[your google account Id]  </echo>
+                <echo> gc.password=[your google account password]  </echo>
+            </catch>
+        </trycatch>
     </target>
-
-	<!-- build javascript tasks ========================================== -->
-	<target name="build-js">
-        <mkdir dir="${build.target.editor.js.dir}" />
-		<ant target="merge_javascripts" />
-		<ant target="escape_and_delete_logging" />
-		<ant target="minify_javascripts" />
-	</target>
-
-        <target name="merge_javascripts">
-            <foreach list="${js.list}" param="module_name" target="_merge_js" />
-            <antcall target="copy_etc_js_to_dist" />
-        </target>
-
-            <target name="_merge_js">
-                <echo message="Merge ${module_name}.js ..."/>
-                <mkdir dir="${build.target.editor.js.dir}/merged"/>
-                <java jar="${build.lib.rhino}" failonerror="true" fork="true">
-                    <arg value="${build.script.dir}/merge_javascript.js"/>
-                    <arg value="${build.target.editor.js.dir}/merged/${module_name}.js"/>
-                    <arg value="${src.editor.js.dir}"/>
-                    <arg value="${module_name}.js"/>
-                </java>
-            </target>
-
-            <target name="copy_etc_js_to_dist">
-                <echo message="copy etc. js files" />
-                <mkdir dir="${build.target.editor.js.dir}"/>
-                <copy file="${src.editor.js.dir}/editor_loader.js" todir="${build.target.editor.js.dir}/merged" />
-
-                <echo message="copy core async tools" />
-                <copy todir="${build.target.editor.js.dir}/merged/" overwrite="true">
-                    <fileset dir="${src.editor.js.dir}">
-                        <include name="**/async/**/*" />
-                    </fileset>
-                </copy>
-            </target>
-
-
-        <!-- escaping -->
-        <target name="escape_and_delete_logging">
-            <echo message="Escape orig.editor.js" />
-            <mkdir dir="${build.target.editor.js.dir}/escaped"/>
-            <native2ascii encoding="utf-8" src="${build.target.editor.js.dir}/merged" dest="${build.target.editor.js.dir}/escaped"
-                          includes="**/*.js"/>
-
-            <echo message="Delete console message" />
-            <replaceregexp match="(console\.[^;]*;)" replace="" flags="g" byline="true" encoding="utf-8">
-                <fileset dir="${build.target.editor.js.dir}/escaped" includes="**/*.js" />
-            </replaceregexp>
-            <replaceregexp match="(StopWatch\.lap\([^;]*;)" replace="" flags="g" byline="true" encoding="utf-8">
-                <fileset dir="${build.target.editor.js.dir}/escaped" includes="**/*.js" />
-            </replaceregexp>
-        </target>
-
-
-        <!-- minifying -->
-        <target name="minify_javascripts">
-            <foreach target="_minify_javascript" param="file">
-                <path>
-                    <fileset dir="${build.target.editor.js.dir}/escaped" includes="**/*.js"/>
-                </path>
-            </foreach>
-        </target>
-
-            <target name="_minify_javascript">
-                <dirname property="target_dir_escaped" file="${file}"/>
-                <propertyregex property="target_dir" input="${target_dir_escaped}" regexp="[\/|\\]escaped" replace=""/>
-
-                <basename property="target_filename" file="${file}"/>
-                <!--  suffix=".escaped.js" -->
-                <mkdir dir="${target_dir}"/>
-                <echo message="minify ${file} to ${target_dir}/${target_filename}"/>
-                <java classname="com.yahoo.platform.yui.compressor.YUICompressor" classpath="${build.lib.yuicompressor}"
-                      failonerror="true">
-                    <arg value="--charset"/>
-                    <arg value="utf-8"/>
-                    <arg value="--line-break"/>
-                    <arg value="1000"/>
-                    <arg file="${file}"/>
-                    <arg value="-o"/>
-                    <arg file="${target_dir}/${target_filename}"/>
-                </java>
-            </target>
-
+    <!-- build javascript tasks ========================================== -->
+    <target name="build-js">
+        <mkdir dir="${build.target.editor.js.dir}"/>
+        <ant target="merge_javascripts"/>
+        <ant target="escape_and_delete_logging"/>
+        <ant target="minify_javascripts"/>
+    </target>
+    <target name="merge_javascripts">
+        <foreach list="${js.list}" param="module_name" target="_merge_js"/>
+        <antcall target="copy_etc_js_to_dist"/>
+    </target>
+    <target name="_merge_js">
+        <echo message="Merge ${module_name}.js ..."/>
+        <mkdir dir="${build.target.editor.js.dir}/merged"/>
+        <java jar="${build.lib.rhino}" failonerror="true" fork="true">
+            <arg value="${build.script.dir}/merge_javascript.js"/>
+            <arg value="${build.target.editor.js.dir}/merged/${module_name}.js"/>
+            <arg value="${src.editor.js.dir}"/>
+            <arg value="${module_name}.js"/>
+        </java>
+    </target>
+    <target name="copy_etc_js_to_dist">
+        <echo message="copy etc. js files"/>
+        <mkdir dir="${build.target.editor.js.dir}"/>
+        <copy file="${src.editor.js.dir}/editor_loader.js" todir="${build.target.editor.js.dir}/merged"/>
+        <echo message="copy core async tools"/>
+        <copy todir="${build.target.editor.js.dir}/merged/" overwrite="true">
+            <fileset dir="${src.editor.js.dir}">
+                <include name="**/async/**/*"/>
+            </fileset>
+        </copy>
+    </target>
+    <!-- escaping -->
+    <target name="escape_and_delete_logging">
+        <echo message="Escape orig.editor.js"/>
+        <mkdir dir="${build.target.editor.js.dir}/escaped"/>
+        <native2ascii encoding="utf-8" src="${build.target.editor.js.dir}/merged" dest="${build.target.editor.js.dir}/escaped" includes="**/*.js"/>
+        <echo message="Delete console message"/>
+        <replaceregexp match="(console\.[^;]*;)" replace="" flags="g" byline="true" encoding="utf-8">
+            <fileset dir="${build.target.editor.js.dir}/escaped" includes="**/*.js"/>
+        </replaceregexp>
+        <replaceregexp match="(StopWatch\.lap\([^;]*;)" replace="" flags="g" byline="true" encoding="utf-8">
+            <fileset dir="${build.target.editor.js.dir}/escaped" includes="**/*.js"/>
+        </replaceregexp>
+    </target>
+    <!-- minifying -->
+    <target name="minify_javascripts">
+        <foreach target="_minify_javascript" param="file">
+            <path>
+                <fileset dir="${build.target.editor.js.dir}/escaped" includes="**/*.js"/>
+            </path>
+        </foreach>
+    </target>
+    <target name="_minify_javascript">
+        <dirname property="target_dir_escaped" file="${file}"/>
+        <propertyregex property="target_dir" input="${target_dir_escaped}" regexp="[\/|\\]escaped" replace=""/>
+        <basename property="target_filename" file="${file}"/>
+        <!--  suffix=".escaped.js" -->
+        <mkdir dir="${target_dir}"/>
+        <echo message="minify ${file} to ${target_dir}/${target_filename}"/>
+        <java classname="com.yahoo.platform.yui.compressor.YUICompressor" classpath="${build.lib.yuicompressor}" failonerror="true">
+            <arg value="--charset"/>
+            <arg value="utf-8"/>
+            <arg value="--line-break"/>
+            <arg value="1000"/>
+            <arg file="${file}"/>
+            <arg value="-o"/>
+            <arg file="${target_dir}/${target_filename}"/>
+        </java>
+    </target>
     <!-- build css tasks ================================================= -->
-	<target name="build-css">
-		<mkdir dir="${build.target.editor.css.dir}" />
-		<ant target="merge_css" />
-		<ant target="minify_css" />
-	</target>
-
-
-        <!-- merge & minify css -->
-        <target name="merge_css">
-            <mkdir dir="${build.target.editor.css.dir}/merged"/>
-            <foreach list="${css.list}" param="module_name" target="_merge_css" />
-        </target>
-            <target name="_merge_css">
-                <echo message="Merge ${module_name}.css ..."/>
-                <java jar="${build.lib.rhino}" failonerror="true" fork="true">
-                    <arg value="${build.script.dir}/merge_css.js"/>
-                    <arg value="${build.target.editor.css.dir}/merged/${module_name}.css"/>
-                    <arg value="${src.editor.css.dir}"/>
-                    <arg value="${module_name}.css"/>
-                </java>
-            </target>
-
-
-        <target name="minify_css">
-            <!--<foreach list="${css.list}" param="css_fname" target="    _minify_stylesheet" />-->
-            <foreach target="_minify_css" param="file">
-                <path>
-                    <fileset dir="${build.target.editor.css.dir}/merged" includes="**/*.css"/>
-                </path>
-            </foreach>
-        </target>
-
-            <target name="_minify_css">
-                <basename property="target_filename" file="${file}"/>
-
-                <echo message="Minify ${target_filename}"/>
-
-                <java classname="com.yahoo.platform.yui.compressor.YUICompressor"
-                      classpath="${build.lib.yuicompressor}" failonerror="true">
-                    <arg value="--type"/>
-                    <arg value="css"/>
-                    <arg value="--charset"/>
-                    <arg value="utf-8"/>
-                    <arg value="--line-break"/>
-                    <arg value="1000"/>
-
-                    <arg file="${build.target.editor.css.dir}/merged/${target_filename}"/>
-                    <arg value="-o"/>
-                    <arg file="${build.target.editor.css.dir}/${target_filename}"/>
-                </java>
-            </target>
-
+    <target name="build-css">
+        <mkdir dir="${build.target.editor.css.dir}"/>
+        <ant target="merge_css"/>
+        <ant target="minify_css"/>
+    </target>
+    <!-- merge & minify css -->
+    <target name="merge_css">
+        <mkdir dir="${build.target.editor.css.dir}/merged"/>
+        <foreach list="${css.list}" param="module_name" target="_merge_css"/>
+    </target>
+    <target name="_merge_css">
+        <echo message="Merge ${module_name}.css ..."/>
+        <java jar="${build.lib.rhino}" failonerror="true" fork="true">
+            <arg value="${build.script.dir}/merge_css.js"/>
+            <arg value="${build.target.editor.css.dir}/merged/${module_name}.css"/>
+            <arg value="${src.editor.css.dir}"/>
+            <arg value="${module_name}.css"/>
+        </java>
+    </target>
+    <target name="minify_css">
+        <!--<foreach list="${css.list}" param="css_fname" target="    _minify_stylesheet" />-->
+        <foreach target="_minify_css" param="file">
+            <path>
+                <fileset dir="${build.target.editor.css.dir}/merged" includes="**/*.css"/>
+            </path>
+        </foreach>
+    </target>
+    <target name="_minify_css">
+        <basename property="target_filename" file="${file}"/>
+        <echo message="Minify ${target_filename}"/>
+        <java classname="com.yahoo.platform.yui.compressor.YUICompressor" classpath="${build.lib.yuicompressor}" failonerror="true">
+            <arg value="--type"/>
+            <arg value="css"/>
+            <arg value="--charset"/>
+            <arg value="utf-8"/>
+            <arg value="--line-break"/>
+            <arg value="1000"/>
+            <arg file="${build.target.editor.css.dir}/merged/${target_filename}"/>
+            <arg value="-o"/>
+            <arg file="${build.target.editor.css.dir}/${target_filename}"/>
+        </java>
+    </target>
     <!-- versioning tasks ================================================= -->
-	<target name="version_up_patch" description="update version. increase 'patch' sequence number.">
-		<antcall target="increase_patch_number" />
-	</target>
-        <target name="increase_patch_number">
-            <propertyfile file="${build.version.properties}">
-                <entry key="version.patch.number" type="int" operation="+" value="1" pattern="0"/>
-            </propertyfile>
-        </target>
-
-	<target name="version_up_minor"
-            description="update version. increase 'minor' sequence number and reset 'patch' sequence number.">
-		<antcall target="increase_minor_number" />
-		<antcall target="reset_patch_number" />
-		<!--<antcall target="update_pom" />-->
-	</target>
-        <target name="increase_minor_number">
-            <propertyfile file="${build.version.properties}">
-                <entry key="version.minor.number" type="int" operation="+" value="1" pattern="0" />
-            </propertyfile>
-        </target>
-        <target name="reset_patch_number">
-            <propertyfile file="${build.version.properties}">
-                <entry key="version.patch.number" type="int" operation="=" value="0" pattern="0" />
-            </propertyfile>
-        </target>
-
+    <target name="version_up_patch" description="update version. increase 'patch' sequence number.">
+        <antcall target="increase_patch_number"/>
+    </target>
+    <target name="increase_patch_number">
+        <propertyfile file="${build.version.properties}">
+            <entry key="version.patch.number" type="int" operation="+" value="1" pattern="0"/>
+        </propertyfile>
+    </target>
+    <target name="version_up_minor" description="update version. increase 'minor' sequence number and reset 'patch' sequence number.">
+        <antcall target="increase_minor_number"/>
+        <antcall target="reset_patch_number"/>
+        <!--<antcall target="update_pom" />-->
+    </target>
+    <target name="increase_minor_number">
+        <propertyfile file="${build.version.properties}">
+            <entry key="version.minor.number" type="int" operation="+" value="1" pattern="0"/>
+        </propertyfile>
+    </target>
+    <target name="reset_patch_number">
+        <propertyfile file="${build.version.properties}">
+            <entry key="version.patch.number" type="int" operation="=" value="0" pattern="0"/>
+        </propertyfile>
+    </target>
     <target name="load_version_information" unless="editor.version">
         <property file="${build.version.properties}"/>
-        <property name="editor.version"
-                  value="${version.major.number}.${version.minor.number}.${version.patch.number}"/>
+        <property name="editor.version" value="${version.major.number}.${version.minor.number}.${version.patch.number}"/>
         <echo message="version information loaded : ${editor.version}"/>
     </target>
-
 </project>
