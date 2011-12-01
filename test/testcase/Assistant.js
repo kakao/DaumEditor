@@ -336,15 +336,8 @@
 
     Assistant.LOREM = LOREM;
     EditorJSLoader.ready(function() {
-        if ($tx.msie) {
-            Editor.getCanvas().observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, createGlobalAssistant);
-        } else {
-            createGlobalAssistant();
-        }
-        function createGlobalAssistant() {
-            if (!window.assi) {
-                window.assi = new Assistant();
-            }
+        if (!window.assi) {
+            window.assi = new Assistant();
         }
     });
 })();
