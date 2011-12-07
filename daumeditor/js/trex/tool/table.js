@@ -3,9 +3,11 @@
  *  Table을 삽입하는 기능을 가진 Tool 'table' Source,
  *  Class Trex.Tool.Table,Trex.Menu.Table,Trex.Menu.Table.TableEdit와 configuration 을 포함 하고있다.    
  */
+
 TrexConfig.addTool(
 	"table",
 	{
+		borderStyle: "1px solid #ccc",
 		sync: _FALSE,
 		status: _TRUE
 	},
@@ -37,8 +39,6 @@ Trex.Tool.Table = Trex.Class.create({
 		},
 		__DEFAULT_TABLE_PROPERTY_STR: "cellspacing=\"0\" cellpadding=\"0\" border=\"0\"",
 		__DEFAULT_TABLE_STYLE:  "border:none;border-collapse:collapse",
-		///__DEFAULT_BORDER_STYLE: "1px solid #000",
-		__DEFAULT_BORDER_STYLE: "1px solid #ccc",
 		__DEFAULT_TABLE_CLASS:"txc-table"
 	},
 	$extend: Trex.Tool,
@@ -85,7 +85,7 @@ Trex.Tool.Table = Trex.Class.create({
 		tableStringArr.push( this.editor.canvas.getStyle("fontSize") );
 		tableStringArr.push("\"><tbody>");
 		
-		var borderStyleText = Trex.Tool.Table.__DEFAULT_BORDER_STYLE;
+		var borderStyleText = this.config.borderStyle;
 		//var tdWidth = parseInt(100/col) + "%";
 		var tdWidth = parseInt(tableWidth/col);
 		var basicBorder = ["border-bottom:",borderStyleText,";border-right:",borderStyleText,";"].join("");
