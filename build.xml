@@ -202,4 +202,29 @@
         <property name="editor.version" value="${version.major.number}.${version.minor.number}.${version.patch.number}"/>
         <echo message="version information loaded : ${editor.version}"/>
     </target>
+    <!-- documentation tasks ================================================= -->
+    <target name="doc" depends="prepare_doc">
+        <foreach target="_doc" param="file">
+            <path>
+                <fileset dir="${src.doc.api.dir}" includes="*.markdown" excludes="_*"/>
+            </path>
+        </foreach>
+    </target>
+    <target name="_doc">
+        <basename property="apiname" file="${file}" suffix=".markdown"/>
+        <echo message="generate document '${apiname}.html'"></echo>
+        <exec executable="${build.cmd.node}">
+            <arg value="${build.lib.doctool}"/>
+            <arg value="${src.doc.api.template}"/>
+            <arg value="${file}"/>
+            <arg value="${build.dist.doc.dir}/${apiname}.html"/>
+        </exec>
+    </target>
+    <target name="prepare_doc">
+        <mkdir dir="${build.dist.doc.dir}"/>
+        <copy todir="${build.dist.doc.dir}/assets" overwrite="true">
+            <fileset dir="${src.doc.assets.dir}"/>
+        </copy>
+    </target>
+    <!-- TODO : upload documents and samples automatically -->
 </project>
