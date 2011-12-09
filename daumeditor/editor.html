@@ -498,5 +498,56 @@
     });
     
 </script>
+
+<!-- Sample: Loading Contents -->
+<textarea id="sample_contents_source" style="display:none;">
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <p style="text-align: center;">
+        <img src="http://cfile273.uf.daum.net/image/2064CD374EE1ACCB0F15C8" class="tx-daum-image" style="clear: none; float: none;"/>
+    </p>﻿
+    <p>
+        <a href="http://cfile297.uf.daum.net/attach/207C8C1B4AA4F5DC01A644"><img src="snapshot/images/icon/p_gif_s.gif"/> editor_bi.gif</a>
+    </p>
+</textarea>
+<script type="text/javascript">
+    function loadContent() {
+        var attachments = {};
+        attachments['image'] = [];
+        attachments['image'].push({
+            'attacher': 'image',
+            'data': {
+                'imageurl': 'http://cfile273.uf.daum.net/image/2064CD374EE1ACCB0F15C8',
+                'filename': 'github.gif',
+                'filesize': 59501,
+                'originalurl': 'http://cfile273.uf.daum.net/original/2064CD374EE1ACCB0F15C8',
+                'thumburl': 'http://cfile273.uf.daum.net/P150x100/2064CD374EE1ACCB0F15C8'
+            }
+        });
+        attachments['file'] = [];
+        attachments['file'].push({
+            'attacher': 'file',
+            'data': {
+                'attachurl': 'http://cfile297.uf.daum.net/attach/207C8C1B4AA4F5DC01A644',
+                'filemime': 'image/gif',
+                'filename': 'editor_bi.gif',
+                'filesize': 640
+            }
+        });
+        /* 저장된 컨텐츠를 불러오기 위한 함수 호출 */
+        Editor.modify({
+            "attachments": function () { /* 저장된 첨부가 있을 경우 배열로 넘김, 위의 부분을 수정하고 아래 부분은 수정없이 사용 */
+                var allattachments = [];
+                for (var i in attachments) {
+                    allattachments = allattachments.concat(attachments[i]);
+                }
+                return allattachments;
+            }(),
+            "content": document.getElementById("sample_contents_source") /* 내용 문자열, 주어진 필드(textarea) 엘리먼트 */
+        });
+    }
+</script>
+<p><button onclick='loadContent()'>load sample contents to editor</button></p>
+<!-- End: Loading Contents -->
+
 </body>
 </html>
