@@ -1,33 +1,29 @@
 importPackage(java.io);
 
-function writeFile(file, stream) {
-    var append = false;
-    if (arguments.length == 2) {
-        append = true;
-    } else {
-        append = arguments[2];
-    }
-
-    var fw = new OutputStreamWriter(new FileOutputStream(file, append), "UTF-8");
-    fw.write(stream);
-    fw.close();
-}
+var FileWriter = function(filename) {
+    this.writer = new OutputStreamWriter(new FileOutputStream(filename), "UTF-8");
+};
+FileWriter.prototype.write = function(data) {
+    this.writer.write('\n');
+    this.writer.write(data);
+};
+FileWriter.prototype.close = function() {
+    this.writer.close();
+};
 
 function exists(file) {
     var f = new File(file);
     return f.exists();
 }
 
-
-
 var mergedFile = this.arguments[0],
     inputPath = this.arguments[1],
-    inputFile = this.arguments[2];
+    inputFile = this.arguments[2],
+    writer = new FileWriter(mergedFile);
 
 print("build " + mergedFile);
 
 function getCssText(filename) {
-//    print(filename);
     var orig = readFile(filename, "utf-8");
     orig = orig.replace(/\/\*[\s\S]*?\*\//g, "");
     orig = orig.replace(/\.\.\/\.\.\/\.\.\/images/g, "../images");
@@ -38,4 +34,5 @@ function getCssText(filename) {
 }
 
 var mergedText = getCssText(inputPath + '/' + inputFile);
-writeFile(mergedFile, mergedText, false);
+writer.write(mergedText);
+writer.close();
