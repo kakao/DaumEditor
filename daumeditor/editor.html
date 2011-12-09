@@ -34,7 +34,7 @@
         @decsription
         등록하기 위한 Form으로 상황에 맞게 수정하여 사용한다. Form 이름은 에디터를 생성할 때 설정값으로 설정한다.
     -->
-    <form name="tx_editor_form" id="tx_editor_form" action="/your_submit_page" method="post" accept-charset="utf-8">
+    <form name="tx_editor_form" id="tx_editor_form" action="http://posttestserver.com/post.php" method="post" accept-charset="utf-8">
         <!-- 에디터 컨테이너 시작 -->
         <div id="tx_trex_container" class="tx-editor-container">
             <!-- 사이드바 -->
@@ -499,6 +499,86 @@
     
 </script>
 
+<!-- Sample: Saving Contents -->
+<script type="text/javascript">
+    /* 예제용 함수 */
+    function saveContent() {
+        Editor.save(); // 이 함수를 호출하여 글을 등록하면 된다.
+    }
+
+    /**
+     * Editor.save()를 호출한 경우 데이터가 유효한지 검사하기 위해 부르는 콜백함수로
+     * 상황에 맞게 수정하여 사용한다.
+     * 모든 데이터가 유효할 경우에 true를 리턴한다.
+     * @function
+     * @param {Object} editor - 에디터에서 넘겨주는 editor 객체
+     * @returns {Boolean} 모든 데이터가 유효할 경우에 true
+     */
+    function validForm(editor) {
+        // Place your validation logic here
+
+        // sample : validate that content exists
+        var validator = new Trex.Validator();
+        var content = editor.getContent();
+        if (!validator.exists(content)) {
+            alert('내용을 입력하세요');
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Editor.save()를 호출한 경우 validForm callback 이 수행된 이후
+     * 실제 form submit을 위해 form 필드를 생성, 변경하기 위해 부르는 콜백함수로
+     * 각자 상황에 맞게 적절히 응용하여 사용한다.
+     * @function
+     * @param {Object} editor - 에디터에서 넘겨주는 editor 객체
+     * @returns {Boolean} 정상적인 경우에 true
+     */
+    function setForm(editor) {
+        var formGenerator = editor.getForm();
+        var content = editor.getContent();
+        formGenerator.createField(
+                tx.textarea({
+                    'name': "tx_content", // 본문 내용을 필드를 생성하여 값을 할당하는 부분
+                    'style': { 'display': "none" }
+                }, content)
+        );
+        /* 아래의 코드는 첨부된 데이터를 필드를 생성하여 값을 할당하는 부분으로 상황에 맞게 수정하여 사용한다.
+         첨부된 데이터 중에 주어진 종류(image,file..)에 해당하는 것만 배열로 넘겨준다. */
+        var images = editor.getAttachments('image');
+        for (var i = 0, len = images.length; i < len; i++) {
+            // existStage는 현재 본문에 존재하는지 여부
+            if (images[i].existStage) {
+                // data는 팝업에서 execAttach 등을 통해 넘긴 데이터
+                alert('attachment information - image[' + i + '] \r\n' + JSON.stringify(images[i].data));
+                formGenerator.createField(
+                        tx.input({
+                            'type': "hidden",
+                            'name': 'tx_attach_image',
+                            'value': images[i].data.imageurl // 예에서는 이미지경로만 받아서 사용
+                        })
+                );
+            }
+        }
+        var files = editor.getAttachments('file');
+        for (var i = 0, len = files.length; i < len; i++) {
+            alert('attachment information - file[' + i + '] \r\n' + JSON.stringify(files[i].data));
+            formGenerator.createField(
+                    tx.input({
+                        'type': "hidden",
+                        'name': 'tx_attach_file',
+                        'value': files[i].data.attachurl
+                    })
+            );
+        }
+        return true;
+    }
+</script>
+<p><button onclick='saveContent()'>SAMPLE - submit contents</button></p>
+<!-- End: Saving Contents -->
+
 <!-- Sample: Loading Contents -->
 <textarea id="sample_contents_source" style="display:none;">
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
@@ -546,7 +626,7 @@
         });
     }
 </script>
-<p><button onclick='loadContent()'>load sample contents to editor</button></p>
+<p><button onclick='loadContent()'>SAMPLE - load contents to editor</button></p>
 <!-- End: Loading Contents -->
 
 </body>
