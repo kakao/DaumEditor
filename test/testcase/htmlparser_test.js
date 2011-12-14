@@ -12,30 +12,34 @@
         tree.unaryTag(8, "Comment");
         equal(tree.toString(), "<p>Hello<br><i>World</i><!--Comment--></p>")
     });
-
+    
     test("from text", function() {
         var html = "<p>Hello<br><i>World</i><!--Comment--></p>";
-        equals(new HTMLParser(html).cleanHTML, html);
+        equals(HTMLParser(html).cleanHTML, html);
     });
 
     test("effectiveness - has id", function() {
         var html = "<p>Hello<br><span id='a'>World</span><!--Comment--></p>";
-        equals(new HTMLParser(html).cleanHTML, html);
+        equals(HTMLParser(html).cleanHTML, html);
     });
 
     test("effectiveness", function() {
         var html = "<p>Hello<br><span>World</span><!--Comment--></p>";
-        equals(new HTMLParser(html).cleanHTML, "<p>Hello<br>World<!--Comment--></p>");
+        equals(HTMLParser(html).cleanHTML, "<p>Hello<br>World<!--Comment--></p>");
     });
 
     test("duplicated font size", function() {
         var html = '<span style="font-size: 10pt"><font size="2">Hello</font></span>';
-        equals(new HTMLParser(html).cleanHTML, '<font size="2">Hello</font>');
+        equals(HTMLParser(html).cleanHTML, '<font size="2">Hello</font>');
     });
 
     test("removeUseless more complex", function() {
         var html = '<P><SPAN style="FONT-FAMILY: Arial"><SPAN style="FONT-SIZE: 12pt"><FONT style="BACKGROUND-COLOR: #9aa5ea" color=#ffffff>Part&nbsp; #1 : Review 11/4 (20 times)</FONT></SPAN></SPAN></P>';
-        equals(new HTMLParser(html).cleanHTML, html);
+        equals(HTMLParser(html).cleanHTML, html);
+    });
+    
+    test('<p style="TEXT-ALIGN: right" class=""><o:p style="TEXT-ALIGN: center"></o:p></p> is well-formed', function() {
+        ok(HTMLParser('<p style="TEXT-ALIGN: right" class=""><o:p style="TEXT-ALIGN: center"></o:p></p>').wellFormed);
     });
 
     var invalidHTML = [

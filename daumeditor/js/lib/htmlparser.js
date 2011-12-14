@@ -1,4 +1,16 @@
+/**
+ * Referred Sources
+ * http://ckeditor.com/ htmlparser.js
+ * http://ejohn.org/blog/pure-javascript-html-parser/ by John Resig (ejohn.org)
+ * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js by Erik Arvidsson
+ */
 (function() {
+    /**
+     * <o:p>MSO</o:p>
+     * <table><tr><td></td>Text<td></td></tr></table>
+     * <embed></embed>, <embed>
+     * area, param
+     */
     function extend(dest, org) {
         for (var key in org) {
             dest[key] = org[key];
@@ -15,7 +27,7 @@
         return obj;
     }
 
-    var htmlPartsRegex = /<(?:(?:\/([A-Za-z][-A-Za-z0-9_]*)[^>]*>)|(?:!--([\S\s]*?)-->)|(?:([A-Za-z][-A-Za-z0-9_]*)((?:\s+(?:\/(?!>)|[^>\s=])+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*?)\s*(\/?)>))/g;
+    var htmlPartsRegex = /<(?:(?:\/([A-Za-z][-A-Za-z0-9_:]*)[^>]*>)|(?:!--([\S\s]*?)-->)|(?:([A-Za-z][-A-Za-z0-9_:]*)((?:\s+(?:\/(?!>)|[^>\s=])+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*?)\s*(\/?)>))/g;
 
     // Empty Elements - HTML 4.01
     var empty = makeMap("area,base,basefont,br,col,frame,hr,img,input,isindex,link,meta,param,embed");
@@ -79,6 +91,8 @@
 
     var HTMLTree = this.HTMLTree = function() {
         this.current = null;
+        this.depth = 0;
+        this.maxDepth = 0;
     };
 
     HTMLTree.create = function() {
@@ -156,6 +170,8 @@
             this.root = data;
             data.valid = false;
         }
+        this.depth += 1;
+        this.maxDepth = Math.max(this.depth, this.maxDepth);
         this.current = data;
     };
 
@@ -165,6 +181,7 @@
     };
 
     HTMLTree.prototype.closeTag = function() {
+        this.depth -= 1;
         this.current = this.current.parent;
     };
 
@@ -286,8 +303,8 @@
                 break;
             }
         });
-        console.log('# of removed elements: ' + count);
-        console.log('duration: ' + (new Date().getTime() - start));
+//        console.log('# of removed elements: ' + count);
+//        console.log('duration: ' + (new Date().getTime() - start));
     };
 
     this.HTMLParser = function(html) {
@@ -377,6 +394,7 @@
         cleanUnclosedUp();
         return {
             wellFormed: wellFormed,
+            maxDepth: tree.maxDepth,
             cleanHTML: tree.cleanHTML()
         };
 
@@ -419,7 +437,7 @@
         function onEndTag(tagName) {
             if (stack.empty()) {
                 wellFormed = false;
-                console.log('stack is empty : ' + tagName);
+//                console.log('stack is empty : ' + tagName);
                 return;
             }
 
@@ -434,16 +452,16 @@
                 } else {
                     wellFormed = false;
                     if (closeSelf[visit.tagName]) {
-                        console.log('self close by meeting closing tag : ' + tagName);
+//                        console.log('self close by meeting closing tag : ' + tagName);
                     } else {
                         repair.push(visit);
-                        console.log('invalid : ' + tagName);
+//                        console.log('invalid : ' + tagName);
                     }
                 }
             }
             if (found == -1) {
                 wellFormed = false;
-                console.log('not opened tag : ' + tagName);
+//                console.log('not opened tag : ' + tagName);
                 return;
             }
             for (i = stack.length - 1; i >= found; i--) {
@@ -451,7 +469,7 @@
                 tree.closeTag();
             }
             for (i = repair.length - 1; i >= 0; i--) {
-                console.log("wrong pair : " + tagName);
+//                console.log("wrong pair : " + tagName);
                 onStartTag(repair[i].tagName, repair[i].rest, repair[i].unary);
             }
         }
@@ -474,9 +492,9 @@
 
                 for (var i = stack.length - 1; i >= 0; i--) {
                     if (closeSelf[ stack[ i ].tagName ]) {
-                        console.log('self close : ' + stack[i].tagName);
+//                        console.log('self close : ' + stack[i].tagName);
                     } else {
-                        console.log('not closed : ' + stack[i].tagName);
+//                        console.log('not closed : ' + stack[i].tagName);
                     }
                     tree.closeTag();
                 }
