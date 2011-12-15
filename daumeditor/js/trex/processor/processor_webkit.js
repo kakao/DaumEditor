@@ -67,32 +67,7 @@ Trex.I.Processor.Webkit = {
 	 * @param {Event} ev - Enter Key 이벤트
 	 */
 	controlEnterByLinebreak: function(ev) {
-		var _processor = this;
-		var _rng = this.getRange(_FALSE);
-		var _parent = _rng.endContainer.parentNode;
-		
-		if (_parent && (_parent.tagName == "P" || _parent.tagName == "DIV" || _parent.tagName == "BODY" || _parent.tagName == "BLOCKQUOTE")) {
-			
-			if(_parent.tagName == "BLOCKQUOTE" || $tx.hasClassName(_parent, "txc-textbox") || $tx.hasClassName(_parent, "txc-moreless")){
-				$tx.stop(ev);
-				var _brNode = _processor.win.br();
-				_rng.insertNode(_brNode);
-				_rng.selectNode(_brNode);
-				_rng.collapse(_FALSE);	
-				_brNode = _processor.win.br();
-				_rng.insertNode(_brNode);
-				_rng.selectNode(_brNode);
-				_rng.collapse(_FALSE);	
-				
-				var _rng2 = _processor.getRange(_FALSE);
-				_rng2.selectNodeContents(_brNode.nextSibling);
-				
-				var _sel = _processor.getSel();
-				_sel.removeAllRanges();
-				_sel.addRange(_rng2);
-				_sel.collapseToStart();
-			}
-		}	
+        throw $propagate;
 	},
 	/**
 	 * 선택된 영역의 native queryCommandState 값을 얻어온다.
