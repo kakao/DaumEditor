@@ -173,7 +173,6 @@ var TrexConfig = function() {
 		},
 		/**
 		 * 컨텐츠 삽입용 이미지의 상위 url을 넘겨준다. <br/>
-		 * 기본 경로는 #host#path/images/deco/ 이며,
 		 * txDecoPath 값이 셋팅된 경우는 해당 url을 넘겨준다.
 		 * @function
 		 * @param {String} url - url 
@@ -191,7 +190,6 @@ var TrexConfig = function() {
 		},
 		/**
 		 * 에디터에서 사용되는 이미지의 상위 url을 넘겨준다. <br/>
-		 * 기본 경로는 #host#path/images/icon/ 이며,
 		 * txIconPath 값이 셋팅된 경우는 해당 url을 넘겨준다.
 		 * @function
 		 * @param {String} url - url 
