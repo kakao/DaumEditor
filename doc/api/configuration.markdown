@@ -43,3 +43,28 @@ Set the Attachbox's Visibility :
     }
 
 
+### Misc.
+
+#### txIconPath
+
+* Key: `config.txIconPath`
+* Type: `string`
+* Defaults: `none`
+
+Base path of the editor image (e.g. toolbar icon) directory.
+URL for the `daumeditor/images/icon/` directory
+
+
+#### txDecoPath
+
+* Key: `config.txDecoPath`
+* Type: `string`
+* Defaults: `none`
+
+Base path of the editor contents image (e.g. emoticon) directory.
+URL for the `daumeditor/images/deco/` directory
+
+    {
+        txIconPath: "http://yourcdnserver/daumeditor/images/icon/editor/",
+        txDecoPath: "http://yourcdnserver/daumeditor/images/deco/contents/"
+    }
