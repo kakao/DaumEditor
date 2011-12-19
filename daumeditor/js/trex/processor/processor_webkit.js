@@ -62,14 +62,6 @@ Trex.I.Processor.Webkit = {
         self.moveCaretTo(newLi);
     },
 	/**
-	 * @private
-	 * Webkit에서 newlinepolicy가 br일 경우 Enter Key 이벤트가 발생하면 실행한다. 
-	 * @param {Event} ev - Enter Key 이벤트
-	 */
-	controlEnterByLinebreak: function(ev) {
-        throw $propagate;
-	},
-	/**
 	 * 선택된 영역의 native queryCommandState 값을 얻어온다.
 	 * @param {String} command - 커맨드 명
 	 * @returns {Boolean} - 해당 영역이 커맨드 상태인지 여부 
