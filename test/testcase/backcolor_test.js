@@ -8,18 +8,18 @@ function assertBackColorExecution(color, expectedContent, expectedSelectedText) 
 
 module("backcolor");
 
-!($tx.os_win && $tx.safari) && test("collapsed에서 backcolor를 #ff0000로 변경하기", function() {
+$tx.msie && test("collapsed에서 backcolor를 #ff0000로 변경하기", function() {
     var p = ax.p(ax.span({id: "span"}, "Hello World"));
     assi.setContentElement(p);
     assi.selectForNodes(assi.$('span').firstChild, 2, assi.$('span').firstChild, 2);
-    assertBackColorExecution("#ff0000", '<p><span id="span">He</span><span style="background-color: #ff0000"></span><span>llo World</span></p>', "");
+    assertBackColorExecution("#ff0000", '<p><span id="span">He<span style="background-color: #ff0000"></span>llo World</span></p>', "");
 });
 
 test("selected에서 backcolor를 #0000ff에서 #ff0000로 변경하기", function() {
     var p = ax.p(ax.span({id: "span", style: { backgroundColor: "#0000ff" }}, "Hello World"));
     assi.setContentElement(p);
     assi.selectForNodes(assi.$('span').firstChild, 2, assi.$('span').firstChild, 3);
-    assertBackColorExecution("#ff0000", '<p><span id="span" style="background-color:#0000ff">He</span><span style="background-color: #ff0000">l</span><span style="background-color: #0000ff">lo World</span></p>', "l");
+    assertBackColorExecution("#ff0000", '<p><span id="span" style="background-color:#0000ff">He<span style="background-color: #ff0000">l</span>lo World</span></p>', "l");
 });
 
 test("selected에서 backcolor를 기본색으로 되돌리기", function() {
@@ -36,8 +36,7 @@ test("selected에서 글자색도 변경되는 backColor를 실행하기", funct
     var p = ax.p(ax.span({id: "span"}, "Hello World"));
     assi.setContentElement(p);
     assi.selectForNodes(assi.$('span').firstChild, 2, assi.$('span').firstChild, 3);
-    assertBackColorExecution("#ff0000|#ffffff", '<p><span id="span">He</span><span style="background-color: #ff0000; color: #ffffff">l</span><span>lo World</span></p>', "l");
-
+    assertBackColorExecution("#ff0000|#ffffff", '<p><span id="span">He<span style="background-color: #ff0000; color: #ffffff">l</span>lo World</span></p>', "l");
 });
 
 test("글상자 안에서 backColor실행시 글상자 배경색 속성은 글상자에 유지되어야 한다.", function() {

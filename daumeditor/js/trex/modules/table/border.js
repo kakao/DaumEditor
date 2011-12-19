@@ -10,8 +10,8 @@ Trex.Table.Border = Trex.Class.create({
 		this.wysiwygPanel = canvas.getPanel(Trex.Canvas.__WYSIWYG_MODE);
 		this.borderRange = "all";
 		this.borderColor = "#4174D9";
-		this.tableSelect = null;
-		this.selectedBoundary = null;
+		this.tableSelect = _NULL;
+		this.selectedBoundary = _NULL;
 		
 	},
 	
@@ -223,7 +223,7 @@ Trex.Table.Border = Trex.Class.create({
 		}
 	},
 	changeBorderColor: function(tdArr, value){
-		if (value != null) {
+		if (value != _NULL) {
 			this.borderColor = value;
 		}
 		this.changeBorderStyle(tdArr, "Color", this.borderColor);

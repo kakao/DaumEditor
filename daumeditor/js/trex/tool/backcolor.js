@@ -42,7 +42,7 @@ Trex.Tool.BackColor = Trex.Class.create({
 		__Identity: 'backcolor'
 	},
 	$extend: Trex.Tool,
-	$mixins: [Trex.I.CookieBaker, Trex.I.FontTool, Trex.I.MenuFontTool],
+	$mixins: [Trex.I.CookieBaker, Trex.I.FontTool, Trex.I.MenuFontTool, Trex.I.WrappingSpanFontTool],
     beforeOnInitialized: function(config) {
         this.useFavorite = !!config.useFavorite;
         if (this.useFavorite) {
@@ -96,10 +96,6 @@ Trex.Tool.BackColor = Trex.Class.create({
             return {backgroundColor: split[0], color: split[1]};
         }
         return {backgroundColor: data};
-    },
-    legacyModeExecutor: function(processor, newStyle) {
-        processor.execCommand(this.getQueryCommandName(), newStyle[this.getCssPropertyName()] || "transparent");
-        processor.execCommand("forecolor", newStyle.color || this.canvas.getStyleConfig('color'));
     },
     shouldRevert: function(data) {
         return data == _NULL;

@@ -22,7 +22,7 @@ Trex.Tool.ForeColor = Trex.Class.create({
 		__Identity: 'forecolor'
 	},
 	$extend: Trex.Tool,
-	$mixins: [Trex.I.CookieBaker, Trex.I.FontTool, Trex.I.MenuFontTool],
+	$mixins: [Trex.I.CookieBaker, Trex.I.FontTool, Trex.I.MenuFontTool, Trex.I.WrappingSpanFontTool],
     beforeOnInitialized: function(config) {
 		this.useFavorite = !!config.useFavorite;
 		if (this.useFavorite) {
@@ -40,14 +40,14 @@ Trex.Tool.ForeColor = Trex.Class.create({
     createMenu: function() {
         return new Trex.Menu.ColorPallete(this.menuCfg);
     },
-    onAfterHandler: function(color) {
-        this.syncButton(color);
+    onAfterHandler: function(data) {
+        this.syncButton(data);
         if (this.useFavorite) {
-            this.writeCookie(color);
+            this.writeCookie(data);
         }
     },
     getDefaultProperty: function() {
-        return this.config.defaultcolor;
+        return this.canvas.getStyleConfig().color;
     },
     getRelatedCssPropertyNames: function() {
         return [this.getCssPropertyName()];
@@ -58,8 +58,10 @@ Trex.Tool.ForeColor = Trex.Class.create({
     getQueryCommandName: function() {
         return "forecolor";
     },
-    legacyModeExecutor: function(processor, newStyle) {
-        processor.execCommand(this.getQueryCommandName(), newStyle[this.getCssPropertyName()] || this.canvas.getStyleConfig('color'));
+    computeNewStyle: function(data) {
+        var style = {};
+        style[this.getCssPropertyName()] = data || this.getDefaultProperty();
+        return style;
     },
     syncButton: function(color) {
         try {

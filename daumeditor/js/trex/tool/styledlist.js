@@ -237,7 +237,7 @@ Trex.Tool.StyledList.ListBuilder = Trex.Class.create({
         $tom.insertAt(self.listElement, insertionPoint);
         self.currentDepth = depth;
         self.listDepth = depth;
-        self.prepared = true;
+        self.prepared = _TRUE;
     },
     adjustDepth: function(node, depth) {
         var self = this;

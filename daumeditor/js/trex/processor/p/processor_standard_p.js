@@ -58,24 +58,4 @@ Trex.module("interrupt enter key action @ wysiwyg panel", function(editor, toolb
             }
         }
     });
-
-    canvas.observeKey({
-        ctrlKey: _FALSE,
-        altKey: _FALSE,
-        shiftKey: _TRUE,
-        keyCode: Trex.__KEY.ENTER
-    }, function(ev) {
-        if (!canvas.isWYSIWYG()) {
-            return;
-        }
-        var _processor = canvas.getProcessor();
-        try {
-            _processor.getTxSel().collapse(_FALSE);
-            _processor.controlEnterByLinebreak(ev);
-        } catch(e) {
-            if (e == $propagate) {
-                throw e;
-            }
-        }
-    });
 });

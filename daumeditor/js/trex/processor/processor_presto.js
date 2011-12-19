@@ -15,14 +15,5 @@ Trex.I.Processor.Presto = {
 	 */
 	controlEnterByParagraph: function(ev) {
 		throw $propagate;
-	},
-	/**
-	 * @private
-	 * @memberOf Trex.Canvas.ProcessorBR
-	 * Presto에서 newlinepolicy가 br일 경우 Enter Key 이벤트가 발생하면 실행한다. 
-	 * @param {Event} ev - Enter Key 이벤트
-	 */
-	controlEnterByLinebreak: function(ev) {
-		throw $propagate;
 	}
 };

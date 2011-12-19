@@ -35,8 +35,5 @@ Trex.Tool.Strike = Trex.Class.create({
     },
     isStyleApplied: function(node) {
         return $tx.getStyle(node, "textDecoration").include("line-through");
-    },
-    toggleFontStyle: function(status) {
-        return { textDecoration: status ? "-line-through" : "line-through" };
     }
 });

@@ -203,6 +203,6 @@ Trex.Table.Merge = Trex.Class.create({
 				return cell;
 			}
 		}
-		return null;
+		return _NULL;
 	}
 });

@@ -55,20 +55,3 @@ test("text가 있는 상태에서 focusOnTop", function() {
 //    equal(assi.getContent(), "<p></p><p>asdf</p>");
 //});
 
-// TODO processor_standard_p 의 SHIFT+ENTER 처리에 관한 테스트.
-// TODO webkit processor에서 동작하지 않고 있음, 로직 자체가 이상함 (...)
-//test("shift + enter 입력시 새로운 &lt;BR&gt; 생성", function() {
-//    assi.setContent("<P>asdf</P>");
-//    assi.focusOnTop();
-//
-//    var canvas = Editor.getCanvas();
-//    canvas.fireKeys({
-//        ctrlKey: false,
-//        altKey: false,
-//        shiftKey: true,
-//        keyCode: Trex.__KEY.ENTER
-//    });
-//
-//    equal(assi.getContent(), "<P><BR>asdf</P>");
-//});
-

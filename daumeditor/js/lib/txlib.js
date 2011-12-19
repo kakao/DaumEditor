@@ -562,7 +562,7 @@ $tx.extend($tx, /** @lends $tx */{
 		},
 	 
 		getCoordsTarget: function(element){
-			return this.getCoords(element, true);
+			return this.getCoords(element, _TRUE);
 		}
 	 
 	});
@@ -1156,7 +1156,7 @@ $tx.extend($tx, /** @lends $tx */{
 		 * 숫자형은 무조건 px로 사용 가능하다.
 		 */
 		isPx: function(){
-			return true;
+			return _TRUE;
 		},
 		/**
 		 * 문자열을 정수형으로 반환한다. 숫자가 아닌 문자열은 0

@@ -35,7 +35,7 @@ Trex.Tool.FontFamily = Trex.Class.create({
 		__Identity: 'fontfamily'
 	},
 	$extend: Trex.Tool,
-	$mixins: [Trex.I.CookieBaker, Trex.I.FontTool, Trex.I.MenuFontTool],
+	$mixins: [Trex.I.CookieBaker, Trex.I.FontTool, Trex.I.MenuFontTool, Trex.I.WrappingSpanFontTool],
     beforeOnInitialized: function(config) {
         function findAvailableFonts(config) {
             self.usedWebFonts = (($tx.msie && config.webfont && config.webfont.use) ? config.webfont.options : []);
@@ -141,13 +141,8 @@ Trex.Tool.FontFamily = Trex.Class.create({
     getQueryCommandName: function() {
         return "fontname";
     },
-    queryElementCurrentStyle: function(element) {
-        var processor = this.canvas.getProcessor();
-        if (element) {
-            return processor.queryStyle(element, this.getCssPropertyName()) || processor.queryAttr(element, 'face');
-        } else {
-            return _NULL;
-        }
+    getFontTagAttribute: function() {
+        return "face";
     },
     getTextByValue: function(value) {
         if (value.include(",")) {
@@ -165,25 +160,5 @@ Trex.Tool.FontFamily = Trex.Class.create({
                 return fontFamilyMap[this.getDefaultProperty()];
             }
         }
-    },
-    legacyModeExecutor: function(processor, newStyle) {
-        var nodes = processor.inlines(function(type) {
-            if (type === 'control') {
-                return 'img,hr,table';
-            }
-            return '%text,span,font';
-        });
-        nodes.each(function(node) { //clean tag
-            $tom.descendants(node, '%inline').each(function(inNode) {
-                $tom.applyAttributes(inNode, {
-                    style: { fontFamily: null },
-                    face: null
-                });
-            });
-        });
-        processor.apply(nodes, {
-            style: newStyle,
-            face: null
-        });
     }
 });

@@ -83,7 +83,15 @@ Trex.register("filter > mode change",
 			}
 			return txt;
 		}
-		
+
+        // FTDUEDTR-794 : html모드에서 줄바꿈되어 보이게
+        function addNewlineToSource(html){
+            return $tx.msie ? html : html.replace(/(\n*<p>)/gi, "\n$1").replace(/^\n/, '');
+        }
+        function removeNewlineFromSource(source){
+            return $tx.msie ? source : source.replace(/\n+(<p>)/gi, "$1");
+        }
+
 		var _docparser = editor.getDocParser();	
 		_docparser.registerFilter(
 			'filter/converting', {
@@ -123,16 +131,16 @@ Trex.register("filter > mode change",
 					return fromText(contents);
 				},
 				'source2text': function(contents){
-					return toText(contents);
+					return toText(removeNewlineFromSource(contents));
 				},
 				'source2html': function(contents){
-					return contents;
+					return removeNewlineFromSource(contents);
 				},
 				'html2text': function(contents){
 					return toText(contents);
 				},
 				'html2source': function(contents){
-					return contents;
+					return addNewlineToSource(contents);
 				}
 			}
 		);

@@ -15,6 +15,16 @@
         $: function(id) {
             return this.doc.getElementById(id);
         },
+        $$: function(selector, context) {
+            context = context || this.doc;
+            if (context.querySelectorAll) {
+                return context.querySelectorAll(selector);
+            } else if (typeof Sizzle == 'function') {
+                return Sizzle(selector, context);
+            } else {
+                throw new Error("not supported operation");
+            }
+        },
         byTag: function(tagName, index) {
             return this.doc.getElementsByTagName(tagName)[index || 0];
         },
@@ -326,40 +336,11 @@
 
     Assistant.LOREM = LOREM;
     EditorJSLoader.ready(function() {
-        if ($tx.msie) {
-            Editor.getCanvas().observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, createGlobalAssistant);
-        } else {
-            createGlobalAssistant();
-        }
-        function createGlobalAssistant() {
-            if (!window.assi) {
-                window.assi = new Assistant();
-            }
+        if (!window.assi) {
+            window.assi = new Assistant();
         }
     });
 })();
-
-// from Sizzle.js
-function getTextContent(elems) {
-    var ret = "", elem;
-    if (typeof elems != 'Array') {
-        elems = [elems];
-    }
-
-    for (var i = 0; elems[i]; i++) {
-        elem = elems[i];
-
-        // Get the text from text nodes and CDATA nodes
-        if (elem.nodeType === 3 || elem.nodeType === 4) {
-            ret += elem.nodeValue;
-
-            // Traverse everything else, except comment nodes
-        } else if (elem.nodeType !== 8) {
-            ret += getTextContent(elem.childNodes);
-        }
-    }
-    return ret;
-}
 
 /* Qunit Helper Methods */
 (function() {

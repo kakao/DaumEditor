@@ -27,12 +27,13 @@ test("fontsize queryCurrentStyle : 3 -> 12t", function() {
     equal(assi.getTool('fontsize').queryCurrentStyle(range), "12pt");
 });
 
-!($tx.os_win && $tx.safari) && test("collapsed에서 fontsize를 9pt -> 12pt로 변경하기", function() {
+test("collapsed에서 fontsize를 9pt -> 12pt로 변경하기", function() {
     var p = ax.p(ax.span({id: "span"}, "Hello World"));
     assi.setContentElement(p);
     var range = new goog.dom.Range.createFromNodes(assi.$('span').firstChild, 2, assi.$('span').firstChild, 2);
     range.select();
-    assertFontsizeExecution(range, "12pt", '<p><span id="span">He</span><span style="font-size: 12pt; "></span><span>llo World</span></p>', "");
+    var expected = '<P><SPAN id=span>He<SPAN style="font-size: 12pt"></SPAN>llo World</SPAN></P>';
+    assertFontsizeExecution(range, "12pt", expected, "");
 });
 
 test("selected에서 fontsize를 9pt -> 12pt로 변경하기", function() {
@@ -40,5 +41,6 @@ test("selected에서 fontsize를 9pt -> 12pt로 변경하기", function() {
     assi.setContentElement(p);
     var range = new goog.dom.Range.createFromNodes(assi.$('span').firstChild, 2, assi.$('span').firstChild, 3);
     range.select();
-    assertFontsizeExecution(range, "12pt", '<p><span id="span" style="font-weight:bold">He</span><span style="font-size: 12pt; font-weight:bold">l</span><span style="font-weight:bold">lo World</span></p>', "l");
+    var expected = '<P><SPAN id=span style="font-weight: bold">He<SPAN style="font-size: 12pt">l</SPAN>lo World</SPAN></P>';
+    assertFontsizeExecution(range, "12pt", expected, "l");
 });

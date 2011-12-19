@@ -15,6 +15,7 @@ var CORE_FILES = [
     "lib/xgetty.js",
     "lib/dateformat.js",
     "lib/swfobject.js",
+    "lib/font_css_property.js",
     "lib/htmlparser.js",
     /** trex engine & config */
     "trex/eval.js",
@@ -91,6 +92,7 @@ var CORE_FILES = [
     "trex/attachment.js",
     "trex/attachbox.js",
     "trex/attachbox/attachbox_ui.js",
+    "trex/attachbox/filecapacity.js",
     "trex/attacher.js",
 
     /** embeder */

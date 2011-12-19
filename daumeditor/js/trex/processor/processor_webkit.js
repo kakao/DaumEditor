@@ -62,39 +62,6 @@ Trex.I.Processor.Webkit = {
         self.moveCaretTo(newLi);
     },
 	/**
-	 * @private
-	 * Webkit에서 newlinepolicy가 br일 경우 Enter Key 이벤트가 발생하면 실행한다. 
-	 * @param {Event} ev - Enter Key 이벤트
-	 */
-	controlEnterByLinebreak: function(ev) {
-		var _processor = this;
-		var _rng = this.getRange(_FALSE);
-		var _parent = _rng.endContainer.parentNode;
-		
-		if (_parent && (_parent.tagName == "P" || _parent.tagName == "DIV" || _parent.tagName == "BODY" || _parent.tagName == "BLOCKQUOTE")) {
-			
-			if(_parent.tagName == "BLOCKQUOTE" || $tx.hasClassName(_parent, "txc-textbox") || $tx.hasClassName(_parent, "txc-moreless")){
-				$tx.stop(ev);
-				var _brNode = _processor.win.br();
-				_rng.insertNode(_brNode);
-				_rng.selectNode(_brNode);
-				_rng.collapse(_FALSE);	
-				_brNode = _processor.win.br();
-				_rng.insertNode(_brNode);
-				_rng.selectNode(_brNode);
-				_rng.collapse(_FALSE);	
-				
-				var _rng2 = _processor.getRange(_FALSE);
-				_rng2.selectNodeContents(_brNode.nextSibling);
-				
-				var _sel = _processor.getSel();
-				_sel.removeAllRanges();
-				_sel.addRange(_rng2);
-				_sel.collapseToStart();
-			}
-		}	
-	},
-	/**
 	 * 선택된 영역의 native queryCommandState 값을 얻어온다.
 	 * @param {String} command - 커맨드 명
 	 * @returns {Boolean} - 해당 영역이 커맨드 상태인지 여부 

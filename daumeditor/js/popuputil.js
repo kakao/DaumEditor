@@ -1,18 +1,3 @@
-var urlParams = {};
-(function () {
-    var e,
-        a = /\+/g,  // Regex for replacing addition symbol with a space
-        r = /([^&=]+)=?([^&]*)/g,
-        d = function (s) { return decodeURIComponent(s.replace(a, " ")); },
-        q = window.location.search.substring(1);
-
-    while (e = r.exec(q))
-       urlParams[d(e[1])] = d(e[2]);
-})();
-if (urlParams.xssDomain) {
-    document.domain = urlParams.xssDomain;
-}
-
 // Height auto resizing
 _WIN.autoResizeHeight = function ( fixedWidth, heightOffset) {
     var win = window.top;
@@ -75,21 +60,21 @@ _WIN.Querystring = function (query) {
 	
 	this.params = new Object();
 	this.get = function(key, defaultValue) {
-		if (defaultValue == null) {
-			defaultValue = null;
+		if (defaultValue == _NULL) {
+			defaultValue = _NULL;
 		}
 		var value = this.params[key];
-		if (value == null) {
+		if (value == _NULL) {
 			value = defaultValue;
 		}
 		return value;
 	};
 	this.getUTF8 = function(key, defaultValue) {
-		if (defaultValue == null) {
-			defaultValue = null;
+		if (defaultValue == _NULL) {
+			defaultValue = _NULL;
 		}
 		var value = unescape(this.params[key]);
-		if (value == null) {
+		if (value == _NULL) {
 			value = defaultValue;
 		}
 	return value;
@@ -182,14 +167,14 @@ _WIN.completeAttach = function () {}; //For Theme
 
 _WIN.existEntry = function (attacher) {
 	if(!attacher) {
-		return false; 
+		return _FALSE;
 	}
 	return attacher.existEntry();
 };
 
 _WIN.getFirstEntryData = function (attacher) {
 	if(!attacher) {
-		return false; 
+		return _FALSE;
 	}
 	return attacher.getFirstEntryData();
 };
@@ -200,13 +185,13 @@ _WIN.getAttrOfElement = function ( elementStr, attrName ) {
 	if ( result) {
 		return result[1];
 	}else{
-		return null;
+		return _NULL;
 	}
 };
 _WIN.getParamValOfObjectTag = function ( objectStr, paramName ) {
 	var regExp = new RegExp("<param([^>]*)name=['\"]"+paramName+"['\"]([^>]*)>","gi");
 	var result = regExp.exec(objectStr, "gi");
-	var value = null;
+	var value = _NULL;
 	
 	if ( result ) {
 		regExp = new RegExp("value=['\"]([^>'\"]*)['\"]", "gi");
@@ -216,7 +201,7 @@ _WIN.getParamValOfObjectTag = function ( objectStr, paramName ) {
 		}
 	}
 	
-	return null;
+	return _NULL;
 };
 _WIN.PopupUtil = {
 	getOpener : function() {
@@ -285,5 +270,5 @@ _WIN.stripBracket = function (text) {
 _WIN.getFieldJson = function (name, value) {
 	if (value)
 		return {name: name, value: value.stripTags()};
-	return null;
+	return _NULL;
 };

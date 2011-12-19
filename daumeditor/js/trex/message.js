@@ -1,33 +1,35 @@
+var TrexMessage = function () {
+    var __MESSAGES = {};
 
-var TrexMessage = function() {
-	var __MESSAGES = {};
-	
-	var _trexMessage = {
-		getMsg: function(msgid){
-			var _message = __MESSAGES[msgid] || "";
-			
-			if (_message.indexOf("#iconpath") > -1) {
-				_message = TrexConfig.getIconPath(_message);
-			}
-			if (_message.indexOf("#decopath") > -1) {
-				_message = TrexConfig.getDecoPath(_message);
-			}
-			return _message;
-		},
-		addMsg: function(messages) {
-			$tx.deepcopy(__MESSAGES, messages);
-		},
-		printAll: function() {
-			var _cc = console;
-			for(var _name in __MESSAGES) {
-				_cc.log(_name + '=' + __MESSAGES[_name]);
-			}
-		}
-	};
-	
-	return _trexMessage;
+    function decorateIconPath(message) {
+        return (message.indexOf("#iconpath") > -1) ?
+            TrexConfig.getIconPath(message) : message;
+    }
+
+    function decorateDecoPath(message) {
+        return (message.indexOf("#decopath") > -1) ?
+            TrexConfig.getDecoPath(message) : message;
+    }
+
+    return {
+        getMsg: function (msgid) {
+            var message = __MESSAGES[msgid] || "";
+            return decorateIconPath(decorateDecoPath(message));
+        },
+
+        addMsg: function (messages) {
+            $tx.deepcopy(__MESSAGES, messages);
+        },
+
+        printAll: function () {
+            for (var name in __MESSAGES) {
+                if (__MESSAGES.hasOwnProperty(name)) {
+                    console.log(name + '=' + __MESSAGES[name]);
+                }
+            }
+        }
+    };
 }();
 
 _WIN.TXMSG = TrexMessage.getMsg;
 _WIN.TrexMessage = TrexMessage;
-

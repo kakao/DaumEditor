@@ -41,9 +41,6 @@ Trex.register("new attachers",
 		for(var i in Trex.Attacher) {
 			var _name = Trex.Attacher[i]['__Identity'];
 			if(_name){
-				if(!toolbar.tools[_name]){
-					console.log(["No tool '",_name,"', but Attacher '", _name, "' is initialized."].join(""));
-				}
 				_attachers[_name] = new Trex.Attacher[i](editor, _attachBox, config); 
 			}
 		}

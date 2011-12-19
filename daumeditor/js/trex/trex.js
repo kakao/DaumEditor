@@ -6,7 +6,7 @@
 /** @namespace */
 var Trex = {
 	__PAGE_PATH: "#host/pages/",
-	__WORD_JOINER: ($tx.safari && $tx.os_win)? "": "\ufeff",
+	__WORD_JOINER: "\ufeff",
 	__WORD_JOINER_REGEXP: /\ufeff/g,
 	__KEY: {
 		ENTER: '13',

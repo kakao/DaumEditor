@@ -41,15 +41,5 @@ Trex.I.Processor.Gecko = {
 		}
 		this.stuffNode(_dvNode);
 		this.moveCaretTo(_dvNode);
-	},
-	/**
-	 * @private
-	 * @memberOf Trex.Canvas.ProcessorBR
-	 * Gecko에서 newlinepolicy가 br일 경우 Enter Key 이벤트가 발생하면 실행한다. 
-	 * @param {Event} ev - Enter Key 이벤트
-	 */
-	controlEnterByLinebreak: function() {
-		throw $propagate;
 	}
 };
-	

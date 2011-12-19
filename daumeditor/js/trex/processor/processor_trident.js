@@ -43,18 +43,6 @@ Trex.I.Processor.Trident = {
 			});
 			this.moveCaretTo(_dvNode);
 		}
-	},
-	/**
-	 * @private
-	 * Trident에서 newlinepolicy가 br일 경우 Enter Key 이벤트가 발생하면 실행한다.
-	 */
-	controlEnterByLinebreak: function(){
-		if (!!this.findNode('blockquote,div,p,strong,u,em,strike,span,font,td,body,li')) { 
-			var _rng = this.getTxSel().getRange(); 
-			_rng.pasteHTML("<br />\n");
-			_rng.collapse(_FALSE);
-			_rng.select();
-		}
 	}
 };
 

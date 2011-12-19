@@ -1,7 +1,7 @@
-
+// TODO change message!
 TrexMessage.addMsg({
-	'@canvas.unload.message': "지금까지 작성된 글은 안전하게 자동 저장되어, 회원님이 다시 글쓰기 하실 때 불러올 수 있습니다.",
-	'@canvas.unload.message.at.modify': "지금까지 작성된 글은 안전하게 자동 저장되어, 회원님이 다시 수정하실 때 불러올 수있습니다."
+	'@canvas.unload.message': "작성하신 내용이 저장되지 않았습니다. 페이지를 떠나시겠습니까?",
+	'@canvas.unload.message.at.modify': "작성하신 내용이 저장되지 않았습니다. 페이지를 떠나시겠습니까?"
 });
 
 Trex.install("editor.isDisableUnloadHandler & editor.setDisableUnloadHandler", function(editor) {
