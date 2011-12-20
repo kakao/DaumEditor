@@ -16,20 +16,6 @@ function exists(file) {
     return f.exists();
 }
 
-function readVersion() {
-    importPackage(java.util);
-    var pro = new Properties();
-    pro.load(new FileInputStream('build/version.properties'));
-    var versions = [
-        pro.getProperty('version.major.number'),
-        pro.getProperty('version.minor.number'),
-        pro.getProperty('version.patch.number')
-    ];
-    return versions.join(".");
-}
-
-
-var EDITOR_PROJECT_NAME = "__UNDEFINED__";
 var document = {
     write: function() {
     }
@@ -51,7 +37,8 @@ var i;
 
 var outputFilename = this.arguments[0],
     srcDir = this.arguments[1],
-    seedFile = this.arguments[2];
+    seedFile = this.arguments[2],
+    editor_version = this.arguments[3];
 
 var outputWriter = new FileWriter(outputFilename);
 
@@ -102,7 +89,7 @@ function _importScript(filename) {
 }
 
 
-var DE_PREFIX = "../../../DaumEditor/daumeditor/js/"
+var DE_PREFIX = "../../../DaumEditor/daumeditor/js/";
 
 // 1. write trex/eval
 _importScript(DE_PREFIX + "trex/eval.js");
@@ -138,7 +125,7 @@ if (typeof SERVICE_FILES === "object") {
     }
 }
 
-outputWriter.write('if (typeof Editor !== "undefined") Editor.version = "' + readVersion() + '";');
+outputWriter.write('if (typeof Editor !== "undefined") Editor.version = "' + editor_version + '";');
 
 // 7. write footer
 _importScript(DE_PREFIX + "trex/footer.js");
@@ -146,4 +133,4 @@ _importScript(DE_PREFIX + "trex/footer.js");
 // 8. close local scope
 outputWriter.write('})();');
 outputWriter.close();
-print(count + " js files has been wrote");
+print(count + " js files has been written");
