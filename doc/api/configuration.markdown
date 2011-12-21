@@ -24,9 +24,64 @@ _TODO introduce `EditorConfigBuilder`_
 
 ---
 
+### Canvas
+
+Configure WYSIWYG area
+
+#### showGuideArea
+
+* Key: `config.canvas.showGuideArea`
+* Type: `boolean`
+* Defaults: `true`
+
+Show or hide content width guide on canvas
+
+#### readonly
+
+* Key: `config.canvas.readonly`
+* Type: `boolean`
+* Defaults: `false`
+
+Disable editing canvas
+
+#### styles
+
+* Key: `config.canvas.styles`
+* Type: `object`
+* Properties:
+    * `color`: Font color
+    * `fontFamily`
+    * `fontSize`
+    * `backgroundColor`
+    * `lineHeight`
+    * `padding`
+* Defaults: [See trex/canvas.js](https://github.com/daumeditor/DaumEditor/blob/development/daumeditor/js/trex/canvas.js#L17)
+
+Set styles of canvas area
+
+
+    {
+        canvas: {
+            styles: {
+                color: "#123456",
+                fontFamily: "Verdana",
+                fontSize: "10pt",
+                backgroundColor: "#fff",
+                lineHeight: "1.5",
+                padding: "8px"
+            },
+            showGuideArea: false
+        }
+    }
+
+
+- - -
+
 ### Sidebar
 
 #### Attachbox
+
+##### show
 
 * Key: `config.sidebar.attachbox.show`
 * Type: `boolean`
@@ -42,6 +97,7 @@ Set the Attachbox's Visibility :
         }
     }
 
+- - -
 
 ### Misc.
 
