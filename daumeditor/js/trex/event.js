@@ -153,6 +153,13 @@
 		 */
 		__ON_SUBMIT: "editor.submit",
 		/** 
+		 * 에디터 래퍼의 너비가 변경된 후 발생하는 사용자 정의 이벤트
+		 * @example
+		 * 	canvas.observeJob(Trex.Ev.__CANVAS_WRAP_WIDTH_CHANGE, function() {
+		 *	});
+		 */
+		__CANVAS_WRAP_WIDTH_CHANGE: 'canvas.wrap.width.change',
+		/** 
 		 * 에디터의 높이가 변경된 후 발생하는 사용자 정의 이벤트
 		 * @example
 		 * 	canvas.observeJob(Trex.Ev.__CANVAS_HEIGHT_CHANGE, function(height) {
