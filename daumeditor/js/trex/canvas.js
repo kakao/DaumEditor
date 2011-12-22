@@ -160,10 +160,13 @@
                     return _config.styles;
                 }
             };
-
-            var _sizeConfig = TrexConfig.get('size', rootConfig);
-            _sizeConfig.wrapWidth = this.getContainerWidth(); // TODO FTDUEDTR-1214
-            if(!_sizeConfig.contentWidth) {
+			
+			var _sizeConfig = TrexConfig.get('size', rootConfig);
+			this.measureWrapWidth = function() {
+                _sizeConfig.wrapWidth = this.getContainerWidth(); // TODO FTDUEDTR-1214
+            };
+			this.measureWrapWidth();
+	        if(!_sizeConfig.contentWidth) {
                 _sizeConfig.contentWidth = _sizeConfig.wrapWidth;
             }
             _sizeConfig.contentPadding = _config.styles.padding.parsePx(); //15

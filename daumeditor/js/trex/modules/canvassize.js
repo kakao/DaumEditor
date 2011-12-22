@@ -13,12 +13,6 @@ Trex.module("make padding area inside Canvas with editor width",
         }
         _elWysiwyg = _wysiwygPanel.el;
 
-        var _sizeConfig = canvas.getSizeConfig();
-        var __EditorMaxWidth = _sizeConfig.wrapWidth.toNumber();
-        var __CanvasWidth = _sizeConfig.contentWidth.toNumber();
-        var __ContentPadding = _sizeConfig.contentPadding.toNumber();
-        var __CanvasTextColor = canvas.getStyleConfig().color;
-
         var __HolderHorPadding = 5;
         var __HolderVerPadding = 5;
         var __ScrollWidth = 16;
@@ -30,6 +24,22 @@ Trex.module("make padding area inside Canvas with editor width",
         var _elRightSpaceChild;
 
         var _wysiwygDoc;
+		
+		var _sizeConfig;
+        var __EditorMaxWidth;
+        var __CanvasWidth;
+        var __ContentPadding;
+        var __CanvasTextColor;
+
+		function _calSizeConfig() {
+			canvas.measureWrapWidth();
+			_sizeConfig = canvas.getSizeConfig();
+			__EditorMaxWidth = _sizeConfig.wrapWidth.toNumber();
+	        __CanvasWidth = _sizeConfig.contentWidth.toNumber();
+	        __ContentPadding = _sizeConfig.contentPadding.toNumber();
+	        __CanvasTextColor = canvas.getStyleConfig().color;
+		}
+		_calSizeConfig();
 
         //iframe 패딩과 패딩영역의 사이즈를 계산한다.
         function _calPadding(skinStyle) {
@@ -225,7 +235,6 @@ Trex.module("make padding area inside Canvas with editor width",
             _elRightSpace.style.height = height;
         });
 
-
         var _adjustPanelPandding = function(){
             _wysiwygPanel.addStyle(_calPadding());
             var _guideAreaSizes = _calGuideArea();
@@ -260,6 +269,13 @@ Trex.module("make padding area inside Canvas with editor width",
                 });
             }
         };
+		
+		//에디터 래퍼의 너비가 변하였을 경우 패딩영역의 위치를 조절한다.
+        canvas.observeJob(Trex.Ev.__CANVAS_WRAP_WIDTH_CHANGE, function(height) {
+            _calSizeConfig();
+            _adjustPanelPandding();
+        });
+		
         canvas.observeJob('canvas.normalscreen.change', function(){
             __EditorMaxWidth = _sizeConfig.wrapWidth;
             _adjustPanelPandding();
@@ -289,4 +305,3 @@ Trex.module("make padding area inside Canvas with editor width",
         }
     }
 );
-
