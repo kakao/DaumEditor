@@ -76,6 +76,13 @@
 		 */
 		__CANVAS_PANEL_DBLCLICK: 'canvas.panel.dbclick',
 		/** 
+		 * wysiwyg 영역에서 발생하는 붙여넣기 이벤트<br/>
+		 * @example
+		 * 	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_PASTE, function() {
+		 *	});
+		 */
+		__CANVAS_PANEL_PASTE: 'canvas.panel.paste',
+		/** 
 		 * wysiwyg 영역에서 발생하는 스크롤 변경 이벤트<br/>
 		 * 이 이벤트는 wysiwyg 영역의 스크롤 높이가 변경되거나 위치가 변경될 경우 발생한다.
 		 * @example
