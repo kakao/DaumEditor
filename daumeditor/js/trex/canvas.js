@@ -683,7 +683,7 @@
         },
 		
 		onPaste: function() {
-			this.fireJobs(Trex.Ev.__CANVAS_PANEL_PASTE, event);
+			this.fireJobs(Trex.Ev.__CANVAS_PANEL_PASTE);
 		},
 
         // TODO rename query status 라는 말 말고 다른 말 없을까?
