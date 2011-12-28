@@ -1,15 +1,19 @@
 ## Configuration
 
-The configuration object is just plain old javascript object to customize your editor instance. You can set the values on your own before initializing a editor, and then pass it to the editor constructor.
-
 ### Configuration Object
 
-The configuration object is just plain old javascript object to customize your editor instance. You can set the values on your own before initializing a editor, and then pass it to the editor constructor.
+The configuration object is just plain old javascript object to customize your editor instance.
+You can set the values on your own before initializing a editor, and then pass it to the editor constructor.
 
 Usage:
 
     var config = {
        // set the values in javascript object literal
+       txHost: "http://your.domain.com",
+       txPath: "/editor/path",
+       wrapper: "wrapper_element_id",
+       form: "form_name",
+       .......
     };
 
     EditorJSLoader.ready(function(Editor) {
@@ -22,7 +26,43 @@ Usage:
 
 _TODO introduce `EditorConfigBuilder`_
 
----
+- - -
+
+### Required Fields
+
+#### txHost
+
+* __Required__
+* Key: `config.txHost`
+* Type: `string`
+
+
+
+#### txPath
+
+* __Required__
+* Key: `config.txPath`
+* Type: `string`
+
+
+
+#### wrapper
+
+* __Required__
+* Key: `config.wrapper`
+* Type: `string`
+
+The id of an element which contains DaumEditor.
+
+#### form
+
+* __Required__
+* Key: `config.form`
+* Type: `string`
+
+The name of a form which is to be sumbitted. Editor.save() will submit this form.
+
+- - -
 
 ### Canvas
 
@@ -74,6 +114,41 @@ Set styles of canvas area
         }
     }
 
+- - -
+
+### Size
+
+#### contentWidth
+
+* Key: `config.size.contentWidth`
+* Type: `integer`
+* Default: auto-computed value
+
+
+
+- - -
+
+### Resizer
+
+#### minHeight
+
+* Key: `config.resizer.minHeight`
+* Type: `integer`
+* Default: `200`
+
+
+
+- - -
+
+### Events
+
+#### preventUnload
+
+* Key: `config.events.preventUnload`
+* Type: `booloean`
+* Default: `true`
+
+
 
 - - -
 
@@ -121,6 +196,14 @@ Set total maximum bytes of all attachments
 - - -
 
 ### Misc.
+
+#### initializedId
+
+* Key: `config.initializedId`
+* Type: `string`
+* Defaults: empty string
+
+
 
 #### txIconPath
 
