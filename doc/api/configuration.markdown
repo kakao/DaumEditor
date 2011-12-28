@@ -87,7 +87,7 @@ Set styles of canvas area
 * Type: `boolean`
 * Defaults: `false`
 
-Set the Attachbox's Visibility :
+Set the Attachbox's Visibility
 
     {
         sidebar: {
@@ -96,6 +96,27 @@ Set the Attachbox's Visibility :
             }
         }
     }
+
+#### Capacity
+
+##### maximum
+
+* Key: `config.sidebar.capacity.maximum`
+* Type: `Number`
+* Defaults: `3145728` (3 MB)
+
+Set total maximum bytes of all attachments
+
+    {
+        sidebar: {
+            capacity: {
+                maximum: 10 * 1024 * 1024 // 10 MB
+            }
+        }
+    }
+
+
+
 
 - - -
 
