@@ -131,6 +131,7 @@
                     <arg value="${build.target.css.merged.dir}/@{module}.css"/>
                     <arg value="${src.editor.css.dir}"/>
                     <arg value="@{module}.css"/>
+                    <arg value="${build.link.image.url}"/>
                 </java>
             </sequential>
         </for>
