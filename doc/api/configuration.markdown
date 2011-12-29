@@ -209,7 +209,7 @@ Set total maximum bytes of all attachments
 
 * Key: `config.txIconPath`
 * Type: `string`
-* Defaults: `none`
+* Defaults: `#txHost#txPath/images/icon/editor/`
 
 Base path of the editor image (e.g. toolbar icon) directory.
 URL for the `daumeditor/images/icon/` directory
@@ -219,7 +219,7 @@ URL for the `daumeditor/images/icon/` directory
 
 * Key: `config.txDecoPath`
 * Type: `string`
-* Defaults: `none`
+* Defaults: `#txHost#txPath/images/deco/contents/`
 
 Base path of the editor contents image (e.g. emoticon) directory.
 URL for the `daumeditor/images/deco/` directory
