@@ -124,7 +124,9 @@
             this.initConfig(rootConfig);
             this.createPanel();
             this.history = new Trex.History(this, _config);
-
+            this.setCanvasSize({
+                height: _config.initHeight
+            });
             StopWatch.lap("Finished canvas.init");
         },
         initConfig: function(rootConfig) {
