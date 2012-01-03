@@ -16,6 +16,7 @@
             this.translateDocumentEventToCanvas('mousedown', 'onMouseDown');
             this.translateDocumentEventToCanvas('mouseup', 'onMouseUp');
             this.translateWindowEventToCanvas('scroll', 'onScroll');
+			this.translateBodyEventToCanvas('paste', 'onPaste');
 
             this.triggerQueryStatusWhenTenConsecutiveKeyPressesDetected();
         },
@@ -27,7 +28,11 @@
         translateWindowEventToCanvas: function(eventName, canvasMethodName) {
             this.translateEventToCanvas(this.win, eventName, canvasMethodName);
         },
-
+		
+		translateBodyEventToCanvas: function(eventName, canvasMethodName) {
+            this.translateEventToCanvas(this.doc.body, eventName, canvasMethodName);
+        },
+		
         translateEventToCanvas: function(element, eventName, canvasMethodName) {
             var canvas = this.canvas;
             $tx.observe(element, eventName, function(e) {

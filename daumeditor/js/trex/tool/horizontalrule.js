@@ -44,9 +44,9 @@ TrexConfig.addTool(
 	function(root){
 		var _config = TrexConfig.getTool("horizontalrule", root);
 		_config.options.each(function(option) {
-			option.image = TrexConfig.getIconPath(option.image, "horizontalrule"); 
+			option.image = TrexConfig.getIconPath(option.image);
 			if(option.html) {
-				option.html = TrexConfig.getDecoPath(option.html, "horizontalrule");
+				option.html = TrexConfig.getDecoPath(option.html);
 			}
 		});
 	}

@@ -1,16 +1,8 @@
 <?xml version="1.0"?>
 <project name="DaumEditor" basedir="." default="buildall">
     <property file="build.properties"/>
-    <taskdef resource="net/sf/antcontrib/antlib.xml">
-        <classpath>
-            <pathelement location="${build.lib.antcontrib}"/>
-        </classpath>
-    </taskdef>
-    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
-        <classpath>
-            <pathelement location="${build.lib.antcontrib}"/>
-        </classpath>
-    </taskdef>
+    <taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${build.lib.antcontrib}" />
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${build.lib.antcontrib}"/>
     <!-- main tasks ====================================================== -->
     <target name="buildall" description="clean and build all" depends="clean, packaging">
 	</target>
@@ -42,7 +34,7 @@
         </zip>
     </target>
     <target name="build" description="build artifacts" depends="build-css,build-js"/>
-    <target name="deploy" depends="packaging, load_version_information" description="upload the artifact on googlecode hosting">
+    <target name="deploy" depends="get_version,packaging" description="upload the artifact on googlecode hosting">
         <trycatch>
             <try>
                 <property file="${user.home}/daumeditor.credentials.properties"/>
@@ -68,7 +60,7 @@
         <mkdir dir="${build.target.js.merged.dir}"/>
         <mkdir dir="${build.target.js.escaped.dir}"/>
     </target>
-    <target name="merge_javascripts">
+    <target name="merge_javascripts" depends="get_version">
         <for list="${js.list}" param="module">
             <sequential>
                 <echo message="Merge @{module}.js ..."/>
@@ -77,6 +69,7 @@
                     <arg value="${build.target.js.merged.dir}/@{module}.js"/>
                     <arg value="${src.editor.js.dir}"/>
                     <arg value="@{module}.js"/>
+                    <arg value="${editor.version}"/>
                 </java>
             </sequential>
         </for>
@@ -102,6 +95,7 @@
                 <fileset dir="${build.target.js.escaped.dir}" includes="**/*.js"/>
             </path>
             <sequential>
+                <property name="target_path" value="dummy"/>
                 <var name="target_path" unset="true"/>
                 <var name="target_dir" unset="true"/>
                 <propertyregex property="target_path" input="@{file}" regexp="(/|\\)escaped" replace=""/>
@@ -137,6 +131,7 @@
                     <arg value="${build.target.css.merged.dir}/@{module}.css"/>
                     <arg value="${src.editor.css.dir}"/>
                     <arg value="@{module}.css"/>
+                    <arg value="${build.link.image.url}"/>
                 </java>
             </sequential>
         </for>
@@ -165,21 +160,12 @@
         </for>
     </target>
     <!-- versioning tasks ================================================= -->
-    <target name="version_up_patch" description="update version. increase 'patch' sequence number.">
-        <propertyfile file="${build.version.properties}">
-            <entry key="version.patch.number" type="int" operation="+" value="1"/>
-        </propertyfile>
-    </target>
-    <target name="version_up_minor" description="update version. increase 'minor' sequence number and reset 'patch' sequence number.">
-        <propertyfile file="${build.version.properties}">
-            <entry key="version.minor.number" type="int" operation="+" value="1"/>
-            <entry key="version.patch.number" value="0"/>
-        </propertyfile>
-    </target>
-    <target name="load_version_information">
-        <property file="${build.version.properties}"/>
-        <property name="editor.version" value="${version.major.number}.${version.minor.number}.${version.patch.number}"/>
-        <echo message="version information loaded : ${editor.version}"/>
+    <target name="get_version">
+        <exec executable="git" outputproperty="editor.version">
+            <arg value="describe"/>
+            <arg value="--tags"/>
+        </exec>
+        <echo message="Editor Version: ${editor.version}"/>
     </target>
     <!-- documentation tasks ================================================= -->
     <target name="doc" depends="prepare_doc">

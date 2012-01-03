@@ -124,7 +124,9 @@
             this.initConfig(rootConfig);
             this.createPanel();
             this.history = new Trex.History(this, _config);
-
+            this.setCanvasSize({
+                height: _config.initHeight
+            });
             StopWatch.lap("Finished canvas.init");
         },
         initConfig: function(rootConfig) {
@@ -160,10 +162,13 @@
                     return _config.styles;
                 }
             };
-
-            var _sizeConfig = TrexConfig.get('size', rootConfig);
-            _sizeConfig.wrapWidth = this.getContainerWidth(); // TODO FTDUEDTR-1214
-            if(!_sizeConfig.contentWidth) {
+			
+			var _sizeConfig = TrexConfig.get('size', rootConfig);
+			this.measureWrapWidth = function() {
+                _sizeConfig.wrapWidth = this.getContainerWidth(); // TODO FTDUEDTR-1214
+            };
+			this.measureWrapWidth();
+	        if(!_sizeConfig.contentWidth) {
                 _sizeConfig.contentWidth = _sizeConfig.wrapWidth;
             }
             _sizeConfig.contentPadding = _config.styles.padding.parsePx(); //15
@@ -678,6 +683,10 @@
         onScroll: function(event) {
             this.fireJobs(Trex.Ev.__CANVAS_PANEL_SCROLLING, event);
         },
+		
+		onPaste: function() {
+			this.fireJobs(Trex.Ev.__CANVAS_PANEL_PASTE);
+		},
 
         // TODO rename query status 라는 말 말고 다른 말 없을까?
         triggerQueryStatus: function() {

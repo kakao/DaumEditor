@@ -72,7 +72,9 @@ var TrexConfig = function() {
 		dinoHost: "http://editor.daum.net",
 		cdnHost: "http://s1.daumcdn.net/editor",
 		wrapper: "tx_trex_container", 
-		form: 'tx_editor_form', 
+		form: 'tx_editor_form',
+        txIconPath: "#host#path/images/icon/editor/",
+        txDecoPath: "#host#path/images/deco/contents/",
 		params: [],
 		events: {
 			preventUnload: _TRUE,
@@ -89,9 +91,6 @@ var TrexConfig = function() {
 		},
 		plugin: { }
 	};
-	
-	var __ICON_IMAGES_PATH = "http://i1.daumcdn.net/icon/editor/";
-	var __DECO_IMAGES_PATH = "http://i1.daumcdn.net/deco/contents/";
 	
     var _createAnchors = function() {
         return {
@@ -179,14 +178,8 @@ var TrexConfig = function() {
 		 * @param {String} subpath - 하위 디렉터리 (optional)
 		 * @returns {String} 변환된 컨텐츠 삽입용 이미지url
 		 */
-		getDecoPath: function(url, subpath) {
-			if (__TREX_CONFIGURE["txDecoPath"]) {
-				url = url.replace(/#decopath\/?/, __TREX_CONFIGURE["txDecoPath"]);
-			} else {
-				subpath = subpath? subpath + "/": "";
-				url = url.replace(/#decopath\/?/, __DECO_IMAGES_PATH + subpath);
-			}	
-			return url;
+		getDecoPath: function(url) {
+			return url.replace(/#decopath\/?/, this.getUrl(__TREX_CONFIGURE["txDecoPath"]));
 		},
 		/**
 		 * 에디터에서 사용되는 이미지의 상위 url을 넘겨준다. <br/>
@@ -196,14 +189,8 @@ var TrexConfig = function() {
 		 * @param {String} subpath - 하위 디렉터리 (optional)
 		 * @returns {String} 에디터에서 사용되는 이미지url
 		 */
-		getIconPath: function(url, subpath) {
-			if (__TREX_CONFIGURE["txIconPath"]) {
-				url = url.replace(/#iconpath\/?/, __TREX_CONFIGURE["txIconPath"]);
-			} else {
-				subpath = subpath? subpath + "/": "";
-				url = url.replace(/#iconpath\/?/, __ICON_IMAGES_PATH + subpath);
-			}	
-			return url;
+		getIconPath: function(url) {
+			return url.replace(/#iconpath\/?/, this.getUrl(__TREX_CONFIGURE["txIconPath"]));
 		},
 		/**
 		 * 에디터 로딩이 완료되면 설정값을 셋업시키는 함수로

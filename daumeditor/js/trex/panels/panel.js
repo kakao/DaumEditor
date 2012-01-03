@@ -31,7 +31,7 @@ Trex.Canvas.BasedPanel = Trex.Class.draft(/** @lends Trex.Canvas.BasedPanel.prot
 		 */
 		this.getName = function() { return _name; };
 		
-		this.lastHeight = config.initHeight? config.initHeight.toPx() : "400px";
+		this.lastHeight = _NULL;
 	},
 	/**
 	 * 컨텐츠 영역에 포커스를 준다.
