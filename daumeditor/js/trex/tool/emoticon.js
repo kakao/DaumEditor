@@ -53,7 +53,7 @@
             var emoticonConfig = TrexConfig.getTool("emoticon", root);
             emoticonConfig.matrices.each(function (matrix) {
                 for (var i = 0, len = matrix.options.length; i < len; i++) {
-                    matrix.options[i] = TrexConfig.getDecoPath(matrix.options[i], "emoticon");
+                    matrix.options[i] = TrexConfig.getDecoPath(matrix.options[i]);
                 }
             });
         }
