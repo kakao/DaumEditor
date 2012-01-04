@@ -15,11 +15,10 @@
                 this.isJsHolding = _TRUE;
                 try {
                     var _queue = this.jsQueue.shift();
-					//txEval(_queue['script'], this.win);
-					//CHECK:: src 없는 iframe 에 document.write 를 
-					//통해 위지윅을 만들면, IE8 이하에서는 win.eval 이 없다. 
-					if (this.win.eval) {
-						this.win.eval(_queue['script']);
+					//CHECK:: src 없는 iframe 에 document.write 를
+					//통해 위지윅을 만들면, IE8 이하에서는 win.eval 이 없다..
+					if (this.win['eval']) {
+                        txEval(_queue['script'], this.win);
 					} else {
 						this.win.document.getElementById("txScriptForEval").text = _queue['script'];
 					}
