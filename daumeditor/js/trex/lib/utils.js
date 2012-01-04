@@ -261,7 +261,9 @@
                     if (row * cols + col < _total) {
                         _item = items[row * cols + col];
                         if (_item.image) {
-                            _html.push('<td class="tx-menu-list-item"><a href="javascript:;"><span class="' + (_item.klass || '') + '"><img src="' + _item.image + '" data="' + _item.data + '"/></span></a></td>');
+							var imageUrl = _item.image;
+							imageUrl = TrexConfig.getIconPath(imageUrl); //글상자 > 직접선택 > 선스타일 이미지.
+                            _html.push('<td class="tx-menu-list-item"><a href="javascript:;"><span class="' + (_item.klass || '') + '"><img src="' + imageUrl + '" data="' + _item.data + '"/></span></a></td>');
                         } else {
                             _html.push('<td class="tx-menu-list-item"><a href="javascript:;"><span class="' + (_item.klass || '') + '">' + _item.data + '</span></a></td>');
                         }

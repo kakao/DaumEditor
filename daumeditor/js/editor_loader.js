@@ -1,9 +1,15 @@
 (function() {
     // TODO option parameter 문서 정리
     // TODO bookmarklet 작성
+    var _DOC = document,
+		_WIN = window,
+		_DOC_EL = _DOC.documentElement,
+		_FALSE = false,
+		_TRUE = true,
+		_NULL = null,
+		_UNDEFINED;
     var DEFAULT_UNKNOWN_OPTION_VALUE = "",
             PREFIX_COOKIE = "tx_",
-            DOC = document,
             STATUS_UNINITIALIZED = "uninitialized",
             STATUS_LOADING = "loading",
             STATUS_COMPLETE = "complete",
@@ -26,7 +32,7 @@
     }
 
     function findLoaderScriptElement(filename) {
-        var scripts = DOC.getElementsByTagName("script");
+        var scripts = _DOC.getElementsByTagName("script");
         for (var i = 0; i < scripts.length; i++) {
             if (scripts[i].src.indexOf(filename) >= 0) {
                 return scripts[i];
@@ -60,7 +66,7 @@
     }
 
     function getCookieOption(name) {
-        var cookieOptions = Options.parse(DOC.cookie, /;[ ]*/);
+        var cookieOptions = Options.parse(_DOC.cookie, /;[ ]*/);
         var value = cookieOptions.findByName(PREFIX_COOKIE + name);
         return value ? decodeURIComponent(value) : value;
     }
@@ -98,7 +104,7 @@
     
     
     function createScriptDOMElement(src) {
-    	var script = DOC.createElement("script");
+    	var script = _DOC.createElement("script");
         script.type = "text/javascript";
         script.src = src;
         return script;
@@ -119,7 +125,7 @@
 
     function loadScriptDOMElement(src, callback) {
         var script = createScriptDOMElement(src);
-        var head = DOC.getElementsByTagName("head")[0] || DOC.documentElement;
+        var head = _DOC.getElementsByTagName("head")[0] || _DOC_EL;
         
         addScriptLoadListener(script, head, callback);
         
@@ -237,7 +243,7 @@
             var url = isModuleNameNotPath(moduleName) ? this.getBasePath() + moduleName : moduleName;
 
             url = url + '?dummy=' + new Date().getTime();
-            DOC.write('<script type="text/javascript" src="' + url + '" charset="utf-8"></script>');
+            _DOC.write('<script type="text/javascript" src="' + url + '" charset="utf-8"></script>');
         },
 
         /**
