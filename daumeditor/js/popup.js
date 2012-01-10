@@ -52,7 +52,7 @@ try {
 }
 
 try {
-    var basePath = opener.EditorJSLoader.getBasePath();
+    var basePath = opener.EditorJSLoader.getJSBasePath();
 } catch (e) {
     // ignore error when loaded from build script
 }

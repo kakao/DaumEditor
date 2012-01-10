@@ -27,8 +27,7 @@
     };
 
     function getBasePath(url) {
-        var cutPos = url.lastIndexOf("/");
-        return url.substring(0, cutPos + 1);
+    	return url.replace(/[^\/]+\/?$/, '');
     }
 
     function findLoaderScriptElement(filename) {
@@ -240,7 +239,7 @@
                 return !name.match(/^((https?|file):\/\/|\.\.\/|\/)/);
             }
             
-            var url = isModuleNameNotPath(moduleName) ? this.getBasePath() + moduleName : moduleName;
+            var url = isModuleNameNotPath(moduleName) ? this.getJSBasePath() + moduleName : moduleName;
 
             url = url + '?dummy=' + new Date().getTime();
             _DOC.write('<script type="text/javascript" src="' + url + '" charset="utf-8"></script>');
@@ -305,24 +304,22 @@
         getBasePath: function(filename) {
             var basePath = getCookieOption("base_path");
             if (!basePath) {
-                var script = findLoaderScriptElement(filename || Loader.NAME);
-                basePath = getBasePath(script.src);
+                var script = findLoaderScriptElement(filename || Loader.NAME);                
+                basePath = getBasePath(getBasePath(script.src));
             }
             return absolutizeURL(basePath);
         },
 
         getJSBasePath: function(filename) {
-            return this.getBasePath(filename);
+        	return this.getBasePath() + "js/";
         },
 
         getCSSBasePath: function() {
-            var jsBasePath = this.getBasePath();
-            return jsBasePath.replace(/\/js\//g, "/css/");
+            return this.getBasePath() + "css/";
         },
 
         getPageBasePath: function() {
-            var jsBasePath = this.getBasePath();
-            return jsBasePath.replace(/\/js\//g, "/pages/");
+        	return this.getBasePath() + "pages/";
         },
 
         getOption: function(name) {
