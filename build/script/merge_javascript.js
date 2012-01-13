@@ -30,6 +30,9 @@ var EditorJSLoader = {
     },
     getJSBasePath: function() {
         return "";
+    },
+    getBasePath: function() {
+        return "";
     }
 };
 

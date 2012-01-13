@@ -73,8 +73,8 @@ var TrexConfig = function() {
 		cdnHost: "http://s1.daumcdn.net/editor",
 		wrapper: "tx_trex_container", 
 		form: 'tx_editor_form',
-        txIconPath: "#host#path/images/icon/editor/",
-        txDecoPath: "#host#path/images/deco/contents/",
+        txIconPath: "images/icon/editor/",
+        txDecoPath: "images/deco/contents/",
 		params: [],
 		events: {
 			preventUnload: _TRUE,
@@ -126,7 +126,9 @@ var TrexConfig = function() {
 		 */
 		getUrl: function(url, params) {
 			if(url == _NULL) return _NULL;
-			url = url.replace(/#host/g, __TREX_CONFIGURE["txHost"]).replace(/#path\/?/g, __TREX_CONFIGURE["txPath"]);
+			url = url.replace(/#host#path\/pages\//g, EditorJSLoader.getPageBasePath());
+			url = url.replace(/#host/g, __TREX_CONFIGURE["txHost"]);
+			url = url.replace(/#path\/?/g, __TREX_CONFIGURE["txPath"]);
 			url = url.replace(/#cmnhost/g, __TREX_CONFIGURE["dinoHost"]);
 			url = url.replace(/#cdnhost/g, __TREX_CONFIGURE["cdnHost"]);
 			
