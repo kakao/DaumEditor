@@ -151,6 +151,9 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 		this.regHtml = this.getRegHtml.bind(this)(_data);
 		this.regText = this.getRegText.bind(this)(_data);
 	},
+	refreshProperties: function () {
+		this.setProperties(this.data);
+	},
 	/**
 	 * object의 attribute 값을 가져온다.
 	 * @function
