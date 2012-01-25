@@ -22,6 +22,7 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 	/** @ignore */
 	$extend: Trex.Entry,
 	isChecked: _FALSE,
+	focused: _FALSE,
 	attrs: {
 		align: "left"
 	},
@@ -32,9 +33,32 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 
 		this.type = this.constructor.__Identity;
 		this.setProperties(data);
+		this.observeFocused();
 		
 		if(this.oninitialized){
 			this.oninitialized(actor, data);
+		}
+	},
+	/**
+	 * focused 값을 __CANVAS_PANEL_QUERY_STATUS 이벤트를 이용하여 동기화해준다.
+	 * @function
+	 */
+	observeFocused: function () {
+		var self = this;
+		this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_QUERY_STATUS, function (goog_range) {
+			var content = goog_range.getHtmlFragment(),
+				focused = self.checkExisted(content);
+			self.setFocused(focused);
+		});
+	},
+	/**
+	 * focused 값을 설정한다.
+	 * @function
+	 */
+	setFocused: function (focused) {
+		if (this.focused !== focused) {
+			this.focused = focused;
+			this.fireJobs(Trex.Ev.__CANVAS_ENTRY_FOCUSED, focused);
 		}
 	},
 	/**
