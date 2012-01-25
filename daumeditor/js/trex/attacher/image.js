@@ -159,39 +159,6 @@ Trex.Attachment.Image = Trex.Class.create({
 		}
 		return _objattr;
 	},
-	getObjectStyle: function(data) {
-		var _objstyle = {};
-		if(this.actor.config.objstyle) {
-			_objstyle = Object.extend(_objstyle, this.actor.config.objstyle);
-		}
-		if(data.imagealign) {
-			var _objectStyle = {
-				"L": Trex.Tool.AlignLeft,
-				"C": Trex.Tool.AlignCenter,
-				"FL": Trex.Tool.AlignRight,
-				"FR": Trex.Tool.AlignFull
-			}[data.imagealign];
-			if (_objectStyle && _objectStyle.__ImageModeProps && _objectStyle.__ImageModeProps['image']) {
-				_objstyle = Object.extend(_objstyle, _objectStyle.__ImageModeProps['image']['style']);
-			}
-		}
-		return _objstyle;
-	},
-	getParaStyle: function(data) {
-		var _parastyle = Object.extend({}, this.actor.config.parastyle || this.actor.config.defaultstyle);
-		if(data.imagealign) {
-			var _objectStyle = {
-				"L": Trex.Tool.AlignLeft,
-				"C": Trex.Tool.AlignCenter,
-				"FL": Trex.Tool.AlignRight,
-				"FR": Trex.Tool.AlignFull
-			}[data.imagealign];
-			if (_objectStyle && _objectStyle.__ImageModeProps && _objectStyle.__ImageModeProps['paragraph']) {
-				_parastyle = Object.extend(_parastyle, _objectStyle.__ImageModeProps['paragraph']['style']);
-			}
-		}
-		return _parastyle;
-	},
 	getSaveHtml: function(data) {
 		return "<img src=\"" + data.imageurl + "\" class=\"txc-image\"/>";
 	},
