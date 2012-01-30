@@ -33,23 +33,10 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 
 		this.type = this.constructor.__Identity;
 		this.setProperties(data);
-		this.observeFocused();
 		
 		if(this.oninitialized){
 			this.oninitialized(actor, data);
 		}
-	},
-	/**
-	 * focused 값을 __CANVAS_PANEL_QUERY_STATUS 이벤트를 이용하여 동기화해준다.
-	 * @function
-	 */
-	observeFocused: function () {
-		var self = this;
-		this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_QUERY_STATUS, function (goog_range) {
-			var content = goog_range.getHtmlFragment(),
-				focused = self.checkExisted(content);
-			self.setFocused(focused);
-		});
 	},
 	/**
 	 * focused 값을 설정한다.
@@ -236,4 +223,34 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 	}
 });
 
-
+/*jslint nomen:false*/
+/*global Trex*/
+Trex.module("observe focused and set property of attachments", function (editor, toolbar, sidebar, canvas) {
+	var setFocusedOfArrItem = function (attachmentArr, focused) {
+		var len, i;
+		len = attachmentArr.length;
+		for (i = 0; i < len; i += 1) {
+			attachmentArr[i].setFocused(focused);
+		}
+	};
+	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_QUERY_STATUS, function (goog_range) {
+		var content, attachments, attachmentItem,
+			focusedArr, defocusedArr, len, i, focused;
+		content = goog_range.getHtmlFragment();
+		attachments = sidebar.getAttachments();
+		focusedArr = [];
+		defocusedArr = [];
+		len = attachments.length;
+		for (i = 0; i < len; i += 1) {
+			attachmentItem = attachments[i];
+			focused = attachmentItem.checkExisted(content);
+			if (focused) {
+				focusedArr.push(attachmentItem);
+			} else {
+				defocusedArr.push(attachmentItem);
+			}
+		}
+		setFocusedOfArrItem(defocusedArr, false);
+		setFocusedOfArrItem(focusedArr, true);
+	});
+});
