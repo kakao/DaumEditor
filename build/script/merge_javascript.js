@@ -18,6 +18,9 @@ function exists(file) {
 
 var document = {
     write: function() {
+    },
+    getElementsByTagName: function() {
+    	return [];
     }
 };
 var window = {
