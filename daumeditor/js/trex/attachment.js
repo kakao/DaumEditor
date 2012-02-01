@@ -22,6 +22,7 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 	/** @ignore */
 	$extend: Trex.Entry,
 	isChecked: _FALSE,
+	focused: _FALSE,
 	attrs: {
 		align: "left"
 	},
@@ -35,6 +36,16 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 		
 		if(this.oninitialized){
 			this.oninitialized(actor, data);
+		}
+	},
+	/**
+	 * focused 값을 설정한다.
+	 * @function
+	 */
+	setFocused: function (focused) {
+		if (this.focused !== focused) {
+			this.focused = focused;
+			this.fireJobs(Trex.Ev.__CANVAS_ENTRY_FOCUSED, focused);
 		}
 	},
 	/**
@@ -84,11 +95,18 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 		if(this.canvas.isWYSIWYG()) {
 			var _pastescope = this.pastescope;
 			var _dispHtml = this.dispHtml;
+			var objectElemTagName = "img";
+			var matched = _dispHtml.match(/<(\w+)/);
+			//for other elements(Exam: button of file attachment).
+			if (matched && matched[1]) {
+				objectElemTagName = matched[1];
+			}
+			var objectElemeReg = new RegExp("<" + objectElemTagName + " ", "i");
 			if(this.objectStyle) {
-				_dispHtml = _dispHtml.replace(/<img /i, "<img style=\"" + Trex.Util.toStyleString(this.objectStyle) + "\" ");
+				_dispHtml = _dispHtml.replace(objectElemeReg, "<" + objectElemTagName + " style=\"" + Trex.Util.toStyleString(this.objectStyle) + "\" ");
 			}
 			if(this.objectAttr) {
-				_dispHtml = _dispHtml.replace(/<img /i, "<img " + Trex.Util.toAttrString(this.objectAttr) + " ");
+				_dispHtml = _dispHtml.replace(objectElemeReg, "<" + objectElemTagName + " " + Trex.Util.toAttrString(this.objectAttr) + " ");
 			}
 			var _style = this.paragraphStyle || {};
 			this.canvas.execute(function(processor) {
@@ -135,7 +153,8 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 	 * @function
 	 */
 	setProperties: function(data) {
-		var _data = this.data = data;
+		var _data = data;
+		this.data = _data;
 		this.key = this.actor.getKey(_data) || 'K'+Trex.Util.generateKey();
 		this.field = this.getFieldAttr(_data);
 		this.boxAttr = this.getBoxAttr(_data);
@@ -151,6 +170,9 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 		this.regHtml = this.getRegHtml.bind(this)(_data);
 		this.regText = this.getRegText.bind(this)(_data);
 	},
+	refreshProperties: function () {
+		this.setProperties(this.data);
+	},
 	/**
 	 * object의 attribute 값을 가져온다.
 	 * @function
@@ -162,16 +184,73 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 	 * object의 style 값을 가져온다.
 	 * @function
 	 */
-	getObjectStyle: function() {
-		return this.actor.config.objstyle;
+	getObjectStyle: function(data) {
+		var _objstyle = {};
+		if(this.actor.config.objstyle) {
+			_objstyle = Object.extend(_objstyle, this.actor.config.objstyle);
+		}
+		if(data.imagealign) {
+			var _objectStyle = {
+				"L": Trex.Tool.AlignLeft,
+				"C": Trex.Tool.AlignCenter,
+				"FL": Trex.Tool.AlignRight,
+				"FR": Trex.Tool.AlignFull
+			}[data.imagealign];
+			if (_objectStyle && _objectStyle.__ImageModeProps && _objectStyle.__ImageModeProps['image']) {
+				_objstyle = Object.extend(_objstyle, _objectStyle.__ImageModeProps['image']['style']);
+			}
+		}
+		return _objstyle;
 	},
 	/**
 	 * object를 감싸고 있는 paragraph tag 의 style 값을 가져온다.
 	 * @function
 	 */
-	getParaStyle: function() {
-		return this.actor.config.parastyle || this.actor.config.defaultstyle || {};
+	getParaStyle: function(data) {
+		var _parastyle = Object.extend({}, this.actor.config.parastyle || this.actor.config.defaultstyle);
+		if(data.imagealign) {
+			var _objectStyle = {
+				"L": Trex.Tool.AlignLeft,
+				"C": Trex.Tool.AlignCenter,
+				"FL": Trex.Tool.AlignRight,
+				"FR": Trex.Tool.AlignFull
+			}[data.imagealign];
+			if (_objectStyle && _objectStyle.__ImageModeProps && _objectStyle.__ImageModeProps['paragraph']) {
+				_parastyle = Object.extend(_parastyle, _objectStyle.__ImageModeProps['paragraph']['style']);
+			}
+		}
+		return _parastyle;
 	}
 });
 
-
+/*jslint nomen:false*/
+/*global Trex*/
+Trex.module("observe focused and set property of attachments", function (editor, toolbar, sidebar, canvas) {
+	var setFocusedOfArrItem = function (attachmentArr, focused) {
+		var len, i;
+		len = attachmentArr.length;
+		for (i = 0; i < len; i += 1) {
+			attachmentArr[i].setFocused(focused);
+		}
+	};
+	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_QUERY_STATUS, function (goog_range) {
+		var content, attachments, attachmentItem,
+			focusedArr, defocusedArr, len, i, focused;
+		content = goog_range.getHtmlFragment();
+		attachments = sidebar.getAttachments();
+		focusedArr = [];
+		defocusedArr = [];
+		len = attachments.length;
+		for (i = 0; i < len; i += 1) {
+			attachmentItem = attachments[i];
+			focused = attachmentItem.checkExisted(content);
+			if (focused) {
+				focusedArr.push(attachmentItem);
+			} else {
+				defocusedArr.push(attachmentItem);
+			}
+		}
+		setFocusedOfArrItem(defocusedArr, false);
+		setFocusedOfArrItem(focusedArr, true);
+	});
+});

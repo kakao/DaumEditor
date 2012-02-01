@@ -18,6 +18,9 @@ function exists(file) {
 
 var document = {
     write: function() {
+    },
+    getElementsByTagName: function() {
+    	return [];
     }
 };
 var window = {
@@ -29,6 +32,9 @@ var EditorJSLoader = {
     loadModule: function() {
     },
     getJSBasePath: function() {
+        return "";
+    },
+    getBasePath: function() {
         return "";
     }
 };

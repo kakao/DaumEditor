@@ -260,6 +260,11 @@
 		 *	});
 		 */
 		__CANVAS_ENTRY_ADDED: 'canvas.entry.added',
+		/**
+		 * 캔바스의 레인지(캐럿)에 첨부가 포함될 때, 혹은 포함되었다가 해제될 때 발생.
+		 * 인자값이 포함될 때는 true, 해제될 때는 false 로 넘어옴.
+		 */
+		__CANVAS_ENTRY_FOCUSED: 'canvas.entry.focused',
 		/** 
 		 * 툴을 이용해 wysiwyg에 요소가 삽입이 될 때 발생하는 사용자 정의 이벤트
 		 * @abstract
