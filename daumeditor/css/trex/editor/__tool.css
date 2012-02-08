@@ -6,7 +6,7 @@
 	
 	.tx-switchtoggle a,.tx-switchtoggle-hovered a, .tx-switchtoggle-pushed a { width: 52px; height: 25px; text-indent: -100em; overflow: hidden; display:block; font-size: 12px} 
 	.tx-switchtoggle a, .tx-switchtoggle-hovered a, .tx-switchtoggle-pushed a {
-		background-image: url(../../../images/icon/editor/skin/06/tx_text.gif);
+		background-image: url(../../../images/icon/editor/skin/06/tx_text2.gif);
 		background-repeat: no-repeat;
 		font-size: 0;
 		line-height: 0px;
