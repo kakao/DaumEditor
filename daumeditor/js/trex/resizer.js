@@ -35,7 +35,7 @@ Trex.Resizer = Trex.Class.create({
 		this.config = config;
 		
 		var _initializedId = editor.getInitializedId();
-		var _elBar = this.elBar = $must("tx_resizer" + _initializedId, "Trex.Worker.Resizer");
+		var _elBar = this.elBar = $tx("tx_resizer" + _initializedId, "Trex.Worker.Resizer");
 		if(!_elBar) {
 			return;
 		}
