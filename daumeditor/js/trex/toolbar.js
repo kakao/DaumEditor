@@ -423,7 +423,10 @@ Trex.AsyncTool = Trex.Class.draft(/** @lends Trex.Tool.prototype */{
 		throw new Error("[Exception]Trex.AsyncTool : not implements function(oninitialized)");
 	},
 	onLoadModule: function() {
-        var url = this.getJSBasePath() + this.config.asyncUrl;
+        var url = this.config.asyncUrl;
+		if (/:\/\//.test(url) === false) {
+			url = this.getJSBasePath() + url;
+		}
 		EditorJSLoader.asyncLoadModule({
     		url: TrexConfig.getUrl(url),
     		callback: function(){}
