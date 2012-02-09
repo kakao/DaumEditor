@@ -95,7 +95,7 @@
 	
 	
 	a.tx-text, .tx-searcher-title, .tx-switchtoggle a, .tx-switchtoggle-hovered a, .tx-switchtoggle-pushed a {
-		background:url(../../../images/icon/editor/skin/06/tx_text.gif); background-repeat:no-repeat;
+		background:url(../../../images/icon/editor/skin/06/tx_text2.gif); background-repeat:no-repeat;
 		height:25px; display:block; float:left;
 		font-size:0; line-height:0; overflow:hidden; text-indent:-1000px;
 	}

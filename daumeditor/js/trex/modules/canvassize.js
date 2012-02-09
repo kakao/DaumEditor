@@ -23,6 +23,8 @@ Trex.module("make padding area inside Canvas with editor width",
         var _elLeftSpaceChild;
         var _elRightSpaceChild;
 
+		var isInited = false;
+
         var _wysiwygDoc;
 		
 		var _sizeConfig;
@@ -88,7 +90,10 @@ Trex.module("make padding area inside Canvas with editor width",
 
         //배경이 적용되었을 경우 사이즈를 변경한다.
         canvas.observeJob('canvas.apply.background', function(data) {
-            _wysiwygPanel.addStyle(_calPadding({
+            if (isInited === false) {
+				return;
+			}
+			_wysiwygPanel.addStyle(_calPadding({
                 'paddingTop': (data && data.topLeftHeight)? data.topLeftHeight.parsePx(): 0,
                 'paddingRight': (data && data.midRightWidth)? data.midRightWidth.parsePx(): 0,
                 'paddingBottom': (data && data.botLeftHeight)? data.botLeftHeight.parsePx(): 0,
@@ -98,7 +103,10 @@ Trex.module("make padding area inside Canvas with editor width",
 
         //NOTE: 메일, 편지지가 적용되었을 에디터 영역의 패딩을 조정한다.
         canvas.observeJob('canvas.apply.letterpaper', function(data) {
-            _wysiwygPanel.addStyle(_calPadding({
+            if (isInited === false) {
+				return;
+			}
+			_wysiwygPanel.addStyle(_calPadding({
                 'paddingTop': (data && data.topHeight)? data.topHeight.parsePx(): 0,
                 'paddingRight': (data && (data.midColor || data.midUrl))? __ContentPadding: 0,
                 'paddingBottom': (data && data.botHeight)? data.botHeight.parsePx(): 0,
@@ -133,7 +141,7 @@ Trex.module("make padding area inside Canvas with editor width",
         }
 
         var _hidePaddingSpace = function(){
-            $tx.hide( _elLeftSpace );
+			$tx.hide( _elLeftSpace );
             $tx.hide( _elRightSpace );
         };
         var _showPaddingSpace = function(){
@@ -217,11 +225,15 @@ Trex.module("make padding area inside Canvas with editor width",
             if ( canvas.mode != "html" ){
                 _hidePaddingSpace();
             }
+			isInited = true;
         });
 
         //모드를 변경하였을 경우 패딩영역 처리
         canvas.observeJob(Trex.Ev.__CANVAS_MODE_CHANGE, function(from, to) {
-            if(from == to) return;
+            if (isInited === false) {
+				return;
+			}
+			if(from == to) return;
             if(from == Trex.Canvas.__WYSIWYG_MODE) {
                 _hidePaddingSpace();
             } else if(to == Trex.Canvas.__WYSIWYG_MODE) {
@@ -231,8 +243,11 @@ Trex.module("make padding area inside Canvas with editor width",
 
         //에디터 높이가 변하였을 경우 패딩영역의 높이를 조절한다.
         canvas.observeJob(Trex.Ev.__CANVAS_HEIGHT_CHANGE, function(height) {
-            _elLeftSpace.style.height = height;
-            _elRightSpace.style.height = height;
+            if (isInited === false) {
+				return;
+			}
+			_elLeftSpace.style.height = height;
+           	_elRightSpace.style.height = height;
         });
 
         var _adjustPanelPandding = function(){
@@ -271,17 +286,26 @@ Trex.module("make padding area inside Canvas with editor width",
         };
 		
 		//에디터 래퍼의 너비가 변하였을 경우 패딩영역의 위치를 조절한다.
-        canvas.observeJob(Trex.Ev.__CANVAS_WRAP_WIDTH_CHANGE, function(height) {
-            _calSizeConfig();
+        canvas.observeJob(Trex.Ev.__CANVAS_WRAP_WIDTH_CHANGE, function () {
+            if (isInited === false) {
+				return;
+			}
+			_calSizeConfig();
             _adjustPanelPandding();
         });
 		
         canvas.observeJob('canvas.normalscreen.change', function(){
-            __EditorMaxWidth = _sizeConfig.wrapWidth;
+		    if (isInited === false) {
+				return;
+			}
+			__EditorMaxWidth = _sizeConfig.wrapWidth;
             _adjustPanelPandding();
         });
         canvas.observeJob('canvas.fullscreen.change', function(){
-            __EditorMaxWidth = _DOC.body.clientWidth;
+            if (isInited === false) {
+				return;
+			}
+			__EditorMaxWidth = _DOC.body.clientWidth;
             _adjustPanelPandding();
         });
 

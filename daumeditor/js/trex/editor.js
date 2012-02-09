@@ -408,6 +408,10 @@ Trex.Editor = Trex.Class.create( /** @lends Trex.Editor.prototype */{
             setTimeout(this.fromHdrive.bind(this, data), 10);
         }
     };
+	Editor.refreshSize = function () {
+		this.canvas.fireJobs(Trex.Ev.__CANVAS_WRAP_WIDTH_CHANGE);
+		//TODO.azki height..???
+	};
 	/**
 	 * <b>deprecated</b> - use Editor.switchEditor, 동일한 Page에 Editor가 여러개 생성됬을 경우, 다른 Editor를 지정한다.
 	 * @function
