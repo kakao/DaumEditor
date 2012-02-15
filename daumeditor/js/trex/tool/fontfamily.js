@@ -145,20 +145,23 @@ Trex.Tool.FontFamily = Trex.Class.create({
         return "face";
     },
     getTextByValue: function(value) {
-        if (value.include(",")) {
+		var fontFamilyMap, text;
+		if (value.include(",")) {
             value = value.split(",")[0];
         }
-        var fontFamilyMap = this.fontFamilyMap;
-        if (fontFamilyMap[value.toLowerCase()]) {
-            return fontFamilyMap[value.toLowerCase()];
-        } else {
-            // 왜 replace를 하는 것일까? => webfont 중에 9나 _9로 끝나는 것들이 몇개 있다
-            value = value.replace("_9", "").replace("9", "");
-            if (fontFamilyMap[value.toLowerCase()]) {
-                return fontFamilyMap[value.toLowerCase()];
-            } else {
-                return fontFamilyMap[this.getDefaultProperty()];
-            }
-        }
+		value = value.toLowerCase();
+		fontFamilyMap = this.fontFamilyMap;
+		text = fontFamilyMap[value];
+		if (text) {
+			return text;
+		}
+		//폰트 이름중에 _9 나 9 로 끝나는게 있어 문제가 있었다고 주석이 있었음.
+		value = value.replace("_9", "").replace("9", "");
+		text = fontFamilyMap[value];
+		if (text) {
+			return text;
+		}
+		text = fontFamilyMap[this.getDefaultProperty()];
+		return text || value; //없으면 그냥 적어주자.
     }
 });
