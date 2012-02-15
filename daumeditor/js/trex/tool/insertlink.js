@@ -103,16 +103,25 @@ Trex.Tool.Link = Trex.Class.create({
 			var _initHandler = function() {
 				if (_canvas.isWYSIWYG()) {
 					return _canvas.query(function(processor){
-						var _node = processor.findNode('a');
-						if (_node) {
-							var _value = $tom.getAttribute(_node, "href");
-							var _target = $tom.getAttribute(_node, "target");
-							if (_value != _NULL && _value.length > 0) {
+						var node, value, target, text;
+						node = processor.findNode('a');
+						if (node) {
+							value = $tom.getAttribute(node, "href");
+							if (value) {
+								target = $tom.getAttribute(node, "target");
 								return {
 									exist: _TRUE,
-									value: _value,
-									target: _target
+									value: value,
+									target: target
 								};
+							}
+						} else {
+							text = processor.getText();
+							if (/^(?:(?:http|https|ftp):\/\/)?[\w\d\-_\.]+[\w\d\-_]+(?::[0-9]+)?(?:\/.*)?$/i.test(text)) {
+								return {
+									exist: _FALSE,
+									value: text
+								}
 							}
 						}
 						return {
