@@ -38,6 +38,7 @@
                 self.installScripts(self.wysiwygWindow, doc);
                 self.makeEditable();
                 self.applyBodyStyles(self.canvasConfig.styles);
+				self.applyCustomCssText(self.canvasConfig.customCssText);
                 self.clearContent();
                 self.bindEvents(canvas);
                 Editor.__PANEL_LOADED = _TRUE;
@@ -266,6 +267,16 @@
             } catch(e) {
             }
         },
+		
+		applyCustomCssText: function (cssText) {
+			if (!cssText) {
+				return;
+			}
+			var doc = this.wysiwygDoc;
+            try {
+				$tx.applyCSSText(doc, cssText);
+            } catch (ignore) {}
+		},
 
 
         /**

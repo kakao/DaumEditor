@@ -48,6 +48,9 @@ Trex.register("filter > attachers",
 				'text@load': function(contents){
 					var entries = _attachBox.datalist;					
 					entries.each(function(entry) {
+						if (entry.loadDataByContent) {
+							entry.loadDataByContent('text@load', contents);
+						}
 						contents = entry.getChangedContent(contents, entry.regLoad, "");
 					});
 					return contents;
@@ -55,6 +58,9 @@ Trex.register("filter > attachers",
 				'source@load': function(contents){
 					var entries = _attachBox.datalist;					
 					entries.each(function(entry) {
+						if (entry.loadDataByContent) {
+							entry.loadDataByContent('source@load', contents);
+						}
 						contents = entry.getChangedContent(contents, entry.regLoad, entry.dispText);
 					});
 					return contents;
@@ -62,6 +68,9 @@ Trex.register("filter > attachers",
 				'html@load': function(contents){
 					var entries = _attachBox.datalist;					
 					entries.each(function(entry) {
+						if (entry.loadDataByContent) {
+							entry.loadDataByContent('html@load', contents);
+						}
 						contents = entry.getChangedContent(contents, entry.regLoad, entry.dispHtml);
 					});
 					return contents;
@@ -69,6 +78,9 @@ Trex.register("filter > attachers",
 				'text4save': function(contents){
 					var entries = _attachBox.datalist;					
 					entries.each(function(entry) {
+						if (entry.loadDataByContent) {
+							entry.loadDataByContent('text4save', contents);
+						}
 						contents = entry.getChangedContent(contents, entry.regText, "");
 					});
 					return contents;
@@ -76,6 +88,9 @@ Trex.register("filter > attachers",
 				'source4save': function(contents){
 					var entries = _attachBox.datalist;					
 					entries.each(function(entry) {
+						if (entry.loadDataByContent) {
+							entry.loadDataByContent('source4save', contents);
+						}
 						contents = entry.getChangedContent(contents, entry.regText, entry.saveHtml, ["id", "class"]);
 					});
 					return contents;
@@ -83,6 +98,9 @@ Trex.register("filter > attachers",
 				'html4save': function(contents){
 					var entries = _attachBox.datalist;					
 					entries.each(function(entry) {
+						if (entry.loadDataByContent) {
+							entry.loadDataByContent('html4save', contents);
+						}
 						contents = entry.getChangedContent(contents, entry.regHtml, entry.saveHtml, ["id", "class"]);
 					});
 					return contents;
@@ -96,6 +114,9 @@ Trex.register("filter > attachers",
 				'source2text': function(contents){
 					var entries = _attachBox.datalist;					
 					entries.each(function(entry) {
+						if (entry.loadDataByContent) {
+							entry.loadDataByContent('source2text', contents);
+						}
 						contents = entry.getChangedContent(contents, entry.regText, "");
 					});
 					return contents;
@@ -103,6 +124,9 @@ Trex.register("filter > attachers",
 				'source2html': function(contents){
 					var entries = _attachBox.datalist;					
 					entries.each(function(entry) {
+						if (entry.loadDataByContent) {
+							entry.loadDataByContent('source2html', contents);
+						}
 						contents = entry.getChangedContent(contents, entry.regText, entry.dispHtml);
 					});
 					return contents;
@@ -110,6 +134,9 @@ Trex.register("filter > attachers",
 				'html2text': function(contents){
 					var entries = _attachBox.datalist;					
 					entries.each(function(entry) {
+						if (entry.loadDataByContent) {
+							entry.loadDataByContent('html2text', contents);
+						}
 						contents = entry.getChangedContent(contents, entry.regHtml, "");
 					});
 					return contents;
@@ -117,6 +144,9 @@ Trex.register("filter > attachers",
 				'html2source': function(contents){
 					var entries = _attachBox.datalist;					
 					entries.each(function(entry) {
+						if (entry.loadDataByContent) {
+							entry.loadDataByContent('html2source', contents);
+						}
 						contents = entry.getChangedContent(contents, entry.regHtml, entry.dispText, ["id", "class"]);
 					});
 					return contents;

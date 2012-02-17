@@ -156,7 +156,7 @@ Trex.Attachment.File = Trex.Class.create({
 		return "<a href=\"" + data.attachurl + "\"><img src=\"" + data.prevurl + "\"/> " + data.filename + "</a>";
 	},
 	getDispHtml: function(data) {
-		return "<button id=\"" + data.dispElId + "\" class=\"txc-file tx-unresizable\"><img src=\"" + data.prevurl + "\" ld=\"" + data.attachurl + "\"/> " + data.filename + "</button>";
+		return "<button id=\"" + data.dispElId + "\" class=\"txc-file\"><img class=\"tx-unresizable\" src=\"" + data.prevurl + "\" ld=\"" + data.attachurl + "\"/> " + data.filename + "</button>";
 	},
 	getDispText: function(data) {
 		return "[" + TXMSG("@file.title") + ":" + data.dataSeq + "]";
