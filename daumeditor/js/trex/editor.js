@@ -100,10 +100,10 @@ Trex.Editor = Trex.Class.create( /** @lends Trex.Editor.prototype */{
 		return _params[name];
 	},
 	getWrapper: function() {
-		return $must(this.config.wrapper);
+		return $must(this.initialConfig.wrapper);
 	},
 	getInitializedId: function() {
-		return this.config.initializedId || "";
+		return this.initialConfig.initializedId || "";
 	},
 	saveEditor: function() {
 		this.setDisableUnloadHandler();
