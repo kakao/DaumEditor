@@ -42,14 +42,9 @@
     
     });
     
-	
-	var thisTool = (Editor.editorForAsyncLoad || Editor).getTool().emoticon;
-	if (Editor.forEachEditor) {
-		Editor.forEachEditor(function (editor) {
-			editor.getTool().emoticon.oninitialized();
-		});
-	} else { //for legacy.
-		thisTool.oninitialized();
-	}
-	thisTool.forceActivate();
+	var thisToolName = 'emoticon';
+	Editor.forEachEditor(function (editor) {
+		editor.getTool()[thisToolName].oninitialized();
+	});
+	Editor.editorForAsyncLoad.getTool()[thisToolName].forceActivate();
 })();

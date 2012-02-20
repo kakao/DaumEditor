@@ -108,13 +108,9 @@
 		}
 	});
 	
-	var thisTool = (Editor.editorForAsyncLoad || Editor).getTool().specialchar;
-	if (Editor.forEachEditor) {
-		Editor.forEachEditor(function (editor) {
-			editor.getTool().specialchar.oninitialized();
-		});
-	} else { //for legacy.
-		thisTool.oninitialized();
-	}
-	thisTool.forceActivate();
+	var thisToolName = 'specialchar';
+	Editor.forEachEditor(function (editor) {
+		editor.getTool()[thisToolName].oninitialized();
+	});
+	Editor.editorForAsyncLoad.getTool()[thisToolName].forceActivate();
 })();

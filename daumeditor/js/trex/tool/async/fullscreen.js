@@ -20,11 +20,12 @@
 			
 			var _fullscreen;
 			var _toolHandler = function() {
-				if(!_fullscreen) {
+				if (!_fullscreen) {
 					_fullscreen = new Trex.FullScreen(_editor, _config);
 				}
 				_fullscreen.execute();
 			};
+			this.executeTool = _toolHandler;
 			
 			if(_config.switched) { //기본이 전체화면
 				if(!_fullscreen) {
@@ -51,12 +52,8 @@
 				shiftKey: _FALSE,
 				keyCode: 77
 			}, _toolHandler);
-			
-			_toolHandler();
-			
 		}
 	});
-	
 	
 	
 	TrexMessage.addMsg({
@@ -91,8 +88,11 @@
 			
 			this.isInit = _FALSE;
 			this.isFullScreen = _FALSE;
-		
+			
+			this.editor = editor;
+			this.rootConfig = this.editor.initialConfig;
 			this.wrapper = editor.getWrapper();
+			
 			this.canvas = editor.getCanvas();
 			this.toolbar = editor.getToolbar();
 			this.attachBox = editor.getAttachBox();
@@ -203,10 +203,11 @@
 			
 			this.isFullScreen = _FALSE;
 			if (!$tx.msie) {
-				setTimeout(function() {
-					var _elIcon = $tom.collect($tx("tx_fullscreen"), "a");
+				var btnElemId = "tx_fullscreen" + this.rootConfig.initializedId;
+				setTimeout(function () {
+					var _elIcon = $tom.collect($tx(btnElemId), "a");
 					_elIcon.focus();
-				}.bind(this), 500);
+				}, 500);
 			}
 		},
 		showFullScreen: function() {
@@ -354,15 +355,17 @@
 		},
 		resizeContainer: function() {
 			//Service Specific
-			var _getPostAreaBoxPosition = function(){
-				if( $tx('tx_fullscreen_post_area') ){
-					return $tx.getDimensions($tx('tx_fullscreen_post_area'));
+			var _getPostAreaBoxPosition = function () {
+				var elem = $tx("tx_fullscreen_post_area");
+				if (elem) {
+					return $tx.getDimensions(elem);
 				} else {
 					return {x:0, y:0, width:0, height:0};
 				}
 			};
-			if ( !this.isFullScreen )   
-				return _FALSE; 
+			if (!this.isFullScreen) {
+				return _FALSE;
+			}
 			this.resizeScreenAtService();
 			var _panelPosY = this.canvas.getCanvasPos().y;
 			var _attachBoxPosition = this.getAttachBoxPosition();
@@ -432,5 +435,9 @@
 		}
 	});
 	
-	Editor.getTool().fullscreen.oninitialized();
+	var thisToolName = 'fullscreen';
+	Editor.forEachEditor(function (editor) {
+		editor.getTool()[thisToolName].oninitialized();
+	});
+	Editor.editorForAsyncLoad.getTool()[thisToolName].executeTool();
 })();
