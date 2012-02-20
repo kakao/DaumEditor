@@ -404,7 +404,7 @@
 		word-break:break-all; display:block;
 	}
 	
-	div.tx-canvas div.tx-wysiwyg-padding { height:400px; width:0; left:0; position:absolute; top:0; opacity:0.3; filter:alpha(opacity=30); overflow:hidden; }
+	div.tx-canvas div.tx-wysiwyg-padding { height:100%; width:0; left:0; position:absolute; top:0; opacity:0.3; filter:alpha(opacity=30); overflow:hidden; }
 	div.tx-canvas div.tx-wysiwyg-padding-divL { float: right; width: 26px; height:26px; margin-top: 3px; margin-right: 2px; }
 	div.tx-canvas div.tx-wysiwyg-padding-divR { float: left; width: 26px; height:26px; margin-top: 3px; margin-left: 2px;}
 	div.tx-canvas div.tx-wysiwyg-padding-divL { margin-right: 0; }

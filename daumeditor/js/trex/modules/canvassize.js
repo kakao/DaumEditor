@@ -1,18 +1,15 @@
 // NOTE 전체적으로 refactoring 필요
 Trex.module("make padding area inside Canvas with editor width",
-    function(editor, toolbar, sidebar, canvas) {
-
-        var _elHolder;
-        var _wysiwygPanel;
-        var _elWysiwyg;
-
-        _elHolder = canvas.wysiwygEl;
-        _wysiwygPanel = canvas.getPanel(Trex.Canvas.__WYSIWYG_MODE);
+	function(editor, toolbar, sidebar, canvas) {
+        var _wysiwygPanel = canvas.getPanel(Trex.Canvas.__WYSIWYG_MODE);
         if (!_wysiwygPanel) {
             return;
         }
-        _elWysiwyg = _wysiwygPanel.el;
+        
+		var _elHolder = canvas.wysiwygEl;
+        var _elWysiwyg = _wysiwygPanel.el;
 
+        // this variables are constant.
         var __HolderHorPadding = 5;
         var __HolderVerPadding = 5;
         var __ScrollWidth = 16;
@@ -25,8 +22,6 @@ Trex.module("make padding area inside Canvas with editor width",
 
 		var isInited = false;
 
-        var _wysiwygDoc;
-		
 		var _sizeConfig;
         var __EditorMaxWidth;
         var __CanvasWidth;
@@ -114,6 +109,7 @@ Trex.module("make padding area inside Canvas with editor width",
             }));
         });
 
+        // XXX
         if(__EditorMaxWidth <= __CanvasWidth) {
             return;
         }
@@ -152,18 +148,16 @@ Trex.module("make padding area inside Canvas with editor width",
         // iframe이 로딩되면 패딩영역을 추가한다.
         canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function() {
 
-            _wysiwygDoc = _wysiwygPanel.getDocument();
+            var _wysiwygDoc = _wysiwygPanel.getDocument();
 
             _wysiwygPanel.addStyle(_calPadding());
 
-            var _height = _wysiwygPanel.getPanelHeight();
             var _guideAreaSizes = _calGuideArea();
 
             _elLeftSpace = tx.div({
                 'className': "tx-wysiwyg-padding",
                 'style': {
                     'width': _guideAreaSizes.leftWidth,
-                    'height': _height,
                     'left': "0".toPx()
                 }
             });
@@ -182,7 +176,6 @@ Trex.module("make padding area inside Canvas with editor width",
                 'className': "tx-wysiwyg-padding",
                 'style': {
                     'width': _guideAreaSizes.rightWidth,
-                    'height': _height,
                     'left': _guideAreaSizes.rightPos
                 }
             });
@@ -239,15 +232,6 @@ Trex.module("make padding area inside Canvas with editor width",
             } else if(to == Trex.Canvas.__WYSIWYG_MODE) {
                 _showPaddingSpace();
             }
-        });
-
-        //에디터 높이가 변하였을 경우 패딩영역의 높이를 조절한다.
-        canvas.observeJob(Trex.Ev.__CANVAS_HEIGHT_CHANGE, function(height) {
-            if (isInited === false) {
-				return;
-			}
-			_elLeftSpace.style.height = height;
-           	_elRightSpace.style.height = height;
         });
 
         var _adjustPanelPandding = function(){
@@ -309,6 +293,7 @@ Trex.module("make padding area inside Canvas with editor width",
             _adjustPanelPandding();
         });
 
+        // 사용하는 곳 확인 필요
         canvas.getCanvasGuideSize = function(){
             return _calGuideArea().leftWidth.parsePx();
         };
