@@ -331,7 +331,7 @@ TrexConfig.addEmbeder(
 		}
 		switch (_ext) {
 			case "swf":
-				return "<embed src=\"" + url + "\" quality='high' "+ _allowScriptAccess +" type='application/x-shockwave-flash' allowfullscreen='true' pluginspage='http://www.macromedia.com/go/getflashplayer' width='"+_size.width+"' height='"+_size.height+"'></embed>";
+				return "<embed src=\"" + url + "\" quality='high' "+ _allowScriptAccess +" type='application/x-shockwave-flash' allowfullscreen='true' pluginspage='http://www.macromedia.com/go/getflashplayer' wmode='transparent' width='"+_size.width+"' height='"+_size.height+"'></embed>";
 			case "mp3":
 			case "wma":
 			case "asf":
