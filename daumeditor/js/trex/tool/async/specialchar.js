@@ -42,8 +42,6 @@
 				/* handler */
 				_toolHandler
 			);
-			
-			this.forceActivate();		
 		}
 	});
 	
@@ -110,5 +108,9 @@
 		}
 	});
 	
-	Editor.getTool().specialchar.oninitialized();
+	var thisToolName = 'specialchar';
+	Editor.forEachEditor(function (editor) {
+		editor.getTool()[thisToolName].oninitialized();
+	});
+	Editor.editorForAsyncLoad.getTool()[thisToolName].forceActivate();
 })();

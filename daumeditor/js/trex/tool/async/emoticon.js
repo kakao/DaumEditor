@@ -38,11 +38,13 @@
                 /* handler */
                 _toolHandler
             );
-            this.forceActivate();
         }
     
     });
     
-    Editor.getTool().emoticon.oninitialized();
-    
+	var thisToolName = 'emoticon';
+	Editor.forEachEditor(function (editor) {
+		editor.getTool()[thisToolName].oninitialized();
+	});
+	Editor.editorForAsyncLoad.getTool()[thisToolName].forceActivate();
 })();

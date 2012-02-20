@@ -100,10 +100,10 @@ Trex.Editor = Trex.Class.create( /** @lends Trex.Editor.prototype */{
 		return _params[name];
 	},
 	getWrapper: function() {
-		return $must(this.config.wrapper);
+		return $must(this.initialConfig.wrapper);
 	},
 	getInitializedId: function() {
-		return this.config.initializedId || "";
+		return this.initialConfig.initializedId || "";
 	},
 	saveEditor: function() {
 		this.setDisableUnloadHandler();
@@ -347,9 +347,20 @@ Trex.Editor = Trex.Class.create( /** @lends Trex.Editor.prototype */{
 	 * 동일한 Page에 Editor가 여러개 생성됬을 경우, 다른 Editor를 지정한다.
 	 * @param {Object} toIndex
 	 */
-	Editor.switchEditor = function(toIndex) {
+	Editor.switchEditor = function (toIndex) {
 		Editor.__SELECTED_INDEX = toIndex;
 		Object.extend(Editor, Editor.__MULTI_LIST[toIndex]);
+	};
+	/* 에디터가 여러개 있을 때 async로 불러오는 모듈에서 호출하는 에디터를 찾기 위함. */
+	Editor.editorForAsyncLoad = Editor;
+	/* 에디터가 여러개 있을 때 모든 에디터에 적용하기 위함 */
+	Editor.forEachEditor = function (fn) {
+		var indexName, list= Editor.__MULTI_LIST;
+		for (indexName in list) {
+			if (list.hasOwnProperty(indexName)) {
+				fn(list[indexName]);
+			}
+		}
 	};
 	/**
 	 * focus on form
