@@ -427,6 +427,7 @@ Trex.AsyncTool = Trex.Class.draft(/** @lends Trex.Tool.prototype */{
 		if (/:\/\//.test(url) === false) {
 			url = this.getJSBasePath() + url;
 		}
+		Editor.editorForAsyncLoad = this.editor;
 		EditorJSLoader.asyncLoadModule({
     		url: TrexConfig.getUrl(url),
     		callback: function(){}
