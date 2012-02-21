@@ -8,7 +8,6 @@ Trex.module("make padding area inside Canvas with editor width",
         var _elWysiwyg = _wysiwygPanel.el;
 
         var ADDED_PADDING_FOR_SKIN = 5;
-        var SPACING_GUIDE_AREA = 5;
         var SCROLL_WIDTH = 16;
         var REQUIRED_MINIMUM_PADDING = 28;
         var BORDER_OF_CANVAS = 2;
@@ -137,9 +136,9 @@ Trex.module("make padding area inside Canvas with editor width",
                 };
             } else {
                 return { 
-                    leftWidth: Math.ceil(_guideAreaWidth - SPACING_GUIDE_AREA).toPx(),
+                    leftWidth: Math.ceil(_guideAreaWidth - contentPadding).toPx(),
 					rightWidth: Math.max(0, (Math.floor(_guideAreaWidth))).toPx(),
-                    rightPos: (contentWidth + Math.ceil(_guideAreaWidth + SPACING_GUIDE_AREA)).toPx()
+                    rightPos: (contentWidth + Math.ceil(_guideAreaWidth + contentPadding)).toPx()
                 };
             }
         }
