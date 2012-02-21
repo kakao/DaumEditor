@@ -5,11 +5,10 @@ Trex.module("make padding area inside Canvas with editor width",
         if (!_wysiwygPanel) {
             return;
         }
-        
-		var _elHolder = canvas.wysiwygEl;
         var _elWysiwyg = _wysiwygPanel.el;
 
         var ADDED_PADDING_FOR_SKIN = 5;
+        var SPACING_GUIDE_AREA = 5;
         var SCROLL_WIDTH = 16;
         var REQUIRED_MINIMUM_PADDING = 28;
         var BORDER_OF_CANVAS = 2;
@@ -20,11 +19,11 @@ Trex.module("make padding area inside Canvas with editor width",
         var _elRightSpaceChild;
 
 		var sizeConfig = canvas.getSizeConfig();
-		var __EditorMaxWidth = canvas.getContainerWidth();
-		var __CanvasWidth = sizeConfig.contentWidth.toNumber();
-        var __ContentPadding = sizeConfig.contentPadding.toNumber();
-		var fixedContentWidth = (__EditorMaxWidth != __CanvasWidth);	// canvas.js: _sizeConfig.contentWidth = _sizeConfig.wrapWidth 와 얽힌 문제임.
-		
+		var currentCanvasWidth = canvas.getContainerWidth();
+		var contentWidth = sizeConfig.contentWidth.toNumber();
+        var contentPadding = sizeConfig.contentPadding.toNumber();
+		var fixedContentWidth = (currentCanvasWidth > contentWidth);	// canvas.js: _sizeConfig.contentWidth = _sizeConfig.wrapWidth 와 얽힌 문제임.
+
         //배경이 적용되었을 경우 사이즈를 변경한다.
         canvas.observeJob('canvas.apply.background', function(data) {
         	adjustCanvasPadding({
@@ -39,9 +38,9 @@ Trex.module("make padding area inside Canvas with editor width",
         canvas.observeJob('canvas.apply.letterpaper', function(data) {
         	adjustCanvasPadding({
                 top: (data && data.topHeight)? data.topHeight.parsePx(): 0,
-                right: (data && (data.midColor || data.midUrl))? __ContentPadding: 0,
+                right: (data && (data.midColor || data.midUrl))? contentPadding: 0,
                 bottom: (data && data.botHeight)? data.botHeight.parsePx(): 0,
-                left: (data && (data.midColor || data.midUrl))? __ContentPadding: 0
+                left: (data && (data.midColor || data.midUrl))? contentPadding: 0
             });
         });
 
@@ -63,7 +62,6 @@ Trex.module("make padding area inside Canvas with editor width",
     		
     		//에디터 래퍼의 너비가 변하였을 경우 패딩영역의 위치를 조절한다.
             canvas.observeJob(Trex.Ev.__CANVAS_WRAP_WIDTH_CHANGE, onCanvasWidthChanged);
-    		
             canvas.observeJob('canvas.normalscreen.change', onCanvasWidthChanged);
             canvas.observeJob('canvas.fullscreen.change', onCanvasWidthChanged);
     
@@ -94,30 +92,43 @@ Trex.module("make padding area inside Canvas with editor width",
 
         //iframe 패딩과 패딩영역의 사이즈를 계산한다.
         function calculdateCanvasPadding(skinStyle) {
-            var _paddingTop = 0, _paddingRight = 0, _paddingBottom = 0, _paddingLeft = 0;
+        	var canvasPadding = {};
+        	var direction = ['top', 'bottom', 'left', 'right'];
+        	
+        	for (var i = 0; i < direction.length; i++) {
+        		var key = direction[i];
+        		canvasPadding[key] = (skinStyle && skinStyle[key]) || contentPadding;
+        	}
             
-            var computedPadding = {
-            	top: (skinStyle && skinStyle.top ? skinStyle.top + ADDED_PADDING_FOR_SKIN : __ContentPadding),
-            	right: (skinStyle && skinStyle.right ? skinStyle.right + ADDED_PADDING_FOR_SKIN : __ContentPadding),
-            	bottom: (skinStyle && skinStyle.bottom ? skinStyle.bottom + ADDED_PADDING_FOR_SKIN : __ContentPadding),
-            	left: (skinStyle && skinStyle.left ? skinStyle.left + ADDED_PADDING_FOR_SKIN : __ContentPadding)
-            };
+            if (fixedContentWidth) {
+            	canvasPadding.left = Math.max(Math.ceil(getGuideAreaWidth()), 0);
+            	canvasPadding.right = Math.max(Math.floor(getGuideAreaWidth()), 0);	// for quirks mode
 
-            if(fixedContentWidth) {
-            	computedPadding.left += Math.max(Math.ceil((__EditorMaxWidth - __CanvasWidth - BORDER_OF_CANVAS - SCROLL_WIDTH) / 2), 0);
-            	computedPadding.right += Math.max(Math.floor((__EditorMaxWidth - __CanvasWidth - BORDER_OF_CANVAS - SCROLL_WIDTH) / 2), 0);
+            	return {
+            		width: contentWidth,
+            		paddingLeft: "0",
+            		paddingRight: "0",
+            		paddingTop: canvasPadding.top.toPx(),
+            		paddingBottom: canvasPadding.bottom.toPx(),
+            		marginLeft: canvasPadding.left.toPx(),
+            		marginRight: canvasPadding.right.toPx()
+            	};
+            } else {
+            	return {
+            		paddingTop: canvasPadding.top.toPx(),
+            		paddingRight: canvasPadding.right.toPx(),
+            		paddingBottom: canvasPadding.bottom.toPx(),
+            		paddingLeft: canvasPadding.left.toPx()
+            	};
             }
-
-            return {
-                paddingTop: computedPadding.top.toPx(),
-                paddingRight: computedPadding.right.toPx(),
-                paddingBottom: computedPadding.bottom.toPx(),
-                paddingLeft: computedPadding.left.toPx()
-            };
+        }
+        
+        function getGuideAreaWidth() {
+        	return (currentCanvasWidth - contentWidth - BORDER_OF_CANVAS - SCROLL_WIDTH) / 2;
         }
         
         function calculdateGuideArea() {
-			var _guideAreaWidth = (__EditorMaxWidth - __CanvasWidth - BORDER_OF_CANVAS - SCROLL_WIDTH) / 2;
+			var _guideAreaWidth = getGuideAreaWidth();
             if(_guideAreaWidth < REQUIRED_MINIMUM_PADDING) {
                 return {
                     leftWidth: '0',
@@ -125,10 +136,10 @@ Trex.module("make padding area inside Canvas with editor width",
                     rightPos: '0'
                 };
             } else {
-                return {
-                    leftWidth: Math.ceil(_guideAreaWidth).toPx(),
+                return { 
+                    leftWidth: Math.ceil(_guideAreaWidth - SPACING_GUIDE_AREA).toPx(),
 					rightWidth: Math.max(0, (Math.floor(_guideAreaWidth))).toPx(),
-                    rightPos: (__CanvasWidth + Math.ceil(_guideAreaWidth)).toPx()
+                    rightPos: (contentWidth + Math.ceil(_guideAreaWidth + SPACING_GUIDE_AREA)).toPx()
                 };
             }
         }
@@ -136,12 +147,15 @@ Trex.module("make padding area inside Canvas with editor width",
         function isGuideAreaCreated() {
         	return _elLeftSpace && _elRightSpace;
         }
-        
+
+		var queuedJob;
         function onCanvasWidthChanged() {
-        	setTimeout(function() {
-        		__EditorMaxWidth = canvas.getContainerWidth();
+        	// for quirks mode
+    		clearTimeout(queuedJob);
+        	queuedJob = setTimeout(function() {
+        		currentCanvasWidth = canvas.getContainerWidth();
         		adjustPanelPandding();
-        	}, 0);
+        	}, 4);
         }
 
         function adjustPanelPandding() {
@@ -169,6 +183,7 @@ Trex.module("make padding area inside Canvas with editor width",
                 }
             });
 
+    		var _elHolder = canvas.wysiwygEl;
             _elLeftSpace.appendChild(_elLeftSpaceChild);
             _elHolder.insertBefore(_elLeftSpace, _elWysiwyg);
             _elRightSpace.appendChild(_elRightSpaceChild);
