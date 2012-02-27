@@ -11,13 +11,14 @@
         <delete dir="${build.dist.dir}"/>
     </target>
     <target name="packaging" description="packaging distribution files" depends="build">
-        <echo message="copy javascript, css files"/>
-        <copy todir="${build.dist.dir}" overwrite="true">
-            <fileset dir="${build.target.dir}">
-                <exclude name="**/merged/"/>
-                <exclude name="**/escaped/"/>
-            </fileset>
+        <echo message="copy javascript"/>
+        <copy todir="${build.dist.dir}/js" overwrite="true">
+            <fileset dir="${build.target.js.minified.dir}"/>
         </copy>
+        <echo message="copy css"/>
+        <copy todir="${build.dist.dir}/css" overwrite="true">
+            <fileset dir="${build.target.css.minified.dir}"/>
+    	</copy>
         <echo message="copy image and html files"/>
         <copy todir="${build.dist.dir}" overwrite="true">
             <fileset dir="${src.editor.dir}">
@@ -59,6 +60,7 @@
     <target name="prepare_build_js">
         <mkdir dir="${build.target.js.merged.dir}"/>
         <mkdir dir="${build.target.js.escaped.dir}"/>
+        <mkdir dir="${build.target.js.minified.dir}"/>
     </target>
     <target name="merge_javascripts" depends="get_version">
         <for list="${js.list}" param="module">
@@ -90,18 +92,15 @@
         </replaceregexp>
     </target>
     <target name="minify_javascripts">
+    	<copy todir="${build.target.js.minified.dir}">
+    		<fileset dir="${build.target.js.escaped.dir}" />
+    	</copy>
         <for param="file">
             <path>
-                <fileset dir="${build.target.js.escaped.dir}" includes="**/*.js"/>
+                <fileset dir="${build.target.js.minified.dir}" includes="**/*.js"/>
             </path>
             <sequential>
-                <property name="target_path" value="dummy"/>
-                <var name="target_path" unset="true"/>
-                <var name="target_dir" unset="true"/>
-                <propertyregex property="target_path" input="@{file}" regexp="(/|\\)escaped" replace=""/>
-                <dirname property="target_dir" file="${target_path}"/>
-                <mkdir dir="${target_dir}"/>
-                <echo message="minify @{file} to ${target_path}"/>
+            	<echo message="Minify @{file}"/>
                 <java classname="com.yahoo.platform.yui.compressor.YUICompressor" classpath="${build.lib.yuicompressor}" failonerror="true">
                     <arg value="--charset"/>
                     <arg value="utf-8"/>
@@ -109,7 +108,7 @@
                     <arg value="1000"/>
                     <arg file="@{file}"/>
                     <arg value="-o"/>
-                    <arg file="${target_path}"/>
+                    <arg file="@{file}"/>
                 </java>
             </sequential>
         </for>
@@ -121,6 +120,7 @@
     </target>
     <target name="prepare_build_css">
         <mkdir dir="${build.target.css.merged.dir}"/>
+    	<mkdir dir="${build.target.css.minified.dir}"/>
     </target>
     <target name="merge_css">
         <for list="${css.list}" param="module">
@@ -137,14 +137,15 @@
         </for>
     </target>
     <target name="minify_css">
+    	<copy todir="${build.target.css.minified.dir}">
+    		<fileset dir="${build.target.css.merged.dir}" />
+    	</copy>
         <for param="file">
             <path>
-                <fileset dir="${build.target.css.merged.dir}" includes="**/*.css"/>
+                <fileset dir="${build.target.css.minified.dir}" includes="**/*.css"/>
             </path>
             <sequential>
-                <var name="target_filename" unset="true"/>
-                <basename property="target_filename" file="@{file}"/>
-                <echo message="Minify ${target_filename}"/>
+                <echo message="Minify @{file}"/>
                 <java classname="com.yahoo.platform.yui.compressor.YUICompressor" classpath="${build.lib.yuicompressor}" failonerror="true">
                     <arg value="--type"/>
                     <arg value="css"/>
@@ -152,16 +153,16 @@
                     <arg value="utf-8"/>
                     <arg value="--line-break"/>
                     <arg value="1000"/>
-                    <arg file="${build.target.css.merged.dir}/${target_filename}"/>
+                    <arg file="@{file}"/>
                     <arg value="-o"/>
-                    <arg file="${build.target.css.dir}/${target_filename}"/>
+                    <arg file="@{file}"/>
                 </java>
             </sequential>
         </for>
     </target>
     <!-- versioning tasks ================================================= -->
     <target name="get_version">
-        <exec executable="git" outputproperty="editor.version">
+        <exec executable="git" outputproperty="editor.version" failonerror="true">
             <arg value="describe"/>
             <arg value="--tags"/>
         </exec>
