@@ -245,7 +245,10 @@
             var _content = _oldPanel.getContent();
             _content = _editor.getDocParser().getContentsAtChangingMode(_content, oldMode, newMode);
             if (oldMode == Trex.Canvas.__WYSIWYG_MODE) { //NOTE: #FTDUEDTR-366
-                _oldPanel.setContent("");
+				if ($tx.msie_ver === 8) {
+					_oldPanel.hide();
+				} //prevent black screen from youtube iframe. #FTDUEDTR-1272
+				_oldPanel.setContent("");
                 try {
                     this.focusOnTop();
                 }catch(e){}
