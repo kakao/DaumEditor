@@ -36,7 +36,13 @@ TrexConfig.addEmbeder(
 	{
 		wysiwygonly: _TRUE,
 		useCC: _FALSE,
-		features: { resizable:"yes", left:250, top:65, width:478, height:580 },
+		features: {
+			left:250, 
+			top:65, 
+			width:458, 
+			height:568,
+			resizable:"yes"
+		},
 		popPageUrl: "#host#path/pages/trex/multimedia.html",
 		allowNetworkingFilter: _TRUE,
 		allowNetworkingSites: [
