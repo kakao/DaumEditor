@@ -45,7 +45,6 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 	setFocused: function (focused) {
 		if (this.focused !== focused) {
 			this.focused = focused;
-			this.fireJobs(Trex.Ev.__CANVAS_ENTRY_FOCUSED, focused);
 		}
 	},
 	/**
@@ -221,36 +220,4 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 		}
 		return _parastyle;
 	}
-});
-
-/*jslint nomen:false*/
-/*global Trex*/
-Trex.module("observe focused and set property of attachments", function (editor, toolbar, sidebar, canvas) {
-	var setFocusedOfArrItem = function (attachmentArr, focused) {
-		var len, i;
-		len = attachmentArr.length;
-		for (i = 0; i < len; i += 1) {
-			attachmentArr[i].setFocused(focused);
-		}
-	};
-	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_QUERY_STATUS, function (goog_range) {
-		var content, attachments, attachmentItem,
-			focusedArr, defocusedArr, len, i, focused;
-		content = goog_range.getHtmlFragment();
-		attachments = sidebar.getAttachments();
-		focusedArr = [];
-		defocusedArr = [];
-		len = attachments.length;
-		for (i = 0; i < len; i += 1) {
-			attachmentItem = attachments[i];
-			focused = attachmentItem.checkExisted(content);
-			if (focused) {
-				focusedArr.push(attachmentItem);
-			} else {
-				defocusedArr.push(attachmentItem);
-			}
-		}
-		setFocusedOfArrItem(defocusedArr, false);
-		setFocusedOfArrItem(focusedArr, true);
-	});
 });
