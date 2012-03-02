@@ -45,13 +45,19 @@ Trex.Canvas.HtmlPanel = Trex.Class.create(/** @lends Trex.Canvas.HtmlPanel.proto
 				this.canvas.fireJobs(Trex.Ev.__CANVAS_SOURCE_PANEL_KEYDOWN, ev);
 			},
 			keyup: function(){
-				this.canvas.getProcessor().savePosition();
+				var processor = this.canvas.getProcessor();
+				if (processor && processor.savePosition) {
+					processor.savePosition();
+				}
 			},
 			mousedown: function(ev){
 				this.canvas.fireJobs(Trex.Ev.__CANVAS_SOURCE_PANEL_MOUSEDOWN, ev);
 			},
 			mouseup: function(){
-				this.canvas.getProcessor().savePosition();	
+				var processor = this.canvas.getProcessor();
+				if (processor && processor.savePosition) {
+					processor.savePosition();
+				}
 			},
 			click: function(ev) {
 				this.canvas.fireJobs(Trex.Ev.__CANVAS_SOURCE_PANEL_CLICK, ev);	
