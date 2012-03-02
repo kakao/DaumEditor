@@ -70,13 +70,19 @@ Trex.Docparser =Trex.Class.create( {
 		getFilter: function(name){
 			return this.filters[name];
 		},
-		executeFilters: function(cmd, contents){
-			for(var i in this.filters){
-				var filter = this.filters[i];
-				if(filter[cmd]){
-					contents = filter[cmd](contents);	
+		executeFilters: function (cmd, contents) {
+			var filters = this.filters;
+			["before " + cmd, cmd, "after " + cmd].each(function (cmd) {
+				var name, filter;
+				for (name in filters) {
+					if (filters.hasOwnProperty(name)) {
+						filter = filters[name];
+						if (filter[cmd]) {
+							contents = filter[cmd](contents);	
+						}
+					}
 				}
-			}
+			});
 			return contents;
 		},
 		getContentsAtChangingMode: function(contents, oldMode, newMode) {
@@ -138,6 +144,3 @@ Trex.Docparser =Trex.Class.create( {
 		/* 외부에서 참조할 컨텐츠 변환 필터명 끝 */
 	} 
 );
-	
-
-
