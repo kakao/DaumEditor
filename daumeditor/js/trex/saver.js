@@ -158,6 +158,20 @@ Trex.Save = Trex.Class.create({
 		if (typeof loadForm == "function") {
 			loadForm(this.editor, jsonData);
 		}
+		
+		try { //#FTDUEDTR-1111
+			this.setDataByJSONToEditor(jsonData);
+		} catch (error) {
+			alert(' - Error: ' + error.message + '\n소스보기 모드로 전환합니다.\n잘못된 HTML이 있는지 확인해주세요.');
+			jsonData.inputmode = Trex.Canvas.__HTML_MODE;
+			this.setDataByJSONToEditor(jsonData);
+		}
+		
+		if (typeof postLoad == "function") {
+			postLoad(this.editor, jsonData);
+		}
+	},
+	setDataByJSONToEditor: function (jsonData) {
 		this.editor.setDataByJSON({
 			'inputmode': (!jsonData.inputmode || jsonData.inputmode == 'html')? 'original': jsonData.inputmode,
 			'content': function() {
@@ -172,10 +186,6 @@ Trex.Save = Trex.Class.create({
 			}(),
 			'attachments': jsonData.attachments
 		});
-		
-		if (typeof postLoad == "function") {
-			postLoad(this.editor, jsonData);
-		}
 	},
 	makeField: function() {
 		var _sidebar = this.sidebar;
