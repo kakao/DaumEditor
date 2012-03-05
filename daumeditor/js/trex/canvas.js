@@ -242,8 +242,8 @@
             if (!_oldPanel || !_newPanel) {
                 throw new Error("[Exception]Trex.Canvas : not suppored mode");
             }
-            var _content = _oldPanel.getContent();
-            _content = _editor.getDocParser().getContentsAtChangingMode(_content, oldMode, newMode);
+            var _oldContent = _oldPanel.getContent();
+            var _content = _editor.getDocParser().getContentsAtChangingMode(_oldContent, oldMode, newMode);
             if (oldMode == Trex.Canvas.__WYSIWYG_MODE) { //NOTE: #FTDUEDTR-366
 				if ($tx.msie_ver === 8) {
 					_oldPanel.hide();
@@ -253,7 +253,14 @@
                     this.focusOnTop();
                 }catch(e){}
             }
-            _newPanel.setContent(_content);
+			try { //#FTDUEDTR-1111
+            	_newPanel.setContent(_content);
+			} catch (error) {
+				alert(' - Error: ' + error.message + '\n에디터 타입 변경에 실패하였습니다.\n잘못된 HTML이 있는지 확인해주세요.');
+				_oldPanel.setContent(_oldContent);
+				_oldPanel.show();
+				return;
+			}
             this.mode = newMode;
             this.fireJobs(Trex.Ev.__CANVAS_MODE_CHANGE, oldMode, newMode);
             _newPanel.setPanelHeight(_oldPanel.getPanelHeight());
