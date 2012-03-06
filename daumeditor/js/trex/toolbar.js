@@ -124,6 +124,22 @@ Trex.module("bind events with tools",
 	function(editor, toolbar, sidebar, canvas) {
 		var _tools = toolbar.tools;
 		
+		var disableToolOnMobile = function () {
+			var isMobile, name, tool, btn;
+			isMobile = $tx.ios || $tx.android;
+			if (!isMobile) {
+				return;
+			}
+			for (name in _tools) {
+				tool = _tools[name];
+				if (tool.disabledonmobile) {
+					btn = tool.button;
+					btn.disable();
+				}
+			}
+		};
+		disableToolOnMobile();
+		
 		var _changeMode = function(from, to){
 			if (from == to) {
 				return;
@@ -141,6 +157,7 @@ Trex.module("bind events with tools",
 					}
 				}
 			}
+			disableToolOnMobile();
 		};
 		canvas.observeJob(Trex.Ev.__CANVAS_MODE_CHANGE, _changeMode);
 		canvas.observeJob(Trex.Ev.__CANVAS_MODE_INITIALIZE, _changeMode);
@@ -271,6 +288,9 @@ Trex.Tool = Trex.Class.draft(/** @lends Trex.Tool.prototype */{
 		this.config = config;
 		this.wysiwygonly = ((config.wysiwygonly != _NULL)? config.wysiwygonly: _TRUE);
 		this.menuFoldAuto = ((config.menuFoldAuto != _NULL)? config.menuFoldAuto: _TRUE);
+		if (config.disabledonmobile != _NULL) {
+			this.disabledonmobile = config.disabledonmobile;
+		}
 		
 		/** 
 		 * 버튼을 생성할 때 필요한 설정값
