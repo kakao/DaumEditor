@@ -135,6 +135,10 @@ var $tx = {};
 		 */
 		ios: isExistAgentString("like mac os x") && isExistAgentString("mobile"),
 		/**
+		 * iPhone, iPod Touch, iPad 의 iOS 버전
+		 */
+		ios_ver: (isExistAgentString("like mac os x") && isExistAgentString("mobile")) ? parseFloat(txua.replace(/^.*os (\d+)([_\d]*) .*$/g, "$1.$2").replace(/_/g, "")) : 0,
+		/**
 		 * Android 이면 true
 		 */
 		android: isExistAgentString("android"),
