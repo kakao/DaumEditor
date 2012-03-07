@@ -17,7 +17,7 @@
 
 /*==== fontfamily ====*/
 	.tx-fontfamily a:hover { text-decoration:none }
-	.tx-fontfamily span{ line-height: 1.5 }
+	.tx-fontfamily span{ line-height:1.5;word-break:break-all; }
 	.tx-fontfamily-menu { width:168px; }
 	
 	.tx-fontfamily-menu .tx-menu-list-item a { height:18px; }
