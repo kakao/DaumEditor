@@ -20,16 +20,37 @@ TrexConfig.addTool(
 		status: _TRUE,
 		useFavorite: _TRUE,
 		options: [
-			{ label: TXMSG('@fontfamily.gulim')+'<span class="tx-txt">(가나다라)</span>', title: TXMSG('@fontfamily.gulim'), data: 'Gulim,굴림', klass: 'tx-gulim' },
-			{ label: TXMSG('@fontfamily.batang')+'<span class="tx-txt">(가나다라)</span>', title: TXMSG('@fontfamily.batang'), data: 'Batang,바탕', klass: 'tx-batang' },
-			{ label: TXMSG('@fontfamily.dotum')+'<span class="tx-txt">(가나다라)</span>', title: TXMSG('@fontfamily.dotum'), data: 'Dotum,돋움', klass: 'tx-dotum' },
-			{ label: TXMSG('@fontfamily.gungsuh')+' <span class="tx-txt">(가나다라)</span>', title: TXMSG('@fontfamily.gungsuh'), data: 'Gungsuh,궁서', klass: 'tx-gungseo' },
-			{ label: 'Arial <span class="tx-txt">(abcde)</span>', title: 'Arial', data: 'Arial', klass: 'tx-arial' },
-			{ label: 'Verdana <span class="tx-txt">(abcde)</span>', title: 'Verda..', data: 'Verdana', klass: 'tx-verdana' }
+			{ label: TXMSG('@fontfamily.gulim')+' (<span class="tx-txt">가나다라</span>)', title: TXMSG('@fontfamily.gulim'), data: 'Gulim,굴림,AppleGothic,sans-serif', klass: 'tx-gulim' },
+			{ label: TXMSG('@fontfamily.batang')+' (<span class="tx-txt">가나다라</span>)', title: TXMSG('@fontfamily.batang'), data: 'Batang,바탕', klass: 'tx-batang' },
+			{ label: TXMSG('@fontfamily.dotum')+' (<span class="tx-txt">가나다라</span>)', title: TXMSG('@fontfamily.dotum'), data: 'Dotum,돋움', klass: 'tx-dotum' },
+			{ label: TXMSG('@fontfamily.gungsuh')+' (<span class="tx-txt">가나다라</span>)', title: TXMSG('@fontfamily.gungsuh'), data: 'Gungsuh,궁서', klass: 'tx-gungseo' },
+			{ label: 'Arial (<span class="tx-txt">abcde</span>)', title: 'Arial', data: 'Arial', klass: 'tx-arial' },
+			{ label: 'Verdana (<span class="tx-txt">abcde</span>)', title: 'Verdana', data: 'Verdana', klass: 'tx-verdana' }
 		]
 	}
 );
-
+/* legacy fontfamily * 
+{ label: ' 굴림 (<span class="tx-txt">가나다라</span>)', title: '굴림', data: 'Gulim,굴림,AppleGothic,sans-serif', klass: 'tx-gulim' },
+{ label: ' 바탕 (<span class="tx-txt">가나다라</span>)', title: '바탕', data: 'Batang,바탕', klass: 'tx-batang' },
+{ label: ' 돋움 (<span class="tx-txt">가나다라</span>)', title: '돋움', data: 'Dotum,돋움', klass: 'tx-dotum' },
+{ label: ' 궁서 (<span class="tx-txt">가나다라</span>)', title: '궁서', data: 'Gungsuh,궁서', klass: 'tx-gungseo' },
+{ label: ' Arial (<span class="tx-txt">abcde</span>)', title: 'Arial', data: 'Arial', klass: 'tx-arial' },
+{ label: ' Verdana (<span class="tx-txt">abcde</span>)', title: 'Verdana', data: 'Verdana', klass: 'tx-verdana' },
+{ label: ' Arial Black (<span class="tx-txt">abcde</span>)', title: 'Arial Black', data: 'Arial Black', klass: 'tx-arial-black' },
+{ label: ' Book Antiqua (<span class="tx-txt">abcde</span>)', title: 'Book Antiqua', data: 'Book Antiqua', klass: 'tx-book-antiqua' },
+{ label: ' Comic Sans MS (<span class="tx-txt">abcde</span>)', title: 'Comic Sans MS', data: 'Comic Sans MS', klass: 'tx-comic-sans-ms' },
+{ label: ' Courier New (<span class="tx-txt">abcde</span>)', title: 'Courier New', data: 'Courier New', klass: 'tx-courier-new' }, 	
+{ label: ' Georgia (<span class="tx-txt">abcde</span>)', title: 'Georgia', data: 'Georgia', klass: 'tx-georgia' },
+{ label: ' Helvetica (<span class="tx-txt">abcde</span>)', title: 'Helvetica', data: 'Helvetica', klass: 'tx-helvetica' },
+{ label: ' Impact (<span class="tx-txt">abcde</span>)', title: 'Impact', data: 'Impact', klass: 'tx-impact' },
+{ label: ' Symbol (<span class="tx-txt">abcde</span>)', title: 'Symbol', data: 'Symbol', klass: 'tx-symbol' },
+{ label: ' Tahoma (<span class="tx-txt">abcde</span>)', title: 'Tahoma', data: 'Tahoma', klass: 'tx-tahoma' },
+{ label: ' Terminal (<span class="tx-txt">abcde</span>)', title: 'Terminal', data: 'Terminal', klass: 'tx-terminal' },
+{ label: ' Times New Roman (<span class="tx-txt">abcde</span>)', title: 'Times New R..', data: 'Times New Roman', klass: 'tx-times-new-roman' },
+{ label: ' Trebuchet MS (<span class="tx-txt">abcde</span>)', title: 'Trebuchet MS', data: 'Trebuchet MS', klass: 'tx-trebuchet-ms' },
+{ label: ' Webdings (<span class="tx-txt">abcde</span>)', title: 'Webdings', data: 'Webdings', klass: 'tx-webdings' },
+{ label: ' Wingdings (<span class="tx-txt">abcde</span>)', title: 'Wingdings', data: 'Wingdings', klass: 'tx-wingdings' }
+ */
 Trex.Tool.FontFamily = Trex.Class.create({
 	$const: {
 		__Identity: 'fontfamily'
@@ -60,7 +81,8 @@ Trex.Tool.FontFamily = Trex.Class.create({
         self.createFontFamilyMap(self.usedFonts);
     },
     createFontFamilyMap: function(usedFonts) {
-        var fontFamilyMap = this.fontFamilyMap = {};
+        var fontFamilyMap = {};
+		this.fontFamilyMap = fontFamilyMap;
         usedFonts.each(function(option) {
             var fontNames = option.data.split(",");
             var title = option.title;
@@ -73,16 +95,30 @@ Trex.Tool.FontFamily = Trex.Class.create({
         });
     },
     createButton: function() {
-        var button = this.button = new Trex.Button.Select(this.buttonCfg);
+        var button = new Trex.Button.Select(this.buttonCfg);
+		this.button = button;
         button.setValue(this.getDefaultProperty());
         button.setText(this.getTextByValue(this.getDefaultProperty()));
         return button;
     },
     createMenu: function() {
         var self = this;
-        var menu = self.menu = new Trex.Menu.Select(TrexConfig.merge(self.menuCfg, {
+        var menu = new Trex.Menu.Select(TrexConfig.merge(self.menuCfg, {
             options: self.usedFonts
         }));
+		this.menu = menu;
+		//overwrite generateListItem
+		menu.generateListItem = function (option) {
+			var result = [], i, item, labalBackup;
+			for(i = 0; i < option.length; i += 1) {
+				item = option[i];
+				labalBackup = item.label;
+				item.label = item.label.replace(/<span class="tx\-txt">/, '<span class="tx-txt" style="font-family:' + item.data + ';">');
+				result.push(Trex.MarkupTemplate.get("menu.select.item").evaluate(item));
+				item.label = labalBackup;	
+			}
+			return result.join("");
+		};
         if (self.usedWebFonts.length > 0) {
             $tx.addClassName(menu.elMenu, "tx-fontfamily-webfont-menu");
             var elDummyForFocus = tx.input({'type': 'text', 'className': 'tx-dummyfocus'});
@@ -149,6 +185,8 @@ Trex.Tool.FontFamily = Trex.Class.create({
 		if (value.include(",")) {
             value = value.split(",")[0];
         }
+		//브라우저에 따라 qoute 등으로 감싸주는 경우가 있음.
+		value = value.replace(/[^A-Za-z\s]/g, "");
 		value = value.toLowerCase();
 		fontFamilyMap = this.fontFamilyMap;
 		text = fontFamilyMap[value];

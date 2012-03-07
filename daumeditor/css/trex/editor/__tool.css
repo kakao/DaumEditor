@@ -17,21 +17,9 @@
 
 /*==== fontfamily ====*/
 	.tx-fontfamily a:hover { text-decoration:none }
-	.tx-fontfamily span{ line-height: 1.5 }
+	.tx-fontfamily span{ line-height:1.5;word-break:break-all; }
 	.tx-fontfamily-menu { width:168px; }
 	
-	.tx-fontfamily-menu .tx-gulim { font-family:Gulim,AppleGothic,sans-serif; }
-	.tx-fontfamily-menu .tx-batang { font-family:'바탕',Batang; }
-	.tx-fontfamily-menu .tx-dotum { font-family:dotum; }
-	.tx-fontfamily-menu .tx-gungseo { font-family:'궁서',GungSuh; }
-	.tx-fontfamily-menu .tx-arial {	font-family:Arial; }
-	.tx-fontfamily-menu .tx-verdana { font-family:Verdana; }
-	.tx-fontfamily-menu .tx-gulim .tx-txt{ font-family:Gulim,AppleGothic,sans-serif; }
-	.tx-fontfamily-menu .tx-batang .tx-txt{ font-family:'바탕',Batang; }
-	.tx-fontfamily-menu .tx-dotum .tx-txt{ font-family:dotum; }
-	.tx-fontfamily-menu .tx-gungseo .tx-txt{ font-family:'궁서',GungSuh; }
-	.tx-fontfamily-menu .tx-arial .tx-txt{	font-family:Arial; }
-	.tx-fontfamily-menu .tx-verdana .tx-txt{ font-family:Verdana; }
 	.tx-fontfamily-menu .tx-menu-list-item a { height:18px; }
 
 /*==== fontsize ====*/

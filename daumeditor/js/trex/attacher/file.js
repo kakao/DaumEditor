@@ -8,7 +8,9 @@
  */
 TrexConfig.addTool(
 	"file",
-	{	wysiwygonly: _TRUE,
+	{
+		disabledonmobile: _TRUE,
+		wysiwygonly: _TRUE,
 		sync: _FALSE,
 		status: _FALSE
 	}
