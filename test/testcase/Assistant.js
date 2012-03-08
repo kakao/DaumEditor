@@ -5,11 +5,21 @@
      * Editor Unit Test Helper
      */
     Assistant = function(editor) {
-        this.editor = editor || Editor;
-        this.canvas = this.editor.getCanvas();
-        this.processor = this.canvas.getProcessor();
-        this.doc = this.processor.doc;
-        this.win = this.processor.win;
+    	var self = this;
+    	self.editor = editor || Editor;
+    	self.canvas = self.editor.getCanvas();
+    	if (self.editor.__PANEL_LOADED) {
+    		setData();
+    	} else {
+    		self.canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function() {
+    			setData();
+    		});
+    	}
+    	function setData() {
+    		self.processor = self.canvas.getProcessor();
+        	self.doc = self.processor.doc;
+        	self.win = self.processor.win;
+    	}
     };
     Assistant.prototype = {
         $: function(id) {
