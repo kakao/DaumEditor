@@ -19,27 +19,34 @@ Trex.I.MenuFontTool = Trex.Mixin.create({
     },
     queryCurrentStyle: function(goog_range) {   // only for fontfamily, fontsize
         var self = this;
-        var currentStyle = self.queryCommandValue();
-        if (!currentStyle) {
-            currentStyle = self.canvas.query(function(processor) {
-                var targetNode;
-                if ($tx.msie && goog_range.isCollapsed()) { // FTDUEDTR-1233
-                    targetNode = processor.getNode();
-                } else {
-                    targetNode = self.findQueryingNode(goog_range);
-                }
-                return self.queryElementCurrentStyle(targetNode) || self.getDefaultProperty();
-            });
+        var queriedValue = self.queryCommandValue();
+
+        // try to get using queryCommand
+        if (queriedValue && self.getTextByValue(queriedValue)) {
+        	return self.getTextByValue(queriedValue);
         }
-        return this.getTextByValue(currentStyle);
+
+        // try to get from style
+    	var currentStyle = self.canvas.query(function(processor) {
+            var targetNode;
+            if ($tx.msie && goog_range.isCollapsed()) { // FTDUEDTR-1233
+                targetNode = processor.getNode();
+            } else {
+                targetNode = self.findQueryingNode(goog_range);
+            }
+            return self.queryElementCurrentStyle(targetNode);
+        });
+    	if (currentStyle && self.getTextByValue(currentStyle)) {
+    		return self.getTextByValue(currentStyle);
+    	}
+
+    	// fallback
+    	return queriedValue || currentStyle || self.getTextByValue(self.getDefaultProperty());
     },
     queryCommandValue: function() {
         var self = this;
         return self.canvas.query(function(processor) {
-            var queriedValue = processor.queryCommandValue(self.getQueryCommandName());
-            if (queriedValue && self.getTextByValue(queriedValue)) {
-                return queriedValue;
-            }
+            return processor.queryCommandValue(self.getQueryCommandName());
         });
     },
     queryElementCurrentStyle: function(element) {
