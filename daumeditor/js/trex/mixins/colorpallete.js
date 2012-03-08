@@ -220,13 +220,8 @@ Trex.I.ColorPallete = Trex.Faculty.create({
         return {x: nPosX, y: nPosY};
     },
     getHueCoords: function(ev) {
-        var scrollParentY = $tx.cumulativeScroll($tx.element(ev))[1];
-        var nPosX = (ev.clientX - this.iHuePos.x) + _DOC_EL.scrollLeft;
-        var nPosY = (ev.clientY - this.iHuePos.y + scrollParentY);
-
-        nPosX = Math.min(this.nHueHeight, Math.max(0, nPosY));
-        nPosY = Math.min(this.nColWidth, Math.max(0, nPosX));
-        return {x: nPosX, y: nPosY};
+		var y = ev.offsetY || ev.layerY;
+		return Math.min(this.nHueHeight, Math.max(0, y));
     },
     getColorByEvent: function(x, y) {
         var s = (x/(this.nColWidth))*100;
@@ -269,8 +264,8 @@ Trex.I.ColorPallete = Trex.Faculty.create({
         this.lastValue = color;
         this.mousedownDetected = _FALSE;
     },
-    getHueByEvent: function(x/*, y*/) {
-        var h = parseInt((x/(this.nHueHeight))*360);
+    getHueByEvent: function(y) {
+        var h = parseInt((y/(this.nHueHeight))*360);
         this.mHSV.h = Math.floor(Math.min(Math.max(h,0), 360));
         var mHueRgb = this.hsv2rgb(this.mHSV.h, 100, 100);
         return this.rgb2hex(mHueRgb.r, mHueRgb.g, mHueRgb.b);
@@ -283,13 +278,13 @@ Trex.I.ColorPallete = Trex.Faculty.create({
         $tx.observe(_DOC, 'mouseup', this.hueUpHandler);
     },
     onHueMove: function(ev) {
-        var iPos = this.getHueCoords(ev);
-        var color = this.getHueByEvent(iPos.x, iPos.y);
+		var y = this.getHueCoords(ev);
+		var color = this.getHueByEvent(y);
         this.setHueColor(color);
     },
     onHueClick: function(ev) {
-        var iPos = this.getHueCoords(ev);
-        var color = this.getHueByEvent(iPos.x, iPos.y);
+		var y = this.getHueCoords(ev);
+		var color = this.getHueByEvent(y);
         this.setHueColor(color);
     },
     onHueUp: function() {
