@@ -9,6 +9,7 @@
 TrexConfig.addTool(
 	"image",
 	{
+		disabledonmobile: _TRUE,
 		wysiwygonly: _TRUE,
 		sync: _FALSE,
 		status: _FALSE
