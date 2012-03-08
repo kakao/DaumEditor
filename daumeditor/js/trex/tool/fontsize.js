@@ -100,8 +100,5 @@ Trex.Tool.FontSize = Trex.Class.create({
     },
     getFontTagAttribute: function() {
         return "size";
-    },
-    rangeExecutor: function(processor, newStyle, range) {
-        this.wrapTextAsStyledSpan(processor, newStyle, range);
     }
 });
