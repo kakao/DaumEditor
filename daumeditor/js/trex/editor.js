@@ -202,10 +202,10 @@ Trex.Editor = Trex.Class.create( /** @lends Trex.Editor.prototype */{
                 console.log(e.stack);
                 if (_editor) {
 					_editor.fireJobs(Trex.Ev.__RUNTIME_EXCEPTION, e);
-					throw e;
 				} else {
-					throw "_editor_not_defined!" + e;
+					_editor.fireJobs(Trex.Ev.__RUNTIME_EXCEPTION, "_editor_not_defined!" + e);
 				}
+                throw e;
 			}
 		}
 	});

@@ -84,7 +84,7 @@ Trex.Tool.FontSize = Trex.Class.create({
             var round = Math.round(parseFloat(value)).toPx();
             matchedText = this.fontSizeMap[round];
         }
-        return matchedText || value;
+        return matchedText;
     },
     getRelatedCssPropertyNames: function() {
         return ["font", this.getCssPropertyName()];
@@ -100,8 +100,5 @@ Trex.Tool.FontSize = Trex.Class.create({
     },
     getFontTagAttribute: function() {
         return "size";
-    },
-    rangeExecutor: function(processor, newStyle, range) {
-        this.wrapTextAsStyledSpan(processor, newStyle, range);
     }
 });

@@ -480,15 +480,6 @@ $tx.extend($tx, /** @lends $tx */{
 			} while (element);
 			return [valueL, valueT];
 		},
-		cumulativeScroll: function(element){
-			var valueT = 0, valueL = 0;
-			do {
-				valueT += element.scrollTop || 0;
-				valueL += element.scrollLeft || 0;
-				element = element.offsetParent;
-			} while (element);
-			return [valueL, valueT];
-		},
 		/**
 		 * 요소의 최상위 요소까지의 offset position 을 더한 값을 리턴한다.
 		 * 상위 요소가 body이거나 position이 relative 또는 absolute 인 경우 계산을 중지한다.

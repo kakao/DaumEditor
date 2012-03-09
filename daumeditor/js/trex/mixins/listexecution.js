@@ -49,10 +49,10 @@ Trex.I.ListExecution = Trex.Mixin.create(/** @lends Trex.I.ListExecution */{
 						$tom.insertAt(_curGrpNode, _clnGrpNode);
 						$tom.append(_curGrpNode, node);
 						
-						if (!$tom.hasChildren(_gNode)) {
+						if (!$tom.hasUsefulChildren(_gNode)) {
 							$tom.remove(_gNode);
 						}
-						if (!$tom.hasChildren(_clnGrpNode)) {
+						if (!$tom.hasUsefulChildren(_clnGrpNode)) {
 							$tom.remove(_clnGrpNode);
 						}
 					} else { //invalid
@@ -157,10 +157,10 @@ tolist: function(nodes, tag, attributes) {
 							$tom.insertAt(_newGNode, _cloneGNode);
 							$tom.append(_newGNode, node);
 							_curGNode = _newGNode;
-							if (!$tom.hasChildren(_cloneGNode)) {
+							if (!$tom.hasUsefulChildren(_cloneGNode)) {
 								$tom.remove(_cloneGNode);
 							}
-							if (!$tom.hasChildren(_gNode)) {
+							if (!$tom.hasUsefulChildren(_gNode)) {
 								$tom.remove(_gNode);
 							}
 						}

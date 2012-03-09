@@ -62,7 +62,7 @@ Trex.Tool.Link = Trex.Class.create({
 									return '%text,img,a,%inline';
 								});
 								_nodes.each(function(node) {
-									if ($tom.hasChildren(node, _TRUE)) {
+									if ($tom.hasUsefulChildren(node, _TRUE)) {
 										if ($tom.kindOf(node, 'a')) {
 											$tom.applyAttributes(node, _attributes);
 										} else if ($tom.kindOf(node, 'img')) {

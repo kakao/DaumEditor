@@ -227,11 +227,7 @@ Object.extend($tom, /** @lends $tom */{
             $tom.remove(textNode);
         }
     },
-	/**
-	 * node의 child가 있으면 true를 반환한다.
-	 * @function
-	 */
-	hasChildren: function(node, ignoreZWNBS) {
+	hasUsefulChildren: function(node, ignoreZWNBS) {
 		if(!node) {
 			return _FALSE;
 		}
@@ -854,7 +850,7 @@ Object.extend($tom, /** @lends $tom */{
 		if(!node) {
 			return node;
 		}
-		if($tom.hasChildren(node, _TRUE)) {
+		if($tom.hasUsefulChildren(node, _TRUE)) {
 			return node;
 		}
 		if(node.lastChild) {

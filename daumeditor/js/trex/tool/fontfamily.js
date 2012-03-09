@@ -1,7 +1,7 @@
 /**
  * @fileoverview 
  * 설정에서 지정된 여러 글꼴들을 선택할 수 있는 메뉴를 포함하는 tool인 '글꼴' Icon을 위한 source로, 
- * 필요한 configuration과 Class Trex.Tool.FontFamily을/를 포함    
+ * 필요한 configuration과 Class Trex.Tool.FontFamily을/를 포함	
  * 
  *   
  */
@@ -57,55 +57,57 @@ Trex.Tool.FontFamily = Trex.Class.create({
 	},
 	$extend: Trex.Tool,
 	$mixins: [Trex.I.CookieBaker, Trex.I.FontTool, Trex.I.MenuFontTool, Trex.I.WrappingSpanFontTool],
-    beforeOnInitialized: function(config) {
-        function findAvailableFonts(config) {
-            self.usedWebFonts = (($tx.msie && config.webfont && config.webfont.use) ? config.webfont.options : []);
-            self.usedFonts = config.options.concat(self.usedWebFonts);
-        }
+	beforeOnInitialized: function(config) {
+		function findAvailableFonts(config) {
+			self.usedWebFonts = (($tx.msie && config.webfont && config.webfont.use) ? config.webfont.options : []);
+			self.usedFonts = config.options.concat(self.usedWebFonts);
+		}
 
-        function setUseFavoriteFont(config) {
-            if (config.useFavorite && self.usedWebFonts.length > 0) {
-                self.useFavorite = _TRUE;
-                self.initCookie('txFontFamilyFavorite');
-            } else {
-                self.useFavorite = _FALSE;
-            }
-        }
+		function setUseFavoriteFont(config) {
+			if (config.useFavorite && self.usedWebFonts.length > 0) {
+				self.useFavorite = _TRUE;
+				self.initCookie('txFontFamilyFavorite');
+			} else {
+				self.useFavorite = _FALSE;
+			}
+		}
 
-        var self = this;
-        self.focusLoosed = _FALSE;
+		var self = this;
+		self.focusLoosed = _FALSE;
 
-        findAvailableFonts(config);
-        setUseFavoriteFont(config);
+		findAvailableFonts(config);
+		setUseFavoriteFont(config);
 
-        self.createFontFamilyMap(self.usedFonts);
-    },
-    createFontFamilyMap: function(usedFonts) {
-        var fontFamilyMap = {};
+		self.createFontFamilyMap(self.usedFonts);
+	},
+	createFontFamilyMap: function(usedFonts) {
+		var self = this, fontFamilyMap = {};
 		this.fontFamilyMap = fontFamilyMap;
-        usedFonts.each(function(option) {
-            var fontNames = option.data.split(",");
-            var title = option.title;
-            for( var i = 0; i < fontNames.length; i++){
-                fontFamilyMap[fontNames[i].toLowerCase()] = title;
-            }
-            if (!fontFamilyMap[title.toLowerCase()]) {
-                fontFamilyMap[title.toLowerCase()] = title;
-            }
-        });
-    },
-    createButton: function() {
-        var button = new Trex.Button.Select(this.buttonCfg);
+		usedFonts.each(function (option) {
+			var fontNames, title, i, key;
+			fontNames = option.data.split(",");
+			title = option.title;
+			for (i = 0; i < fontNames.length; i += 1) {
+				key = self.preprocessFontFamily(fontNames[i]);
+				fontFamilyMap[key] = title;
+			}
+			if (!fontFamilyMap[title.toLowerCase()]) {
+				fontFamilyMap[title.toLowerCase()] = title;
+			}
+		});
+	},
+	createButton: function() {
+		var button = new Trex.Button.Select(this.buttonCfg);
 		this.button = button;
-        button.setValue(this.getDefaultProperty());
-        button.setText(this.getTextByValue(this.getDefaultProperty()));
-        return button;
-    },
-    createMenu: function() {
-        var self = this;
-        var menu = new Trex.Menu.Select(TrexConfig.merge(self.menuCfg, {
-            options: self.usedFonts
-        }));
+		button.setValue(this.getDefaultProperty());
+		button.setText(this.getTextByValue(this.getDefaultProperty()));
+		return button;
+	},
+	createMenu: function() {
+		var self = this;
+		var menu = new Trex.Menu.Select(TrexConfig.merge(self.menuCfg, {
+			options: self.usedFonts
+		}));
 		this.menu = menu;
 		//overwrite generateListItem
 		menu.generateListItem = function (option) {
@@ -119,87 +121,77 @@ Trex.Tool.FontFamily = Trex.Class.create({
 			}
 			return result.join("");
 		};
-        if (self.usedWebFonts.length > 0) {
-            $tx.addClassName(menu.elMenu, "tx-fontfamily-webfont-menu");
-            var elDummyForFocus = tx.input({'type': 'text', 'className': 'tx-dummyfocus'});
-            $tom.append(menu.elMenu, elDummyForFocus);
-            $tx.observe(menu.elMenu, 'mousedown', function(ev) {
-                if (ev.offsetX < self.menu.elMenu.clientWidth) { //not scrollbar
-                    return;
-                }
-                elDummyForFocus.style.top = ev.offsetY.toPx();
-                if (!self.focusLoosed) {
-                    elDummyForFocus.focus();
-                    elDummyForFocus.blur();
-                    self.menu.elMenu.focus();
-                    self.focusLoosed = _TRUE;
-                }
-            });
-        }
-        return menu;
-    },
-    menuInitHandler: function() {
-        var self = this;
-        var menu = self.menu;
-        self.focusLoosed = _FALSE;
-        if(!self.useFavorite) {
-            return [];
-        }
-        menu.elMenu.scrollTop = 0;
-        var elGroup = $tom.collect(menu.elMenu, "ul.tx-menu-favlist");
-        if(elGroup) {
-            $tom.remove(elGroup);
-        }
-        var favorite = self.extractOptions(self.usedFonts, self.readCookie());
-        elGroup = menu.generateList(favorite);
-        $tom.insertFirst(menu.elMenu, elGroup);
-        $tx.addClassName(elGroup, 'tx-menu-favlist');
-        return favorite;
-    },
-    onBeforeHandler: function(data) {
-        this.canvas.includeWebfontCss("font-family: " + data);
-    },
-    onAfterHandler: function(data) {
-        var self = this;
-        if (self.useFavorite) {
-            self.writeCookie(self.mergeValues(self.readCookie(), data));
-        }
-    },
-    getDefaultProperty: function() {
-        return this.canvas.getStyleConfig().fontFamily;
-    },
-    getRelatedCssPropertyNames: function() {
-        return ["font", this.getCssPropertyName()];
-    },
-    getCssPropertyName: function() {
-        return "fontFamily";
-    },
-    getQueryCommandName: function() {
-        return "fontname";
-    },
-    getFontTagAttribute: function() {
-        return "face";
-    },
-    getTextByValue: function(value) {
-		var fontFamilyMap, text;
-		if (value.include(",")) {
-            value = value.split(",")[0];
-        }
+		if (self.usedWebFonts.length > 0) {
+			$tx.addClassName(menu.elMenu, "tx-fontfamily-webfont-menu");
+			var elDummyForFocus = tx.input({'type': 'text', 'className': 'tx-dummyfocus'});
+			$tom.append(menu.elMenu, elDummyForFocus);
+			$tx.observe(menu.elMenu, 'mousedown', function(ev) {
+				if (ev.offsetX < self.menu.elMenu.clientWidth) { //not scrollbar
+					return;
+				}
+				elDummyForFocus.style.top = ev.offsetY.toPx();
+				if (!self.focusLoosed) {
+					elDummyForFocus.focus();
+					elDummyForFocus.blur();
+					self.menu.elMenu.focus();
+					self.focusLoosed = _TRUE;
+				}
+			});
+		}
+		return menu;
+	},
+	menuInitHandler: function() {
+		var self = this;
+		var menu = self.menu;
+		self.focusLoosed = _FALSE;
+		if(!self.useFavorite) {
+			return [];
+		}
+		menu.elMenu.scrollTop = 0;
+		var elGroup = $tom.collect(menu.elMenu, "ul.tx-menu-favlist");
+		if(elGroup) {
+			$tom.remove(elGroup);
+		}
+		var favorite = self.extractOptions(self.usedFonts, self.readCookie());
+		elGroup = menu.generateList(favorite);
+		$tom.insertFirst(menu.elMenu, elGroup);
+		$tx.addClassName(elGroup, 'tx-menu-favlist');
+		return favorite;
+	},
+	onBeforeHandler: function(data) {
+		this.canvas.includeWebfontCss("font-family: " + data);
+	},
+	onAfterHandler: function(data) {
+		var self = this;
+		if (self.useFavorite) {
+			self.writeCookie(self.mergeValues(self.readCookie(), data));
+		}
+	},
+	getDefaultProperty: function() {
+		return this.canvas.getStyleConfig().fontFamily;
+	},
+	getRelatedCssPropertyNames: function() {
+		return ["font", this.getCssPropertyName()];
+	},
+	getCssPropertyName: function() {
+		return "fontFamily";
+	},
+	getQueryCommandName: function() {
+		return "fontname";
+	},
+	getFontTagAttribute: function() {
+		return "face";
+	},
+	preprocessFontFamily: function (name) {
 		//브라우저에 따라 qoute 등으로 감싸주는 경우가 있음.
-		value = value.replace(/[^A-Za-z\s]/g, "");
-		value = value.toLowerCase();
-		fontFamilyMap = this.fontFamilyMap;
-		text = fontFamilyMap[value];
-		if (text) {
-			return text;
-		}
 		//폰트 이름중에 _9 나 9 로 끝나는게 있어 문제가 있었다고 주석이 있었음.
-		value = value.replace("_9", "").replace("9", "");
-		text = fontFamilyMap[value];
-		if (text) {
-			return text;
+		return name.toLowerCase().replace(/[^a-z_\-\s]/g, "").replace(/_?9$/, "");
+	},
+	getTextByValue: function(value) {
+		if (value.include(",")) {
+			value = value.split(",")[0];
 		}
-		text = fontFamilyMap[this.getDefaultProperty()];
-		return text || value; //없으면 그냥 적어주자.
-    }
+		value = this.preprocessFontFamily(value);
+		return this.fontFamilyMap[value];
+	}
 });

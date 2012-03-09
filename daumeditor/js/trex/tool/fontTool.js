@@ -67,8 +67,10 @@ Trex.I.WrappingSpanFontTool = Trex.Mixin.create({
         var affectedNodes;
         if (processor.isCollapsed()) {
             var startNode = range.getStartNode();
-            var parentNode = startNode.parentNode;
-            var targetNode = this.findOrCreateDummySpan(parentNode, processor, range);
+        	if (startNode.nodeType == 3) {
+        		startNode = startNode.parentNode;
+        	}            
+            var targetNode = this.findOrCreateDummySpan(startNode, processor, range);
             var wordJoiner = targetNode.firstChild;
             processor.createGoogRangeFromNodes(wordJoiner, wordJoiner.length, wordJoiner, wordJoiner.length).select();
             affectedNodes = [ targetNode ];
@@ -133,12 +135,12 @@ Trex.I.WrappingSpanFontTool = Trex.Mixin.create({
     /**
      * collapsed 일 때에 style을 적용할 수 있는 span을 찾거나, 새로 span을 만든다.
      */
-    findOrCreateDummySpan: function(parentNode, processor, goog_range) {
-        var reuseExistNode = (parentNode.tagName == "SPAN" && !$tom.hasChildren(parentNode, _TRUE));
+    findOrCreateDummySpan: function(node, processor, goog_range) {
+        var reuseExistNode = (node.tagName == "SPAN" && node.childNodes.length == 1 && node.firstChild.nodeType == 3 && node.firstChild.nodeValue == Trex.__WORD_JOINER);
         if (reuseExistNode) {
-            return parentNode;
+            return node;
         } else {
-            return this.createDummySpan(parentNode, processor, goog_range);
+            return this.createDummySpan(node, processor, goog_range);
         }
     },
     createDummySpan: function (parentNode, processor, goog_range) {

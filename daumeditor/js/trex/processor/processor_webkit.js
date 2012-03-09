@@ -51,10 +51,10 @@ Trex.I.Processor.Webkit = {
             newLi = $tom.divideTree(li, marker.endMarker);
         });
 
-        if (!$tom.hasChildren(li, _TRUE)) {
+        if (!$tom.hasUsefulChildren(li, _TRUE)) {
             li.innerHTML = "";
         }
-        if (!$tom.hasChildren(newLi, _TRUE)) {
+        if (!$tom.hasUsefulChildren(newLi, _TRUE)) {
             newLi.innerHTML = "";
         }
         self.stuffNode(li);
