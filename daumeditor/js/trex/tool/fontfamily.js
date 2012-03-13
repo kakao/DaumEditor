@@ -185,7 +185,7 @@ Trex.Tool.FontFamily = Trex.Class.create({
 	preprocessFontFamily: function (name) {
 		//브라우저에 따라 qoute 등으로 감싸주는 경우가 있음.
 		//폰트 이름중에 _9 나 9 로 끝나는게 있어 문제가 있었다고 주석이 있었음.
-		return name.toLowerCase().replace(/[^a-z_\-\s]/g, "").replace(/_?9$/, "");
+		return name.toLowerCase().replace(/'|"/g, "").replace(/_?9$/, "");
 	},
 	getTextByValue: function(value) {
 		if (value.include(",")) {

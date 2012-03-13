@@ -14,12 +14,18 @@ function assertFontFamilyResult(expectedContent, expectedSelectedText) {
 
 module("fontfamily");
 
-test("fontfamily queryCurrentStyle : Gulim", function() {
-    var p = ax.p(ax.span({id: "span", style: { fontFamily: "Gulim" }}, "Hello World"));
-    assi.setContentElement(p);
-    var range = new goog.dom.Range.createFromNodes(assi.$('span').firstChild, 2, assi.$('span').firstChild, 2);
-    range.select();
-    equal(assi.getTool('fontfamily').queryCurrentStyle(range), "굴림");
+test("fontfamily queryCurrentStyle", function() {
+    var html = '<p style="font-family:Gulim">Gulim</p>' +
+    	'<p style="font-family:Consolas">Consolas</p>' +
+    	'<p style="font-family:맑은 고딕">맑은 고딕</p>';
+    assi.setContent(html);
+
+    var expected = ["굴림", "Consolas", "맑은 고딕"];
+    for (var i = 0; i < 3; i++) {
+    	var range = new goog.dom.Range.createFromNodes(assi.byTag('p', i), 0, assi.byTag('p', i), 0);
+    	range.select();
+    	equal(assi.getTool('fontfamily').queryCurrentStyle(range), expected[i]);
+    }
 });
 
 test("collapsed에서 fontfamily를 Gulim으로 변경하기", function() {

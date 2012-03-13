@@ -13,19 +13,7 @@ Trex.I.Processor.Webkit = {
 	 * Webkit에서 newlinepolicy가 p일 경우 Enter Key 이벤트가 발생하면 실행한다.
 	 */
 	controlEnterByParagraph: function() {
-		var currentNode = this.getNode();
-		if (!currentNode) {
-			throw $propagate;
-		} //Chrome 에서 테이블 뒤에서 enter 눌렀을 때 안되는 현상(http://sr.daum.net:8080/browse/ME-23). 
-        var node = this.findParagraph(currentNode);
-        if (node) {
-            var li = this.findAncestorListItem(node);
-        }
-        if (li) {
-            this.divideListItem(li);
-        } else {
-            throw $propagate;
-        }
+		throw $propagate;
     },
     findParagraph: function(node) {
         var matched = function(node) {

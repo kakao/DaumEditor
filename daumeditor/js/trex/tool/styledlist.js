@@ -286,16 +286,15 @@ Trex.Tool.StyledList.ListBuilder = Trex.Class.create({
     wrapWithListItem: function(node) {
         if (node.tagName == "LI") {
             return node;
-        } else if (node.tagName == "P") {
+        } else if (node.tagName == "P" || ($tx.webkit && node.tagName == "DIV")) {
             // p에 스타일이 있으면 marginLeft는 지우고 li로 감싸기
             var newListItem = this.createListItem();
-            var tom = $tom;
-            tom.applyStyles(node, {marginLeft: _NULL});
-            if (tom.getStyleText(node)) {
-                tom.wrap(newListItem, node);
+            $tom.applyStyles(node, {marginLeft: _NULL});
+            if ($tom.getStyleText(node)) {
+            	$tom.wrap(newListItem, node);
                 return newListItem;
             } else {
-                return tom.replace(node, newListItem);
+                return $tom.replace(node, newListItem);
             }
         } else {
             var li = this.createListItem();
