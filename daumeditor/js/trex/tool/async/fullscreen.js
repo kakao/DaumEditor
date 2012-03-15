@@ -1,25 +1,22 @@
-(function(){
+/*jslint nomen:false,onevar:false*/
+/*global Trex,TrexMessage,$tx,$tom,$A,Editor*/
+/*global showAttachBox,hideAttachBox,
+	showFullScreen,showNormalScreen,resizeScreen*/
+(function () {
+	var _DOC = document, _WIN = window, _DOC_EL = _DOC.documentElement, 
+		_FALSE = false, _TRUE = true, _NULL = null, _UNDEFINED;
 	
-	var _DOC = document,
-	_WIN = window,
-	_DOC_EL = _DOC.documentElement,
-	_FALSE = false,
-	_TRUE = true,
-	_NULL = null,
-	_UNDEFINED;
-
 	Trex.Class.overwrite(Trex.Tool.FullScreen, {
-		oninitialized: function() {
-			var _editor = this.editor,
-				_config = this.config;
-	
+		oninitialized: function () {
+			var _editor = this.editor, _config = this.config;
+			
 			var _wrapper = _editor.getWrapper();
-			if(!_wrapper) {
+			if (!_wrapper) {
 				return;
 			}
 			
 			var _fullscreen;
-			var _toolHandler = function() {
+			var _toolHandler = function () {
 				if (!_fullscreen) {
 					_fullscreen = new Trex.FullScreen(_editor, _config);
 				}
@@ -27,25 +24,21 @@
 			};
 			this.executeTool = _toolHandler;
 			
-			if(_config.switched) { //기본이 전체화면
-				if(!_fullscreen) {
+			if (_config.switched) { //기본이 전체화면
+				if (!_fullscreen) {
 					_fullscreen = new Trex.FullScreen(_editor, _config);
 				}
 				_fullscreen.showFullScreen();
 			}
 			
-			this.resetWeave();		
-			this.weave.bind(this)(
-				new Trex.Button(this.buttonCfg), 
-				_NULL,
-				_toolHandler
-			);
+			this.resetWeave();
+			this.weave.bind(this)(new Trex.Button(this.buttonCfg), _NULL, _toolHandler);
 			
 			this.bindKeyboard({ // ctrl + m - 넓게쓰기
 				ctrlKey: _TRUE,
 				keyCode: 77
 			}, _toolHandler);
-	
+			
 			_editor.observeKey({ // ctrl + m - 넓게쓰기
 				ctrlKey: _TRUE,
 				altKey: _FALSE,
@@ -62,30 +55,23 @@
 		'@fullscreen.noti.span': "넓게쓰기 버튼을 다시 누르시면 처음 글쓰기 창 크기로 돌아갑니다."
 	});
 	
-	Trex.MarkupTemplate.add(
-		'fullscreen.notice', 
-		'<div class="tx-fullscreen-notice"><span>@fullscreen.noti.span</span><a href="#">@fullscreen.noti.btn</a></div>'
-	);
-	Trex.MarkupTemplate.add(
-		'fullscreen.linebox', 
-		'<div class="tx-fullscreen-line">\
-			<div class="tx-fullscreen-line-division">\
-				<div class="tx-fullscreen-line-left">&nbsp;</div>\
-				<div class="tx-fullscreen-line-right">&nbsp;</div>\
-			</div>\
-			<div class="tx-fullscreen-line-box">\
-				<div class="tx-fullscreen-line-left">&nbsp;</div>\
-				<div class="tx-fullscreen-line-right">&nbsp;</div>\
-				<a href="#">@fullscreen.attach.close.btn</a>\
-			</div>\
-		</div>'
-	);
+	Trex.MarkupTemplate.add('fullscreen.notice', '<div class="tx-fullscreen-notice"><span>@fullscreen.noti.span</span><a href="#">@fullscreen.noti.btn</a></div>');
+	Trex.MarkupTemplate.add('fullscreen.linebox', '<div class="tx-fullscreen-line">' +
+	'<div class="tx-fullscreen-line-division">' +
+	'<div class="tx-fullscreen-line-left">&nbsp;</div>' +
+	'<div class="tx-fullscreen-line-right">&nbsp;</div>' +
+	'</div>' +
+	'<div class="tx-fullscreen-line-box">' +
+	'<div class="tx-fullscreen-line-left">&nbsp;</div>' +
+	'<div class="tx-fullscreen-line-right">&nbsp;</div>' +
+	'<a href="#">@fullscreen.attach.close.btn</a>' +
+	'</div>' +
+	'</div>');
 	Trex.FullScreen = Trex.Class.create({
-		initialize: function(editor, config) {
-			if(!editor) {
+		initialize: function (editor, config) {
+			if (!editor) {
 				return;
 			}
-			
 			this.isInit = _FALSE;
 			this.isFullScreen = _FALSE;
 			
@@ -96,108 +82,103 @@
 			this.canvas = editor.getCanvas();
 			this.toolbar = editor.getToolbar();
 			this.attachBox = editor.getAttachBox();
-		
+			
 			this.elSavedHiddens = [];
 			this.minHeight = config.minHeight;
 			this.minWidth = config.minWidth;
-		
-			this.useAttachBox = (this.attachBox.elBox !== _UNDEFINED);
+			
+			this.useAttachBox = (!!this.attachBox.elBox);
 			this.isAttachBoxDisplay = _FALSE;
-		
-			this.resizeHandler = this.resizeContainer.bind(this);
-		
-			this.toolbar.observeJob("toolbar.advanced.fold", function() { 
-				if (this.isFullScreen) {
-					this.resizeContainer();
-				}
-			}.bind(this));
 			
-			this.toolbar.observeJob("toolbar.advanced.spread", function() { 
-				if (this.isFullScreen) {
-					this.resizeContainer();
+			var self = this;
+			this.resizeHandler = function () {
+				if (self.isFullScreen) {
+					self.resizeContainer();
 				}
-			}.bind(this));
-			
-			if(typeof(showAttachBox) != _UNDEFINED+'') { 
+			};
+			this.toolbar.observeJob("toolbar.advanced.fold", this.resizeHandler);
+			this.toolbar.observeJob("toolbar.advanced.spread", this.resizeHandler);
+			if (typeof showAttachBox === "function") {
 				this.showAttachBoxAtServiceForSave = showAttachBox; //NOTE: fullscreen 모드에서는 다른 모양의 첨부박스를 사용한다.
 			}
-			if(typeof(hideAttachBox) != _UNDEFINED+'') { 
+			if (typeof hideAttachBox === "function") {
 				this.hideAttachBoxAtServiceForSave = hideAttachBox; //NOTE: fullscreen 모드에서는 다른 모양의 첨부박스를 사용한다.
 			}
-		},	
-		execute: function() {
-			if(this.isFullScreen) {
+		},
+		execute: function () {
+			if (this.isFullScreen) {
 				this.showNormalScreen();
 			} else {
 				this.showFullScreen();
 			}
 		},
-		onAttachClick: function() {
+		onAttachClick: function () {
 			this.attachClickHandler(!this.isAttachBoxDisplay);
 			this.resizeContainer();
 		},
-		attachClickHandler: function(isAttachBoxDisplay) {
-			if(isAttachBoxDisplay) {
+		attachClickHandler: function (isAttachBoxDisplay) {
+			if (isAttachBoxDisplay) {
 				this.showAttachBox();
 			} else {
 				this.hideAttachBox();
 			}
 		},
-		showNormalScreen: function() {
-			if(!this.isFullScreen) {
+		showNormalScreen: function () {
+			if (!this.isFullScreen) {
 				return;
 			}
 			
 			this._showScrollbar();
-	
+			
 			//Service Specific
 			this.showNormalScreenAtService();
-	
+			
 			var _wrapper = this.wrapper;
-			if(!_wrapper) {
+			if (!_wrapper) {
 				return;
 			}
-	
+			
 			_wrapper.style.width = '';
 			$tx.removeClassName(_wrapper, 'tx-editor-fullscreen');
-	
-			this.elSavedHiddens.each(function(el) {
+			
+			this.elSavedHiddens.each(function (el) {
 				el.style.visibility = 'visible';
 			});
-	
-			if(parent) {
-				try{
+			
+			if (parent) {
+				try {
 					$tx.stopObserving(parent, 'resize', this.resizeHandler);
-				} catch(e){}
+				} catch (e) {
+				}
 			} else {
-				$tx.stopObserving(window,'resize', this.resizeHandler);
+				$tx.stopObserving(window, 'resize', this.resizeHandler);
 			}
-	
+			
 			this.canvas.setCanvasSize({
-			 	height: this.panelNormalHeight.toPx()
+				height: this.panelNormalHeight.toPx()
 			});
-	
+			
 			//첨부파일박스
-			if(this.useAttachBox) {
+			if (this.useAttachBox) {
 				this.attachClickHandler(this.attachBox.checkDisplay());
 			}
-	
+			
 			this.canvas.fireJobs("canvas.normalscreen.change");
 			
 			//NOTE: Service Specific
-			if(this.showAttachBoxAtServiceForSave) {
+			if (this.showAttachBoxAtServiceForSave) {
 				_WIN.showAttachBox = this.showAttachBoxAtServiceForSave;
 			}
-			if(this.hideAttachBoxAtServiceForSave) {
+			if (this.hideAttachBoxAtServiceForSave) {
 				_WIN.hideAttachBox = this.hideAttachBoxAtServiceForSave;
 			}
 			
 			var length = this.relativeParents.length;
-			for (var i = 0; i < length; i++) {
+			for (var i = 0; i < length; i += 1) {
 				var element = this.relativeParents.pop();
 				var value = this.relativeValues.pop();
 				$tx.setStyle(element, {
-					position: value 
+					position: value
 				});
 			}
 			
@@ -210,226 +191,252 @@
 				}, 500);
 			}
 		},
-		showFullScreen: function() {
-			if(this.isFullScreen) {
+		showFullScreen: function () {
+			var self = this;
+			if (this.isFullScreen) {
 				return;
 			}
-	
-			if(!this.isInit) {
+			
+			if (!this.isInit) {
 				this.generate();
 			}
-	
+			
 			this._hideScrollbar();
-	
+			
 			//Service Specific
 			this.showFullScreenAtService();
-			if(this.showAttachBoxAtServiceForSave) {
-				_WIN.showAttachBox = function(){
-					this.showAttachBox();
-					this.resizeContainer();
-				}.bind(this);
+			if (this.showAttachBoxAtServiceForSave) {
+				_WIN.showAttachBox = function () {
+					self.showAttachBox();
+					self.resizeContainer();
+				};
 			}
-			if(this.hideAttachBoxAtServiceForSave) {
-				_WIN.hideAttachBox = function(){
-					this.hideAttachBox();
-					this.resizeContainer();
-				}.bind(this);
+			if (this.hideAttachBoxAtServiceForSave) {
+				_WIN.hideAttachBox = function () {
+					self.hideAttachBox();
+					self.resizeContainer();
+				};
 			}
 			
 			var _wrapper = this.wrapper;
-	
-			if(!_wrapper) {
+			
+			if (!_wrapper) {
 				return;
 			}
 			$tx.addClassName(_wrapper, 'tx-editor-fullscreen');
 			
 			//Hide select,activeX 
 			var _savedHiddens = [];
-			["select", "embed", "object"].each(function(name) {
+			["select", "embed", "object"].each(function (name) {
 				var _elHdns = $A(_DOC.getElementsByTagName(name));
-				_elHdns.each(function(el) {
+				_elHdns.each(function (el) {
 					el.style.visibility = 'hidden';
 					_savedHiddens.push(el);
 				});
 			});
 			this.elSavedHiddens = _savedHiddens;
-	
+			
 			//attach file box
-			if(this.useAttachBox) {
+			if (this.useAttachBox) {
 				this.attachClickHandler(this.attachBox.checkDisplay());
 			}
-	
+			
 			var _panel = this.canvas.getCurrentPanel();
 			this.panelNormalHeight = _panel.getPosition().height;
-	
-			if(parent) {
-				$tx.observe(parent, 'resize', this.resizeHandler);
+			
+			if (window.parent) {
+				$tx.observe(window.parent, 'resize', this.resizeHandler);
 			} else {
-				$tx.observe(window,'resize', this.resizeHandler);
+				$tx.observe(window, 'resize', this.resizeHandler);
 			}
-	
+			
 			this.canvas.fireJobs("canvas.fullscreen.change");
-	
+			
 			// make trace element and move container to body's direct child
 			_WIN.wrapper = _wrapper;
 			this.relativeParents = [];
 			this.relativeValues = [];
-			var parent = _wrapper.offsetParent;
-			while (parent && parent.tagName && parent.tagName.toUpperCase() != "HTML" && parent.tagName.toUpperCase() != "BODY") {
-				var position = $tx.getStyle(parent, "position");
-				if (position.toLowerCase() == "relative") {
-					this.relativeParents.push(parent);
+			var parentOfWarpper = _wrapper.offsetParent;
+			while (parentOfWarpper && parentOfWarpper.tagName && parentOfWarpper.tagName !== "HTML" && parentOfWarpper.tagName !== "BODY") {
+				var position = $tx.getStyle(parentOfWarpper, "position");
+				if (position.toLowerCase() === "relative") {
+					this.relativeParents.push(parentOfWarpper);
 					this.relativeValues.push(position);
-					$tx.setStyle( parent, {
+					$tx.setStyle(parentOfWarpper, {
 						position: "static"
 					});
 				}
-				parent = parent.offsetParent;
+				parentOfWarpper = parent.offsetParent;
 			}
 			
 			this.isFullScreen = _TRUE;
 			this.resizeContainer();
 		},
-		_hideScrollbar: function(){
-			if ( _DOC_EL.scrollTop || _DOC_EL.scrollLeft){
+		_hideScrollbar: function () {
+			if (_DOC_EL.scrollTop || _DOC_EL.scrollLeft) {
 				_DOC_EL.scrollTop = 0;
 				_DOC_EL.scrollLeft = 0;
 			}
-			if ( _DOC.body.scrollTop || _DOC.body.scrollLeft ){
+			if (_DOC.body.scrollTop || _DOC.body.scrollLeft) {
 				_DOC.body.scrollTop = 0;
 				_DOC.body.scrollLeft = 0;
 			}
 			_DOC_EL.style.overflow = 'hidden'; //Remove basic scrollbars
 			_DOC.body.style.overflow = 'hidden';
 		},
-		_showScrollbar: function(){
+		_showScrollbar: function () {
 			_DOC_EL.style.overflow = '';
 			_DOC.body.style.overflow = '';
 		},
-		generate: function() {
-			if(this.isInit) {
+		generate: function () {
+			if (this.isInit) {
 				return;
 			}
-	
-			var _wrapper = this.wrapper;
-			if(!_wrapper) {
+			if (!this.wrapper) {
 				return;
 			}
-	
+			this.generateNoti();
+			this.generateLineBox();
+			this.isInit = _TRUE;
+		},
+		generateNoti: function () {
+			var self = this;
 			var _elNoti = Trex.MarkupTemplate.get("fullscreen.notice").evaluateAsDom({});
-			$tom.insertFirst(_wrapper, _elNoti);
+			$tom.insertFirst(this.wrapper, _elNoti);
 			
 			var _elNotiBtn = $tom.collect(_elNoti, 'a');
-			$tx.observe(_elNotiBtn,'click', function() {
-				if(this.isFullScreen) {
-					this.showNormalScreen();
+			$tx.observe(_elNotiBtn, 'click', function () {
+				if (self.isFullScreen) {
+					self.showNormalScreen();
 				} else {
-					this.showFullScreen();
+					self.showFullScreen();
 				}
-			}.bind(this));
-	
+			});
+		},
+		generateLineBox: function () {
+			if (!this.useAttachBox) {
+				return;
+			}
+			
 			var _elCanvas = this.canvas.elContainer;
+			
 			var _elLine = Trex.MarkupTemplate.get("fullscreen.linebox").evaluateAsDom({});
 			$tom.insertNext(_elLine, _elCanvas);
-	
-			var _attr = { className: "tx-fullscreen-line-box"};
-			if($tx.msie_ver == '5.5'){
-				_attr.align = "center"; 
+			
+			var _attr = {
+				className: "tx-fullscreen-line-box"
+			};
+			if ($tx.msie_ver <= '5.5') {
+				_attr.align = "center";
 			}
 			
 			var _elLineBox = $tom.collect(_elLine, 'div.tx-fullscreen-line-box');
-			if($tx.msie_ver == '5.5'){
-				_elLineBox.align = "center"; 
+			if ($tx.msie_ver <= '5.5') {
+				_elLineBox.align = "center";
 			}
 			
-			var _elLineBtn = this.elLineBtn = $tom.collect(_elLineBox, "a");
-			$tx.observe(_elLineBtn,'click', this.onAttachClick.bind(this));
-			this.isInit = _TRUE;
+			var _elLineBtn = $tom.collect(_elLineBox, "a");
+			this.elLineBtn = _elLineBtn;
+			$tx.observe(_elLineBtn, 'click', this.onAttachClick.bind(this));
 		},
-		getAttachBoxPosition: function() {
-			if(this.isAttachBoxDisplay) {
+		getAttachBoxPosition: function () {
+			if (this.isAttachBoxDisplay) {
 				return $tom.getPosition(this.attachBox.elBox);
 			} else {
-				return {x:0, y:0, width:0, height:0};
+				return {
+					x: 0,
+					y: 0,
+					width: 0,
+					height: 0
+				};
 			}
 		},
-		resizeContainer: function() {
-			//Service Specific
-			var _getPostAreaBoxPosition = function () {
-				var elem = $tx("tx_fullscreen_post_area");
-				if (elem) {
-					return $tx.getDimensions(elem);
-				} else {
-					return {x:0, y:0, width:0, height:0};
-				}
-			};
+		getPostAreaBoxPosition: function () {
+			var elem = $tx("tx_fullscreen_post_area");
+			if (elem) {
+				return $tx.getDimensions(elem);
+			} else {
+				return {
+					x: 0,
+					y: 0,
+					width: 0,
+					height: 0
+				};
+			}
+		},
+		resizeContainer: function () {
 			if (!this.isFullScreen) {
 				return _FALSE;
 			}
 			this.resizeScreenAtService();
-			var _panelPosY = this.canvas.getCanvasPos().y;
-			var _attachBoxPosition = this.getAttachBoxPosition();
-	
-			var _panelHeight = 0;
-			var _postArea = _getPostAreaBoxPosition();
 			
-			if (_DOC_EL.clientHeight > 0) {
-				_panelHeight = _DOC_EL.clientHeight - _panelPosY - 17; //cuz line
-			}else{
-				_panelHeight = _DOC_EL.offsetHeight - _panelPosY - 17;
+			var panelHeight, panelWidth;
+			panelHeight = this.getPanelHeight();
+			this.canvas.setCanvasSize({
+				height: panelHeight.toPx()
+			});
+			if (this.wrapper) {
+				panelWidth = this.getPanelWidth();
+				this.wrapper.style.width = panelWidth.toPx();
 			}
+			return _TRUE;
+		},
+		getPanelHeight: function () {
+			var _panelHeight = 0;
+			
+			var _panelPosY = this.canvas.getCanvasPos().y;
+			var lineHeight = this.useAttachBox ? 17 : 0;
+			if (_DOC_EL.clientHeight > 0) {
+				_panelHeight = _DOC_EL.clientHeight - _panelPosY - lineHeight;
+			} else {
+				_panelHeight = _DOC_EL.offsetHeight - _panelPosY - lineHeight;
+			}
+			
+			var _postArea = this.getPostAreaBoxPosition();
 			_panelHeight -= _postArea.height;
 			
-			if(_attachBoxPosition.height > 0) {
+			var _attachBoxPosition = this.getAttachBoxPosition();
+			if (_attachBoxPosition.height > 0) {
 				_panelHeight -= _attachBoxPosition.height + 20; //cuz margin
 			}
-			_panelHeight = Math.max(_panelHeight, this.minHeight);
-	
-			this.canvas.setCanvasSize({
-				height: _panelHeight.toPx()
-			});
-	
+			
+			return Math.max(_panelHeight, this.minHeight);
+		},
+		getPanelWidth: function () {
 			var _panelWidth = 0;
-			if(_DOC_EL.clientWidth > 0){
+			if (_DOC_EL.clientWidth > 0) {
 				_panelWidth = _DOC_EL.clientWidth;
-			}else{
+			} else {
 				_panelWidth = _DOC_EL.offsetWidth;
 			}
-			
-			_panelWidth = Math.max(_panelWidth, this.minWidth);
-	
-			var _wrapper = this.wrapper;
-			if(!_wrapper) {
-				return;
-			}
-			_wrapper.style.width = _panelWidth.toPx();
+			return Math.max(_panelWidth, this.minWidth);
 		},
-		showAttachBox: function() {
-			if(this.attachBox.useBox) {
+		showAttachBox: function () {
+			if (this.attachBox.useBox) {
 				$tx.addClassName(this.elLineBtn, "tx-attach-close");
 				$tx.show(this.attachBox.elBox);
 				this.isAttachBoxDisplay = _TRUE;
 			}
 		},
-		hideAttachBox: function() {
-			if(this.attachBox.useBox) {
+		hideAttachBox: function () {
+			if (this.attachBox.useBox) {
 				$tx.removeClassName(this.elLineBtn, "tx-attach-close");
 				$tx.hide(this.attachBox.elBox);
 				this.isAttachBoxDisplay = _FALSE;
 			}
 		},
-		showFullScreenAtService: function() {
-			if(typeof showFullScreen == "function") {
+		showFullScreenAtService: function () {
+			if (typeof showFullScreen === "function") {
 				showFullScreen();
 			}
 		},
-		showNormalScreenAtService: function() {
-			if(typeof showNormalScreen == "function") {
+		showNormalScreenAtService: function () {
+			if (typeof showNormalScreen === "function") {
 				showNormalScreen();
 			}
 		},
-		resizeScreenAtService: function() {
-			if(typeof resizeScreen == "function") {
+		resizeScreenAtService: function () {
+			if (typeof resizeScreen === "function") {
 				resizeScreen();
 			}
 		}
@@ -440,4 +447,4 @@
 		editor.getTool()[thisToolName].oninitialized();
 	});
 	Editor.editorForAsyncLoad.getTool()[thisToolName].executeTool();
-})();
+}());
