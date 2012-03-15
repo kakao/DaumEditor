@@ -39,9 +39,12 @@ Trex.I.FontTool = Trex.Mixin.create({
     },
     findQueryingNode: function(goog_range) {
         if (goog_range) {
-            var textNode = this.findFirst(goog_range.__iterator__(), function(node) {
-                return node.nodeType == 3 && node.nodeValue.trim();
-            });
+			var textNode;
+			try {
+	            textNode = this.findFirst(goog_range.__iterator__(), function(node) {
+	                return node.nodeType == 3 && node.nodeValue.trim();
+	            });
+			} catch (ignore4ie678) {}
             if (textNode) {
                 return textNode.parentNode;
             } else {    // fallback condition
