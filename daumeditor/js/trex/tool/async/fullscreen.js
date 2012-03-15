@@ -1,9 +1,10 @@
 /*jslint nomen:false,onevar:false*/
 /*global Trex,TrexMessage,$tx,$tom,$A,Editor*/
-/*global showAttachBox,hideAttachBox,showFullScreen,showNormalScreen,resizeScreen*/
+/*global showAttachBox,hideAttachBox,
+	showFullScreen,showNormalScreen,resizeScreen*/
 (function () {
-
-	var _DOC = document, _WIN = window, _DOC_EL = _DOC.documentElement, _FALSE = false, _TRUE = true, _NULL = null, _UNDEFINED;
+	var _DOC = document, _WIN = window, _DOC_EL = _DOC.documentElement, 
+		_FALSE = false, _TRUE = true, _NULL = null, _UNDEFINED;
 	
 	Trex.Class.overwrite(Trex.Tool.FullScreen, {
 		oninitialized: function () {
@@ -71,7 +72,6 @@
 			if (!editor) {
 				return;
 			}
-			
 			this.isInit = _FALSE;
 			this.isFullScreen = _FALSE;
 			
@@ -90,22 +90,14 @@
 			this.useAttachBox = (!!this.attachBox.elBox);
 			this.isAttachBoxDisplay = _FALSE;
 			
-			this.resizeHandler = this.resizeContainer.bind(this);
-			
-			this.toolbar.observeJob("toolbar.advanced.fold", function () {
-				if (this.isFullScreen) {
-					this.resizeContainer();
+			var self = this;
+			this.resizeHandler = function () {
+				if (self.isFullScreen) {
+					self.resizeContainer();
 				}
-			}
-.bind(this));
-			
-			this.toolbar.observeJob("toolbar.advanced.spread", function () {
-				if (this.isFullScreen) {
-					this.resizeContainer();
-				}
-			}
-.bind(this));
-			
+			};
+			this.toolbar.observeJob("toolbar.advanced.fold", this.resizeHandler);
+			this.toolbar.observeJob("toolbar.advanced.spread", this.resizeHandler);
 			if (typeof showAttachBox === "function") {
 				this.showAttachBoxAtServiceForSave = showAttachBox; //NOTE: fullscreen 모드에서는 다른 모양의 첨부박스를 사용한다.
 			}
@@ -304,7 +296,7 @@
 				return;
 			}
 			this.generateNoti();
-			this.generateLine();
+			this.generateLineBox();
 			this.isInit = _TRUE;
 		},
 		generateNoti: function () {
@@ -321,7 +313,11 @@
 				}
 			});
 		},
-		generateLine: function () {
+		generateLineBox: function () {
+			if (!this.useAttachBox) {
+				return;
+			}
+			
 			var _elCanvas = this.canvas.elContainer;
 			
 			var _elLine = Trex.MarkupTemplate.get("fullscreen.linebox").evaluateAsDom({});
@@ -355,63 +351,65 @@
 				};
 			}
 		},
+		getPostAreaBoxPosition: function () {
+			var elem = $tx("tx_fullscreen_post_area");
+			if (elem) {
+				return $tx.getDimensions(elem);
+			} else {
+				return {
+					x: 0,
+					y: 0,
+					width: 0,
+					height: 0
+				};
+			}
+		},
 		resizeContainer: function () {
-			//Service Specific
-			var _getPostAreaBoxPosition = function () {
-				var elem = $tx("tx_fullscreen_post_area");
-				if (elem) {
-					return $tx.getDimensions(elem);
-				} else {
-					return {
-						x: 0,
-						y: 0,
-						width: 0,
-						height: 0
-					};
-				}
-			};
 			if (!this.isFullScreen) {
 				return _FALSE;
 			}
 			this.resizeScreenAtService();
-			var _panelPosY = this.canvas.getCanvasPos().y;
-			var _attachBoxPosition = this.getAttachBoxPosition();
 			
+			var panelHeight, panelWidth;
+			panelHeight = this.getPanelHeight();
+			this.canvas.setCanvasSize({
+				height: panelHeight.toPx()
+			});
+			if (this.wrapper) {
+				panelWidth = this.getPanelWidth();
+				this.wrapper.style.width = panelWidth.toPx();
+			}
+			return _TRUE;
+		},
+		getPanelHeight: function () {
 			var _panelHeight = 0;
-			var _postArea = _getPostAreaBoxPosition();
 			
-			var lineHeight = 17;
-			
+			var _panelPosY = this.canvas.getCanvasPos().y;
+			var lineHeight = this.useAttachBox ? 17 : 0;
 			if (_DOC_EL.clientHeight > 0) {
 				_panelHeight = _DOC_EL.clientHeight - _panelPosY - lineHeight;
 			} else {
 				_panelHeight = _DOC_EL.offsetHeight - _panelPosY - lineHeight;
 			}
+			
+			var _postArea = this.getPostAreaBoxPosition();
 			_panelHeight -= _postArea.height;
 			
+			var _attachBoxPosition = this.getAttachBoxPosition();
 			if (_attachBoxPosition.height > 0) {
 				_panelHeight -= _attachBoxPosition.height + 20; //cuz margin
 			}
-			_panelHeight = Math.max(_panelHeight, this.minHeight);
 			
-			this.canvas.setCanvasSize({
-				height: _panelHeight.toPx()
-			});
-			
+			return Math.max(_panelHeight, this.minHeight);
+		},
+		getPanelWidth: function () {
 			var _panelWidth = 0;
 			if (_DOC_EL.clientWidth > 0) {
 				_panelWidth = _DOC_EL.clientWidth;
 			} else {
 				_panelWidth = _DOC_EL.offsetWidth;
 			}
-			
-			_panelWidth = Math.max(_panelWidth, this.minWidth);
-			
-			var _wrapper = this.wrapper;
-			if (!_wrapper) {
-				return;
-			}
-			_wrapper.style.width = _panelWidth.toPx();
+			return Math.max(_panelWidth, this.minWidth);
 		},
 		showAttachBox: function () {
 			if (this.attachBox.useBox) {
