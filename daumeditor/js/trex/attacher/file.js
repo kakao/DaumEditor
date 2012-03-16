@@ -154,6 +154,47 @@ Trex.Attachment.File = Trex.Class.create({
 			image: data.thumburl
 		};
 	},
+	/**
+	 * object의 style 값을 가져온다.
+	 * @function
+	 */
+	getObjectStyle: function(data) {
+		var _objstyle = {};
+		if(this.actor.config.objstyle) {
+			_objstyle = Object.extend(_objstyle, this.actor.config.objstyle);
+		}
+		if(data.imagealign) {
+			var _objectStyle = {
+				"L": Trex.Tool.AlignLeft,
+				"C": Trex.Tool.AlignCenter,
+				"FL": Trex.Tool.AlignRight,
+				"FR": Trex.Tool.AlignFull
+			}[data.imagealign];
+			if (_objectStyle && _objectStyle.__TextModeProps && _objectStyle.__TextModeProps['image']) {
+				_objstyle = Object.extend(_objstyle, _objectStyle.__TextModeProps['button']['style']);
+			}
+		}
+		return _objstyle;
+	},
+	/**
+	 * object를 감싸고 있는 paragraph tag 의 style 값을 가져온다.
+	 * @function
+	 */
+	getParaStyle: function(data) {
+		var _parastyle = Object.extend({}, this.actor.config.parastyle || this.actor.config.defaultstyle);
+		if(data.imagealign) {
+			var _objectStyle = {
+				"L": Trex.Tool.AlignLeft,
+				"C": Trex.Tool.AlignCenter,
+				"FL": Trex.Tool.AlignFull,
+				"FR": Trex.Tool.AlignRight
+			}[data.imagealign];
+			if (_objectStyle && _objectStyle.__TextModeProps && _objectStyle.__TextModeProps['paragraph']) {
+				_parastyle = Object.extend(_parastyle, _objectStyle.__TextModeProps['paragraph']['style']);
+			}
+		}
+		return _parastyle;
+	},
 	getSaveHtml: function(data) {
 		return "<a href=\"" + data.attachurl + "\"><img src=\"" + data.prevurl + "\"/> " + data.filename + "</a>";
 	},
