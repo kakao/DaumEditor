@@ -56,7 +56,7 @@
             self.imageAlignMode = _FALSE;
 
             self.weave(new Trex.Button(self.buttonCfg), _NULL, self.handler);
-            self.startSyncButtonWithStyle(__TextAlignProperty, __ImageFloatProperty);
+            self.startSyncButtonWithStyle();
         },
         handler: function() {
             var self = this;
@@ -73,10 +73,10 @@
             });
             canvas.triggerQueryStatus();
         },
-        startSyncButtonWithStyle: function(textAlign, imageFloat) {
+        startSyncButtonWithStyle: function() {
             var self = this;
             self.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_QUERY_STATUS, function(){
-                 self.syncButtonState(textAlign, imageFloat);
+                 self.syncButtonState();
             });
         }
     });
