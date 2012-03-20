@@ -130,14 +130,14 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
 		var imageModeProps = this.constructor.__ImageModeProps;
 		var currentImageFloat = this.queryImageFloat(processor);
 		if (currentImageFloat && currentImageFloat != 'none') {
-			if (imageModeProps.image && imageModeProps.image.style.float) {
-				return (currentImageFloat == imageModeProps.image.style.float);
+			if (imageModeProps.image && imageModeProps.image.style['float']) {
+				return (currentImageFloat == imageModeProps.image.style['float']);
 			}
 		}
 		var currentParaFloat = this.queryParaFloat(processor);
 		if (currentParaFloat && currentParaFloat != 'none') {
-			if (imageModeProps.paragraph && imageModeProps.paragraph.style.float) {
-				return (currentParaFloat == imageModeProps.paragraph.style.float);
+			if (imageModeProps.paragraph && imageModeProps.paragraph.style['float']) {
+				return (currentParaFloat == imageModeProps.paragraph.style['float']);
 			}
 		}
 		var currentTextAlign = this.queryTextAlign(processor);
