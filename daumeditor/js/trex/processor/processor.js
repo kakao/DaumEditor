@@ -283,9 +283,13 @@
             if (!__HAS_DUMMY) { 
                 return;
             }
-            var range = this.createGoogRange();
-            var startNode = range && range.getStartNode();
-            var remained = _NULL;
+			var range, startNode;
+            try {
+				range = this.createGoogRange();
+	            startNode = range && range.getStartNode();
+            } catch (ignore4ie678) {}
+			
+			var remained = _NULL;
 //            console.log(__TEXT_GC_LIST.length);
             for (var i = 0, len = __TEXT_GC_LIST.length - 1; i < len; i++) {
                 try {
