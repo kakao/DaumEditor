@@ -207,6 +207,14 @@ TrexConfig.addEmbeder(
 		
 	function convertToHtml(content) {
 		if ($tx.msie) { //NOTE: #FTDUEDTR-366 + #FTDUEDTR-372 -> #FTDUEDTR-403
+			content = content.replace(/<iframe[^>]*src=("|'|)https?:\/\/www\.youtube\.com\/embed\/(\w+)\1[^>]*><\/iframe>/i, function (html, quote, vid) {
+                var matched, width, height;
+				matched = html.match(/\swidth=['"]?(\d+)/);
+				width = (matched && matched[1]) || "560";
+				matched = html.match(/\sheight=['"]?(\d+)/);
+				height = (matched && matched[1]) || "315";
+				return '<object width="' + width + '" height="' + height + '"><param name="movie" ' + 'value="https://www.youtube.com/v/' + vid + '?version=3&amp;hl=ko_KR"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="https://www.youtube.com/v/' + vid + '?version=3&amp;hl=ko_KR" type="application/x-shockwave-flash" width="' + width + '" height="' + height + '" allowscriptaccess="always" allowfullscreen="true"></embed></object>';
+            });
 			content = content.replace(/(<object[^>]*>)((?:\n|.)*?)(<\/object>)/gi, function(match, start, param, end) {
 				param = param.replace(/<param[^>]*=[^\w]*wmode[^\w]+[^>]*>/i, "");
 				param = param.replace(/<param[^>]*=[^\w]*play[^\w]+[^>]*>/i, "");
