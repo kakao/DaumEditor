@@ -159,8 +159,9 @@ Trex.module("table resize dragger", function(editor, toolbar, sidebar, canvas) {
         };
 
         var moveUnDraggingAction = function() {
-            var td = $tom.find($tx.element(elem), "td");
-            if (td) {
+			var td = $tom.find($tx.element(elem), "td");
+			var isTxInfo = $tom.find(td, ".txc-info");
+			if (td && !isTxInfo) {
                 currentNode = td;
                 edgeType = getEdgeType(currentNode);
                 showDragger();

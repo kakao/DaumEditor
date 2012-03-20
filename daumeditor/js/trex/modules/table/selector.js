@@ -79,11 +79,12 @@ Trex.Table.Selector = Trex.Class.create({
 	 * @param {Element} elem
 	 */
 	onmousedown: function (elem) {
-		var td;
+		var td, isTxInfo;
 		this.reset();
 		if (this.canvas.config.readonly === _FALSE) {
 			td = Trex.TableUtil.getClosestByTagNames(["td", "th"], elem);
-			if (td) {
+			isTxInfo = $tom.find(td, ".txc-info");
+			if (td && !isTxInfo) {
 				this.selectStart(td);
 				this.turnOnDragging();
 			}
