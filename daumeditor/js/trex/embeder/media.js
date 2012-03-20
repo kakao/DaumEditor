@@ -221,8 +221,9 @@ TrexConfig.addEmbeder(
 				param = '<param name="wmode" value="transparent" />'.concat(param);
 				return start + param + end;
 			});
-			content = content.replace(/(<embed)([^>]*)(>)/gi, function(match, start, attr, end) {
-				attr = attr.replace(/\s+wmode=(["']?)(window|opaque|transparent)(["']?)/i, " wmode=$1transparent$3");
+			content = content.replace(/(<embed)([^>]*)(>)/gi, function (match, start, attr, end) {
+				attr = attr.replace(/\s+wmode=("|'|)\w*\1/i, '');
+				attr += ' wmode="transparent"';
 				return start + attr + end;
 			});
 			
