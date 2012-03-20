@@ -100,24 +100,25 @@ Trex.I.KeyObservable = Trex.Faculty.create(/** @lends Trex.I.KeyObservable */{
 			return;
 		}
 		var _self = this;
-        var eventStopped = _FALSE;
-        var stopEventOnce = function() {
-            if (!eventStopped) {
-                $tx.stop(ev);
-                eventStopped = _TRUE;
-            }
-        };
-        this.keyObservers[_name].each(function(observer) {
-            try {
-                observer.apply(_self, [ev]);
-                stopEventOnce();
-            } catch (e1) {
-                if(e1 != $propagate) {
-                    stopEventOnce();
-                    console.log(e1, e1.stack);
-                }
-            }
-        });
+		var eventStopped = _FALSE;
+		var stopEventOnce = function() {
+			if (!eventStopped) {
+				$tx.stop(ev);
+				eventStopped = _TRUE;
+			}
+		};
+		this.keyObservers[_name].each(function(observer) {
+			try {
+				observer.apply(_self, [ev]);
+				stopEventOnce();
+			} catch (e1) {
+				if(e1 === $stop) {
+					stopEventOnce();
+				} else if (e1 !== $propagate) {
+					console.log(e1, e1.stack);
+				}
+			}
+		});
 	},
 	registerKeyEvent: function(el) {
 		try {
@@ -176,7 +177,7 @@ Trex.I.ElementObservable = Trex.Faculty.create(/** @lends Trex.I.ElementObservab
 		
 		var _self = this;
 		try {
-            var _observers;
+			var _observers;
 			if($tom.kindOf(_node, 'img,hr,table,button,iframe')) {
 				_observers = this.collectObserverByElement(_node.nodeName.toLowerCase(), _node.className);
 				if(_observers) {

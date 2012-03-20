@@ -28,5 +28,6 @@ var testCases = [
     "testcase/FontCssProperty_test.js",
     "testcase/paste_test.js",
 //    "testcase/well_formed_test.js", // not finished
-    "testcase/tableedit.js"
+    "testcase/tableedit.js",
+    "testcase/range_test.js"
 ];

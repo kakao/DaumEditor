@@ -52,6 +52,13 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
 			return _NULL;
 		}
 	},
+	queryParaFloat: function(processor) {
+		var _value, _node = processor.findNode('%paragraph');
+		if (_node) {
+			_value = processor.queryStyle(_node, 'float');
+		}
+		return _value || _NULL;
+	},
 	queryTextAlign: function(processor) {
 		var _node = processor.findNode('%paragraph');
 		var _value = processor.queryStyle(_node, 'textAlign');
@@ -106,40 +113,45 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
         }
         this.indenter.indent(processor);
     },
-    syncButtonState: function(textAlign, imageFloat) {
+    syncButtonState: function() {
         var self = this;
         var state = self.canvas.query(function(processor) {
-            return self.queryCurrentStyle(processor, textAlign, imageFloat);
+            return self.queryCurrentStyle(processor);
         });
         self.button.setState(state);
     },
-    queryCurrentStyle: function(processor, textAlign, imageFloat) {
-        var self = this;
-        if (self.imageAlignMode) {
-            return self.queryImageMode(processor, textAlign, imageFloat)
+    queryCurrentStyle: function(processor) {
+        if (this.imageAlignMode) {
+            return this.queryImageMode(processor)
         }
-        return self.queryTextMode(processor, textAlign);
+        return this.queryTextMode(processor);
     },
-    queryImageMode: function(processor, textAlign, imageFloat) {
-        var self = this, currentFloat;
-        if (!this.constructor.__ImageModeProps['paragraph']) {
-            currentFloat = self.queryImageFloat(processor);
-            return (currentFloat == imageFloat);
-        } else {
-            var align = self.queryTextAlign(processor);
-            if (align == textAlign) {
-                currentFloat = self.queryImageFloat(processor) || 'none';
-                return (currentFloat == imageFloat);
-            } else {
-                return _FALSE;
-            }
-        }
+    queryImageMode: function(processor) {
+		var imageModeProps = this.constructor.__ImageModeProps;
+		var currentImageFloat = this.queryImageFloat(processor);
+		if (currentImageFloat && currentImageFloat != 'none') {
+			if (imageModeProps.image && imageModeProps.image.style.float) {
+				return (currentImageFloat == imageModeProps.image.style.float);
+			}
+		}
+		var currentParaFloat = this.queryParaFloat(processor);
+		if (currentParaFloat && currentParaFloat != 'none') {
+			if (imageModeProps.paragraph && imageModeProps.paragraph.style.float) {
+				return (currentParaFloat == imageModeProps.paragraph.style.float);
+			}
+		}
+		var currentTextAlign = this.queryTextAlign(processor);
+		if (imageModeProps.paragraph && imageModeProps.paragraph.style.textAlign) {
+			return (currentTextAlign == imageModeProps.paragraph.style.textAlign);
+		}
+        return _FALSE;
     },
-    queryTextMode: function(processor, textAlign) {
-        var self = this;
-        var controlAlign = self.queryControlAlign(processor);
+    queryTextMode: function(processor) {
+		var textModeProps = this.constructor.__TextModeProps;
+		var textAlign = textModeProps.paragraph.style.textAlign;
+        var controlAlign = this.queryControlAlign(processor);
         if (controlAlign == _NULL) {
-            var align = self.queryTextAlign(processor) || 'left';
+            var align = this.queryTextAlign(processor) || 'left';
             return (align == textAlign);
         } else {
             return (controlAlign == textAlign);
