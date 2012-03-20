@@ -1115,7 +1115,7 @@ Object.extend($tom, /** @lends $tom */{
 	},
     wrapInlinesWithP: function(inline, ancestorBlock) {
         var ownerDocument = $tom.getOwnerDocument(inline);
-        var inlineNodes = $tom.extract(ancestorBlock || ownerDocument.body, inline, '%text,%inline,img,object,embed,hr');
+        var inlineNodes = $tom.extract(ancestorBlock || ownerDocument.body, inline, '%text,%inline,img,object,embed,hr,button');
         // caret은 곧 사라지기 때문에P로 감쌀 필요가 없다
         if (this.hasOnlySavedCaret(inlineNodes, inline)) {
             return _NULL;
