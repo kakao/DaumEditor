@@ -22,6 +22,7 @@
                 lineHeight: "1.5",
                 padding: "8px"
             },
+			pMarginZero: true,
             selectedMode: "html",
             readonly: _FALSE,
             initHeight: 400,

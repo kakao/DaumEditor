@@ -18,7 +18,6 @@ body {
 	padding:8px;
 }
 
-p { margin: 0; padding: 0; }
 a:hover, a:link, a:active, a:visited  { text-decoration:none; border-bottom:1px dashed #840000; }
 
 button { 
