@@ -14,32 +14,6 @@ Trex.I.Processor.Gecko = {
 	 * @param {Event} ev - Enter Key 이벤트
 	 */
 	controlEnterByParagraph: function() {
-		var _bNode = this.findNode('li,td,th');
-		if (_bNode) { 
-			throw $propagate;
-		}
-		
-		var _btnNode = this.findNode("button");
-		if(_btnNode) {
-			this.moveCaretTo($tom.next(_btnNode));
-			throw $propagate;
-		}
-		
-		var _dvNode;
-		this.getTxSel().collapse(_FALSE);
-		var _wNode = this.findNode('%paragraph');
-		if (_wNode) {
-			this.execWithMarker(function(marker) {
-				_dvNode = $tom.divideParagraph(marker.endMarker);
-			});
-			this.stuffNode(_wNode);
-		} else {
-			_dvNode = this.newParagraph('p');
-			this.execWithMarker(function(marker) {
-				$tom.insertAt(_dvNode, marker.endMarker);
-			});
-		}
-		this.stuffNode(_dvNode);
-		this.moveCaretTo(_dvNode);
+		throw $propagate;
 	}
 };
