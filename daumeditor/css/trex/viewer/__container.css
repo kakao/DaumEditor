@@ -1,7 +1,6 @@
 /*==== container ====*/
 	
 	.tx-content-container em { font-style: italic; }
-	.tx-content-container p { margin: 0; padding: 0; }
 	.tx-content-container ol { padding-left:25px; }
 	.tx-content-container ol li{ list-style-type: inherit; }
 	.tx-content-container ul { list-style-type: disc; padding-left:20px;}

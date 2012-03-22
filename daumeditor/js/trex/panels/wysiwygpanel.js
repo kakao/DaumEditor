@@ -246,7 +246,11 @@
 		 */
 		setFontStyle: function(doc, styles) {
 			var extendedStyles = Object.extend(styles, { 'browser': $tx.browser });
+			extendedStyles = Object.extend(styles, {
+				'pMarginZero': this.canvasConfig.pMarginZero ? "true" : "false"
+			});
 			var cssText = new Template([
+				"#{if:pMarginZero=='true'}p { margin:0; padding:0; }#{/if:pMarginZero}",
 				"body, td, button { color:#{color}; font-size:#{fontSize}; font-family:#{fontFamily}; line-height:#{lineHeight}; }",
 				"a, a:hover, a:link, a:active, a:visited { color:#{color}; }",
 				"div.txc-search-border { border-color:#{color}; }",
