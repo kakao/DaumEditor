@@ -245,8 +245,8 @@
 		 * @param styles {Object} key: value 형태의 CSS property 모음
 		 */
 		setFontStyle: function(doc, styles) {
-			var extendedStyles = Object.extend(styles, { 'browser': $tx.browser });
-			extendedStyles = Object.extend(styles, {
+			var extendedStyles = Object.extend(styles, {
+				'browser': $tx.browser,
 				'pMarginZero': this.canvasConfig.pMarginZero ? "true" : "false"
 			});
 			var cssText = new Template([
