@@ -32,12 +32,11 @@ Trex.Tool.Table = Trex.Class.create({
 			"border": 0,
 			"style": {
 				border: "none",
-				borderCollapse:"collapse",
-				layout: "fixed"
+				borderCollapse:"collapse"
 			}
 		},
 		__DEFAULT_TABLE_PROPERTY_STR: "cellspacing=\"0\" cellpadding=\"0\" border=\"0\"",
-		__DEFAULT_TABLE_STYLE: "border:none;border-collapse:collapse;table-layout:fixed;",
+		__DEFAULT_TABLE_STYLE: "border:none;border-collapse:collapse;",
 		__DEFAULT_TABLE_CLASS: "txc-table"
 	},
 	$extend: Trex.Tool,
