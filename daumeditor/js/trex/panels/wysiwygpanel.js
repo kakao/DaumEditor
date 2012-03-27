@@ -280,7 +280,32 @@
 				$tx.applyCSSText(doc, cssText);
 			} catch (ignore) {}
 		},
-
+		
+		setRule: function (selector, value) {
+			var styleElem, sheet, rules;
+			try {
+				styleElem = this.wysiwygDoc.getElementById("txStyleForSetRule");
+				sheet = styleElem.sheet ? styleElem.sheet : styleElem.styleSheet;
+				rules = sheet.cssRules ? sheet.cssRules : sheet.rules;
+				if (sheet.insertRule) { // all browsers, except IE before version 9
+					if (0 < rules.length) {
+						sheet.deleteRule(0);
+					}
+					if (selector) {
+						sheet.insertRule(selector + "{" + value + "}", 0);
+					}
+				} else { // Internet Explorer before version 9
+					if (sheet.addRule) {
+						if (0 < rules.length) {
+							sheet.removeRule(0);
+						}
+						if (selector) {
+							sheet.addRule(selector, value, 0);
+						}
+					}
+				}
+			} catch (ignore) {}
+		},
 
 		/**
 		 * iframe에서 발생하는 각종 event 들을 observing 하기 시작한다.
