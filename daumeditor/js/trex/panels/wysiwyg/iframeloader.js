@@ -82,7 +82,7 @@
             '<style id="txStyleForSetRule"></style>' +
 			'</head>' +
             '<body class="tx-content-container">' +
-            '<p></p>' +
+            $tom.EMPTY_PARAGRAPH_HTML +
             '</body></html>';
 
 })();
