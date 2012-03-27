@@ -223,7 +223,7 @@ TrexConfig.addEmbeder(
 			});
 			content = content.replace(/(<embed)([^>]*)(>)/gi, function (match, start, attr, end) {
 				attr = attr.replace(/\s+wmode=("|'|)\w*\1/i, '');
-				attr += ' wmode="transparent"';
+				attr += ' wmode=transparent';
 				return start + attr + end;
 			});
 			
