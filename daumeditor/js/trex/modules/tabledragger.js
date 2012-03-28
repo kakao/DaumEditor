@@ -6,6 +6,7 @@ Trex.module("table resize dragger", function(editor, toolbar, sidebar, canvas) {
         var win = wysiwygPanel.getWindow();
         var body = doc.body;
         var MIN_WIDTH = 20;
+        var w3cBoxModelWorks;
 
         var colDragger = $tom.collect(canvas.wysiwygEl, ".tx-table-col-resize-dragger");
         var rowDragger = $tom.collect(canvas.wysiwygEl, ".tx-table-row-resize-dragger");
@@ -378,6 +379,14 @@ Trex.module("table resize dragger", function(editor, toolbar, sidebar, canvas) {
                 }
             }
         };
+        
+        (function checkW3cBoxModel() {
+			var div = doc.createElement( "div" );
+			body.appendChild(div);
+			div.style.width = div.style.paddingLeft = "1px";
+			w3cBoxModelWorks = div.offsetWidth === 2;
+			body.removeChild(div);
+        })();
 
         var getEdgeType = function(node) {
             var rect, edgeType = EDGE_TYPE.NONE;
@@ -392,12 +401,7 @@ Trex.module("table resize dragger", function(editor, toolbar, sidebar, canvas) {
 				try {
 					var doc = node.ownerDocument,
 						docElem = doc.documentElement,
-						body = doc.body,
-						div = doc.createElement( "div" );
-					body.appendChild(div);
-					div.style.width = div.style.paddingLeft = "1px";
-					var w3cBoxModelWorks = div.offsetWidth === 2;
-					body.removeChild(div);
+						body = doc.body;
 					var box = node.getBoundingClientRect(),
 						win = doc.defaultView || doc.parentWindow,
 						clientTop  = docElem.clientTop  || body.clientTop  || 0,

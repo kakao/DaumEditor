@@ -137,7 +137,7 @@ Trex.module("make padding area inside Canvas with editor width",
             } else {
                 return { 
                     leftWidth: Math.ceil(_guideAreaWidth - contentPadding).toPx(),
-					rightWidth: Math.max(0, (Math.floor(_guideAreaWidth))).toPx(),
+					rightWidth: Math.max(0, (Math.floor(_guideAreaWidth - contentPadding))).toPx(),
                     rightPos: (contentWidth + Math.ceil(_guideAreaWidth + contentPadding)).toPx()
                 };
             }
