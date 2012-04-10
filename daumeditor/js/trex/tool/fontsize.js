@@ -78,6 +78,9 @@ Trex.Tool.FontSize = Trex.Class.create({
             fontSizeMap[option.data] = option.title;
         });
     },
+    reliableQueriedValue: function(value) {
+    	return $tx.webkit === false;
+    },
     getTextByValue: function(value) {
         var matchedText = this.fontSizeMap[value];
         if (!matchedText) {
