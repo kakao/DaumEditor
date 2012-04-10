@@ -22,7 +22,7 @@ Trex.I.MenuFontTool = Trex.Mixin.create({
         var queriedValue = self.queryCommandValue();
 
         // try to get using queryCommand
-        if (queriedValue && self.getTextByValue(queriedValue)) {
+        if (self.reliableQueriedValue(queriedValue) && queriedValue && self.getTextByValue(queriedValue)) {
         	return self.getTextByValue(queriedValue);
         }
 
@@ -48,6 +48,9 @@ Trex.I.MenuFontTool = Trex.Mixin.create({
         return self.canvas.query(function(processor) {
             return processor.queryCommandValue(self.getQueryCommandName());
         });
+    },
+    reliableQueriedValue: function(value) {
+    	return _TRUE;
     },
     queryElementCurrentStyle: function(element) {
         var cssPropertyName = this.getCssPropertyName();
