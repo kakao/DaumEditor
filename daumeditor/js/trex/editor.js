@@ -19,14 +19,10 @@ Trex.Editor = Trex.Class.create( /** @lends Trex.Editor.prototype */{
 	config: _NULL,
     initialConfig: _NULL,
 	initialize: function(config) {
-		StopWatch.lap("Started editor.init");
         this.initialConfig = config;
 		var _editor = this, _config = this.config = TrexConfig.setup(config);
-		StopWatch.lap("Before new Trex.Canvas ");
 		var _canvas = this.canvas = new Trex.Canvas(_editor, _config);
-		StopWatch.lap("Before new Trex.Toolbar ");
 		var _toolbar = this.toolbar = new Trex.Toolbar(_editor, _config);
-		StopWatch.lap("Before new Trex.Sidebar ");
 		var _sidebar = this.sidebar = new Trex.Sidebar(_editor, _config);
 		Trex.invokeInstallation(_editor, _toolbar, _sidebar, _canvas, _config);
 		
@@ -55,10 +51,8 @@ Trex.Editor = Trex.Class.create( /** @lends Trex.Editor.prototype */{
 			}
 			$tx.hide(_elLoading);
 		});
-		StopWatch.lap("Before executing Modules ");
 		Trex.invokeRegisters(_editor, _toolbar, _sidebar, _canvas, _config);
 		Trex.invokeModules(_editor, _toolbar, _sidebar, _canvas, _config);
-		StopWatch.lap("Finished editor.init");
 	},
 	/**
 	 * Get toolbar instance
@@ -182,7 +176,6 @@ Trex.Editor = Trex.Class.create( /** @lends Trex.Editor.prototype */{
 			}
 			Editor.initStartTime = new Date().getTime();
 			
-			StopWatch.start();
 			var _editor;
 			try {
 				Editor.__EDITOR_LOADED = _FALSE;
