@@ -87,7 +87,7 @@
     </target>
     <target name="escape_and_delete_logging">
         <native2ascii encoding="utf-8" src="${build.target.js.merged.dir}" dest="${build.target.js.escaped.dir}" includes="**/*.js"/>
-        <replaceregexp match="(console\.[^;]*;)|(StopWatch\.lap\([^;]*;)" replace="" flags="g" byline="true" encoding="utf-8">
+        <replaceregexp match="(console\.[^;]*;)" replace="" flags="g" byline="true" encoding="utf-8">
             <fileset dir="${build.target.js.escaped.dir}" includes="**/*.js"/>
         </replaceregexp>
     </target>
