@@ -111,7 +111,6 @@
          */
         panels: _NULL,
         initialize: function(editor, rootConfig) {
-            StopWatch.lap("Start canvas.init");
 
             this.editor = editor;
             var _config = this.config = TrexConfig.get('canvas', rootConfig);
@@ -128,7 +127,6 @@
             this.setCanvasSize({
                 height: _config.initHeight
             });
-            StopWatch.lap("Finished canvas.init");
         },
         initConfig: function(rootConfig) {
             var _config = this.config;
