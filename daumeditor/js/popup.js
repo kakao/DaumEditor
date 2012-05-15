@@ -2,7 +2,6 @@ var CORE_FILES = [
     "scopeVariable.js",
     /** debugging library */
     "lib/firebug/firebugx.js",
-    "lib/stopwatch.js",
     /** common library */
     "lib/txlib.js",
     "lib/hyperscript.js",

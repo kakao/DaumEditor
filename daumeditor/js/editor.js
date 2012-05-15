@@ -3,7 +3,6 @@ var CORE_FILES = [
     "scopeVariable.js",
     /** debugging library */
     "lib/firebug/firebugx.js",
-    "lib/stopwatch.js",
     /** common library */
     "lib/json2.js",
     "lib/txlib.js",

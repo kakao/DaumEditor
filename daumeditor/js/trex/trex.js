@@ -215,10 +215,7 @@ var Trex = {
 		invoke: function(fns, editor, toolbar, sidebar, canvas, config){
 			for(var i=0,len=fns.length; i<len; i++){
 				var fn = fns[i];
-				if (fn.desc) {
-					StopWatch.lap(fn.desc);
-				}
-				fn(editor, toolbar, sidebar, canvas, config);		
+				fn(editor, toolbar, sidebar, canvas, config);
 			}
 		},
 		invokeInstallation: function(editor, toolbar, sidebar, canvas, config){

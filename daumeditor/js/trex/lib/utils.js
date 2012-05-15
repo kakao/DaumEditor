@@ -8,7 +8,7 @@
 		getDispElId: function() {
 			var _genId;
 			do {
-				_genId = "tx_entry_" + (Math.floor(Math.random() * 90000) + 10000); //id: 10000~99999
+				_genId = "tx_entry_" + (Math.floor(Math.random() * 90000) + 10000) + "_"; //id: 10000~99999
 			} while(Trex.Util._dispElIds.contains(_genId));
 			Trex.Util._dispElIds.push(_genId);
 			return _genId;
