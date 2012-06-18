@@ -1,6 +1,6 @@
 /**
  * @fileOverview
- * Wysiwyg 영역의 컨텐츠를 조작하기 위해 사용되는 공통되는 Processor 정의 
+ * Wysiwyg 영역의 컨텐츠를 조작하기 위해 사용되는 공통되는 Processor 정의
  */
 Trex.I.Processor = {};
 Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
@@ -8,7 +8,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	initialize: function(win, doc) {
 		this.win = win;
 		this.doc = doc;
-		
+
 		this.txSelection = new Trex.Canvas.Selection(this);
 		this.bookmark = new Trex.Canvas.Bookmark(this);
 	},
@@ -90,7 +90,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	},
 	/**
 	 * 컨트롤 노드를 선택한다.
-	 * @param {Element} node - 컨트롤 노트 
+	 * @param {Element} node - 컨트롤 노트
 	 * @example
 	 * 	txSelection.selectControl(node);
 	 */
@@ -155,7 +155,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 			return node.currentStyle[styleName];
 		} else if(_WIN.getComputedStyle) {
 			var _cssStyle = this.doc.defaultView.getComputedStyle(node, _NULL);
-	    	return ((_cssStyle)? _cssStyle[styleName] : _NULL);
+			return ((_cssStyle)? _cssStyle[styleName] : _NULL);
 		}
 		return _NULL;
 	},
@@ -176,7 +176,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	/**
 	 * 선택된 영역의 native queryCommandState 값을 얻어온다.
 	 * @param {String} command - 커맨드 명
-	 * @returns {Boolean} - 해당 영역이 커맨드 상태인지 여부 
+	 * @returns {Boolean} - 해당 영역이 커맨드 상태인지 여부
 	 * @example
 	 * 	processor.queryCommandState('bold');
 	 */
@@ -185,16 +185,16 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 			return this.doc.queryCommandState(command);
 		} catch(e) { return _FALSE; }
 	},
-    /**
-     * 선택된 영역의 native queryCommandValue 값을 얻어온다.
-     */
-    queryCommandValue: function(command) {
-        try {
-            return this.doc.queryCommandValue(command);
-        } catch(e) {
-            return "";
-        }
-    },
+	/**
+	 * 선택된 영역의 native queryCommandValue 값을 얻어온다.
+	 */
+	queryCommandValue: function(command) {
+		try {
+			return this.doc.queryCommandValue(command);
+		} catch(e) {
+			return "";
+		}
+	},
 	/*-------- processor - query style end --------*/
 	/**
 	 * 선택된 영역에 native execCommand를 실행시킨다.
@@ -204,19 +204,19 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	 * 	processor.execCommand('forecolor', '#333');
 	 */
 	execCommand: function(command, data) {
-        if ($tx.gecko) {
-            // Firefox는 styleWithCSS 기본값이 true
-            try {
-                this.doc.execCommand('styleWithCSS', _FALSE, _FALSE);
-            } catch(e) {}
-        }
+		if ($tx.gecko) {
+			// Firefox는 styleWithCSS 기본값이 true
+			try {
+				this.doc.execCommand('styleWithCSS', _FALSE, _FALSE);
+			} catch(e) {}
+		}
 		try {
 			this.doc.execCommand(command, _FALSE, data);
 		} catch(e) {}
 	},
 	/*-------- processor - marker start --------*/
 	/**
-	 * 선택된 영역에 주어진 handler를 실행시킨다. 
+	 * 선택된 영역에 주어진 handler를 실행시킨다.
 	 * 주로 외부에서 processor를 이용해 DOM조작을 할 경우에 사용된다.
 	 * @param {Funtion} handler - 해당 영역에 실행할 함수
 	 * @example
@@ -224,7 +224,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	 *		$tom.insertAt(node, marker.endMarker);
 	 *  });
 	 */
-	execWithMarker: function(handler) { 
+	execWithMarker: function(handler) {
 		var _marker = new Trex.Canvas.Marker(this);
 		this.bookmarkTo();
 		try {
@@ -235,7 +235,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 			console.log(e, e.stack)
 		} finally {
 			_marker.remove();
-		}	
+		}
 	},
 	/*-------- processor - marker end --------*/
 	/*--------------------- focus, movecaret ----------------------*/
@@ -260,16 +260,16 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	 * @example
 	 * 	processor.focusOnTop();
 	 */
-    focusOnTop: function() {
-        this.win.focus();
-        this.selectFirstText(this.doc.body);
-        this.doc.body.scrollTop = 0; //NOTE: only html, not xhtml
-    },
-    selectFirstText: function(node) {
-        var firstNode = $tom.top(node);
-        var range = this.createGoogRangeFromNodes(firstNode, 0, firstNode, 0);
-        range.select();
-    },
+	focusOnTop: function() {
+		this.win.focus();
+		this.selectFirstText(this.doc.body);
+		this.doc.body.scrollTop = 0; //NOTE: only html, not xhtml
+	},
+	selectFirstText: function(node) {
+		var firstNode = $tom.top(node);
+		var range = this.createGoogRangeFromNodes(firstNode, 0, firstNode, 0);
+		range.select();
+	},
 	/**
 	 * 본문의 마지막으로 캐럿을 옮긴다.
 	 * @example
@@ -368,7 +368,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	 * 	processor.bookmark();
 	 */
 	bookmarkTo: function(rng) {
-		rng = rng || this.txSelection.getRange(); 
+		rng = rng || this.txSelection.getRange();
 		this.bookmark.save({
 			startContainer: rng.startContainer,
 			startOffset: rng.startOffset,
@@ -398,15 +398,15 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	 * @param {String, Object, Element} argument - 가변 arguments<br/>
 	 * 			{String} name : 1st String은 노드명  <br/>
 	 * 			{Object} attributes : 적용할 속성들  <br/>
-	 * 			{Element, String, Number} children : 자식 노드 
+	 * 			{Element, String, Number} children : 자식 노드
 	 * @example
 	 * 	processor.create('div', { 'className': 'txc-textbox' });
 	 */
 	create: function() {
 		var name = arguments[0];
 		var _node = this.newNode(name);
-        for (var i = 1; i < arguments.length; i++) {
-            var arg = arguments[i];
+		for (var i = 1; i < arguments.length; i++) {
+			var arg = arguments[i];
 			if (arg.nodeType) {
 				$tom.append(_node, arg);
 			} else if (typeof(arg) == 'string' || typeof(arg) == 'number') {
@@ -437,14 +437,14 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 		if(!nodes.length) {
 			nodes = [].concat(nodes);
 		}
-		
+
 		this.txSelection.collapse(_FALSE);
 		if(newline) {
 			/* order
 			 * (curNode) > wpNode > dvNode
 			 */
 			var _curNode, _wpNode, _dvNode;
-			
+
 			var _processor = this;
 			this.execWithMarker(function(marker) {
 				_dvNode = $tom.divideParagraph(marker.endMarker);
@@ -464,7 +464,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 				if(wrapStyle) {
 					$tom.applyAttributes(_wpNode, wrapStyle);
 				}
-			});	
+			});
 			if(_curNode) {
 				if(!$tom.hasData(_curNode)) {
 					this.stuffNode(_curNode);
@@ -472,13 +472,13 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 			}
 			this.stuffNode(_dvNode);
 			this.bookmark.saveIntoFirst(_dvNode);
-				
+
 		} else {
 			this.execWithMarker(function(marker) {
 				nodes.each(function(node) {
-					$tom.insertNext(node, marker.endMarker);
+					$tom.insertAt(node, marker.endMarker);
 				});
-			});	
+			});
 		}
 		return nodes[0];
 	},
@@ -512,7 +512,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	},
 	/**
 	 * 선택한 영역안에 있는 노드 중에 패턴을 만족하는 블럭 노드들을 리턴한다.
-	 * @param {Array} filter - 수집할 노드 패턴 조건 
+	 * @param {Array} filter - 수집할 노드 패턴 조건
 	 * @returns {Array} - 선택한 영역안에 있는 노드 중에 패턴을 만족하는 노드들
 	 * @example
 	 * 	processor.blocks(function() {
@@ -522,9 +522,9 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	blocks: function(filter) {
 		var _nodes = [];
 		var _patterns = filter();
-		if (this.hasControl()) { 
+		if (this.hasControl()) {
 			var _control = this.getControl();
-			if ($tom.kindOf(_control.parentNode, _patterns)) { 
+			if ($tom.kindOf(_control.parentNode, _patterns)) {
 				_nodes.push(_control.parentNode);
 			}
 		} else {
@@ -546,7 +546,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	},
 	/**
 	 * 선택한 영역안에 있는 노드 중에 패턴을 만족하는 인라인 노드들을 리턴한다.
-	 * @param {Array} filter - 수집할 노드 패턴 조건 
+	 * @param {Array} filter - 수집할 노드 패턴 조건
 	 * @returns {Array} - 선택한 영역안에 있는 노드 중에 패턴을 만족하는 노드들
 	 * @example
 	 * 	processor.inlines(function(type) {
@@ -559,15 +559,15 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	inlines: function(filter) {
 		var _nodes = [];
 		var _patterns = filter();
-		
+
 		var _processor = this;
 		var _createInline = function() {
 			return _processor.create($tom.inlineOf());
 		};
-		
-		if (this.hasControl()) { 
+
+		if (this.hasControl()) {
 			var _control = this.getControl();
-			if ($tom.kindOf(_control, _patterns)) { 
+			if ($tom.kindOf(_control, _patterns)) {
 				_nodes.push(_control);
 			} else {
 				var _iNode = _createInline();
@@ -617,16 +617,16 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	controls: function(filter) {
 		var _nodes = [];
 		if (this.hasControl()) {
-			if ($tom.kindOf(this.getControl(), filter())) { 
+			if ($tom.kindOf(this.getControl(), filter())) {
 				_nodes.push(this.getControl());
 			}
-		} 
+		}
 		return _nodes;
 	},
 	/**
 	 * 더미용 nbsp를 넣는 함수.
 	 * webkit 용에 구현되어있습니다.
-	 * Safari 에서 apply 시 
+	 * Safari 에서 apply 시
 	 * 폰트에 대한 속성을 잃어버리기 때문에 필요.
 	 */
 	addDummyNbsp: function () {},
@@ -683,23 +683,23 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 		this.bookmark.saveAroundNode(node);
 		return $tom.unwrap(node);
 	},
-    createGoogRange: function() {
-        return goog.dom.Range.createFromWindow(this.win)
-    },
-    createGoogRangeFromNodes: function(startNode, startOffset, endNode, endOffset) {
-        return goog.dom.Range.createFromNodes(startNode, startOffset, endNode, endOffset);
-    },
-    executeUsingCaret: function(handler) {
-        try {
-            var range = this.createGoogRange();
-            var savedCaret = range.saveUsingCarets();
-            return handler(range, savedCaret);
-        } finally {
-            if (!savedCaret.isDisposed()) {
-                savedCaret.restore();
-            }
-        }
-    }
+	createGoogRange: function() {
+		return goog.dom.Range.createFromWindow(this.win)
+	},
+	createGoogRangeFromNodes: function(startNode, startOffset, endNode, endOffset) {
+		return goog.dom.Range.createFromNodes(startNode, startOffset, endNode, endOffset);
+	},
+	executeUsingCaret: function(handler) {
+		try {
+			var range = this.createGoogRange();
+			var savedCaret = range.saveUsingCarets();
+			return handler(range, savedCaret);
+		} finally {
+			if (!savedCaret.isDisposed()) {
+				savedCaret.restore();
+			}
+		}
+	}
 };
 
 Trex.module("observe that @when control elements are focused at",
