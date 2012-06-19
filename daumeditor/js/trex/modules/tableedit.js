@@ -64,13 +64,13 @@
 			var rowClass = "row ".times(rowCount).replace(/(row)/g, function(m, value){
 				return value+(rowSpan++);
 			});
-			
+
 			var colSpan= col + 1;
 			var colCount = this.getColSpan( element );
 			var colClass = "col ".times(colCount).replace(/(col)/g, function(m, value){
 				return value+(colSpan++);
 			});
-			
+
 			element.setAttribute("colClass", colClass);
 			element.setAttribute("rowClass", rowClass);
 		},
@@ -81,7 +81,7 @@
 			return parseInt( element.getAttribute("rowSpan") || 1 );
 		}
 	};
-	
+
 	var Boundary = {
 		start: {x:-1, y:-1},
 		top: -1,
@@ -93,7 +93,7 @@
 			this.start.y = this.top = this.bottom = y;
 		},
 		clear: function(){
-			this.top = this.left = this.bottom = this.right = this.start.x = this.start.y= -1; 
+			this.top = this.left = this.bottom = this.right = this.start.x = this.start.y= -1;
 		},
 		changeBoundary: function(x,y){
 			this.top = Math.min(this.start.y, y);
@@ -110,39 +110,39 @@
 			}
 		}
 	};
-	
+
 	var TableEditActionValidator = {
 		canMerge: function(rectCoord, tdMatrix){
-            var i;
+			var i;
 			for(i = rectCoord.sy; i < rectCoord.ey + 1; i++ ){
-				if ( TdUtil.getMinCoord(tdMatrix[i][rectCoord.sx]).x - 1 != rectCoord.sx ||	
+				if ( TdUtil.getMinCoord(tdMatrix[i][rectCoord.sx]).x - 1 != rectCoord.sx ||
 					TdUtil.getMaxCoord(tdMatrix[i][rectCoord.ex]).x - 1 != rectCoord.ex ){
-						return _FALSE;	
-				}	
+						return _FALSE;
+				}
 			}
-			
+
 			for(i = rectCoord.sx; i < rectCoord.ex + 1; i++ ){
-				if ( TdUtil.getMinCoord(tdMatrix[rectCoord.sy][i]).y - 1 != rectCoord.sy ||	
+				if ( TdUtil.getMinCoord(tdMatrix[rectCoord.sy][i]).y - 1 != rectCoord.sy ||
 					TdUtil.getMaxCoord(tdMatrix[rectCoord.ey][i]).y - 1!= rectCoord.ey ){
-						return _FALSE;	
-				}	
+						return _FALSE;
+				}
 			}
-			
+
 			return _TRUE;
-		},	
+		},
 		canSplit: function(rectCoord, tdMatrix){
 			var topLeftCoord = TdUtil.getMinCoord( tdMatrix[rectCoord.sy][rectCoord.sx]);
 			var bottomRightCoord = TdUtil.getMinCoord( tdMatrix[rectCoord.ey][rectCoord.ex]);
-			
-			return ( topLeftCoord.x == bottomRightCoord.x 
-					&& topLeftCoord.y == bottomRightCoord.y 
-					&& topLeftCoord.x > 0 
+
+			return ( topLeftCoord.x == bottomRightCoord.x
+					&& topLeftCoord.y == bottomRightCoord.y
+					&& topLeftCoord.x > 0
 					&& topLeftCoord.y > 0);
 		},
 		isMergedCell: function(rectCoord, tdMatrix){
 			var maxCoord= TdUtil.getMaxCoord( tdMatrix[rectCoord.sy][rectCoord.sx]);
 			var minCoord= TdUtil.getMinCoord( tdMatrix[rectCoord.sy][rectCoord.sx]);
-			
+
 			if ( maxCoord.x != minCoord.x || maxCoord.y != minCoord.y ){
 				return _TRUE;
 			}else{
@@ -186,15 +186,15 @@
 		canAddUpperRow: function( row, tdMatrix){
 			for( var i = 0; i < tdMatrix[0].length; i++ ){
 				if ( tdMatrix[row-1][i] == tdMatrix[row][i] ){
-					return _FALSE;					
+					return _FALSE;
 				}
 			}
-			return _TRUE;			
+			return _TRUE;
 		},
 		canAddBelowRow: function( row, tdMatrix){
 			for( var i = 0; i < tdMatrix[0].length; i++ ){
 				if ( tdMatrix[row+1][i] == tdMatrix[row][i] ){
-					return _FALSE;					
+					return _FALSE;
 				}
 			}
 			return _TRUE;
@@ -202,7 +202,7 @@
 		canAddLeftCol: function( col, tdMatrix){
 			for( var i = 0; i < tdMatrix.length; i++ ){
 				if ( tdMatrix[i][col-1] == tdMatrix[i][col] ){
-					return _FALSE;					
+					return _FALSE;
 				}
 			}
 			return _TRUE;
@@ -210,110 +210,110 @@
 		canAddRightCol: function( col, tdMatrix){
 			for( var i = 0; i < tdMatrix.length; i++ ){
 				if ( tdMatrix[i][col+1] == tdMatrix[i][col] ){
-					return _FALSE;					
+					return _FALSE;
 				}
 			}
 			return _TRUE;
 		}
 	};
-	
+
 	Trex.MarkupTemplate.add("table.edit",
-		'<div class="tx-table-edit">\
-			<ul class="tx-tab tx-tab-menu1">\
-				<li><a href="javascript:;">표구성</a></li>\
-				<li><a href="javascript:;">디자인</a></li>\
-				<li><a href="javascript:;">서식</a></li>\
-			</ul>\
-			<div class="tx-table-edit-layout">\
-			<div class="tx-table-edit-layout-wrapper">\
-				<div class="tx-table-edit-layout-insert">\
-					<h4>삽입</h4>\
-					<ul class="tx-2cell">\
-						<li class="tx-left"><a href="javascript:;" class="tx-up" title="위에 추가">위</a></li>\
-						<li class="tx-right"><a href="javascript:;" class="tx-down" title="아래에 추가">아래</a></li>\
-					</ul>\
-					<ul class="tx-2cell">\
-						<li class="tx-left"><a href="javascript:;" class="tx-left" title="왼쪽에 추가">왼쪽</a></li>\
-						<li class="tx-right"><a href="javascript:;" class="tx-right" title="오른쪽 추가">오른</a></li>\
-					</ul>\
-				</div>\
-				<div class="tx-table-edit-layout-cell">\
-					<h4>삭제</h4>\
-					<ul class="tx-2cell">\
-						<li class="tx-left"><a href="javascript:;" class="tx-col" title="열삭제">열</a></li>\
-						<li class="tx-right"><a href="javascript:;" class="tx-row" title="행삭제">행</a></li>\
-					</ul>\
-					<h4 style="width:50px">병합/분할</h4>\
-					<ul class="tx-2cell">\
-						<li class="tx-left"><a href="javascript:;" class="tx-merge" title="병합">합</a></li>\
-						<li class="tx-right"><a href="javascript:;" class="tx-split" title="분할">분</a></li>\
-					</ul>\
-				</div>\
-				<div class="tx-table-edit-layout-align">\
-					<h4>정렬</h4>\
-					<ul class="tx-3cell">\
-						<li class="tx-left"><a href="javascript:;" class="tx-top" title="상단">상</a></li>\
-						<li class="tx-center"><a href="javascript:;" class="tx-middle" title="중단">중</a></li>\
-						<li class="tx-right"><a href="javascript:;" class="tx-bottom" title="하단">하</a></li>\
-					</ul>\
-					<ul class="tx-3cell">\
-						<li class="tx-left"><a href="javascript:;" class="tx-alignleft" title="왼쪽 정렬">좌</a></li>\
-						<li class="tx-center"><a href="javascript:;" class="tx-aligncenter" title="가운데 정렬">중</a></li>\
-						<li class="tx-right"><a href="javascript:;" class="tx-alignright" title="오른쪽 정렬">우</a></li>\
-					</ul>\
-				</div>\
-				</div>\
-			</div>\
-			<div class="tx-table-edit-design">\
-			<div class="tx-table-edit-design-wrapper">\
-				<dl>\
-					<dt>테두리선택</dt>\
-					<dd class="tx-table-edit-borderrange tx-btn-widget">\
-						<a href="javascript:;" class="tx-icon">테두리</a>\
-						<a href="javascript:;" class="tx-arrow">테두리</a>\
-						<div class="tx-menu"></div>\
-					</dd>\
-					<dt>선</dt>\
-					<dd class="tx-table-edit-bordercolor tx-btn-widget-tbg">\
-						<a href="javascript:;" class="tx-icon">선색</a>\
-						<a href="javascript:;" class="tx-arrow">선색</a>\
-						<div class="tx-colorpallete"></div>\
-					</dd>\
-					<dd class="tx-table-edit-borderwidth tx-btn-widget">\
-						<a href="javascript:;" class="tx-icon">굵기</a>\
-						<a href="javascript:;" class="tx-arrow">굵기</a>\
-						<div class="tx-menu"></div>\
-					</dd>\
-					<dd class="tx-table-edit-borderstyle tx-btn-widget">\
-						<a href="javascript:;" class="tx-icon">스타일</a>\
-						<a href="javascript:;" class="tx-arrow">스타일</a>\
-						<div class="tx-menu"></div>\
-					</dd>\
-					<dt>배경색</dt>\
-					<dd class="tx-table-edit-backcolor tx-btn-widget-brbg">\
-						<a href="javascript:;" class="tx-icon">배경색</a>\
-						<a href="javascript:;" class="tx-arrow">배경색</a>\
-						<div class="tx-colorpallete" unselectable="on"></div>\
-					</dd>\
-				</dl>\
-			</div>\
-			</div>\
-			<div class="tx-table-edit-template">\
-			<div class="tx-table-edit-template-wrapper">\
-				<ul>\
-					<!--li class="tx-ex1"><a href="javascript:"></a></li-->\
-				</ul>\
-				<a href="javascript:;" class="tx-button-on">더보기</a>\
-				<ul class="tx-table-edit-template-all">\
-					<!--li class="tx-ex1"><a href="javascript:"></a></li-->\
-				</ul>\
-			</div>\
-			</div>\
-			<div class="tx-table-edit-main">\
-				<a href="javascript:;" class="tx-confirm">확인</a>\
-				<a href="javascript:;" class="tx-cancel">취소</a>\
-			</div>\
-		</div>'
+'<div class="tx-table-edit">\
+<ul class="tx-tab tx-tab-menu1">\
+<li><a href="javascript:;">표구성</a></li>\
+<li><a href="javascript:;">디자인</a></li>\
+<li><a href="javascript:;">서식</a></li>\
+</ul>\
+<div class="tx-table-edit-layout">\
+<div class="tx-table-edit-layout-wrapper">\
+<div class="tx-table-edit-layout-insert">\
+<h4>삽입</h4>\
+<ul class="tx-2cell">\
+<li class="tx-left"><a href="javascript:;" class="tx-up" title="위에 추가">위</a></li>\
+<li class="tx-right"><a href="javascript:;" class="tx-down" title="아래에 추가">아래</a></li>\
+</ul>\
+<ul class="tx-2cell">\
+<li class="tx-left"><a href="javascript:;" class="tx-left" title="왼쪽에 추가">왼쪽</a></li>\
+<li class="tx-right"><a href="javascript:;" class="tx-right" title="오른쪽 추가">오른</a></li>\
+</ul>\
+</div>\
+<div class="tx-table-edit-layout-cell">\
+<h4>삭제</h4>\
+<ul class="tx-2cell">\
+<li class="tx-left"><a href="javascript:;" class="tx-col" title="열삭제">열</a></li>\
+<li class="tx-right"><a href="javascript:;" class="tx-row" title="행삭제">행</a></li>\
+</ul>\
+<h4 style="width:50px">병합/분할</h4>\
+<ul class="tx-2cell">\
+<li class="tx-left"><a href="javascript:;" class="tx-merge" title="병합">합</a></li>\
+<li class="tx-right"><a href="javascript:;" class="tx-split" title="분할">분</a></li>\
+</ul>\
+</div>\
+<div class="tx-table-edit-layout-align">\
+<h4>정렬</h4>\
+<ul class="tx-3cell">\
+<li class="tx-left"><a href="javascript:;" class="tx-top" title="상단">상</a></li>\
+<li class="tx-center"><a href="javascript:;" class="tx-middle" title="중단">중</a></li>\
+<li class="tx-right"><a href="javascript:;" class="tx-bottom" title="하단">하</a></li>\
+</ul>\
+<ul class="tx-3cell">\
+<li class="tx-left"><a href="javascript:;" class="tx-alignleft" title="왼쪽 정렬">좌</a></li>\
+<li class="tx-center"><a href="javascript:;" class="tx-aligncenter" title="가운데 정렬">중</a></li>\
+<li class="tx-right"><a href="javascript:;" class="tx-alignright" title="오른쪽 정렬">우</a></li>\
+</ul>\
+</div>\
+</div>\
+</div>\
+<div class="tx-table-edit-design">\
+<div class="tx-table-edit-design-wrapper">\
+<dl>\
+<dt>테두리선택</dt>\
+<dd class="tx-table-edit-borderrange tx-btn-widget">\
+<a href="javascript:;" class="tx-icon">테두리</a>\
+<a href="javascript:;" class="tx-arrow">테두리</a>\
+<div class="tx-menu"></div>\
+</dd>\
+<dt>선</dt>\
+<dd class="tx-table-edit-bordercolor tx-btn-widget-tbg">\
+<a href="javascript:;" class="tx-icon">선색</a>\
+<a href="javascript:;" class="tx-arrow">선색</a>\
+<div class="tx-colorpallete"></div>\
+</dd>\
+<dd class="tx-table-edit-borderwidth tx-btn-widget">\
+<a href="javascript:;" class="tx-icon">굵기</a>\
+<a href="javascript:;" class="tx-arrow">굵기</a>\
+<div class="tx-menu"></div>\
+</dd>\
+<dd class="tx-table-edit-borderstyle tx-btn-widget">\
+<a href="javascript:;" class="tx-icon">스타일</a>\
+<a href="javascript:;" class="tx-arrow">스타일</a>\
+<div class="tx-menu"></div>\
+</dd>\
+<dt>배경색</dt>\
+<dd class="tx-table-edit-backcolor tx-btn-widget-brbg">\
+<a href="javascript:;" class="tx-icon">배경색</a>\
+<a href="javascript:;" class="tx-arrow">배경색</a>\
+<div class="tx-colorpallete" unselectable="on"></div>\
+</dd>\
+</dl>\
+</div>\
+</div>\
+<div class="tx-table-edit-template">\
+<div class="tx-table-edit-template-wrapper">\
+<ul>\
+<!--li class="tx-ex1"><a href="javascript:"></a></li-->\
+</ul>\
+<a href="javascript:;" class="tx-button-on">더보기</a>\
+<ul class="tx-table-edit-template-all">\
+<!--li class="tx-ex1"><a href="javascript:"></a></li-->\
+</ul>\
+</div>\
+</div>\
+<div class="tx-table-edit-main">\
+<a href="javascript:;" class="tx-confirm">확인</a>\
+<a href="javascript:;" class="tx-cancel">취소</a>\
+</div>\
+</div>'
 	);
 
 	Trex.Menu.Table.TableEdit = Trex.Class.create({
@@ -346,23 +346,23 @@
 			}
 		},
 		initialize: function(config){
-			/* config = { 
+			/* config = {
 			 * 	table: 편집할 테이블
 			 * }
 			 */
-			
+
 			console.log("table editor......init...");
 			if ( !config.table ){
 				alert( "편집할 테이블을 선택해주세요." );
 				return ;
 			}
-					
+
 			var _config = this.config = $tx.extend({}, config );
 			this.previewTable = new Trex.Menu.Table.TableEdit.PreviewTable(_config);
 			this.realTable = new Trex.Menu.Table.TableEdit.TableEditor(_config);
 			this.elContainer = this.elPreviewArea = _NULL;
 			this.createTableEditLayer();
-			
+
 			this.blackBox = config.editor.getBlackBox();
 			this.blackBox.show( this.elContainer );
 			this.eventBinding();
@@ -370,17 +370,17 @@
 			// TODO property 정리
 			this.borderRange = "all";
 		},
-		
+
 		createTableEditLayer: function(){
 			this.elPreviewArea = tx.div({className:"tx-preview"});
 			this.elPreviewArea.appendChild( this.previewTable.getTable() );
-			
+
 			this.elContainer = tx.div({className:"tx-table-edit-container"});
 			this.elContainer.appendChild( this.elPreviewArea );
-			
+
 			this.elMenu = Trex.MarkupTemplate.get("table.edit").evaluateAsDom({});
 			this.elContainer.appendChild( this.elMenu );
-			
+
 			/* IE 여백 버그 보정(Guillotine Bug). */
 			var _marginDiv = tx.div({style:{clear:"both"}});
 			_marginDiv.style.clear = "both";
@@ -398,15 +398,15 @@
 				$tx.addClassName( parentOfBtn, "tx-tab-menu"+(layerNumber+1));
 				$tx.show( menuLayers[layerNumber] );
 			};
-			
-			var parentOfBtn = $tom.collect( this.elMenu, "ul.tx-tab");	
+
+			var parentOfBtn = $tom.collect( this.elMenu, "ul.tx-tab");
 			var menuBtns = $tom.collectAll( parentOfBtn, "li");
 			var menuLayers = [
-				$tom.collect( this.elContainer, "div.tx-table-edit-layout"), 
+				$tom.collect( this.elContainer, "div.tx-table-edit-layout"),
 				$tom.collect( this.elContainer, "div.tx-table-edit-design"),
 				$tom.collect( this.elContainer, "div.tx-table-edit-template")
 			];
-			
+
 			var clickHandler = function(ev, menuIndex){
 				showMenu(menuIndex);
 				return _FALSE;
@@ -418,20 +418,20 @@
 		_eventBindingLayoutMenu: function(){
 			var self = this;
 			var menus = $tom.collectAll( $tom.collect( this.elMenu, ".tx-table-edit-layout"), "a" );
-			var menuset = [ "addRowUpper", "addRowBelow", 
-							"addColLeft", "addColRight",   
-							"removeCol", "removeRow", 
+			var menuset = [ "addRowUpper", "addRowBelow",
+							"addColLeft", "addColRight",
+							"removeCol", "removeRow",
 							"merge", "split",
 							"changeTextValignTop", "changeTextValignMiddle", "changeTextValignBottom",
 							"changeTextAlignLeft", "changeTextAlignCenter", "changeTextAlignRight"
 						];
-						
+
 			var mouseOverHandler = function( ev ){
 				var el = $tx.findElement(ev, "li");
-				var parentEl = el.parentNode; 
+				var parentEl = el.parentNode;
 				if (el){
 					var position = $tx.classNames(el)[0].replace("tx","");
-                    parentEl.className = parentEl.className + position;
+					parentEl.className = parentEl.className + position;
 				}
 			};
 			var mouseOutHandler = function(ev){
@@ -445,7 +445,7 @@
 				self[menuset[index]]();
 				return _FALSE;
 			};
-			
+
 			for( var i = 0; i < menus.length; i++ ){
 				$tx.observe( menus[i], "click", clickHandler.bindAsEventListener(this, i));
 				$tx.observe( menus[i], "mouseover", mouseOverHandler );
@@ -455,7 +455,7 @@
 		_eventBindingDesignMenu: function(){
 			var self = this;
 			var _elPart = $tom.collect(this.elMenu, "div.tx-table-edit-design");
-			
+
 			var _toolbar = this.config.editor.toolbar;
 			var _elBackColorIcon = $tom.collect(_elPart, "dd.tx-table-edit-backcolor a.tx-icon");
 			_toolbar.makeWidget(
@@ -463,9 +463,9 @@
 					status: _TRUE,
 					el: $tom.collect(_elPart, "dd.tx-table-edit-backcolor")
 				}),
-				new Trex.Menu.ColorPallete({ 
+				new Trex.Menu.ColorPallete({
 					el: $tom.collect(this.elMenu, "dd.tx-table-edit-backcolor div.tx-colorpallete"),
-					thumbs: Trex.__CONFIG_COMMON.thumbs 
+					thumbs: Trex.__CONFIG_COMMON.thumbs
 				}),
 				function(color){
 					if ( !$tx.hasClassName( _elBackColorIcon, "tx-selected" ) ){
@@ -474,7 +474,7 @@
 					self.changeCellStyle( "changeBackColor", color );
 				}
 			);
-			
+
 			var _elBorderRangeIcon = $tom.collect(_elPart, "dd.tx-table-edit-borderrange a.tx-icon") ;
 			_toolbar.makeWidget(
 				new Trex.Button.Widget({
@@ -492,16 +492,16 @@
 					self.setBorderRange(value);
 				}
 			);
-			
+
 			var _elBorderColorIcon =  $tom.collect(_elPart, "dd.tx-table-edit-bordercolor a.tx-icon");
 			_toolbar.makeWidget(
 				new Trex.Button.ColorWidget({
 					status: _TRUE,
 					el: $tom.collect(_elPart, "dd.tx-table-edit-bordercolor")
 				}),
-				new Trex.Menu.ColorPallete({ 
+				new Trex.Menu.ColorPallete({
 					el: $tom.collect(this.elMenu, "dd.tx-table-edit-bordercolor div.tx-colorpallete"),
-					thumbs: Trex.__CONFIG_COMMON.thumbs 
+					thumbs: Trex.__CONFIG_COMMON.thumbs
 				}),
 				function(color){
 					if ( !$tx.hasClassName( _elBorderColorIcon, "tx-selected" ) ){
@@ -510,7 +510,7 @@
 					self.changeCellStyle( "changeBorderColor", color );
 				}
 			);
-			
+
 			_toolbar.makeWidget(
 				new Trex.Button.Widget({
 					status: _TRUE,
@@ -519,13 +519,13 @@
 				new Trex.Menu.Select({
 					el: $tom.collect(_elPart, "dd.tx-table-edit-borderwidth div.tx-menu"),
 					options: Trex.Menu.Table.TableEdit.__OPTIONS.WIDTH
-				}), 
+				}),
 				function(value){
 					var width = value.toPx();
 					self.changeCellStyle( "changeBorderWidth", width );
 				}
 			);
-			
+
 			_toolbar.makeWidget(
 				new Trex.Button.Widget({
 					status: _TRUE,
@@ -534,7 +534,7 @@
 				new Trex.Menu.Select({
 					el: $tom.collect(_elPart, "dd.tx-table-edit-borderstyle div.tx-menu"),
 					options: Trex.Menu.Table.TableEdit.__OPTIONS.STYLE
-				}), 
+				}),
 				function(style){
 					self.changeCellStyle( "changeBorderType", style );
 				}
@@ -546,7 +546,7 @@
 			var elListAll = ulList[1];
 			var templateList = (new Trex.Tool.Table.TemplateWizard()).getTemplateList();
 			var self = this;
-			
+
 			var _makeTemplateList = function(list, parentEl, offset){
 				for( var i = 0; i < list.length; i++){
 					var elLi = tx.li({className:"tx-"+list[i].klass});
@@ -560,20 +560,20 @@
 					parentEl.appendChild(elLi);
 				}
 			};
-			
+
 			_makeTemplateList(templateList.slice(10), elListAll, 10);
 			_makeTemplateList(templateList.slice(1,10), elListSome, 1);
-			
+
 			var elDownBtn = $tom.collect( this.elMenu, "a.tx-button-on" );
 			$tx.observe( elDownBtn, "click", function(){
 				elDownBtn.className = $tx.hasClassName(elDownBtn, "tx-button")?"tx-button-on":"tx-button";
 				$tx.toggle( elListAll );
 				return _FALSE;
-			});	
+			});
 		},
 		_eventBindingMainMenu: function(){
 			var self = this;
-			
+
 			var elMainMenu = $tom.collect( this.elContainer, "div.tx-table-edit-main" );
 			var elBtnConfirm = $tom.collect( elMainMenu, "a.tx-confirm");
 			$tx.observe(elBtnConfirm, "click", function(){self.done(); return _FALSE;});
@@ -593,7 +593,7 @@
 		_executeLayoutCommand: function( command, optionValue ){
 			//TODO error code 를 검사해서 error메세지를 뿌려주는 걸로 바꾸자.
 			this.previewTable.clearSelection();
-			this.previewTable[command](optionValue);	
+			this.previewTable[command](optionValue);
 			this.previewTable.refreshCoord();
 			this.realTable[command](optionValue);
 			this.previewTable.clearBoundary();
@@ -604,7 +604,7 @@
 				alert('추가될 행을 선택해주세요.');
 				return ;
 			}
-			
+
 			if ( row != 0 && !TableEditActionValidator.canAddUpperRow(row, this.previewTable.getTdMatrix())) {
 				alert('좌우측에 합쳐진 행이 있어서 행을 추가할 수 없습니다.');
 				return;
@@ -634,7 +634,7 @@
 				alert('위아래에 합쳐진 열이 있어서 열을 추가할 수 없습니다.');
 				return;
 			}
-			
+
 			this._executeLayoutCommand("addColLeft", col);
 		},
 		addColRight: function(){
@@ -648,14 +648,14 @@
 				alert('위아래에 합쳐진 열이 있어서 열을 추가할 수 없습니다.');
 				return;
 			}
-			
+
 			this._executeLayoutCommand("addColRight", col);
 		},
 		removeRow: function(){
 			var rectCoord = this.previewTable.getSelectedRectCoord();
 			var startRow = rectCoord.sy;
 			var endRow = rectCoord.ey;
-					
+
 			if ( startRow < 0 ){
 				alert('삭제할 행을 선택해주세요.');
 				return ;
@@ -668,10 +668,10 @@
 				alert( '모든 행을 삭제할 수 없습니다.' );
 				return ;
 			}
-			
+
 			this.previewTable.clearSelection();
 			for( var i = startRow; i <= endRow; i++ ){
-				this.previewTable.removeRow(startRow);	
+				this.previewTable.removeRow(startRow);
 				this.realTable.removeRow(startRow);
 			}
 			this.previewTable.refreshCoord();
@@ -681,7 +681,7 @@
 			var rectCoord = this.previewTable.getSelectedRectCoord();
 			var startCol = rectCoord.sx;
 			var endCol = rectCoord.ex;
-			
+
 			if ( startCol < 0 ){
 				alert('삭제할 열을 선택해주세요.');
 				return ;
@@ -694,7 +694,7 @@
 				alert( '모든 열을 삭제할 수 없습니다.' );
 				return;
 			}
-			
+
 			for( var i = startCol; i <= endCol; i++ ){
 				this._executeLayoutCommand( "removeCol", startCol );
 			}
@@ -702,7 +702,7 @@
 		merge: function(){
 			var rectCoord = this.previewTable.getSelectedRectCoord();
 			if( rectCoord.sx < 0 || rectCoord.sy < 0 ){
-				alert( '합칠 칸들을 선택해주세요.' ); 
+				alert( '합칠 칸들을 선택해주세요.' );
 				return _FALSE;
 			}
 			if ( this.previewTable.getTdMatrix()[rectCoord.sy][rectCoord.sx] == this.previewTable.getTdMatrix()[rectCoord.ey][rectCoord.ex]){
@@ -713,20 +713,20 @@
 				alert('합치기를 수행할 수 없는 선택영역입니다.');
 				return _FALSE;
 			}
-			
+
 			this.previewTable.clearSelection();
-			
+
 			this.previewTable.merge(rectCoord);
-			this.previewTable.refreshCoord();	
+			this.previewTable.refreshCoord();
 			this.realTable.merge(rectCoord);
-			
+
 			this.previewTable.clearBoundary();
 		},
 		split: function(){
 			var rectCoord = this.previewTable.getSelectedRectCoord();
-			
+
 			if( rectCoord.sx < 0 || rectCoord.sy < 0 ){
-				alert( '나눌 칸을 선택해주세요.' ); 
+				alert( '나눌 칸을 선택해주세요.' );
 				return _FALSE;
 			}
 			if ( !TableEditActionValidator.canSplit(rectCoord, this.previewTable.getTdMatrix()) ){
@@ -738,11 +738,11 @@
 				return _FALSE;
 			}
 			this.previewTable.clearSelection();
-			
+
 			this.previewTable.split(rectCoord);
-			this.previewTable.refreshCoord();	
+			this.previewTable.refreshCoord();
 			this.realTable.split(rectCoord);
-			
+
 			this.previewTable.clearBoundary();
 		},
 		changeCellStyle: function( command, value ){
@@ -752,7 +752,7 @@
 		},
 		_changeTextAlign:function(align){
 			var rectCoord = this.previewTable.getSelectedRectCoord();
-			
+
 			this.previewTable.changeTextAlign(rectCoord, align);
 			this.realTable.changeTextAlign(rectCoord, align);
 		},
@@ -767,7 +767,7 @@
 		},
 		_changeTextValign:function(align){
 			var rectCoord = this.previewTable.getSelectedRectCoord();
-			
+
 			this.previewTable.changeTextValign(rectCoord, align);
 			this.realTable.changeTextValign(rectCoord, align);
 		},
@@ -784,7 +784,7 @@
 			if ( isNaN(styleIndex) ){
 				return ;
 			}
-			
+
 			this.previewTable.applyTemplateStyle(styleIndex);
 			this.realTable.applyTemplateStyle(styleIndex);
 		},
@@ -808,7 +808,7 @@
 			this.elTable = this.createTable( config.table );
 			this.initTdMatrix();
 			this.tableConfig = {};
-					
+
 			var canvas = config.editor.getCanvas();
 			this.doc = canvas.getCurrentPanel().getDocument();
 		},
@@ -816,7 +816,7 @@
 			var tableMatrixer = new Trex.Tool.Table.TableCellMatrixer(this.elTable);
 			this.tdMatrix = tableMatrixer.getTdMatrix();
 			this.rowSize = tableMatrixer.getRowSize();
-			this.colSize = tableMatrixer.getColSize();		
+			this.colSize = tableMatrixer.getColSize();
 		},
 		createTable: function(table){
 			return table.cloneNode(_TRUE);
@@ -836,12 +836,12 @@
 			for( var name in properties ){
 				td.setAttribute(name, properties[name] );
 			}
-	
+
 			return td;
 		},
 		createTr: function(){
 			var tr = this.doc.createElement("tr");
-			
+
 			for( var i = 0; i< this.colSize; i++){
 				var td = this.createTd({});
 				this.setTdBorderStyle(td, _FALSE, (i==0));
@@ -863,15 +863,15 @@
 		},
 		_addRow: function(index, isBelow){
 			var trArr = dGetties(this.elTable, "tr");
-			var indexTr = trArr[index]; 
+			var indexTr = trArr[index];
 	//		var indexTr = this.tdMatrix[index][0].parentNode;
 			var newTr = this.createTr();
 			$tom[(isBelow)?'insertNext':'insertAt'](newTr, indexTr);
-						
+
 			if ( isBelow ){
 				index++;
 			}
-	
+
 			this.tdMatrix.splice(index, 0, $tom.collectAll(newTr, "td"));
 			this.rowSize++;
 		},
@@ -892,7 +892,7 @@
 			if ( !width ){
 				return;
 			}
-			
+
 			var oneCellWidth = Math.round( width / this.colSize, 0);
 			for (var i = 0; i < this.rowSize; i++) {
 				for (var j = 0; j < this.colSize; j++) {
@@ -905,7 +905,7 @@
 		_addCol: function(index, isRight){
 			var usedStack = [];
 			var indexTd = _NULL;
-			
+
 			var _getIndexTd = function(row, colIndex, tdMatrix, isRight){
 				var index = colIndex;
 				while ( tdMatrix[row][index] && usedStack.contains(tdMatrix[row][index]) ){
@@ -914,17 +914,17 @@
 				usedStack.push( tdMatrix[row][index] );
 				return tdMatrix[row][index];
 			};
-			
+
 			for( var i = 0; i < this.rowSize; i++){
 				indexTd = _getIndexTd( i, index, this.tdMatrix, isRight );
-				
+
 				var newTd = this.createTd({});
 				this.setTdBorderStyle( newTd, i==0, index==0 );
 				$tom[(!isRight)?'insertAt':'insertNext'](newTd, indexTd);
-				
+
 				this.tdMatrix[i].splice(isRight?index+1:index, 0, newTd);
 			}
-			this.colSize++;		
+			this.colSize++;
 			this._resizeAllCellWidth();
 		},
 		removeRow: function(index){
@@ -932,7 +932,7 @@
 			$tom.remove( tr );
 			this.tdMatrix.splice(index,1);
 			this.rowSize--;
-			
+
 			if (index == 0) {
 				for (var i = 0; i < this.colSize; i++) {
 					this.setTdBorderStyle(this.tdMatrix[0][i], index == 0, i == 0);
@@ -940,13 +940,13 @@
 			}
 		},
 		removeCol: function(index){
-            var i;
+			var i;
 			for(i = 0; i < this.rowSize; i++){
 				$tom.remove(this.tdMatrix[i][index]);
 				this.tdMatrix[i].splice(index,1);
 			}
 			this.colSize--;
-			
+
 			for(i = 0; i< this.rowSize; i++){
 				if (this.tdMatrix[i][index]) {
 					this.setTdBorderStyle(this.tdMatrix[i][index], i == 0, index == 0);
@@ -960,7 +960,7 @@
 				totalColSpan += colSpan;
 				i += colSpan;
 			}
-			
+
 			var totalRowSpan = 0;
 			for(i  = rectCoord.sy; i <= rectCoord.ey; i){
 				var rowSpan = TdUtil.getRowSpan( this.tdMatrix[i][rectCoord.sx] );
@@ -971,16 +971,16 @@
 				"rowSpan": totalRowSpan,
 				"colSpan": totalColSpan
 			});
-			
+
 			/* TODO 이하의 코드와 위의 코드 분리할 수 있겠다. */
-			
+
 			var _isAliveTd= function(td){
 				return ( td.parentNode && td.parentNode.nodeType != '11' );
 			};
-			
+
 			this.setTdBorderStyle( mergeTd, rectCoord.sy==0, rectCoord.sx==0 );
 			var indexTd = this.tdMatrix[rectCoord.sy][rectCoord.sx];
-			
+
 			$tom.insertAt( mergeTd, indexTd );
 			var contents = "";
 			for (i = rectCoord.sy; i <= rectCoord.ey; i++) {
@@ -995,7 +995,7 @@
 				contents += colContents + "";
 			}
 			mergeTd.innerHTML = contents;
-			
+
 			this._resizeAllCellWidth();
 		},
 		split: function(rectCoord){
@@ -1009,7 +1009,7 @@
 					return _self.tdMatrix[row][col-1];
 				}
 			};
-			
+
 			var yIndex = rectCoord.sy;
 			var xIndex = rectCoord.sx;
 			var el = this.tdMatrix[yIndex][xIndex];
@@ -1036,57 +1036,57 @@
 		},
 		_changeTopBorderStyle: function(rectCoord, styleType, value){
 			var style = {};
-			
+
 //			var isTopCell = (rectCoord.sy == 0);
 			style[( rectCoord.sy == 0) ? "borderTop"+styleType:"borderBottom"+styleType] = value;
 			var yIndex = (rectCoord.sy == 0)?0:rectCoord.sy-1;
-			
+
 			for (var i = rectCoord.sx; i <= rectCoord.ex; i++) {
 				$tx.setStyle(this.tdMatrix[yIndex][i], style);
 			}
 		},
 		_changeBottomBorderStyle: function(rectCoord, styleType, value){
 			var style = {};
-			
+
 			style["borderBottom"+styleType] = value;
 			var yIndex = rectCoord.ey;
-			
+
 			for (var i = rectCoord.sx; i <= rectCoord.ex; i++) {
 				$tx.setStyle(this.tdMatrix[yIndex][i], style);
 			}
 		},
 		_changeLeftBorderStyle: function(rectCoord, styleType, value){
 			var style = {};
-			
+
 //			var isLeftmostCell = (rectCoord.sx == 0);
 			style[( rectCoord.sx == 0) ? "borderLeft"+styleType:"borderRight"+styleType] = value;
 			var xIndex = (rectCoord.sx== 0)?0:rectCoord.sx-1;
-			
+
 			for (var i = rectCoord.sy; i <= rectCoord.ey; i++) {
 				$tx.setStyle(this.tdMatrix[i][xIndex], style);
 			}
 		},
 		_changeRightBorderStyle: function(rectCoord, styleType, value){
 			var style = {};
-			
+
 			style["borderRight"+styleType] = value;
 			var xIndex = rectCoord.ex;
-			
+
 			for (var i = rectCoord.sy; i <= rectCoord.ey; i++) {
 				$tx.setStyle(this.tdMatrix[i][xIndex], style);
 			}
 		},
 		_changeInBorderStyle: function(rectCoord, styleType, value){
 			var style = {};
-			
+
 			for( var i = rectCoord.sy; i <= rectCoord.ey; i++ ){
 				for (var j = rectCoord.sx; j <= rectCoord.ex; j++) {
 					style = {};
 					if ( i != rectCoord.ey ){
-						style["borderBottom"+styleType] = value;	
+						style["borderBottom"+styleType] = value;
 					}
 					if ( j != rectCoord.ex ){
-						style["borderRight"+styleType] = value;	
+						style["borderRight"+styleType] = value;
 					}
 					$tx.setStyle(this.tdMatrix[i][j], style);
 				}
@@ -1112,30 +1112,30 @@
 				case "left":
 					this._changeLeftBorderStyle( rectCoord, styleType, value );
 					break;
-				case "right": 
+				case "right":
 					this._changeRightBorderStyle( rectCoord, styleType, value );
 					break;
-				case "in": 
+				case "in":
 					this._changeInBorderStyle( rectCoord, styleType, value );
 					break;
 				case "out":
-					this._changeOutBorderStyle( rectCoord, styleType, value ); 
+					this._changeOutBorderStyle( rectCoord, styleType, value );
 					break;
 				case "all":
 					this._changeInBorderStyle( rectCoord, styleType, value );
 					this._changeOutBorderStyle( rectCoord, styleType, value );
-					break; 
+					break;
 				default:
 					break;
 			}
 		},
 		_getValidRectCoord: function(rectCoord){
-			return { 
-				sy: (rectCoord.sy < 0)?0:rectCoord.sy, 
-				ex: (rectCoord.ex < 0)?this.colSize-1:rectCoord.ex, 
-				ey: (rectCoord.ey < 0)?this.rowSize-1:rectCoord.ey, 
-				sx: (rectCoord.sx < 0)?0:rectCoord.sx 
-			} 
+			return {
+				sy: (rectCoord.sy < 0)?0:rectCoord.sy,
+				ex: (rectCoord.ex < 0)?this.colSize-1:rectCoord.ex,
+				ey: (rectCoord.ey < 0)?this.rowSize-1:rectCoord.ey,
+				sx: (rectCoord.sx < 0)?0:rectCoord.sx
+			}
 		},
 		_removeTableBorderProperty: function(){
 			var border = parseInt( this.elTable.getAttribute("border") );
@@ -1156,13 +1156,13 @@
 		},
 		changeBorderWidth: function(rectCoord, value, range){
 			var width = value.toPx();
-			this._changeBorderStyle( rectCoord, "Width", width, range ); 
+			this._changeBorderStyle( rectCoord, "Width", width, range );
 		},
 		_changeCellStyle: function(rectCoord, name, value ){
 			var coord = this._getValidRectCoord( rectCoord );
 			var style = {};
 			style[name] = value;
-			
+
 			for( var i = coord.sy; i <= coord.ey; i++ ){
 				for( var j = coord.sx; j <= coord.ex; j++ ){
 					$tx.setStyle(this.tdMatrix[i][j], style);
@@ -1191,23 +1191,23 @@
 			return this.elTable;
 		}
 	});
-	
+
 	Trex.Menu.Table.TableEdit.PreviewTable = Trex.Class.create({
 		$extend: Trex.Menu.Table.TableEdit.TableEditor,
 		initialize: function(config){
 			this.$super.initialize(config);
 			this.tableConfig = {};
 			this.countOfExcuteResizeToParentClientWidth = 0;
-	
+
 			this.boundary = Boundary;
 			this.boundary.clear();
 			this.refreshCoord();
-	
+
 			this.clearTable();
 			this.eventBinding();
 		},
 		createTd: function(properties){
-            return tx.td(properties, "+");
+			return tx.td(properties, "+");
 		},
 		createTr: function(){
 			var tr = tx.tr();
@@ -1221,18 +1221,18 @@
 		createTable: function(table){
 			if ($tx.msie || $tx.opera) {
 				var div = tx.div();
-                div.innerHTML = table.outerHTML;
+				div.innerHTML = table.outerHTML;
 				return div.firstChild;
 			}else {
 				return table.cloneNode(_TRUE);
-			}	
+			}
 		},
 		clearTable: function(){
 			if ($tx.gecko) {
 				$tx.setStyle(this.elTable, { borderCollapse: "separate" });
 			}
 			this.elTable.setAttribute("width","");
-			
+
 			for( var i = 0 ; i < this.rowSize; i++){
 				for( var j = 0 ; j < this.colSize; j++){
 					TdUtil.clearContent(this.tdMatrix[i][j]);
@@ -1243,9 +1243,9 @@
 		clearSelection: function(){
 			var coord = this.boundary;
 			if ( coord.top < 0 || coord.left < 0 ){
-				return; 
+				return;
 			}
-	
+
 			for( var i = coord.top; i <= coord.bottom; i++){
 				for( var j = coord.left; j <= coord.right; j++){
 					TdUtil.setUnselect( this.tdMatrix[i][j] );
@@ -1254,7 +1254,7 @@
 		},
 		setSelection: function(){
 			var coord = this.boundary;
-			
+
 			for( var i = coord.top; i <= coord.bottom; i++){
 				for( var j = coord.left; j <= coord.right; j++){
 					TdUtil.setSelect(this.tdMatrix[i][j]);
@@ -1272,7 +1272,7 @@
 			this._clearCoord();
 			for( var i = 0; i < this.rowSize; i++){
 				for( var j = 0; j < this.colSize; j++ ){
-					var colClass = this.tdMatrix[i][j].getAttribute("colClass"); 
+					var colClass = this.tdMatrix[i][j].getAttribute("colClass");
 					if ( !colClass ){
 						TdUtil.setCoords(this.tdMatrix[i][j], i, j);
 					}
@@ -1306,7 +1306,7 @@
 		eventBinding: function(){
 			var self = this;
 			var previousElement = _NULL;
-			
+
 			var _mouseDownHandler = function(ev){
 				var el = TdUtil.getEventElement(ev, _TRUE);
 				if (el) {
@@ -1318,7 +1318,7 @@
 					previousElement = el;
 				}
 			};
-			
+
 			var _mouseOverHandler = function(ev){
 				if (previousElement) {
 					var el = TdUtil.getEventElement(ev);
@@ -1341,7 +1341,7 @@
 					previousElement = _NULL;
 				}
 			};
-			
+
 			setTimeout(function(){
 				var elContainertArea = $tom.collect( ".tx-table-edit-container" );
 				var _mouseClickHandler = function(ev){
@@ -1357,7 +1357,7 @@
 					}
 				};
 				$tx.observe(elContainertArea, "click", _mouseClickHandler);
-				
+
 				var _mouseupHandler = function(){
 					if (previousElement) {
 						previousElement = _NULL;
@@ -1365,8 +1365,8 @@
 				};
 				$tx.observe(elContainertArea, "mouseup", _mouseupHandler);
 			}, 1000);
-	
-			
+
+
 			$tx.observe(this.elTable, "mousedown", _mouseDownHandler);
 			$tx.observe(this.elTable, "mouseover", _mouseOverHandler);
 			$tx.observe(this.elTable, "mouseup", _mouseupHandler);
