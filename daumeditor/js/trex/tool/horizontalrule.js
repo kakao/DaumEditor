@@ -14,15 +14,15 @@ TrexConfig.addTool(
 		left: _NULL,
 		options: [{	data: 'tx-hr-border-1', 
 			image: '#iconpath/horizontalrule/line01.gif?v=2',
-			html: '<hr style="border: black 0 none; border-top: black 1px solid; height: 1px"/>'
+			html: '<hr style="display:block; border: black 0 none; border-top: black 1px solid; height: 1px"/>'
 		},
 		{	data: 'tx-hr-border-2',
 			image: '#iconpath/horizontalrule/line02.gif?v=2',
-			html: '<hr style="border: black 0 none; border-top: black 1px solid; border-bottom: black 3px solid; height: 7px"/>'
+			html: '<hr style="display:block; border: black 0 none; border-top: black 1px solid; border-bottom: black 3px solid; height: 7px"/>'
 		},
 		{	data: 'tx-hr-border-3',
 			image: '#iconpath/horizontalrule/line04.gif?v=2',
-			html: '<hr style="border: black 0 none; border-top: black 1px dotted; height: 1px"/>'
+			html: '<hr style="display:block; border: black 0 none; border-top: black 1px dotted; height: 1px"/>'
 		},
 		{	data: 'tx-hr-image-1',
 			image: '#iconpath/horizontalrule/line03.gif?v=2',
