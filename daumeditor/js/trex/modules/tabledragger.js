@@ -301,6 +301,7 @@ Trex.module("table resize dragger", function(editor, toolbar, sidebar, canvas) {
         var stopResizeCol = function() {
             resizeWidth();
             initDragger();
+			moveUnDraggingAction();
         };
 
         var resizeWidth = function() {
@@ -366,6 +367,7 @@ Trex.module("table resize dragger", function(editor, toolbar, sidebar, canvas) {
         var stopResizeRow = function() {
             resizeHeight();
             initDragger();
+			moveUnDraggingAction();
         };
 
         var resizeHeight = function() {
