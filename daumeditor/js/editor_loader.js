@@ -160,15 +160,6 @@
 		}
 	}
 
-
-
-	function errorLog(str) {
-		var loggingImage = new Image();
-		var service = Loader.getOption("service");
-		loggingImage.src = "http://rialog.daum-img.net:8080/editor_error/?service=" + service + "&" + str;
-	}
-
-
 	var AsyncLoader = function(config){
 		this.TIMEOUT = DEFAULT_TIMEOUT * MILLISECOND;
 		this.readyState = STATUS_UNINITIALIZED;
