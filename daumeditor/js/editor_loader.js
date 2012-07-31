@@ -15,7 +15,6 @@
 			STATUS_COMPLETE = "complete",
 			ENV_PRODUCTION = "production",
 			ENV_DEVELOPMENT = "development",
-			EDITOR_STATUS_COOKIE_NAME = "EDR_ST",
 			MILLISECOND = 1000,
 			DEFAULT_TIMEOUT = 5;
 	
@@ -193,7 +192,6 @@
 				if( self.id ){
 					script.id = self.id;
 				}
-//				this.startErrorTimer();
 			} 
 			return this;
 		},
@@ -206,17 +204,7 @@
 			}, self.TIMEOUT);
 		},
 		onTimeout: function() {
-//			if (isRetry) {
-//				errorLog("message=loading_error&detail=retry_timeout");
-//				if (typeof this.onError === "function") {
-//					this.onError();
-//				}
-//			} else {
-//				isRetry = 1;
-//				errorLog("message=loading_error&detail=timeout");
-//				document.cookie = EDITOR_STATUS_COOKIE_NAME + "=e";
-//				initialize();
-//			}
+			//NOTE: retry or error log?
 		},
 		onLoadComplete: function(){
 		}
@@ -268,41 +256,11 @@
 		},
 
 		finish: function() {
-			if (isRetry) {
-				errorLog("message=loading_error&detail=retry_success");
-			} else if (document.cookie.indexOf(EDITOR_STATUS_COOKIE_NAME + "=e") > -1) {
-				errorLog("message=loading_error&detail=recovered");
-			}
-			document.cookie = EDITOR_STATUS_COOKIE_NAME + "=; expires=Mon, 1 Jan 1970 00:00:00 GMT";
-			
 			for (var i = 0; i < onLoadHandlers.length; i++) {
 				callEditorOnLoadHandler(onLoadHandlers[i]);
 			}
 			onLoadHandlers = [];
 		},
-
-//		startErrorTimer: function() {
-//			var self = this;
-//			setTimeout(function() {
-//				if (self.readyState !== STATUS_COMPLETE) {
-//					self.onTimeout();
-//				}
-//			}, self.TIMEOUT);
-//		},
-//
-//		onTimeout: function() {
-//			if (isRetry) {
-//				errorLog("message=loading_error&detail=retry_timeout");
-//				if (typeof this.onError === "function") {
-//					this.onError();
-//				}
-//			} else {
-//				isRetry = 1;
-//				errorLog("message=loading_error&detail=timeout");
-//				document.cookie = EDITOR_STATUS_COOKIE_NAME + "=e";
-//				initialize();
-//			}
-//		},
 
 		getBasePath: function(filename) {
 			var basePath = getCookieOption("base_path");
