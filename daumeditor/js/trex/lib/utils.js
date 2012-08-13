@@ -194,11 +194,11 @@
 			var _map = {};
 			var _matchsAttr;
 
-			var _reg = new RegExp("style=\"[^\"]*(?:width|WIDTH)\\s*:\\s*([0-9]+)px[^\"]*\"", "g");
+			var _reg = /style="(?:\s*|(?:[^"]*(?:;\s*)))width\s*:\s*([0-9]+)px[^"]*"/ig;
 			while ((_matchsAttr = _reg.exec(source)) != _NULL) {
 				_map["width"] = _matchsAttr[1];
 			}
-			_reg = new RegExp("style=\"[^\"]*(?:height|HEIGHT)\\s*:\\s*([0-9]+)px[^\"]*\"", "g");
+			_reg = /style="(?:\s*|(?:[^"]*(?:;\s*)))height\s*:\s*([0-9]+)px[^"]*"/ig;
 			while ((_matchsAttr = _reg.exec(source)) != _NULL) {
 				_map["height"] = _matchsAttr[1];
 			}
