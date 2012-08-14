@@ -176,7 +176,7 @@ Trex.Editor = Trex.Class.create( /** @lends Trex.Editor.prototype */{
 			}
 			Editor.initStartTime = new Date().getTime();
 			
-			var _editor;
+			var _editor = null;
 			try {
 				Editor.__EDITOR_LOADED = _FALSE;
 				Editor.__PANEL_LOADED = _FALSE;
@@ -191,12 +191,10 @@ Trex.Editor = Trex.Class.create( /** @lends Trex.Editor.prototype */{
 				Editor.__EDITOR_LOADED = _TRUE;
 				Editor.__ACTIVE = _TRUE;
 			} catch (e) {
-				console.log(e);
-                console.log(e.stack);
                 if (_editor) {
 					_editor.fireJobs(Trex.Ev.__RUNTIME_EXCEPTION, e);
 				} else {
-					_editor.fireJobs(Trex.Ev.__RUNTIME_EXCEPTION, "_editor_not_defined!" + e);
+                    throw 'failed to initialize editor. caused by ' + e;
 				}
                 throw e;
 			}
