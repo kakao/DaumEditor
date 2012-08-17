@@ -94,6 +94,9 @@ Trex.Editor = Trex.Class.create( /** @lends Trex.Editor.prototype */{
 		return _params[name];
 	},
 	getWrapper: function() {
+        if (!this.initialConfig.wrapper) {
+            throw new Error('`wrapper` config variable should be provided');
+        }
 		return $must(this.initialConfig.wrapper);
 	},
 	getInitializedId: function() {
