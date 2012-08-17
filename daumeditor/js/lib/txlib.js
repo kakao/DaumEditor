@@ -190,7 +190,7 @@ var $tx = {};
 	_WIN.$must = function(id, className) {
 		var _el = $tx(id);
 		if (!_el) {
-			throw new Error("[Exception] " + className + " : not exist element(" + id + ")");
+			throw new Error("[Exception] " + className + ": cannot find element: id='" + id + "'");
 		}
 		return _el;
 	};
