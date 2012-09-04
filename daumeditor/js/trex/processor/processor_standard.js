@@ -467,12 +467,13 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 			});
 			if(_curNode) {
 				if(!$tom.hasData(_curNode)) {
-					this.stuffNode(_curNode);
+					//this.stuffNode(_curNode);
+					//paragraph의 첫 위치에서 node 삽입시 빈 paragraph를 남기지 말자.
+					$tom.remove(_curNode);
 				}
 			}
 			this.stuffNode(_dvNode);
 			this.bookmark.saveIntoFirst(_dvNode);
-
 		} else {
 			this.execWithMarker(function(marker) {
 				nodes.each(function(node) {
