@@ -5,6 +5,7 @@
             wysiwygonly: _TRUE,
             sync: _FALSE,
             status: _TRUE,
+			needRevert: true,
             thumbs: Trex.__CONFIG_COMMON.thumbs
         }
     );
@@ -42,12 +43,21 @@
                     self._restoreColor(data);
                 }
             );
-            canvas.addStyle({
-                backgroundColor: color,
-                backgroundImage: ""
-            });
-            articleBackgroundColor = color;
-            canvas.getConfig().hasUserBgcolor = _TRUE;
+			if (color === null) {
+				canvas.addStyle({
+	                backgroundColor: canvas.getConfig().styles ? canvas.getConfig().styles.backgroundColor || "" : "",
+	                backgroundImage: canvas.getConfig().styles ? canvas.getConfig().styles.backgroundImage || "" : ""
+	            });
+				articleBackgroundColor = "";
+				canvas.getConfig().hasUserBgcolor = _FALSE;
+			} else {
+	            canvas.addStyle({
+	                backgroundColor: color,
+	                backgroundImage: ""
+	            });
+	            articleBackgroundColor = color;
+	            canvas.getConfig().hasUserBgcolor = _TRUE;
+			}
         },
         _restoreColor: function(data) {
             var canvas = this.canvas;
