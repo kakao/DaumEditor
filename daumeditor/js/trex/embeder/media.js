@@ -54,7 +54,8 @@ TrexConfig.addEmbeder(
 			{host:"photo-contents.daum-img.net"},
 			{host:"serviceapi.nmv.naver.com"},
 			{host:"v.nate.com"},
-			{host:"flvr.pandora.tv"}
+			{host:"flvr.pandora.tv"},
+			{host:"videofarm.daum.net"}
 		]
 	},
 	function(root) {
