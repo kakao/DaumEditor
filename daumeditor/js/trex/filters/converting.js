@@ -63,7 +63,10 @@ Trex.register("filter > mode change",
 		}
 		
 		function brn2n(html){
-			return html.replace( new RegExp("<br[^>]*>\\n", "gi"), "\n" );
+			try {
+				return html.replace( new RegExp("<br[^>]*>\\n", "gi"), "\n" );
+			} catch(ignore) {}
+			return html;
 		}
 	
 		function fromText(txt) {
@@ -108,14 +111,12 @@ Trex.register("filter > mode change",
 					var content;
 					if (config.canvas.escapeTextModeContents) {
 						content = fromText(contents);
-					}
-					else {
+					} else {
 						content = contents;
 					}
-					try {
+					if (config.canvas.removeTextModeBr) {
 						content = brn2n(content);
 					}
-					catch(e){}
 					return content;
 				},
 				'source4save': function(contents){

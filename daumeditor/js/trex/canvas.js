@@ -31,7 +31,9 @@
             param: "",
             newlinepolicy: "p",
             showGuideArea: _TRUE,
-            convertingText: _TRUE
+            convertingText: _TRUE,
+			escapeTextModeContents: _TRUE,
+			removeTextModeBr: _FALSE
         }
     }, function(root) {
         var _config = TrexConfig.get('canvas', root);
