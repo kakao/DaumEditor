@@ -8,7 +8,7 @@
 /* toolbar ====*/
 	.tx-toolbar { clear:both; background-color:#f8f8f8;border:1px solid #cdcdcd;border-bottom:none;height:30px; }
 	.tx-toolbar-boundary { border:1px solid #fff; padding:0 0 0 5px; height:28px; }
-	.tx-toolbar-boundary .tx-tableedit {width:10px;height:18px;background:url(../../../images/icon/editor/skin/05/tx_icon.gif?v=2) no-repeat; background-position:-89px -152px; }
+	.tx-toolbar-boundary .tx-tableedit {width:10px;height:18px;background:url(../../../images/icon/editor/skin/06/tx_icon.gif?v=1) no-repeat; background-position:-89px -152px; }
 	.tx-toolbar-table-boundary { border:1px solid #fff; padding:0 0 0 412px; height:5px; }
 	
 	
@@ -70,7 +70,7 @@
 
 /*==== button ====*/
 	a.tx-icon {
-		background:url(../../../images/icon/editor/skin/05/tx_icon.gif?v=2); background-repeat:no-repeat;
+		background:url(../../../images/icon/editor/skin/06/tx_icon.gif?v=1); background-repeat:no-repeat;
 		width:21px;height:22px; display:block; float:left; 
 		font-size:0; line-height:0; overflow:hidden; text-indent:-1000px;
 	}
