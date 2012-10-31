@@ -353,7 +353,7 @@ Trex.Menu.Table = Trex.Class.create({
 				}
 			},
 			getValidValue:function(value, previousValue, max){
-				if ( value < 0 || value > max  ){
+				if ( value <= 0 || value > max  ){
 					alert( TXMSG("@table.alert") );
 					return previousValue;
 				}else{
