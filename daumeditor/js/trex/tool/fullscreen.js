@@ -21,6 +21,17 @@
 				_NULL,
 				this.onLoadModule // define in Trex.AsyncTool
 			);
+			
+			var self = this;
+			// #FTDUEDTR-150
+			this.bindKeyboard({ // ctrl + m - 넓게쓰기
+				ctrlKey: _TRUE,
+				keyCode: 77
+			}, function () {
+				if (!self.loaded) {
+					self.onLoadModule();
+				}
+			});
 		}
 	});
 })();
