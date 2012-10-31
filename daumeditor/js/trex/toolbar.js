@@ -440,9 +440,11 @@ Trex.Tool = Trex.Class.draft(/** @lends Trex.Tool.prototype */{
 Trex.AsyncTool = Trex.Class.draft(/** @lends Trex.Tool.prototype */{
 	$extend: Trex.Tool,
 	oninitialized: function() {
+		this.loaded = false;
 		throw new Error("[Exception]Trex.AsyncTool : not implements function(oninitialized)");
 	},
 	onLoadModule: function() {
+		var self = this;
         var url = this.config.asyncUrl;
 		if (/:\/\//.test(url) === false) {
 			url = this.getJSBasePath() + url;
@@ -450,7 +452,9 @@ Trex.AsyncTool = Trex.Class.draft(/** @lends Trex.Tool.prototype */{
 		Editor.editorForAsyncLoad = this.editor;
 		EditorJSLoader.asyncLoadModule({
     		url: TrexConfig.getUrl(url),
-    		callback: function(){}
+    		callback: function(){
+    			self.loaded = true;
+    		}
     	});
 	},
     getJSBasePath: function() {
