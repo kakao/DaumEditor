@@ -508,21 +508,27 @@
          *			processor.execCommand('bold', _NULL);
          *		});
          */
-        execute: function(handler) {
+        execute: function(handler, opt_dont_save_after) {
             var _history = this.history;
             var _processor = this.getProcessor();
             if (this.isWYSIWYG()) {
                 if ($tx.msie) {
                     setTimeout(function() { //NOTE: #FTDUEDTR-435
+                    	_history.saveHistoryIfEdited();
                         _processor.restoreRange();
                         handler(_processor);
-                        _history.saveHistory();
+                        if (!opt_dont_save_after) {
+                            _history.saveHistory();
+                        }
                         _processor.restore();
                     },0);
                 }else{
+                	_history.saveHistoryIfEdited();
                     handler(_processor);
                     _processor.focus();
-                    _history.saveHistory();
+                    if (!opt_dont_save_after) {
+                    	_history.saveHistory();
+                	}
                     _processor.restore();
                 }
             } else {

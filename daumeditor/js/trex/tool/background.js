@@ -30,6 +30,7 @@
             var canvas = self.canvas;
 
             canvas.fireJobs("canvas.apply.backgroundcolor", color);
+            canvas.history.saveHistoryIfEdited();
             canvas.history.saveHistory(
                 {
                     backgroundColor: articleBackgroundColor,
@@ -37,7 +38,7 @@
                 },
                 {
                     backgroundColor: color,
-                    backgroundImage: canvas.getStyle('backgroundImage')
+                    backgroundImage: ""
                 },
                 function(data){
                     self._restoreColor(data);
@@ -62,9 +63,7 @@
         _restoreColor: function(data) {
             var canvas = this.canvas;
             canvas.addStyle({ backgroundColor: data.backgroundColor });
-            if (data.backgroundImage) {
-                canvas.addStyle({ backgroundImage: data.backgroundImage });
-            }
+            canvas.addStyle({ backgroundImage: data.backgroundImage });
             articleBackgroundColor = data.backgroundColor;
         }
     });

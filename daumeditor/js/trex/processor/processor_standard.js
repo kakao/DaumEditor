@@ -692,11 +692,11 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	},
 	executeUsingCaret: function(handler) {
 		try {
-			var range = this.createGoogRange();
-			var savedCaret = range.saveUsingCarets();
+			var range = this.createGoogRange(),
+                savedCaret = range && range.saveUsingCarets();
 			return handler(range, savedCaret);
 		} finally {
-			if (!savedCaret.isDisposed()) {
+			if (savedCaret && !savedCaret.isDisposed()) {
 				savedCaret.restore();
 			}
 		}

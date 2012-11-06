@@ -11,11 +11,14 @@ Trex.I.FontTool = Trex.Mixin.create({
     },
     doHandle: function(data) {
         var self = this,
-            range, newStyle = self.computeNewStyle(data);
+            range,
+        	processor = this.canvas.getProcessor(),
+            newStyle = self.computeNewStyle(data),
+            dont_save_after = processor.isCollapsed();
+		
         self.canvas.execute(function(processor) {
             var selectedCells = (processor.table) ? processor.table.getTdArr() : [];
             if (selectedCells.length > 0) {
-                range = goog.dom.Range.createFromNodeContents(selectedCells[0]);
                 processor.executeUsingCaret(function() {
                     self.tableCellsExecutor(processor, newStyle, selectedCells);
                 });
@@ -25,7 +28,7 @@ Trex.I.FontTool = Trex.Mixin.create({
                     self.rangeExecutor(processor, newStyle, range);
                 }
             }
-        });
+        }, dont_save_after);
     },
     onAfterHandler: function() {
     },
