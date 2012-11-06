@@ -73,9 +73,7 @@ Trex.Tool.HorizontalRule = Trex.Class.create({
 				}
 				var _item = map[data];
 				if (_canvas.isWYSIWYG()) {
-					_canvas.execute(function(processor){
-						processor.pasteContent(_item.html, _TRUE);
-					});
+					_canvas.pasteContent(_item.html, _TRUE);
 				} else {
 					_canvas.execute(function(processor) {
 						processor.insertTag('',_item.html);

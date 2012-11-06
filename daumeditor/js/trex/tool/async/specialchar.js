@@ -6,14 +6,6 @@
 	 * Class Trex.Tool.SpecialChar 와 configuration을 포함    
 	 *     
 	 */
-	var _DOC = document,
-		_WIN = window,
-		_DOC_EL = _DOC.documentElement,
-		_FALSE = false,
-		_TRUE = true,
-		_NULL = null,
-		_UNDEFINED;
-	
 	TrexMessage.addMsg({
 		'@specialchar.cancel.image': "#iconpath/btn_l_cancel.gif?v=2",
 		'@specialchar.confirm.image': "#iconpath/btn_l_confirm.gif?v=2",
@@ -27,9 +19,7 @@
 				if(!value){
 					return;
 				}
-				_canvas.execute(function(processor) {
-					processor.pasteContent(value, _FALSE);
-				});
+				_canvas.pasteContent(value, false);
 			};
 	
 			/* button & menu weave */
@@ -100,7 +90,7 @@
 			_elInput.focus();
 			if ($tx.msie) { //NOTE: #FTDUEDTR-1044
 				try {
-					var _sel = _DOC.selection.createRange();
+					var _sel = document.selection.createRange();
 					_sel.move("character", _elInput.value.length);
 					_sel.select();
 				} catch (ignore) {}
