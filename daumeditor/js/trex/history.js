@@ -21,8 +21,22 @@
             list.shift();
         }
     }
+    
+    var SavedCaretByElement = function (startCaret, endCaret) {
+    	goog.dom.SavedRange.call(this);
+    	this.startCaretId_ = startCaret.id;
+		this.endCaretId_ = endCaret.id;
+		/**
+		 * A DOM helper for storing the current document context.
+		 * @type {goog.dom.DomHelper}
+		 * @private
+		 */
+		this.dom_ = goog.dom.getDomHelper($tom.getOwnerDocument(startCaret));
+		this.removeIncidentalTextNode_();
+    };
+    goog.inherits(SavedCaretByElement, goog.dom.SavedCaretRange);
 
-	var MAX_UNDO_COUNT = 20;
+	var MAX_UNDO_COUNT = 30;
 
 	/**
 	 * @class
@@ -163,7 +177,16 @@
         getTextHandler: function() {
             var canvas = this.canvas;
             return function(data) {
-                canvas.setContent(data.content);
+            	canvas.setContent(data.content);
+            	
+                if (data.startCaretId && data.endCaretId) {
+                	var doc = canvas.getCurrentPanel().getDocument();
+                	var startCaret = doc.getElementById(data.startCaretId);
+                	var endCaret = doc.getElementById(data.endCaretId);
+                	
+                	var savedCaret = new SavedCaretByElement(startCaret, endCaret);
+                	savedCaret.restore();
+                }
                 // #FTDUEDTR-1122
                 setTimeout(function() {
                     canvas.setScrollTop(data.scrollTop);
@@ -171,10 +194,21 @@
             }
         },
         getTextData:function() {
-            return {
-                content: this.canvas.getContent(),
-                scrollTop: this.canvas.getScrollTop()
-            }
+	        var self = this;
+        	var processor = this.canvas.getProcessor();
+        	return processor.executeUsingCaret(function (range, savedCaret) {
+                var startCaretId, endCaretId;
+                if (savedCaret) {
+                	startCaretId = savedCaret.getCaret(_TRUE).id;
+                	endCaretId = savedCaret.getCaret(_FALSE).id;
+                }
+	        	return {
+	                content: self.canvas.getContent(),
+	                scrollTop: self.canvas.getScrollTop(),
+                    startCaretId: startCaretId,
+                    endCaretId: endCaretId
+	            }
+        	});
         }
 	};
 
