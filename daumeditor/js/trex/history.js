@@ -162,11 +162,11 @@
             var self = this;
             if (key.code == Trex.__KEY.ENTER || key.code == Trex.__KEY.SPACE || key.code == Trex.__KEY.TAB) {
                 self.saveHistoryIfEdited();
-            } else if (key.code == Trex.__KEY.DELETE || key.code == Trex.__KEY.BACKSPACE) {
+            } else if (key.code == Trex.__KEY.DELETE || (key.code == Trex.__KEY.BACKSPACE && $tx.chrome == false)) {    // FTDUEDTR-1288
                 self.saveHistory();
             } else if ((key.code == Trex.__KEY.PASTE || key.code == Trex.__KEY.CUT) && key.ctrl) {
                 self.saveHistory();
-            } else if (((key.code > 32 && key.code < 41) && key.shift) || (key.code == 65 && key.ctrl)) {   // shift + arrow,  home, end,  etc..  / select all
+            } else if ((key.code >= 33 && key.code <= 40) || (key.code == 65 && key.ctrl)) {   //  + arrow,  home, end,  etc..  / select all
                 self.saveHistoryIfEdited();
             } else if (key.ctrl || key.alt || (key.shift && key.code == 16)) {
                 // content isn't modified
