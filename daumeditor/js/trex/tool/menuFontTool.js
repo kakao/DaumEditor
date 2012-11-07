@@ -11,6 +11,18 @@ Trex.I.MenuFontTool = Trex.Mixin.create({
     rangeExecutor: function(processor, newStyle, range) {
         this.wrapTextAsStyledSpan(processor, newStyle, range);
     },
+    onAfterHandler: function (data) {
+        var self = this,
+            processor = self.canvas.getProcessor();
+
+        self.syncButton && self.syncButton(data);
+        self.saveFavorite && self.saveFavorite(data);
+
+        // FTDUEDTR-1287
+        if ($tx.chrome && processor.isCollapsed()) {
+            processor.executeUsingCaret();
+        }
+    },
     startSyncButtonWithStyle: function() {
         var self = this;
         self.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_QUERY_STATUS, function(goog_range) {
@@ -49,7 +61,7 @@ Trex.I.MenuFontTool = Trex.Mixin.create({
             return processor.queryCommandValue(self.getQueryCommandName());
         });
     },
-    reliableQueriedValue: function(value) {
+    reliableQueriedValue: function() {
     	return _TRUE;
     },
     queryElementCurrentStyle: function(element) {

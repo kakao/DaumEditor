@@ -15,12 +15,12 @@ Trex.I.FontTool = Trex.Mixin.create({
         	processor = this.canvas.getProcessor(),
             newStyle = self.computeNewStyle(data),
             dont_save_after = processor.isCollapsed();
-		
+
         self.canvas.execute(function(processor) {
             var selectedCells = (processor.table) ? processor.table.getTdArr() : [];
             if (selectedCells.length > 0) {
                 processor.executeUsingCaret(function() {
-                    self.tableCellsExecutor(processor, newStyle, selectedCells);
+                    tableCellsExecutor(self, processor, newStyle, selectedCells);
                 });
             } else {
                 range = processor.createGoogRange();
@@ -29,22 +29,22 @@ Trex.I.FontTool = Trex.Mixin.create({
                 }
             }
         }, dont_save_after);
+
+        function tableCellsExecutor(self, processor, newStyle, cells) {
+            cells.each(function(cell) {
+                var range = goog.dom.Range.createFromNodeContents(cell);
+                range.select();
+                self.rangeExecutor(processor, newStyle, range);
+            });
+        }
     },
     onAfterHandler: function() {
-    },
-    tableCellsExecutor: function(processor, newStyle, cells) {
-        var self = this;
-        cells.each(function(cell) {
-            var range = goog.dom.Range.createFromNodeContents(cell);
-            range.select();
-            self.rangeExecutor(processor, newStyle, range);
-        });
     },
     findQueryingNode: function(goog_range) {
         if (goog_range) {
 			var textNode;
 			try {
-	            textNode = this.findFirst(goog_range.__iterator__(), function(node) {
+	            textNode = findFirst(goog_range.__iterator__(), function(node) {
 	                return node.nodeType == 3 && node.nodeValue.trim();
 	            });
 			} catch (ignore4ie678) {}
@@ -58,12 +58,12 @@ Trex.I.FontTool = Trex.Mixin.create({
                 return startNode;
             }
         }
-    },
-    findFirst: function(iterator, condition) {
-        try {
-            return goog.iter.filter(iterator, condition).next();
-        } catch(e) {
-            return null;
+        function findFirst(iterator, condition) {
+            try {
+                return goog.iter.filter(iterator, condition).next();
+            } catch(e) {
+                return null;
+            }
         }
     }
 });

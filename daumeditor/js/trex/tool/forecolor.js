@@ -40,8 +40,7 @@ Trex.Tool.ForeColor = Trex.Class.create({
     createMenu: function() {
         return new Trex.Menu.ColorPallete(this.menuCfg);
     },
-    onAfterHandler: function(data) {
-        this.syncButton(data);
+    saveFavorite: function(data) {
         if (this.useFavorite) {
             this.writeCookie(data);
         }

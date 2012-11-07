@@ -161,12 +161,11 @@ Trex.Tool.FontFamily = Trex.Class.create({
 	onBeforeHandler: function(data) {
 		this.canvas.includeWebfontCss("font-family: " + data);
 	},
-	onAfterHandler: function(data) {
-		var self = this;
-		if (self.useFavorite) {
-			self.writeCookie(self.mergeValues(self.readCookie(), data));
-		}
-	},
+    saveFavorite: function(data) {
+        if (this.useFavorite) {
+            this.writeCookie(this.mergeValues(this.readCookie(), data));
+        }
+    },
 	getDefaultProperty: function() {
 		return this.canvas.getStyleConfig().fontFamily;
 	},

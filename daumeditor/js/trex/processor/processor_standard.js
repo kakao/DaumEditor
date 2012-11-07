@@ -694,7 +694,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 		try {
 			var range = this.createGoogRange(),
                 savedCaret = range && range.saveUsingCarets();
-			return handler(range, savedCaret);
+			return handler && handler(range, savedCaret);
 		} finally {
 			if (savedCaret && !savedCaret.isDisposed()) {
 				savedCaret.restore();
