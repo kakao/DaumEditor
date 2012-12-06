@@ -27,6 +27,7 @@
 			this.canvasConfig = canvasConfig;
 			this.iframe = this.el;
 			this.wysiwygWindow = this.iframe.contentWindow;
+			this.onceWysiwygFocused = false;
 
 			var self = this;
 			var iframeLoader = new Trex.WysiwygIframeLoader(this.iframe);
@@ -41,6 +42,12 @@
 				self.clearContent();
 				self.bindEvents(canvas);
 				Editor.__PANEL_LOADED = _TRUE;
+
+				$tx.observe(self.wysiwygWindow, 'focus', function onWysiwygFocused() {
+					if (!self.onceWysiwygFocused) {
+						self.onceWysiwygFocused = true;
+					}
+				});
 				canvas.fireJobs(Trex.Ev.__IFRAME_LOAD_COMPLETE, doc);
 			});
 
@@ -138,7 +145,7 @@
 			}
 			return contentHTML;
 		},
-
+		
 		setBodyHTML: function(content) {
 			this.wysiwygDoc.body.innerHTML = content || $tom.EMPTY_PARAGRAPH_HTML;
 		},
@@ -348,6 +355,14 @@
 			});
 		},
 
+		ensureFocused: function () {
+			if (!this.onceWysiwygFocused) {
+				this.onceWysiwygFocused = true;
+				this.ifProcessorReady(function(processor) {
+					processor.focusOnTop();
+				});
+			}
+		},
 
 		/**
 		 * wysiwyg panel을 보이게한다.

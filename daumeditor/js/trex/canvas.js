@@ -509,25 +509,26 @@
          *		});
          */
         execute: function(handler) {
-            var _history = this.history;
-            var _processor = this.getProcessor();
-            if (this.isWYSIWYG()) {
-                if ($tx.msie) {
-                    setTimeout(function() { //NOTE: #FTDUEDTR-435
-                        _processor.restoreRange();
-                        handler(_processor);
-                        _history.saveHistory();
-                        _processor.restore();
-                    },0);
-                }else{
-                    handler(_processor);
-                    _processor.focus();
-                    _history.saveHistory();
-                    _processor.restore();
-                }
-            } else {
-                handler(_processor);
-            }
+	        var _history = this.history;
+	        var _processor = this.getProcessor();
+	        if (this.isWYSIWYG()) {
+		        this.getPanel('html').ensureFocused();
+		        if ($tx.msie) {
+			        setTimeout(function () { //NOTE: #FTDUEDTR-435
+				        _processor.restoreRange();
+				        handler(_processor);
+				        _history.saveHistory();
+				        _processor.restore();
+			        }, 0);
+		        } else {
+			        handler(_processor);
+			        _processor.focus();
+			        _history.saveHistory();
+			        _processor.restore();
+		        }
+	        } else {
+		        handler(_processor);
+	        }
         },
         /**
          * caret을 주어진 위치로 이동한다. - Only Wysiwyg <br/>
@@ -735,6 +736,7 @@
 Trex.module("focus body @after editor iframe load",
     function(editor, toolbar, sidebar, canvas/*, config*/) {
         canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function(/*panelDoc*/) {
+	        /*
             if (!canvas.isWYSIWYG()) {
                 return;
             }
@@ -742,6 +744,7 @@ Trex.module("focus body @after editor iframe load",
 				var _processor = canvas.getProcessor();
                 _processor.focusOnTop();
             } catch(e) {}
+            */
         });
     }
 );
