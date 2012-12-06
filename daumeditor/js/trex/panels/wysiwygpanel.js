@@ -64,28 +64,27 @@
 		/**
 		 * WYSIWYG 영역 iframe을 편집 가능한 상태로 변경한다.
 		 */
-		makeEditable: function() {
+		makeEditable: function () {
 			if (this.canvasConfig.readonly) {
 				return;
 			}
 
-			if ($tx.msie || $tx.chrome || $tx.webkit_ver >= 3) { //Safari 3, Chrome, and Internet Explorer (since 5.5).
-				this.wysiwygDoc.body.setAttribute("contentEditable", _TRUE.toString() );
-			} else { //old version or Firefox, Opera
+			if ($tx.msie || $tx.chrome || $tx.webkit_ver >= 3 || $tx.gecko) {
+				this.wysiwygDoc.body.setAttribute("contentEditable", _TRUE);
+			} else {
 				var self = this;
-				setTimeout(function() {
+				setTimeout(function () {
 					try {
 						self.wysiwygDoc.designMode = "On";
 						if ($tx.gecko) {
 							self.wysiwygDoc.execCommand("enableInlineTableEditing", _FALSE, _FALSE);
 						}
-					} catch(e) {
+					} catch (e) {
 						self.designModeActivated = _FALSE;
 					}
 				}, 10);
 			}
 		},
-
 
 		/**
 		 * panel의 이름을 리턴한다.
@@ -145,7 +144,7 @@
 			}
 			return contentHTML;
 		},
-		
+
 		setBodyHTML: function(content) {
 			this.wysiwygDoc.body.innerHTML = content || $tom.EMPTY_PARAGRAPH_HTML;
 		},
