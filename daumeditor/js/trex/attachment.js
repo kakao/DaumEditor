@@ -108,6 +108,9 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 				_dispHtml = _dispHtml.replace(objectElemeReg, "<" + objectElemTagName + " " + Trex.Util.toAttrString(this.objectAttr) + " ");
 			}
 			var _style = this.paragraphStyle || {};
+			if ($tx.webkit) {
+				this.canvas.getPanel('html').el.focus();    // FTDUEDTR-1281
+			}
 			this.canvas.execute(function(processor) {
 				processor.moveCaretWith(_pastescope);
 				processor.pasteContent(_dispHtml, _TRUE, {
