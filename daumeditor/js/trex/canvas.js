@@ -733,22 +733,6 @@
 
 })(Trex);
 
-Trex.module("focus body @after editor iframe load",
-    function(editor, toolbar, sidebar, canvas/*, config*/) {
-        canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function(/*panelDoc*/) {
-	        /*
-            if (!canvas.isWYSIWYG()) {
-                return;
-            }
-            try {
-				var _processor = canvas.getProcessor();
-                _processor.focusOnTop();
-            } catch(e) {}
-            */
-        });
-    }
-);
-
 Trex.module("bind canvas events for close external menus",
 	function(editor, toolbar, sidebar, canvas/*, config*/) {
 		var _shouldCloseMenus = function () {
