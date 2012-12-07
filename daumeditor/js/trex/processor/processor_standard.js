@@ -245,7 +245,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	 * 	processor.focus();
 	 */
 	focus: function() {
-		this.win.focus();
+		this.doc.body.focus();
 	},
 	/**
 	 * wysiwyg 영역에 포커스를 뺀다.
@@ -261,7 +261,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	 * 	processor.focusOnTop();
 	 */
 	focusOnTop: function() {
-		this.win.focus();
+		this.focus();
 		this.selectFirstText(this.doc.body);
 		this.doc.body.scrollTop = 0; //NOTE: only html, not xhtml
 	},
@@ -276,7 +276,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	 * 	processor.focusOnBottom();
 	 */
 	focusOnBottom: function() {
-		this.win.focus();
+		this.focus();
 		this.moveCaretTo(this.doc.body, _FALSE);
 		this.doc.body.scrollTop = this.doc.body.scrollHeight; //NOTE: only html, not xhtml
 	},

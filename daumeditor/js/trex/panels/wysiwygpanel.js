@@ -69,8 +69,8 @@
 				return;
 			}
 
-			if ($tx.msie || $tx.chrome || $tx.webkit_ver >= 3 || $tx.gecko) {
-				this.wysiwygDoc.body.setAttribute("contentEditable", _TRUE);
+			if (this.wysiwygDoc.body.contentEditable) {
+				this.wysiwygDoc.body.contentEditable = _TRUE;
 			} else {
 				var self = this;
 				setTimeout(function () {
@@ -357,9 +357,7 @@
 		ensureFocused: function () {
 			if (!this.onceWysiwygFocused) {
 				this.onceWysiwygFocused = true;
-				this.ifProcessorReady(function(processor) {
-					processor.focusOnTop();
-				});
+				this.focus();
 			}
 		},
 
