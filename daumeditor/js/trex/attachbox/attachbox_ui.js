@@ -215,10 +215,12 @@ Trex.I.AttachBox = {
 
 		var _elDelete = tx.a({ className: "tx-delete" }, TXMSG("@attacher.del")); //삭제
 		_elButton.appendChild(_elDelete);
+		var self = this;
 		$tx.observe(_elDelete, 'click', function() {
 			if(!confirm(TXMSG("@attacher.delete.confirm"))) {
 				return;
 			}
+			self.canvas.history.saveHistory();
 			entry.execRemove();
 		}, _FALSE);
 
