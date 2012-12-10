@@ -8,8 +8,9 @@
      * @class
      */
     Trex.WysiwygIframeLoader = Trex.Class.create({
-        initialize: function(iframe) {
+        initialize: function(iframe, iframeUrl) {
             this.iframe = iframe;
+	        this.iframeUrl = iframeUrl;
         },
 
         load: function(callback) {
@@ -37,14 +38,15 @@
             _WIN.__tx_wysiwyg_iframe_load_complete = function() {
                 self.loadLocalIframe(callback);
             };
-            try { // core dev mode, core production mode, dex dev mode
-                var basePath = EditorJSLoader.getPageBasePath('editor.js');
-            } catch (e) { // dex production mode
-                basePath = EditorJSLoader.getPageBasePath();
-            }
-            this.iframe.src = basePath +
-                              "trex/iframe_loader_catalyst.html?" +
-                              document.domain;
+	        if (!this.iframeUrl) {
+		        try { // core dev mode, core production mode, dex dev mode
+			        var basePath = EditorJSLoader.getPageBasePath('editor.js');
+		        } catch (e) { // dex production mode
+			        basePath = EditorJSLoader.getPageBasePath();
+		        }
+		        this.iframeUrl = basePath + "trex/iframe_loader_catalyst.html";
+	        }
+            this.iframe.src = this.iframeUrl + "?" + document.domain;
         },
 
         // 옛날 스타일
@@ -57,10 +59,9 @@
 
     function absolutizeURL(url) {
         var location = _DOC.location;
-        if (url.indexOf("http://") === 0) {
-        } else if (url.indexOf("file://") === 0) {
+        if (/^(https?|file):\/\//.test(url)) {
         } else if (url.indexOf("/") === 0) {
-            url = "http://" + location.host + ":" + (location.port || "80") + url;
+            url = "//" + location.host + ":" + (location.port || "80") + url;
         } else {
             var href = location.href;
             var cutPos = href.lastIndexOf("/");
@@ -75,7 +76,7 @@
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">' +
             '<html lang="ko"><head>' +
             '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">' +
-            '<title>Daum에디터</title>' +
+            '<title>DaumEditor Wygiwyg Panel</title>' +
             '<script id="txScriptForEval"></script>' +
 			'<link rel="stylesheet" href="' + cssBasePath + 'content_view.css" type="text/css"></link>' +
             '<link rel="stylesheet" href="' + cssBasePath + 'content_wysiwyg.css" type="text/css"></link>' +

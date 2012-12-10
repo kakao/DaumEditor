@@ -139,7 +139,7 @@ Trex.I.FHRequester = Trex.Faculty.create(/** @lends Trex.I.FHRequester */{
 		var _fhr = Trex.Flash.get("tx_fhr");
 		if (!_fhr) {
 			_fhr = function() {
-				var _url = TrexConfig.getUrl( "#cmnhost/swf/FHR3.swf?v=2" );
+				var _url = TrexConfig.getUrl( "#cdnhost/swf/FHR3.swf?v=2" );
 				Trex.Flash.load(
 					_url,
 					"tx_fhr_target",
