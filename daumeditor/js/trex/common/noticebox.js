@@ -21,8 +21,8 @@ Trex.NoticeBox = Trex.Class.create({
 		this.make({
 			'head': options.head,
 			'body': options.body,
-			'confirm': options.confirm || 'http://i1.daumcdn.net/icon/editor/btn_confirm_s1.gif?v=2',
-			'cancel': options.cancel || 'http://i1.daumcdn.net/icon/editor/btn_cancel_s1.gif?v=2'
+			'confirm': options.confirm || '//i1.daumcdn.net/icon/editor/btn_confirm_s1.gif?v=2',
+			'cancel': options.cancel || '//i1.daumcdn.net/icon/editor/btn_cancel_s1.gif?v=2'
 		});
 		this.blackbox = blackbox;
 	},

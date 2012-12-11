@@ -41,7 +41,7 @@
 		},
 		setSelect: function(element){
 			$tx.setStyle(element, {
-				backgroundImage: "url(http://i1.daumcdn.net/icon/editor/table_focus_50.png)"
+				backgroundImage: "url(//i1.daumcdn.net/icon/editor/table_focus_50.png)"
 			});
 		},
 		setUnselect: function(element){

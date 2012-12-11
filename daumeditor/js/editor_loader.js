@@ -1,13 +1,6 @@
-(function() {
+(function(document) {
 	// TODO option parameter 문서 정리
 	// TODO bookmarklet 작성
-	var _DOC = document,
-		_WIN = window,
-		_DOC_EL = _DOC.documentElement,
-		_FALSE = false,
-		_TRUE = true,
-		_NULL = null,
-		_UNDEFINED;
 	var DEFAULT_UNKNOWN_OPTION_VALUE = "",
 			PREFIX_COOKIE = "tx_",
 			STATUS_UNINITIALIZED = "uninitialized",
@@ -18,7 +11,7 @@
 			MILLISECOND = 1000,
 			DEFAULT_TIMEOUT = 5;
 	
-	var REGX_MATCH_VERSION = /\/([6-9][a-z.]?\.[a-z0-9\-]+\.[\-\w]+)\//;
+	var REGX_MATCH_VERSION = /\/(\d+[a-z.]?\.[a-z0-9\-]+\.[\-\w]+)\//;
 
 	var DEFAULT_OPTIONS = {
 		environment: ENV_PRODUCTION,
@@ -32,7 +25,7 @@
 	}
 
 	function findLoaderScriptElement(filename) {
-		var scripts = _DOC.getElementsByTagName("script");
+		var scripts = document.getElementsByTagName("script");
 		for (var i = 0; i < scripts.length; i++) {
 			if (scripts[i].src.indexOf(filename) >= 0) {
 				return scripts[i];
@@ -66,7 +59,7 @@
 	}
 
 	function getCookieOption(name) {
-		var cookieOptions = Options.parse(_DOC.cookie, /;[ ]*/);
+		var cookieOptions = Options.parse(document.cookie, /;[ ]*/);
 		var value = cookieOptions.findByName(PREFIX_COOKIE + name);
 		return value ? decodeURIComponent(value) : value;
 	}
@@ -104,7 +97,7 @@
 	
 	
 	function createScriptDOMElement(src) {
-		var script = _DOC.createElement("script");
+		var script = document.createElement("script");
 		script.type = "text/javascript";
 		script.src = src;
 		return script;
@@ -112,7 +105,7 @@
 
 	function absolutizeURL(url) {
 		var location = document.location;
-		if (url.match(/^(https?|file):\/\//)) {
+		if (url.match(/^(https?:|file:|)\/\//)) {
 		} else if (url.indexOf("/") === 0) {
 			url = "http://" + location.host + url;
 		} else {
@@ -125,7 +118,7 @@
 
 	function loadScriptDOMElement(src, callback) {
 		var script = createScriptDOMElement(src);
-		var head = _DOC.getElementsByTagName("head")[0] || _DOC_EL;
+		var head = document.getElementsByTagName("head")[0] || document.documentElement;
 		
 		addScriptLoadListener(script, head, callback);
 		
@@ -144,7 +137,7 @@
 					
 					// Handle memory leak in IE
 					if (/MSIE/i.test(navigator.userAgent)) {
-						script.onload = script.onreadystatechange = _NULL;
+						script.onload = script.onreadystatechange = null;
 						if ( head && script.parentNode ) {
 							head.removeChild( script );
 						}
@@ -224,7 +217,7 @@
 			if (DEFAULT_OPTIONS.environment === ENV_DEVELOPMENT) {
 				url = url + '?dummy=' + new Date().getTime();				
 			}
-			_DOC.write('<script type="text/javascript" src="' + url + '" charset="utf-8"></script>');
+			document.write('<script type="text/javascript" src="' + url + '" charset="utf-8"></script>');
 		},
 
 		/**
@@ -292,4 +285,4 @@
 	}
 
 	initialize();
-})();
+})(document);
