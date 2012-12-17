@@ -67,9 +67,9 @@ Trex.Tool.Indent.Handler = Trex.Class.create({
         var IndentTool = Trex.Tool.Indent;
         var RangeIndenter = IndentTool.RangeIndenter;
         var TableCellIndenter = IndentTool.TableCellIndenter;
-        this.collapsedRange = new RangeIndenter(collasped),
-        this.selectedRange = new RangeIndenter(selection),
-        this.tableCellSelected = new TableCellIndenter(tableCell)
+        this.collapsedRange = new RangeIndenter(collasped);
+        this.selectedRange = new RangeIndenter(selection);
+        this.tableCellSelected = new TableCellIndenter(tableCell);
     },
     handle: function(processor) {
         var tableCells = (processor.table) ? processor.table.getTdArr() : [];
