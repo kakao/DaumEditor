@@ -3,13 +3,15 @@ Trex.module("Add layer to display notice message on editor area before editing",
 		if (config.initializedMessage) {
 			canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function () {
 				var _noticeDiv = tx.div({ id:"tx-canvas-notice", className:"tx-canvas-notice"}, config.initializedMessage);
-				$tx("tx_canvas").insertBefore(_noticeDiv, $tx("tx_loading"));
+                var txLoading = $tx("tx_loading");
+                var txLoadingParent = txLoading.parentNode;
+                txLoadingParent.insertBefore(_noticeDiv, txLoading);
 
 				var disappeared = false;
 				var _noticeDivHandler = function () {
 					if (!disappeared && $tx("tx-canvas-notice")) {
 						disappeared = true;
-						$tx("tx_canvas").removeChild(_noticeDiv);
+                        txLoadingParent.removeChild(_noticeDiv);
 						canvas.focus();
 					}
 				};
