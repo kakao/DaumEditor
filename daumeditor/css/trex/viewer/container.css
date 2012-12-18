@@ -1,0 +1,19 @@
+/*==== container ====*/
+	
+	.tx-content-container em { font-style: italic; }
+	.tx-content-container ol { padding-left:25px; }
+	.tx-content-container ol li{ list-style-type: inherit; }
+	.tx-content-container ul { list-style-type: disc; padding-left:20px;}
+	.tx-content-container ul li{ list-style-type: inherit;}
+	
+	.tx-content-container hr, 
+	.tx-content-container h1, 
+	.tx-content-container h2, 
+	.tx-content-container h3, 
+	.tx-content-container h4, 
+	.tx-content-container h5, 
+	.tx-content-container h6 { display:block;  }
+	
+	.tx-content-container button { background-color:transparent; border:none; padding:0; text-align:left; margin:0; }
+	.tx-content-container button img { vertical-align:middle; }
+	

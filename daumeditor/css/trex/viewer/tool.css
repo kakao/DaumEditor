@@ -1,0 +1,58 @@
+/*==== horizontalrule ====*/
+	.tx-hr-border-1 { height: 1px;
+        border: 0 none;
+        border-top: 1px solid #666;
+        display: block;}
+	.tx-hr-border-2 { height: 7px; border-top: 1px solid #666; border-bottom: 3px solid #666; border-left: 0 none; border-right: 0 none; display: block;}
+	.tx-hr-border-3 { height: 1px;
+        border: 0 none;
+        border-top: 1px dotted #666;
+        display: block;}
+	
+	div.tx-hr-image-1 { border: 0 none; height: 15px; background:url(../../../images/deco/contents/horizontalrule/line03.gif?v=2) repeat-x scroll left; width:99%;}
+	div.tx-hr-image-1 hr { position:relative; top: -999px; left: -999px; border: 0 none; }
+	
+	div.tx-hr-image-2 { border: 0 none; height: 15px; background:url(../../../images/deco/contents/horizontalrule/line05.gif?v=2) repeat-x scroll left; width:99%;}
+	div.tx-hr-image-2 hr { position:relative; top: -999px; left: -999px; border: 0 none; }
+	
+	div.tx-hr-image-3 { border: 0 none; height: 15px; background:url(../../../images/deco/contents/horizontalrule/line06.gif?v=2) repeat-x scroll left; width:99%;}
+	div.tx-hr-image-3 hr { position:relative; top: -999px; left: -999px; border: 0 none; }
+	
+	div.tx-hr-image-4 { border: 0 none; height: 15px; background:url(../../../images/deco/contents/horizontalrule/line08.gif?v=2) no-repeat scroll center; width:99%;}
+	div.tx-hr-image-4 hr { position:relative; top: -999px; left: -999px; border: 0 none; }
+
+/*==== quotation ====*/
+	blockquote.tx-quote1 { border: 1px solid #dbdbdb; margin: 10px; padding: 10px; }
+	blockquote.tx-quote2 { border: 3px solid #dbdbdb; margin: 10px; padding: 10px; }		
+	blockquote.tx-quote3 { border: 1px dashed #dbdbdb; margin: 10px; padding: 10px; }
+	blockquote.tx-quote4 { border: none; background: url(../../../images/deco/contents/quote/titation01.gif?v=2) top left no-repeat; padding: 0 20px 10px 20px; margin: 10px; }
+	blockquote.tx-quote5 { border: none; border-left: 2px solid #dbdbdb; margin: 10px; padding: 10px; }
+
+/*==== textbox ====*/
+	.txc-textbox1 { padding:10px; background-color:#ffffff; border:1px solid #f7f7f7; }
+	.txc-textbox2 { padding:10px; background-color:#eeeeee; border:1px solid #eeeeee; }
+	.txc-textbox3 { padding:10px; background-color:#f2f2b8; border:1px solid #f2f2b8; }
+	.txc-textbox4 { padding:10px; background-color:#fedec7; border:1px solid #fedec7; }
+	.txc-textbox5 { padding:10px; background-color:#e7fdb5; border:1px solid #e7fdb5; }
+	.txc-textbox6 { padding:10px; background-color:#dbe8fb; border:1px solid #dbe8fb; }
+	
+	.txc-textbox7 { padding:10px; background-color:#ffffff; border:1px dotted #cbcbcb; }
+	.txc-textbox8 { padding:10px; background-color:#eeeeee; border:1px dotted #c1c1c1; }
+	.txc-textbox9 { padding:10px; background-color:#f2f2b8; border:1px dotted #f3c534; }
+	.txc-textbox10 { padding:10px; background-color:#fedec7; border:1px dotted #fe8943; }
+	.txc-textbox11 { padding:10px; background-color:#e7fdb5; border:1px dotted #9fd331; }
+	.txc-textbox12 { padding:10px; background-color:#dbe8fb; border:1px dotted #79a5e4; }
+	
+	.txc-textbox13 { padding:10px; background-color:#ffffff; border:1px solid #cbcbcb; }
+	.txc-textbox14 { padding:10px; background-color:#eeeeee; border:1px solid #c1c1c1; }
+	.txc-textbox15 { padding:10px; background-color:#f2f2b8; border:1px solid #f3c534; }
+	.txc-textbox16 { padding:10px; background-color:#fedec7; border:1px solid #fe8943; }
+	.txc-textbox17 { padding:10px; background-color:#e7fdb5; border:1px solid #9fd331; }
+	.txc-textbox18 { padding:10px; background-color:#dbe8fb; border:1px solid #79a5e4; }
+	
+	.txc-textbox19 { padding:10px; background-color:#ffffff; border:3px double #cbcbcb; }
+	.txc-textbox20 { padding:10px; background-color:#eeeeee; border:3px double #c1c1c1; }
+	.txc-textbox21 { padding:10px; background-color:#f2f2b8; border:3px double #f3c534; }
+	.txc-textbox22 { padding:10px; background-color:#fedec7; border:3px double #fe8943; }
+	.txc-textbox23 { padding:10px; background-color:#e7fdb5; border:3px double #9fd331; }
+	.txc-textbox24 { padding:10px; background-color:#dbe8fb; border:3px double #79a5e4; }	

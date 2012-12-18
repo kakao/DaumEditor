@@ -1,0 +1,7 @@
+/*==== media ====*/
+	.txc-media { border:1px solid #eeeeee; background:#f3f3f3 url(../../../images/icon/editor/img_multi_icon.gif?v=2) no-repeat 50% 50%; }
+	.txc-media-wmp { border:none; background:#000000 url(../../../images/icon/editor/img_multi_wmp.gif?v=2) no-repeat left bottom; }
+	.txc-media-tvpot { border:none; background:#000000; }
+
+/* FTDUEDTR-1202 */
+/* button.tx-entry-attach { height:23px; min-height:23px; display:inline; } */
