@@ -70,6 +70,7 @@ var TrexConfig = function() {
 	var __TREX_PARAM = {};
 	var __TREX_CONFIGURE = {
 		cdnHost: "//s1.daumcdn.net/editor",
+		cmnHost: "http://editor.daum.net",
 		wrapper: "tx_trex_container", 
 		form: 'tx_editor_form',
         txIconPath: "images/icon/editor/",
@@ -129,7 +130,8 @@ var TrexConfig = function() {
 			url = url.replace(/#host/g, __TREX_CONFIGURE["txHost"]);
 			url = url.replace(/#path\/?/g, __TREX_CONFIGURE["txPath"]);
 			url = url.replace(/#cdnhost/g, __TREX_CONFIGURE["cdnHost"]);
-			
+			url = url.replace(/#cmnhost/g, __TREX_CONFIGURE["cmnHost"]);
+
 			for(var _name in __TREX_PARAM) {
 				url = url.replace(new RegExp("#".concat(_name), "g"), __TREX_CONFIGURE[__TREX_PARAM[_name]]);
 			}
