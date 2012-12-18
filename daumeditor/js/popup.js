@@ -6,7 +6,6 @@ var CORE_FILES = [
 	"lib/template.js",
 	"lib/dgetty.js",
 	"lib/xgetty.js",
-	"lib/dateformat.js",
 	"lib/rubber.js",
 	"lib/swfobject.js",
 	/** trex engine & config */

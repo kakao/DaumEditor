@@ -35,8 +35,7 @@ var Trex = {
 			return _FALSE;
 		}
 		return _TRUE;
-	},
-	getSWF: _WIN.getSWF
+	}
 };
 
 //oop

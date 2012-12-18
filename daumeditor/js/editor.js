@@ -10,7 +10,6 @@ var CORE_FILES = [
 	"lib/dgetty.js",
 	"lib/dfindy.js",
 	"lib/xgetty.js",
-	"lib/dateformat.js",
 	"lib/swfobject.js",
 	"lib/font_css_property.js",
 	//"lib/htmlparser.js",
