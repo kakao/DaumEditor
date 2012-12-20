@@ -34,7 +34,6 @@ var CORE_FILES = [
 	"trex/common/button.js",
 	"trex/common/menu.js",
 	"trex/common/blackbox.js",
-	"trex/common/noticebox.js",
 
 	/** editor core */
 	"trex/editor.js",

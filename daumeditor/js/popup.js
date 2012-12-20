@@ -20,7 +20,6 @@ var CORE_FILES = [
 	"trex/mixins/observable.js",
 	/** trex common */
 	"trex/common/blackbox.js",
-	"trex/common/noticebox.js",
 	"popuputil.js"
 ];
 
