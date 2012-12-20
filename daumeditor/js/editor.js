@@ -10,7 +10,6 @@ var CORE_FILES = [
 	"lib/dgetty.js",
 	"lib/dfindy.js",
 	"lib/xgetty.js",
-	"lib/swfobject.js",
 	"lib/font_css_property.js",
 	//"lib/htmlparser.js",
 	/** trex engine & config */
@@ -25,7 +24,6 @@ var CORE_FILES = [
 	"trex/lib/domutil.js",
 	"trex/lib/utils.js",
 	"trex/lib/imageresizer.js",
-	"trex/lib/flash.js",
 	"trex/lib/tableutil.js",
 	/** trex mixins */
 	"trex/mixins/ajax.js",
@@ -54,7 +52,6 @@ var CORE_FILES = [
 	"trex/panels/panel.js",
 	"trex/panels/wysiwyg/iframeloader.js",
 	"trex/panels/wysiwyg/webfontloader.js",
-	"trex/panels/wysiwyg/scriptloader.js",
 	"trex/panels/wysiwyg/wysiwygrelative.js",
 	"trex/panels/wysiwyg/eventbinder.js",
 	"trex/panels/wysiwygpanel.js",
