@@ -122,16 +122,6 @@
         equalIgnoreCases(panel.getContent(), $tom.EMPTY_PARAGRAPH_HTML);
     });
 
-    test("wysiwyg panel에 정해진 script 함수를 설치한다.", function() {
-        var win = panel.getWindow();
-        equal(typeof win.txImportScript, "function", "txImportScript");
-        equal(typeof win.hr, "function", "hyperscript");
-        equal(typeof win.UI, "object", "UI");
-        equal(typeof win.UI.toolTip, "function", "UI.toolTip");
-        equal(typeof win.ciaCallback, "function", "ciaCallback");
-        equal(typeof win.ShowOrgImage, "function", "ShowOrgImage");
-    });
-
     test("clean word joiner in pre filter", function() {
         equal(panel.doPreFilter("before \ufeff after"), "before  after", "word joiner should be removed");
     });
@@ -191,7 +181,7 @@
             var doc = iframe.contentWindow.document;
             doc.open();
             doc.write('<html><head><title>mock iframe</title></head><body>' +
-                      '<script type="text/javascript">parent.onBlankPageLoaded(this, document);</sc' + 'ript>' +
+                      '<script type="text/javascript">parent.onBlankPageLoaded(this, document);<\/script>' +
                       '</body></html>');
             doc.close();
         },

@@ -35,6 +35,7 @@
 				self.wysiwygDoc = doc;
 
 				self.initializeSubModules(doc);
+				installHyperscript(self.wysiwygWindow, self.wysiwygDoc);
 				self.makeEditable();
 				self.applyBodyStyles(self.canvasConfig.styles);
 				self.applyCustomCssText(self.canvasConfig.customCssText);
