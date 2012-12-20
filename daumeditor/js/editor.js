@@ -156,7 +156,6 @@ var CORE_FILES = [
 	"trex/modules/canvassize.js",
 	"trex/modules/blockingedit.js",
 	"trex/modules/saveimagehistory.js",
-	"trex/modules/tableedit.js",
 	// TODO. delete table buttons. but hanmailex?
 	// "trex/modules/tablebuttons.js",
 	"trex/modules/noticepanel.js",
