@@ -19,7 +19,6 @@ var CORE_FILES = [
 	"trex/mixins/ajax.js",
 	"trex/mixins/observable.js",
 	/** trex common */
-	"trex/common/blackbox.js",
 	"popuputil.js"
 ];
 
