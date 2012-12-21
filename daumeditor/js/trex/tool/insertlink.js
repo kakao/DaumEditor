@@ -16,7 +16,7 @@ TrexConfig.addTool(
 TrexMessage.addMsg({
 	'@insertlink.cancel.image': "#iconpath/btn_cancel.gif?v=2",
 	'@insertlink.confirm.image': "#iconpath/btn_confirm.gif?v=2",
-	'@insertlink.invalid.url': "'HTTP://'로 시작하는 URL을 입력해주십시오.",
+	'@insertlink.invalid.url': "URL을 입력해주세요.",
 	'@insertlink.link.alt': "[#{title}]로 이동합니다.",
 	'@insertlink.remove.image': "#iconpath/btn_remove.gif?v=2",
 	'@insertlink.title': "선택된 부분에 걸릴 URL주소를 넣어주세요.",
@@ -214,7 +214,7 @@ Trex.Menu.Link = Trex.Class.create({
 			if (value.length == 0) {
 				return _FALSE;
 			}
-			if ( !/http[s]?:\/\//.test(value) ) {
+			if ( !/(^\w+:\/\/)|(^mailto:.+)/.test(value) ) {
 				return "http://" + value;
 			} else {
 				return value;
