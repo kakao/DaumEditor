@@ -48,6 +48,17 @@
 						self.onceWysiwygFocused = true;
 					}
 				});
+                if ($tx.msie) {
+                    var htmlEl = self.wysiwygDoc.getElementsByTagName('html');
+                    if (htmlEl && htmlEl[0]) {
+                        $tx.observe(htmlEl[0], 'click', function (event) {
+                            var target = $tx.element(event);
+                            if (canvas.canHTML() && htmlEl[0] == target) {
+                                self.focus();
+                            }
+                        });
+                    }
+                }
 				canvas.fireJobs(Trex.Ev.__IFRAME_LOAD_COMPLETE, doc);
 			});
 
