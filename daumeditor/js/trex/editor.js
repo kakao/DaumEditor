@@ -84,6 +84,9 @@ Trex.Editor = Trex.Class.create( /** @lends Trex.Editor.prototype */{
 	getConfig: function() {
 		return this.config;
 	},
+    getInitialConfig: function () {
+        return this.initialConfig;
+    },
 	getParam: function(name) {
 		var _params = {}, _config = this.config;
 		_config.params.each(function(name) {
