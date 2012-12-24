@@ -35,7 +35,7 @@
 				self.wysiwygDoc = doc;
 
 				self.initializeSubModules(doc);
-				self.installScripts(self.wysiwygWindow, doc);
+				installHyperscript(self.wysiwygWindow, self.wysiwygDoc);
 				self.makeEditable();
 				self.applyBodyStyles(self.canvasConfig.styles);
 				self.applyCustomCssText(self.canvasConfig.customCssText);
@@ -420,38 +420,7 @@
 		getPositionByNode: function(node) {
 			var wysiwygRelative = new Trex.WysiwygRelative(this.iframe);
 			return wysiwygRelative.getRelative(node);
-		},
-
-
-		/**
-		 * WYSIWYG 문서에서 자바스크립트를 동적으로 실행한다
-		 * @function
-		 * @param {String} script - 자바스크립트 문자열
-		 */
-		runScript: function(script, callback) {
-			var scriptLoader = new Trex.ScriptLoader(this.wysiwygWindow);
-			scriptLoader.runBy(script, callback);
-		},
-
-
-		/**
-		 * WYSIWYG 문서에서 자바스크립트를 동적으로 실행한다
-		 * @function
-		 * @param {String} url - 자바스크립트 url
-		 */
-		importScript: function(url, callback) {
-			var scriptLoader = new Trex.ScriptLoader(this.wysiwygWindow);
-			scriptLoader.importBy(url, callback);
-		},
-
-
-		installScripts: function() {
-			var self = this, win = self.wysiwygWindow, doc = self.wysiwygDoc;
-			installHyperscript(win, doc);
-			installTxImport(win, self);
-			installLegacyDummies(win);
 		}
-
 	});
 
 	function excludeNotAllowed(style) {
@@ -461,22 +430,6 @@
 			delete excluded[notAllowed[i]];
 		}
 		return excluded;
-	}
-
-	function installTxImport(win, panel) {
-		win.txImportScript = function(url, callback) {
-			panel.importScript(url, callback);
-		};
-	}
-
-	function installLegacyDummies(win) {
-		var dummyFunction = function() {
-		};
-		win.UI = {
-			toolTip: dummyFunction
-		};
-		win.ciaCallback = dummyFunction;
-		win.ShowOrgImage = dummyFunction;
 	}
 
 	function removeWordJoiner(content) {

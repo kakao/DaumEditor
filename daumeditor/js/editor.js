@@ -10,8 +10,6 @@ var CORE_FILES = [
 	"lib/dgetty.js",
 	"lib/dfindy.js",
 	"lib/xgetty.js",
-	"lib/dateformat.js",
-	"lib/swfobject.js",
 	"lib/font_css_property.js",
 	//"lib/htmlparser.js",
 	/** trex engine & config */
@@ -26,7 +24,6 @@ var CORE_FILES = [
 	"trex/lib/domutil.js",
 	"trex/lib/utils.js",
 	"trex/lib/imageresizer.js",
-	"trex/lib/flash.js",
 	"trex/lib/tableutil.js",
 	/** trex mixins */
 	"trex/mixins/ajax.js",
@@ -36,8 +33,6 @@ var CORE_FILES = [
 	/** trex common */
 	"trex/common/button.js",
 	"trex/common/menu.js",
-	"trex/common/blackbox.js",
-	"trex/common/noticebox.js",
 
 	/** editor core */
 	"trex/editor.js",
@@ -55,7 +50,6 @@ var CORE_FILES = [
 	"trex/panels/panel.js",
 	"trex/panels/wysiwyg/iframeloader.js",
 	"trex/panels/wysiwyg/webfontloader.js",
-	"trex/panels/wysiwyg/scriptloader.js",
 	"trex/panels/wysiwyg/wysiwygrelative.js",
 	"trex/panels/wysiwyg/eventbinder.js",
 	"trex/panels/wysiwygpanel.js",
@@ -161,7 +155,6 @@ var CORE_FILES = [
 	"trex/modules/canvassize.js",
 	"trex/modules/blockingedit.js",
 	"trex/modules/saveimagehistory.js",
-	"trex/modules/tableedit.js",
 	// TODO. delete table buttons. but hanmailex?
 	// "trex/modules/tablebuttons.js",
 	"trex/modules/noticepanel.js",

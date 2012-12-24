@@ -20,11 +20,11 @@ test("fontfamily queryCurrentStyle", function() {
     	'<p style="font-family:맑은 고딕">맑은 고딕</p>';
     assi.setContent(html);
 
-    var expected = ["굴림", "Consolas", "맑은 고딕"];
+    var expected = ["굴림", "Consolas", "'?맑은 고딕'?"];
     for (var i = 0; i < 3; i++) {
     	var range = new goog.dom.Range.createFromNodes(assi.byTag('p', i), 0, assi.byTag('p', i), 0);
     	range.select();
-    	equal(assi.getTool('fontfamily').queryCurrentStyle(range), expected[i]);
+	    regexpEqual(assi.getTool('fontfamily').queryCurrentStyle(range), expected[i]);
     }
 });
 

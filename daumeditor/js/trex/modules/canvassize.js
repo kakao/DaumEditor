@@ -7,7 +7,6 @@ Trex.module("make padding area inside Canvas with editor width",
         }
         var _elWysiwyg = _wysiwygPanel.el;
 
-        var ADDED_PADDING_FOR_SKIN = 5;
         var SCROLL_WIDTH = 16;
         var REQUIRED_MINIMUM_PADDING = 28;
         var BORDER_OF_CANVAS = 2;
@@ -54,7 +53,7 @@ Trex.module("make padding area inside Canvas with editor width",
             });
     
             //모드를 변경하였을 경우 패딩영역 처리
-            canvas.observeJob(Trex.Ev.__CANVAS_MODE_CHANGE, function(from, to) {
+            canvas.observeJob(Trex.Ev.__CANVAS_MODE_CHANGE, function() {
             	adjustGuidAreaPosition();
             	updatePaddingSpace();
             });
@@ -63,11 +62,7 @@ Trex.module("make padding area inside Canvas with editor width",
             canvas.observeJob(Trex.Ev.__CANVAS_WRAP_WIDTH_CHANGE, onCanvasWidthChanged);
             canvas.observeJob('canvas.normalscreen.change', onCanvasWidthChanged);
             canvas.observeJob('canvas.fullscreen.change', onCanvasWidthChanged);
-    
-            // 사용하는 곳 확인 필요
-            canvas.getCanvasGuideSize = function(){
-                return calculdateGuideArea().leftWidth.parsePx();
-            };
+
 
             // 아래 코드의 필요성은 확인 필요
             if (!$tx.msie) {
@@ -84,6 +79,10 @@ Trex.module("make padding area inside Canvas with editor width",
                 }
             }
         }
+
+		canvas.getCanvasGuideSize = function(){
+			return calculdateGuideArea().leftWidth.parsePx();
+		};
         
         function adjustCanvasPadding(skinStyle) {
         	_wysiwygPanel.addStyle(calculdateCanvasPadding(skinStyle));
