@@ -46,7 +46,12 @@
 		        }
 		        this.iframeUrl = basePath + "trex/iframe_loader_catalyst.html";
 	        }
-            this.iframe.src = this.iframeUrl + "?" + document.domain;
+
+            var explicitDocumentDomain = (document.location.hostname != document.domain);
+            if (explicitDocumentDomain) {
+                this.iframeUrl = this.iframeUrl + ((this.iframeUrl.indexOf("?") > -1) ? "&" : "?") + "xssDomain=" + document.domain;
+            }
+            this.iframe.src = this.iframeUrl;
         },
 
         // 옛날 스타일
