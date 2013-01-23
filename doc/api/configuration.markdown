@@ -95,7 +95,7 @@ Disable editing canvas
     * `backgroundColor`
     * `lineHeight`
     * `padding`
-* Defaults: [See trex/canvas.js](https://github.com/daumeditor/DaumEditor/blob/development/daumeditor/js/trex/canvas.js#L17)
+* Defaults: [See trex/canvas.js](https://github.com/daumcorp/DaumEditor/blob/development/daumeditor/js/trex/canvas.js#L17)
 
 Set styles of canvas area
 

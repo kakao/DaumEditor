@@ -2,7 +2,7 @@
 
 ### 7.2.0
 
-commits since 7.1.11 : [https://github.com/daumeditor/DaumEditor/compare/7.1.11...7.2.0](https://github.com/daumeditor/DaumEditor/compare/7.1.11...7.2.0)
+commits since 7.1.11 : [https://github.com/daumcorp/DaumEditor/compare/7.1.11...7.2.0](https://github.com/daumcorp/DaumEditor/compare/7.1.11...7.2.0)
 
 - support file: protocol on development mode
 - fix changing forecolor to default color
@@ -17,12 +17,12 @@ commits since 7.1.11 : [https://github.com/daumeditor/DaumEditor/compare/7.1.11.
 - [#14][], [#15][] fixed. remove complicated legacy <br> logic. use browser default…
 - add configuration document
 
-[#4]: https://github.com/daumeditor/DaumEditor/issues/4
-[#7]: https://github.com/daumeditor/DaumEditor/issues/7
-[#8]: https://github.com/daumeditor/DaumEditor/issues/8
-[#12]: https://github.com/daumeditor/DaumEditor/issues/12
-[#14]: https://github.com/daumeditor/DaumEditor/issues/14
-[#15]: https://github.com/daumeditor/DaumEditor/issues/15
+[#4]: https://github.com/daumcorp/DaumEditor/issues/4
+[#7]: https://github.com/daumcorp/DaumEditor/issues/7
+[#8]: https://github.com/daumcorp/DaumEditor/issues/8
+[#12]: https://github.com/daumcorp/DaumEditor/issues/12
+[#14]: https://github.com/daumcorp/DaumEditor/issues/14
+[#15]: https://github.com/daumcorp/DaumEditor/issues/15
 
 
 ### 7.1.11
