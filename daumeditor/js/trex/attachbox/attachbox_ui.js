@@ -169,7 +169,9 @@ Trex.I.AttachBox = {
 		this.isDisplay = isDisplay;
 	},
 	registerEntryNode: function(entry) {
-		var _elData = tx.li(  );
+		var _elData = tx.li({
+			className: "type-" + entry.type
+		});
 		this.elList.appendChild(_elData);
 		entry.elData = _elData;
 		
