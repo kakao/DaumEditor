@@ -3,7 +3,7 @@ TrexMessage.addMsg({
 	'@attacher.del': "삭제",
 	'@attacher.preview.image': "#iconpath/pn_preview.gif",
 	'@attacher.delete.confirm': "삭제하시면 본문에서도 삭제됩니다. 계속하시겠습니까?",
-	'@attacher.delete.all.confirm': "선택한 첨부파일을 삭제하시겠습니까? 삭제하시면 본문에서도 삭제됩니다.",
+	'@attacher.delete.all.confirm': "모든 첨부 파일을 삭제하시겠습니까? 삭제하시면 본문에서도 삭제됩니다.",
 	'@attacher.exist.alert': "이미 본문에 삽입되어 있습니다."
 });
 
@@ -30,7 +30,8 @@ Trex.I.AttachBox = {
 		this.elList = $must("tx_attach_list" + _initializedId, "Trex.I.AttachBox");
 		var _elPreview = $must('tx_attach_preview' + _initializedId, "Trex.I.AttachBox");
 		this.elPreviewKind = $tom.collect(_elPreview, "p");
-		var _elPreviewImg = this.elPreviewImg = $tom.collect(_elPreview, "img");
+		var _elPreviewImg = $tom.collect(_elPreview, "img");
+		this.elPreviewImg = _elPreviewImg;
 		this.imageResizer = new Trex.ImageResizer(_elPreviewImg, {
 			maxWidth: 147,
 			maxHeight: 108,
@@ -41,7 +42,13 @@ Trex.I.AttachBox = {
 		});
 
 		this.elDelete = $tom.collect("#tx_attach_delete" + _initializedId + " a");
-		$tx.observe(this.elDelete, 'click', this.onDeleteAll.bind(this));
+		$tx.observe(this.elDelete, 'click', function () {
+			if (config.sidebar.attachbox.confirmForDeleteAll) {
+				_entryBox.onDeleteAll(false);
+			} else {
+				_entryBox.onDeleteAll(true);
+			}
+		});
 
 		if (typeof showAttachBox == "function") { //NOTE: 첨부박스가 보여질 때 실행할 서비스 콜백
 			this.observeJob(Trex.Ev.__ATTACHBOX_SHOW, function(){
@@ -54,7 +61,8 @@ Trex.I.AttachBox = {
 			});
 		}
 
-		var _elProgress = this.elProgress = $must('tx_upload_progress' + _initializedId, 'Trex.I.AttachBox');
+		var _elProgress = $must('tx_upload_progress' + _initializedId, 'Trex.I.AttachBox');
+		this.elProgress = _elProgress;
 		this.elProgressPercent = $tom.collect(_elProgress, "div");
 		this.elProgressTicker = $tom.collect(_elProgress, "p");
 		
@@ -190,7 +198,8 @@ Trex.I.AttachBox = {
 		var _elRow = tx.dl(  );
 		_elData.appendChild(_elRow);
 
-		var _elName = entry.elName = tx.dt({ className: "tx-name", unselectable: "on" },entry.boxAttr.name ); //파일명
+		var _elName = tx.dt({ className: "tx-name", unselectable: "on" },entry.boxAttr.name ); //파일명
+		entry.elName = _elName;
 		_elRow.appendChild(_elName);
 		$tx.observe(_elData, 'click',
 			function(e){
@@ -224,7 +233,8 @@ Trex.I.AttachBox = {
 			entry.execRemove();
 		}, _FALSE);
 
-		var _elInsert = entry.elInsert = tx.a({ className: "tx-insert" }, TXMSG("@attacher.ins")); //삽입
+		var _elInsert = tx.a({ className: "tx-insert" }, TXMSG("@attacher.ins")); //삽입
+		entry.elInsert = _elInsert;
 		_elButton.appendChild(_elInsert);
 		$tx.observe(_elInsert, 'click', function() {
 			if(entry.existStage && !entry.actor.config.multipleuse) {
