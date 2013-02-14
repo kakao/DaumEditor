@@ -89,13 +89,15 @@ Trex.register("filter > mode change",
 
         // FTDUEDTR-794 : html모드에서 줄바꿈되어 보이게
         function addNewlineToSource(html){
-            return $tx.msie ? html : html.replace(/(\n*<p>)/gi, "\n$1").replace(/^\n/, '');
+            var isOldIE = $tx.msie && ($tx.msie_ver < 9 || $tx.msie_docmode < 9);
+            return isOldIE ? html : html.replace(/(\n*<p>)/gi, "\n$1").replace(/^\n/, '');
         }
         function removeNewlineFromSource(source){
-            return $tx.msie ? source : source.replace(/\n+(<p>)/gi, "$1");
+            var isOldIE = $tx.msie && ($tx.msie_ver < 9 || $tx.msie_docmode < 9);
+            return isOldIE ? source : source.replace(/\n+(<p>)/gi, "$1");
         }
 
-		var _docparser = editor.getDocParser();	
+        var _docparser = editor.getDocParser();
 		_docparser.registerFilter(
 			'filter/converting', {
 				'text@load': function(contents){

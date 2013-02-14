@@ -93,6 +93,11 @@ var $tx = {};
 		 * @field
 		 */
 		msie_ver: isExistAgentString("msie")?parseFloat(navigator.appVersion.split("MSIE")[1]):0,
+        /**
+         * MS IE document mode 버전
+         * @field
+         */
+        msie_docmode: _DOC.documentMode || 0,
 		/**
 		 * AppleWebKit browser 이면 true 
 		 * @field
