@@ -446,7 +446,7 @@ Trex.AsyncTool = Trex.Class.draft(/** @lends Trex.Tool.prototype */{
 	onLoadModule: function() {
 		var self = this;
         var url = this.config.asyncUrl;
-		if (/:\/\//.test(url) === false) {
+		if (/^(?:\/\/)|(?:\w+:\/\/)/.test(url) === false) {
 			url = this.getJSBasePath() + url;
 		}
 		Editor.editorForAsyncLoad = this.editor;
