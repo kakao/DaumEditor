@@ -144,10 +144,14 @@ Trex.Attachment.File = Trex.Class.create({
 		var _nameMaxLength = 56;
 		var _filename = data.filename;
 		if(_filename.getRealLength() > _nameMaxLength) {
-			var _nameArr = _filename.split(".");
-			var _ext = _nameArr.pop();
-			var _name = _nameArr.join(".").cutRealLength(_nameMaxLength - 2);
-			_filename = _name + "." + _ext;
+			if (/\./.test(_filename)) {
+				var _nameArr = _filename.split(".");
+				var _ext = _nameArr.pop().cutRealLength(_nameMaxLength - 4);
+				var _name = _nameArr.join(".").cutRealLength(_nameMaxLength - 1 - _ext.length);
+				_filename = _name + "." + _ext;
+			} else {
+				_filename = _filename.cutRealLength(_nameMaxLength);
+			}
 		}
 		return {
 			name: _filename + " (" + data.filesize.toByteUnit() + ")",
