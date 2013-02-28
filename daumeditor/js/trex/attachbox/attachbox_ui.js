@@ -175,6 +175,9 @@ Trex.I.AttachBox = {
 		var _elData = tx.li({
 			className: "type-" + entry.type
 		});
+		if (entry.actor.boxonly) {
+			$tx.addClassName(_elData, "tx-boxonly");
+		}
 		this.elList.appendChild(_elData);
 		entry.elData = _elData;
 		

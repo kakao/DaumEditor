@@ -66,6 +66,8 @@
 	.tx-attach-box .tx-attach-list .tx-name strong { font-family:dotum; font-size:11px; color:#ed1c24; font-weight: normal; letter-spacing:-1px; }
 	.tx-attach-box .tx-attach-list li.tx-existed .tx-insert { display:none; }
 
+	.tx-attach-box .tx-attach-list li.tx-boxonly .tx-insert { display:none; }
+
 	.tx-attach-box .tx-attach-list dd.tx-button {float:right;}
 
 	.tx-attach-box .tx-attach-list li a.tx-insert {
