@@ -51,7 +51,7 @@ Trex.register("new embeders",
 			var _name = Trex.Embeder[i]['__Identity'];
 			if (_name) {
 				if(!toolbar.tools[_name]){
-					console.log(["No tool '",_name,"', but Embeder '", _name,"' is initialized."].join(""));
+//					console.log(["No tool '",_name,"', but Embeder '", _name,"' is initialized."].join(""));
 				}
 				_embeders[_name] = new Trex.Embeder[i](editor, _embedBox, config);
 			}
