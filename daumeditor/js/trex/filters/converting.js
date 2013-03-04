@@ -59,10 +59,10 @@ Trex.register("filter > mode change", function(editor, toolbar, sidebar, canvas,
 	
 	// FTDUEDTR-794 : new line formatting on the source mode.
 	function addNewlineToSource(html) {
-		return html.replace(/<\/(p)><(p)/gi, '</$1>\n<$2');
+		return html.replace(/<\/(p)><(p[\s>])/gi, '</$1>\n<$2');
 	}
 	function removeNewlineFromSource(source) {
-		return source.replace(/<\/(p)>\n+<(p)/gi, '</$1><$2');
+		return source.replace(/<\/(p)>\n+<(p[\s>])/gi, '</$1><$2');
 	}
 	
 	var _docparser = editor.getDocParser();
