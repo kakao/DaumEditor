@@ -117,7 +117,7 @@ Trex.Tool.Link = Trex.Class.create({
 							}
 						} else {
 							text = processor.getText();
-							if (/^(?:(?:http|https|ftp):\/\/)?[\w\d\-_\.]+[\w\d\-_]+(?::[0-9]+)?(?:\/.*)?$/i.test(text)) {
+							if (/^\w+\:\/\/\S+/.test(text)) { // only for url with protocol. 
 								return {
 									exist: _FALSE,
 									value: text
