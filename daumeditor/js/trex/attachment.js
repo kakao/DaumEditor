@@ -1,22 +1,21 @@
 /**
- * @fileoverview 
+ * @fileoverview
  * attachments.js
- * 
+ *
  */
-
 TrexMessage.addMsg({
 	'@attacher.only.wysiwyg.alert': "에디터 상태에서만 본문에 삽입할 수 있습니다.\n에디터모드에서 첨부박스의 썸네일을 클릭해서 삽입할 수 있습니다."
 });
 /**
  * Trex.Attachment
- * 첨부된 data를 wrapping하는 class 
- * 
+ * 첨부된 data를 wrapping하는 class
+ *
  * @abstract
  * @class
  * @extends Trex.Entry
- * 
+ *
  * @param {Object} actor
- * @param {Object} data 
+ * @param {Object} data
  */
 Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 	/** @ignore */
@@ -28,13 +27,13 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 	},
 	initialize: function(actor, data) {
 		this.actor = actor;
-        this.canvas = actor.canvas;
+		this.canvas = actor.canvas;
 		this.entryBox = actor.entryBox;
-
+		
 		this.type = this.constructor.__Identity;
 		this.setProperties(data);
 		
-		if(this.oninitialized){
+		if (this.oninitialized) {
 			this.oninitialized(actor, data);
 		}
 	},
@@ -42,7 +41,7 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 	 * focused 값을 설정한다.
 	 * @function
 	 */
-	setFocused: function (focused) {
+	setFocused: function(focused) {
 		if (this.focused !== focused) {
 			this.focused = focused;
 		}
@@ -51,7 +50,7 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 	 * existStage 값을 설정한다.
 	 * @function
 	 */
-	setExistStage: function(existStage) {	//just attachments~
+	setExistStage: function(existStage) { //just attachments~
 		/**
 		 * attachment가 content에 존재하는지 확인할 때 사용되는 속성
 		 */
@@ -66,13 +65,13 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 	 */
 	remove: function() {
 		var _content = this.canvas.getContent();
-		if(this.canvas.isWYSIWYG()) {
-			if(_content.search(this.regHtml) > -1) {
+		if (this.canvas.isWYSIWYG()) {
+			if (_content.search(this.regHtml) > -1) {
 				_content = _content.replace(this.regHtml, "");
 				this.canvas.setContent(_content);
 			}
 		} else {
-			if(_content.search(this.regText) > -1) {
+			if (_content.search(this.regText) > -1) {
 				_content = _content.replace(this.regText, "");
 				this.canvas.setContent(_content);
 			}
@@ -84,14 +83,14 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 	 */
 	register: function() {
 		if (Editor.getSidebar().addOnlyBox) {
-			return;	
+			return;
 		}
 		var _actor = this.actor;
 		if (_actor.boxonly) {
 			return;
 		}
 		
-		if(this.canvas.isWYSIWYG()) {
+		if (this.canvas.isWYSIWYG()) {
 			var _pastescope = this.pastescope;
 			var _dispHtml = this.dispHtml;
 			var objectElemTagName = "img";
@@ -100,25 +99,25 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 			if (matched && matched[1]) {
 				objectElemTagName = matched[1];
 			}
-			var objectElemeReg = new RegExp("<" + objectElemTagName + " ", "i");
-			if(this.objectStyle) {
+			if (this.objectStyle) {
+				var objectElemeReg = new RegExp("<" + objectElemTagName + " ", "i");
 				_dispHtml = _dispHtml.replace(objectElemeReg, "<" + objectElemTagName + " style=\"" + Trex.Util.toStyleString(this.objectStyle) + "\" ");
 			}
-			if(this.objectAttr) {
+			if (this.objectAttr) {
 				_dispHtml = _dispHtml.replace(objectElemeReg, "<" + objectElemTagName + " " + Trex.Util.toAttrString(this.objectAttr) + " ");
 			}
 			var _style = this.paragraphStyle || {};
 			if ($tx.webkit) {
-				this.canvas.getPanel('html').el.focus();    // FTDUEDTR-1281
+				this.canvas.getPanel('html').el.focus(); // FTDUEDTR-1281
 			}
 			this.canvas.execute(function(processor) {
 				processor.moveCaretWith(_pastescope);
 				processor.pasteContent(_dispHtml, _TRUE, {
-					'style': _style 
+					'style': _style
 				});
 			});
 		} else {
-			if(this.actor.wysiwygonly){
+			if (this.actor.wysiwygonly) {
 				alert(TXMSG("@attacher.only.wysiwyg.alert"));
 			} else {
 				this.canvas.getProcessor().insertTag('', this.dispText);
@@ -134,15 +133,15 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 		var _content = _canvas.getContent();
 		var _actor = this.actor;
 		if (!_actor.boxonly) {
-			if(_canvas.isWYSIWYG()) {
-				if(_content.search(oldReg.regHtml) > -1) {
+			if (_canvas.isWYSIWYG()) {
+				if (_content.search(oldReg.regHtml) > -1) {
 					_content = _content.replace(oldReg.regHtml, this.dispHtml);
 					_canvas.setContent(_content);
 				} else {
 					_canvas.pasteContent(this.dispHtml, _TRUE);
 				}
 			} else {
-				if(_content.search(oldReg.regText) > -1) {
+				if (_content.search(oldReg.regText) > -1) {
 					_content = _content.replace(oldReg.regText, "");
 					_canvas.setContent(_content);
 				}
@@ -157,7 +156,7 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 	setProperties: function(data) {
 		var _data = data;
 		this.data = _data;
-		this.key = this.actor.getKey(_data) || 'K'+Trex.Util.generateKey();
+		this.key = this.actor.getKey(_data) || 'K' + Trex.Util.generateKey();
 		this.field = this.getFieldAttr(_data);
 		this.boxAttr = this.getBoxAttr(_data);
 		
@@ -172,7 +171,7 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 		this.regHtml = this.getRegHtml.bind(this)(_data);
 		this.regText = this.getRegText.bind(this)(_data);
 	},
-	refreshProperties: function () {
+	refreshProperties: function() {
 		this.setProperties(this.data);
 	},
 	/**
@@ -182,14 +181,14 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 	getObjectAttr: function() {
 		return this.actor.config.objattr;
 	},
-	getObjectStyle: function () {
+	getObjectStyle: function() {
 		var objstyle = {};
-		if(this.actor.config.objstyle) {
+		if (this.actor.config.objstyle) {
 			objstyle = Object.extend(objstyle, this.actor.config.objstyle);
 		}
 		return objstyle;
 	},
-	getParaStyle: function (data) {
+	getParaStyle: function(data) {
 		var parastyle = Object.extend({}, this.actor.config.parastyle || this.actor.config.defaultstyle);
 		return parastyle;
 	}
