@@ -131,11 +131,12 @@ Trex.Resizer = Trex.Class.create({
 					return;
 				}
 				try {
-					var _scrollTop = _DOC.body.scrollTop || _DOC_EL.scrollTop || _WIN.pageYOffset;
-					var _height = Math.max((this.panelHeight + ev.clientY - this.dragStartPosY + this.panelTop - _scrollTop), this.minDragHeight.parsePx()).toPx();
-					_panel.setPanelHeight(_height);
-					_canvas.fireJobs('canvas.height.change', _height);
-				} catch(e) {
+                    var _scrollTop = _DOC.body.scrollTop || _DOC_EL.scrollTop || _WIN.pageYOffset;
+                    var canvasPos = _canvas.getCanvasPos(); // canvas 위치를 조정하지 않아서 높이 잘못 계산한 부분 수정
+                    var _height = Math.max((this.panelHeight + ev.clientY + canvasPos.y - this.dragStartPosY + this.panelTop - _scrollTop), this.minDragHeight.parsePx()).toPx();
+                    _panel.setPanelHeight(_height);
+                    _canvas.fireJobs('canvas.height.change', _height);
+                } catch (e) {
 					console.log(e);
 				}
 			}
