@@ -103,7 +103,7 @@ Trex.Tool.Table = Trex.Class.create({
 				if ( j == 0 ){
 					tableStringArr.push("border-left:",borderStyleText,";");
 				}
-				tableStringArr.push(";\">&nbsp;</td>\n");
+				tableStringArr.push(";\"><p>&nbsp;</p></td>\n");
 			}
 			tableStringArr.push("</tr>\n")
 		}
