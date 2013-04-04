@@ -3,6 +3,7 @@
     <property file="build.properties"/>
     <taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${build.lib.antcontrib}" />
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${build.lib.antcontrib}"/>
+	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${build.lib.gcuploader}" name="gcupload"/>
     <!-- main tasks ====================================================== -->
     <target name="buildall" description="clean and build all" depends="clean, packaging">
 	</target>
@@ -39,7 +40,6 @@
         <trycatch>
             <try>
                 <property file="${user.home}/daumeditor.credentials.properties"/>
-                <taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${build.lib.gcuploader}" name="gcupload"/>
                 <gcupload username="${gc.username}" password="${gc.password}" projectname="daumopeneditor" filename="${build.dist.dir}/daumeditor.zip" targetfilename="daumeditor-${editor.version}.zip" summary="${editor.version} release zip file" verbose="true"/>
             </try>
             <catch>
@@ -81,6 +81,7 @@
         <copy todir="${build.target.js.merged.dir}" overwrite="true">
             <fileset dir="${src.editor.js.dir}">
                 <include name="editor_loader.js"/>
+                <include name="editor_creator.js"/>
                 <include name="**/async/"/>
             </fileset>
         </copy>

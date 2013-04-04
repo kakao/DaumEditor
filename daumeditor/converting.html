@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Daum Editor - Demo</title>
+    <link rel="stylesheet" href="css/editor.css" type="text/css" charset="utf-8"/>
+</head>
+<body>
+<div class="body">
+    <form name="tx_editor_form" id="tx_editor_form" action="http://posttestserver.com/post.php" method="post"
+          accept-charset="utf-8">
+        <textarea name="content" id="content" style="width: 100%; height: 490px;"></textarea>
+    </form>
+</div>
+<div>
+    <button onclick="saveContent()">Submit Content</button>
+</div>
+<script src="js/editor_loader.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/editor_creator.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var config = {
+        initializedId: "",
+        wrapper: "tx_trex_container",
+        form: 'tx_editor_form',
+        txIconPath: "images/icon/editor/",
+        txDecoPath: "images/deco/contents/",
+        events: {
+            preventUnload: false
+        },
+        sidebar: {
+            attachbox: {
+                show: true
+            }
+        }
+    };
+
+    EditorCreator.convert(document.getElementById("content"), 'pages/template/simple.html', function () {
+        EditorJSLoader.ready(function (Editor) {
+            new Editor(config);
+            Editor.modify({
+                content: '<p>Hello</p>'
+            });
+        });
+    });
+
+</script>
+
+<script type="text/javascript">
+    function saveContent() {
+        Editor.save();
+    }
+
+    function validForm(editor) {
+        var validator = new Trex.Validator();
+        var content = editor.getContent();
+        if (!validator.exists(content)) {
+            alert('Content is empty');
+            return false;
+        }
+
+        return true;
+    }
+
+    function setForm(editor) {
+        var i, input;
+        var form = editor.getForm();
+        var content = editor.getContent();
+
+        var field = document.getElementById("content");
+        field.value = content;
+
+        var images = editor.getAttachments('image');
+        for (i = 0; i < images.length; i++) {
+            input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'attach_image';
+            input.value = images[i].data.imageurl;
+            form.createField(input);
+        }
+
+        var files = editor.getAttachments('file');
+        for (i = 0; i < files.length; i++) {
+            input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'attach_file';
+            input.value = files[i].data.attachurl;
+            form.createField(input);
+        }
+        return true;
+    }
+</script>
+</body>
+</html>
