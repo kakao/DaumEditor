@@ -27,6 +27,9 @@ Trex.module("Register an eventhandler in order to change align icons upon toolba
 			
 		var _changeButton = function(kind) {
 			var _exec = function(tool, kind, title){
+				if (!tool) {
+					return;
+				}
 				var _elList = _NULL;
 				var _elIcon = _NULL;	
 				if(!_elList) {
