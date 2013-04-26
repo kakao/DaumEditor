@@ -55,6 +55,7 @@ Trex.EntryProxy =Trex.Class.create( {
 			}
 			if(all || attachment.existStage) {
 				_attachments.push({
+					type: attachment.type,
 					attacher: attachment.actor.name,
 					existStage: attachment.existStage,
 					data: Object.extend(attachment.data, {
