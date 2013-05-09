@@ -40,10 +40,14 @@ Trex.EntryProxy =Trex.Class.create( {
 		
 		var _actors = this.sidebar.getAttacher();
 		attachments.each(function(attachment){
-			var _actor = _actors[attachment.attacher];
-			if(_actor) {
-				_actor.execReload(attachment.data, contents, attachment.type);
-			}
+            try {
+                var _actor = _actors[attachment.attacher];
+                if(_actor) {
+                    _actor.execReload(attachment.data, contents, attachment.type);
+                }
+            } catch(ignore) {
+                // 첨부데이터 일부를 정상적으로 불러오지 못했습니다.
+            }
 		});
 	},
 	getAttachments: function(attachments, all) {
