@@ -8,22 +8,41 @@
      * @class
      */
     Trex.WysiwygIframeLoader = Trex.Class.create({
-        initialize: function(iframe, iframeUrl) {
+        initialize: function(iframe, iframeUrl, doctype) {
             this.iframe = iframe;
 	        this.iframeUrl = iframeUrl;
+			this.doctype = '';
+			switch (doctype) {
+			case "edge":
+			case "loose":
+			case "strict":
+				this.doctype = doctype;
+//			case "quirks":
+			}
         },
 
         load: function(callback) {
             try {
-                this.loadLocalIframe(callback);
+                this.loadLocalIframe(callback, this.doctype);
             } catch (e) {
                 this.reloadUsingCatalyst(callback);
             }
         },
 
-        loadLocalIframe: function(callback) {
+        loadLocalIframe: function(callback, doctype) {
             var doc = this.iframe.contentWindow.document;
             doc.open();
+			switch (doctype) {
+			case "edge":
+				doc.write(DOCTYPE_edge);
+				break;
+			case "loose":
+				doc.write(DOCTYPE_loose);
+				break;
+			case "strict":
+				doc.write(DOCTYPE_strict);
+				break;
+			}
             doc.write(wysiwygHTML);
             doc.close();
             // 하위 호환을 위하여 delay 처리한다. 기존 iframe observer 들이 loading 이 비동기라 가정하고 작성되어있다.
@@ -33,10 +52,10 @@
         },
 
         reloadUsingCatalyst: function(callback) {
-            console.log("retry with xss iframe catalyst");
+            //console.log("retry with xss iframe catalyst");
             var self = this;
             _WIN.__tx_wysiwyg_iframe_load_complete = function() {
-                self.loadLocalIframe(callback);
+                self.loadLocalIframe(callback, ''); //이 시점에선 어차피 doctype 을 설정할 수 없음.
             };
 	        if (!this.iframeUrl) {
 		        try { // core dev mode, core production mode, dex dev mode
@@ -44,7 +63,16 @@
 		        } catch (e) { // dex production mode
 			        basePath = EditorJSLoader.getPageBasePath();
 		        }
-		        this.iframeUrl = basePath + "trex/iframe_loader_catalyst.html";
+				var doctype = this.doctype;
+				switch (doctype) {
+				case "edge":
+				case "loose":
+				case "strict":
+					this.iframeUrl = basePath + "trex/iframe_loader_catalyst_" + doctype + ".html";
+					break;
+				default:
+					this.iframeUrl = basePath + "trex/iframe_loader_catalyst.html";
+				}
 	        }
 
             var explicitDocumentDomain = (document.location.hostname != document.domain);
@@ -76,9 +104,12 @@
     }
 
     var cssBasePath = absolutizeURL(EditorJSLoader.getCSSBasePath());
-
+	
+	var DOCTYPE_edge = '<!DOCTYPE html>';
+	var DOCTYPE_loose = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
+	var DOCTYPE_strict = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">';
+	
     var wysiwygHTML =
-            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">' +
             '<html lang="ko"><head>' +
             '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">' +
             '<title>DaumEditor Wygiwyg Panel</title>' +

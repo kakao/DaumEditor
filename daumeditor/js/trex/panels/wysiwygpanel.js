@@ -30,7 +30,7 @@
 			this.onceWysiwygFocused = false;
 
 			var self = this;
-			var iframeLoader = new Trex.WysiwygIframeLoader(this.iframe, canvasConfig.wysiwygCatalystUrl);
+			var iframeLoader = new Trex.WysiwygIframeLoader(this.iframe, canvasConfig.wysiwygCatalystUrl, canvasConfig.doctype);
 			iframeLoader.load(function(doc) {
 				self.wysiwygDoc = doc;
 
