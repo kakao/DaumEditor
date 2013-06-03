@@ -44,19 +44,8 @@ TrexConfig.addEmbeder(
 			resizable:"yes"
 		},
 		popPageUrl: "#host#path/pages/trex/multimedia.html",
-		allowNetworkingFilter: _TRUE,
-		allowNetworkingSites: [
-			{host:"www.youtube.com"},
-			{host:"youtube.com"},
-			{host:"api.v.daum.net"},
-			{host:"tvpot.daum.net"},
-			{host:"flvs.daum.net"},
-			{host:"photo-contents.daum-img.net"},
-			{host:"serviceapi.nmv.naver.com"},
-			{host:"v.nate.com"},
-			{host:"flvr.pandora.tv"},
-			{host:"videofarm.daum.net"}
-		]
+		allowNetworkingFilter: _FALSE,
+		allowNetworkingSites: []
 	},
 	function(root) {
 		var _config = root.sidebar.embeder.media; 
@@ -140,8 +129,8 @@ TrexConfig.addEmbeder(
 		len = config.allowNetworkingSites.length;
 		for (i = 0; i < len; i += 1) {
 			if (host == config.allowNetworkingSites[i].host) {
-				return _TRUE;
-			}
+                return _TRUE;
+            }
 		}
 		return _FALSE;
 	}
@@ -153,27 +142,36 @@ TrexConfig.addEmbeder(
 		}
 		filteredContent = content.replace(/(<object[^>]*>)((?:\n|.)*?)(<\/object>)/gi, function(match, start, param, end) {
 			var _matchs, _matchsForUrl;
-			_matchs = /<param[^>]*=[^\w]*movie[^\w]+[^>]*>/i.exec(param);
-			if (_matchs && _matchs[0]) {
-				_matchsForUrl = /\s+value=["']?([^\s"']*)["']?/i.exec(_matchs[0]);
-				if (_matchsForUrl && _matchsForUrl[1]) {
-					if (isAllowNetworkingSite(_matchsForUrl[1], config)) {
-						return start + param + end;
-					}
+            var isBlockContent = _FALSE;
+            _matchs = /data[\s]*=[\s"']*(http:\/\/[^\/]+\/)[^("'\s)]+/i.exec(start);
+            if(_matchs && _matchs.length == 2) {
+                _matchsForUrl = _matchs[1];
+                if (isAllowNetworkingSite(_matchsForUrl, config) === _FALSE){
+                    isBlockContent = _TRUE;
+                }
+            }
+            _matchs = /<param[^>]*=[^\w]*movie[^\w]+[^>]*>/i.exec(param);
+            if (_matchs && _matchs[0]) {
+                _matchsForUrl = /\s+value=["']?([^\s"']*)["']?/i.exec(_matchs[0]);
+                if (_matchsForUrl && _matchsForUrl[1]) {
+                    if (isAllowNetworkingSite(_matchsForUrl[1], config) === _FALSE) {
+                        isBlockContent = _TRUE;
+                    }
+                }
+            }
+            _matchs = /<param[^>]*=[^\w]*src[^\w]+[^>]*>/i.exec(param);
+            if (_matchs && _matchs[0]) {
+                _matchsForUrl = /\s+value=["']?([^\s"']*)["']?/i.exec(_matchs[0]);
+                if (_matchsForUrl && _matchsForUrl[1]) {
+                    if (isAllowNetworkingSite(_matchsForUrl[1], config) === _FALSE) {
+                        isBlockContent = _TRUE;
+                    }
 				}
 			}
-			_matchs = /<param[^>]*=[^\w]*src[^\w]+[^>]*>/i.exec(param);
-			if (_matchs && _matchs[0]) {
-				_matchsForUrl = /\s+value=["']?([^\s"']*)["']?/i.exec(_matchs[0]);
-				if (_matchsForUrl && _matchsForUrl[1]) {
-					if (isAllowNetworkingSite(_matchsForUrl[1], config)) {
-						return start + param + end;
-					}
-				}
-			}
-			
-			param = param.replace(/<param[^>]*=[^\w]*allowNetworking[^\w]+[^>]*>/i, "");
-			param = '<param name="allowNetworking" value="internal" />'.concat(param);
+            if (isBlockContent === _TRUE) {
+                param = param.replace(/<param[^>]*=[^\w]*allowNetworking[^\w]+[^>]*>/i, "");
+                param = '<param name="allowNetworking" value="internal" />'.concat(param);
+            }
 			return start + param + end;
 		});
 		filteredContent = filteredContent.replace(/(<embed)([^>]*)(><\/embed>|\/>)/gi, function(match, start, attr, end) { //NOTE: #FTDUEDTR-1071 -> #FTDUEDTR-1105
