@@ -342,7 +342,7 @@
 				return _FALSE;
 			}
 			if(this.strip(content) == "") {
-				if(content.search(/<(img|iframe|embed|table|hr|script|TXDB)/i) < 0) {
+				if(content.search(/<(img|iframe|object|embed|table|hr|script|TXDB)/i) < 0) {
 					return _FALSE;
 				}
 			}
@@ -352,7 +352,7 @@
 			if(!content || !text) {
 				return _FALSE;
 			}
-			if(content.search(/<(img|iframe|embed|table|hr|script|TXDB)/i) < 0) {
+			if(content.search(/<(img|iframe|object|embed|table|hr|script|TXDB)/i) < 0) {
 				if(this.strip(content) == this.strip(text)) {
 					return _TRUE;
 				}
