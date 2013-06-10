@@ -99,13 +99,10 @@ Trex.module("delete table element @when backspace key event fires",
 /*-------------------------------------------------------*/
 
 Object.extend(Trex.I.Processor.Trident, {
+	isRangeInsideWysiwyg: false,
 	lastRange: _NULL,
-	shouldHandleOnActivate: _TRUE,
 	restoreRange: function() { //TODO: rename
-		if (!this.shouldHandleOnActivate) {
-			return;
-		}
-		if (this.lastRange) {
+		if (!this.isRangeInsideWysiwyg && this.lastRange) {
 			try {
 				this.lastRange.select();
 			} catch (e) {
@@ -131,25 +128,23 @@ Trex.module("bind iframe activate or deactivate event",
 				var _processor = canvas.getProcessor(Trex.Canvas.__WYSIWYG_MODE);
 				
 				$tx.observe(panelDoc, 'beforedeactivate', function(ev) {
-					var _activation_between_inner_iframe_nodes = ev.toElement;
-					if (_activation_between_inner_iframe_nodes) {
-						_processor.shouldHandleOnActivate = _FALSE;
-						_processor.lastRange = _NULL;
-					} else {
-						var _node = $tx.element(ev);
-						if (!_node || !$tom.isElement(_node)) {
-							return;
-						}
-						// activation to outside of iframe 
-						_processor.shouldHandleOnActivate = !$tom.kindOf(_node, 'iframe,object');
-						_processor.lastRange = _processor.getRange();
-					}
+					_processor.isRangeInsideWysiwyg = true;
+					_processor.lastRange = _processor.getRange();
 				});
-				
+
+				$tx.observe(panelDoc, 'deactivate', function (ev) {
+					if (_processor.hasControl()) {
+						return;
+					}
+					var range = _processor.getRange();
+					var parent = range && range.parentElement();
+					_processor.isRangeInsideWysiwyg = ($tom.body(parent) == panelDoc.body);
+				});
+
 				$tx.observe(panelDoc, 'activate', function() {
+					_processor.isRangeInsideWysiwyg = true;
 					_processor.lastRange = _NULL; 
 				});
-				
 			});
 		}
 	}
