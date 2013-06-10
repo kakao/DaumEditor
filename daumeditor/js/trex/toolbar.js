@@ -355,9 +355,6 @@ Trex.Tool = Trex.Class.draft(/** @lends Trex.Tool.prototype */{
 		if(!menu){
 			button.setCommand(
 				cmd = function(){
-					if ($tx.msie) {	// #FTDUEDTR-1328
-						_canvas.getProcessor().blur();
-					}
 					_toolbar.fireJobs(Trex.Ev.__TOOL_CLICK, _identity);
                     return execHandler.apply(_tool, arguments);
 				}
@@ -384,9 +381,6 @@ Trex.Tool = Trex.Class.draft(/** @lends Trex.Tool.prototype */{
 			);
 			button.setCommand(
 				function(ev) {
-					if ($tx.msie) {	// #FTDUEDTR-1328
-						_canvas.getProcessor().blur();
-					}
 					_toolbar.fireJobs(Trex.Ev.__TOOL_CLICK, _identity, ev);
 					if(!button.isPushed()) {
 						var _lastvalue = button.getValue();
