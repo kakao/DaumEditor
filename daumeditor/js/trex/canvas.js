@@ -194,7 +194,7 @@
             var _config = this.config;
             this.panels = {};
             this.mode = _config.selectedMode || Trex.Canvas.__WYSIWYG_MODE;
-            if (($tx.ios && $tx.ios_ver < 5) || $tx.android) {
+            if (($tx.ios && $tx.ios_ver < 5) || ($tx.android && $tx.android_ver < 3)) {
                 this.mode = Trex.Canvas.__TEXT_MODE;
             }
             var _panelCreater = {
