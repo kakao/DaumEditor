@@ -311,14 +311,14 @@ TrexConfig.addEmbeder(
 		var _url = _attrs['src'];
 		var _size = getDefaultSizeByUrl(_url);
 		if(isNaN(_width)) {
-			_source = Trex.String.changeAttribute(_source, "width", " width=\"" + _size.width + "\"");
+			_source = Trex.String.changeAttribute(_source, "width", _width, _size.width);
 		} else {
-			_source = Trex.String.changeAttribute(_source, "width", " width=\"" + _width + "\"");
+			_source = Trex.String.changeAttribute(_source, "width", _width, _width);
 		}
 		if(isNaN(_height)) {
-			_source = Trex.String.changeAttribute(_source, "height", " height=\"" + _size.height + "\"");
+			_source = Trex.String.changeAttribute(_source, "height", _height, _size.height);
 		} else {
-			_source = Trex.String.changeAttribute(_source, "height", " height=\"" + _height + "\"");
+			_source = Trex.String.changeAttribute(_source, "height", _height, _height);
 		}
 		return _source;
 	}

@@ -306,26 +306,26 @@
 				return "";
 			}
 		},
-		changeAttribute: function(elStr, attrName, toAttr){
-			var regAttribute1 = new RegExp("(^|\\W)" + attrName + '="([^"]*)"', "gi");
-			var regAttribute2 = new RegExp("(^|\\W)" + attrName + "='([^']*)'", "gi");
-			var regAttribute3 = new RegExp("(^|\\W)" + attrName + "=([^\\s>]*)", "gi");
+		changeAttribute: function(elStr, attrName, currentValue, value ){
+			var regAttribute1 = new RegExp("(^|\\W)(" + attrName + '=")' + currentValue + '(")', "gi");
+			var regAttribute2 = new RegExp("(^|\\W)(" + attrName + "=')" + currentValue + "(')", "gi");
+			var regAttribute3 = new RegExp("(^|\\W)(" + attrName + "=)"+currentValue, "gi");
 			var regAttribute4 = new RegExp("<([\\w]+\\s*)", "gi");
 			var _exists = _FALSE;
 			if (elStr.search(regAttribute1) > -1) {
 				_exists = _TRUE;
-				elStr = elStr.replace(regAttribute1, toAttr);
+				elStr = elStr.replace(regAttribute1, "$1$2"+value+"$3");
 			}
 			if (elStr.search(regAttribute2) > -1) {
 				_exists = _TRUE;
-				elStr = elStr.replace(regAttribute2, toAttr);
+				elStr = elStr.replace(regAttribute2, "$1$2"+value+"$3");
 			}
 			if (elStr.search(regAttribute3) > -1) {
 				_exists = _TRUE;
-				elStr = elStr.replace(regAttribute3, toAttr);
+				elStr = elStr.replace(regAttribute3, "$1$2"+value);
 			}
 			if(!_exists) {
-				elStr = elStr.replace(regAttribute4, "<$1" + toAttr + " ");
+				elStr = elStr.replace(regAttribute4, "<$1" + attrName + '=' + value + ' ');
 			}
 			return elStr;
 		}
