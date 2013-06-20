@@ -74,7 +74,12 @@
 		if(!_rubber) {
 			_rubber = new Rubber(width);
 		}
-		_rubber.resize(wrapper);
+		if ($tx.webkit && opener && opener.innerHeight == window.innerHeight) {
+			setTimeout(function () {
+				_rubber.resize(wrapper);
+			}, 100);
+		} else {
+			_rubber.resize(wrapper);
+		}
 	};
-
 })();
