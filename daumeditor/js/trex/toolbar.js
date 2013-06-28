@@ -388,13 +388,13 @@ Trex.Tool = Trex.Class.draft(/** @lends Trex.Tool.prototype */{
 						menu.show(_lastvalue);
 					} else {
 						menu.hide();
-					}
-					if($tx.msie) {
-						var _processor = _canvas.getProcessor();
-						if(_processor.restoreRange){
-							setTimeout(function(){
-								_processor.restoreRange();
-							},0);
+						if ($tx.msie) {
+							var _processor = _canvas.getProcessor();
+							if (_processor.restoreRange) {
+								setTimeout(function () {
+									_processor.restoreRange();
+								}, 0);
+							}
 						}
 					}
 					return _TRUE;
