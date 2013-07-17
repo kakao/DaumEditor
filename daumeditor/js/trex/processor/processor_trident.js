@@ -136,9 +136,7 @@ Trex.module("bind iframe activate or deactivate event",
 					if (_processor.hasControl()) {
 						return;
 					}
-					var range = _processor.getRange();
-					var parent = range && range.parentElement();
-					_processor.isRangeInsideWysiwyg = ($tom.body(parent) == panelDoc.body);
+					_processor.isRangeInsideWysiwyg = false;
 				});
 
 				$tx.observe(panelDoc, 'activate', function() {
