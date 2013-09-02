@@ -206,20 +206,7 @@ Trex.Menu.Link = Trex.Class.create({
 				_newInput.checked = "";
 		});
 			
-		var _checkValidation = function(value) {
-			if (!value) {
-				return _FALSE;
-			}
-			value = value.trim();
-			if (value.length == 0) {
-				return _FALSE;
-			}
-			if ( !/(^\w+:\/\/)|(^mailto:.+)/.test(value) ) {
-				return "http://" + value;
-			} else {
-				return value;
-			}
-		};	
+		var _checkValidation = this.urlValidator;
 		var _elInput = this.elInput = $tom.collect(_elMenu, 'input.tx-text-input');
 		$tx.observe(_elInput, "keydown", function(ev) {
 			if(ev.keyCode == 13) { //Enter
@@ -295,6 +282,21 @@ Trex.Menu.Link = Trex.Class.create({
 				catch (ignore) {}
 			}, 100);
 		}
-	}
+	},
+    urlValidator: function(value) {
+        if (!value) {
+            return _FALSE;
+        }
+        value = value.trim();
+        if (value.length == 0) {
+            return _FALSE;
+        }
+        var pattern = /^[a-z0-9+.-]+:|^\/\//i;// FTDUEDTR-1330 && MAILCS-24754
+        if ( pattern.test(value) ) {
+            return value;
+        } else {
+            return "http://" + value;
+        }
+    }
 });
 
