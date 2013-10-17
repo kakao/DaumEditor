@@ -62,6 +62,9 @@ var $tx = {};
 	var isExistAgentString = function(str){
 		return txua.indexOf(str)!=-1;
 	};
+    var isExistAgentStringByRegx = function(regx){
+        return regx.test(txua);
+    };
 	Object.extend($tx, /** @lends $tx */{
 		/**
 		 * Chrome browser 이면 true
@@ -87,12 +90,21 @@ var $tx = {};
 		 * MS IE 이면 true 
 		 * @field
 		 */
-		msie: isExistAgentString("msie"),
+        msie: (txua.indexOf("msie") != -1),
+        msie11above: (isExistAgentString("trident") && isExistAgentStringByRegx(/rv:\d+\.\d+/)),
 		/**
-		 * MS IE browser 버전 
+		 * MS IE browser 버전 a.match(/rv:(\d+)\.\d+/)
 		 * @field
 		 */
-		msie_ver: isExistAgentString("msie")?parseFloat(navigator.appVersion.split("MSIE")[1]):0,
+		msie_ver: !function() {
+            if (!this.msie) {
+                return 0;
+            }
+
+            return isExistAgentString("msie") ?
+                parseFloat(navigator.appVersion.split("MSIE")[1])
+                : parseFloat(navigator.appVersion.split("rv:")[1]);
+        },
         /**
          * MS IE document mode 버전
          * @field
@@ -118,7 +130,10 @@ var $tx = {};
 		  * @field  
 		  */
 		presto: isExistAgentString("presto"),
-		os_win: isExistAgentString("win"), 
+		os_win: isExistAgentString("win"),
+        os_win7: isExistAgentString('windows nt 6.1'),
+        os_win8: isExistAgentString('windows nt 6.2'),
+        os_win8_1: isExistAgentString('windows nt 6.3'),
 		os_mac: isExistAgentString("mac"),
 		/**
 		 * iPhone 이면 true 
