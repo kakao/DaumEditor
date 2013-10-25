@@ -96,15 +96,9 @@ var $tx = {};
 		 * MS IE browser 버전 a.match(/rv:(\d+)\.\d+/)
 		 * @field
 		 */
-		msie_ver: !function() {
-            if (!this.msie) {
-                return 0;
-            }
-
-            return isExistAgentString("msie") ?
-                parseFloat(navigator.appVersion.split("MSIE")[1])
-                : parseFloat(navigator.appVersion.split("rv:")[1]);
-        },
+		msie_ver: isExistAgentString("msie") ?
+            parseFloat(txua.split("msie")[1])
+            : isExistAgentString("trident") ? parseFloat(navigator.appVersion.split("rv:")[1]) : 0,
         /**
          * MS IE document mode 버전
          * @field
