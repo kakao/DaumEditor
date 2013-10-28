@@ -288,10 +288,13 @@ Trex.Actor = Trex.Class.draft({
 			_entry.execReplace(_oldReg);
 		}
 	},
-	execReload: function(data, content, type) {
-		var _entry = this.createEntry(this.getDataForEntry(data, content), type);
-		_entry.execReload();
-	},
+    execReload: function(data, content, type) {
+        var _dataForEntry = this.getDataForEntry(data, content);
+        if (_dataForEntry) { // FTDUEDTR-1361
+            var _entry = this.createEntry(_dataForEntry, type);
+            _entry.execReload();
+        }
+    },
 	existEntry: function() {
 		return ((this.getDatalist().length == 0)? _FALSE: _TRUE);
 	},
