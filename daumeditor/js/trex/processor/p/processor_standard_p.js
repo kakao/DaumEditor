@@ -18,7 +18,7 @@ Trex.I.Processor.StandardP = {
 
 Trex.module("put bogus paragraph @when any key event fires",
 	function(editor, toolbar, sidebar, canvas) { //NOTE: #FTDUEDTR-695
-		if($tx.msie) {
+		if($tx.msie_nonstd) {
 			return;
 		}
 		if (canvas.config.newlinepolicy == "p") {

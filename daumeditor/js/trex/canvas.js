@@ -513,7 +513,7 @@
 	        var _processor = this.getProcessor();
 	        if (this.isWYSIWYG()) {
 		        this.getPanel('html').ensureFocused();
-		        if ($tx.msie) {
+		        if (_processor.restoreRange) {
 			        setTimeout(function () { //NOTE: #FTDUEDTR-435
 				        _processor.restoreRange();
 				        handler(_processor);
@@ -674,6 +674,7 @@
                 self.fireJobs(Trex.Ev.__CANVAS_PANEL_MOUSEUP, event);
                 setTimeout(function() {
                     var googRange = self.getProcessor().createGoogRange();
+                    console.log(googRange);
                     if (googRange) {
                         self.fireJobs(Trex.Ev.__CANVAS_PANEL_QUERY_STATUS, googRange);
                     }

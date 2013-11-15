@@ -346,7 +346,8 @@ Trex.Canvas.Processor = Trex.Class.draft({
 	/** @ignore */
 	$mixins: [
 		Trex.I.Processor.Standard,
-		(($tx.msie)? Trex.I.Processor.Trident: {}),
+		(($tx.msie_nonstd)? Trex.I.Processor.Trident: {}),
+        (($tx.msie_std)? Trex.I.Processor.TridentStandard: {}),
 		(($tx.gecko)? Trex.I.Processor.Gecko: {}),
 		(($tx.webkit)? Trex.I.Processor.Webkit: {}),
 		(($tx.presto)? Trex.I.Processor.Presto: {})
@@ -366,7 +367,8 @@ Trex.Canvas.ProcessorP = Trex.Class.create({
 	/** @ignore */
 	$mixins: [
 		Trex.I.Processor.StandardP,
-		(($tx.msie)? Trex.I.Processor.TridentP: {}),
+		(($tx.msie_nonstd)? Trex.I.Processor.TridentP: {}),
+        (($tx.msie_std)? Trex.I.Processor.TridentStandardP: {}),
 		(($tx.gecko)? Trex.I.Processor.GeckoP: {}),
 		(($tx.webkit)? Trex.I.Processor.WebkitP: {}),
 		(($tx.presto)? Trex.I.Processor.PrestoP: {})

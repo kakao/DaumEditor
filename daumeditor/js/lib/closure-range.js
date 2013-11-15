@@ -1114,17 +1114,19 @@ goog.userAgent.init_ = function() {
   var ua;
   if (!goog.userAgent.BROWSER_KNOWN_ &&
       (ua = goog.userAgent.getUserAgentString())) {
-    var navigator = goog.userAgent.getNavigator();
-    goog.userAgent.detectedOpera_ = ua.indexOf('Opera') == 0;
-    goog.userAgent.detectedIe_ = !goog.userAgent.detectedOpera_ &&
-        ua.indexOf('MSIE') != -1;
-    goog.userAgent.detectedWebkit_ = !goog.userAgent.detectedOpera_ &&
-        ua.indexOf('WebKit') != -1;
-    // WebKit also gives navigator.product string equal to 'Gecko'.
-    goog.userAgent.detectedMobile_ = goog.userAgent.detectedWebkit_ &&
-        ua.indexOf('Mobile') != -1;
-    goog.userAgent.detectedGecko_ = !goog.userAgent.detectedOpera_ &&
-        !goog.userAgent.detectedWebkit_ && navigator.product == 'Gecko';
+      var navigator = goog.userAgent.getNavigator();
+      goog.userAgent.detectedOpera_ = goog.string.startsWith(ua, 'Opera');
+      goog.userAgent.detectedIe_ = !goog.userAgent.detectedOpera_ &&
+          (goog.string.contains(ua, 'MSIE') ||
+              goog.string.contains(ua, 'Trident'));
+      goog.userAgent.detectedWebkit_ = !goog.userAgent.detectedOpera_ &&
+          goog.string.contains(ua, 'WebKit');
+      // WebKit also gives navigator.product string equal to 'Gecko'.
+      goog.userAgent.detectedMobile_ = goog.userAgent.detectedWebkit_ &&
+          goog.string.contains(ua, 'Mobile');
+      goog.userAgent.detectedGecko_ = !goog.userAgent.detectedOpera_ &&
+          !goog.userAgent.detectedWebkit_ && !goog.userAgent.detectedIe_ &&
+          navigator.product == 'Gecko';
   }
 };
 
@@ -1421,7 +1423,7 @@ goog.userAgent.isVersion = function(version) {
 
 
 /**
- * Cache for {@link goog.userAgent.isDocumentMode}. 
+ * Cache for {@link goog.userAgent.isDocumentMode}.
  * Browsers document mode version number is unlikely to change during a session
  * we cache the results.
  * @type {Object}

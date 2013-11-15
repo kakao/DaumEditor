@@ -271,7 +271,7 @@ Trex.Menu.Link = Trex.Class.create({
 		_elInput.focus();
 		
 		// Set focus to end of input box. ( For IE );
-		if ($tx.msie) {
+		if ($tx.msie_nonstd) {
 			setTimeout(function() {
 				try {
 					_elInput.focus();

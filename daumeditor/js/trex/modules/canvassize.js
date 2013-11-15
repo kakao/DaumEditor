@@ -65,7 +65,7 @@ Trex.module("make padding area inside Canvas with editor width",
 
 
             // 아래 코드의 필요성은 확인 필요
-            if (!$tx.msie) {
+            if (!$tx.msie_nonstd) {
                 if ($tx.gecko) {
                     $tx.setStyle(_elWysiwyg, {
                         overflowX: 'auto',

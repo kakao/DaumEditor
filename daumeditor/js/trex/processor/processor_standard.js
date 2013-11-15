@@ -5,6 +5,8 @@
 Trex.I.Processor = {};
 Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	txSelection: _NULL,
+    isRangeInsideWysiwyg: _FALSE,
+    lastRange: _NULL,
 	initialize: function(win, doc) {
 		this.win = win;
 		this.doc = doc;
@@ -720,4 +722,31 @@ Trex.module("observe that @when control elements are focused at",
 			});
 		}
 	}
+);
+
+Trex.module("bind iframe activate or deactivate event",
+    function(editor, toolbar, sidebar, canvas) {
+//        if ($tx.msie_nonstd) {
+            canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function(panelDoc) {
+                var _processor = canvas.getProcessor(Trex.Canvas.__WYSIWYG_MODE);
+
+                $tx.observe(panelDoc, 'beforedeactivate', function(ev) {
+                    _processor.isRangeInsideWysiwyg = true;
+                    _processor.lastRange = _processor.getRange();
+                });
+
+                $tx.observe(panelDoc, 'deactivate', function (ev) {
+                    if (_processor.hasControl()) {
+                        return;
+                    }
+                    _processor.isRangeInsideWysiwyg = false;
+                });
+
+                $tx.observe(panelDoc, 'activate', function() {
+                    _processor.isRangeInsideWysiwyg = true;
+                    _processor.lastRange = _NULL;
+                });
+            });
+//        }
+    }
 );

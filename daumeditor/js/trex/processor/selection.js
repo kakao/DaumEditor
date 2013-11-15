@@ -546,6 +546,51 @@ Trex.I.Selection.Trident = /** @lends Trex.Canvas.Selection.prototype */{
 	}
 };
 
+Trex.I.Selection.TridentStandard = {
+    /**
+     * 선택된 영역의 컨트롤 노드(img,object,hr,table,button)를 리턴한다.
+     * @returns {Element} - 선택된 영역의 노드
+     * @example
+     * 	txSelection.getControl();
+     */
+    getControl: function() {
+        var _sel = this.getSel();
+        if(_sel.isCollapsed) {
+            return null;
+        }
+        if ($tom.isElement(_sel.anchorNode)) {
+            var _node = _sel.anchorNode.childNodes[_sel.anchorOffset];
+            if ($tom.kindOf(_node, '%control')) {
+                return _node;
+            } else {
+                return null;
+            }
+        }
+        //button
+        var _prevNode = $tom.previous(_sel.focusNode);
+        var _nextNode = $tom.next(_sel.anchorNode);
+        if(_prevNode == _nextNode) {
+            return $tom.first(_prevNode, '%control');
+        } else {
+            return null;
+        }
+    },
+    /**
+     * 컨트롤 노드를 선택한다.
+     * @param {Element} node - 컨트롤 노트
+     * @example
+     * 	txSelection.selectControl(node);
+     */
+    selectControl: function(node) {
+        var _rng = this.createRange();
+        _rng.selectNode(node);
+        var _sel = this.getSel();
+        _sel.removeAllRanges();
+        _sel.addRange(_rng);
+    }
+};
+
+
 Trex.I.Selection.Gecko = {
 	
 };
@@ -612,7 +657,8 @@ Trex.Canvas.Selection = Trex.Class.create(/** @lends Trex.Canvas.Selection.proto
 	/** @ignore */
 	$mixins: [
 		Trex.I.Selection.Standard,
-		(($tx.msie)? Trex.I.Selection.Trident: {}),
+		(($tx.msie_nonstd)? Trex.I.Selection.Trident: {}),
+        (($tx.msie_std)? Trex.I.Selection.TridentStandard: {}),
 		(($tx.gecko)? Trex.I.Selection.Gecko: {}),
 		(($tx.webkit)? Trex.I.Selection.Webkit: {}),
 		(($tx.presto)? Trex.I.Selection.Presto: {})

@@ -120,7 +120,7 @@ Trex.I.Marker.Trident = /** @lends Trex.Canvas.Marker.prototype */{
 Trex.Canvas.Marker = Trex.Class.create(/** @lends Trex.Canvas.Marker.prototype */{
 	/** @ignore */
 	$mixins: [
-		(($tx.msie)? Trex.I.Marker.Trident: Trex.I.Marker.Standard)
+		(($tx.msie_nonstd)? Trex.I.Marker.Trident: Trex.I.Marker.Standard)
 	],
 	initialize: function(processor) {
 		this.processor = processor;

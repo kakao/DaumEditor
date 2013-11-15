@@ -90,15 +90,14 @@ var $tx = {};
 		 * MS IE 이면 true 
 		 * @field
 		 */
-        msie: (txua.indexOf("msie") != -1),
-        msie11above: (isExistAgentString("trident") && isExistAgentStringByRegx(/rv:\d+\.\d+/)),
+        msie: isExistAgentString("trident"),
 		/**
 		 * MS IE browser 버전 a.match(/rv:(\d+)\.\d+/)
 		 * @field
 		 */
-		msie_ver: isExistAgentString("msie") ?
-            parseFloat(txua.split("msie")[1])
-            : isExistAgentString("trident") ? parseFloat(navigator.appVersion.split("rv:")[1]) : 0,
+        msie_ver: isExistAgentString("trident")?(function(){
+            return isExistAgentString("msie") ? parseFloat(txua.split("msie")[1]) : parseFloat(txua.split("rv:")[1]);
+        })():0,
         /**
          * MS IE document mode 버전
          * @field
@@ -173,8 +172,14 @@ var $tx = {};
 		 */
 		wince: isExistAgentString("windows ce")
 	});
-    $tx.msie6 = $tx.msie && 6 <= $tx.msie_ver && $tx.msie_ver < 7;
-	
+
+    Object.extend($tx, /** @lends $tx */{
+        //msie11above: (isExistAgentString("trident") && isExistAgentStringByRegx(/rv:\d+\.\d+/)),//@Deprecated $tx.msie11above
+        msie_std: ($tx.msie && !_DOC.selection),
+        msie_nonstd: ($tx.msie && !!_DOC.selection),
+        msie6: ($tx.msie && 6 <= $tx.msie_ver && $tx.msie_ver < 7)
+    });
+
 	Object.extend($tx, /** @lends $tx */{
 		extend: Object.extend,
 		/**
@@ -389,7 +394,7 @@ $tx.extend($tx, /** @lends $tx */{
 });
 (function() {
 
-	if ($tx.msie) {
+	if ($tx.msie_nonstd) {
         $tx.getStyle = function (element, style) {
             element = $tx(element);
             style = (style == 'float' || style == 'cssFloat') ? 'styleFloat' : style.camelize();
@@ -412,7 +417,7 @@ $tx.extend($tx, /** @lends $tx */{
         };
     }
 
-    if ($tx.msie) {
+    if ($tx.msie_nonstd) {
         $tx.setOpacity = function (element, value) {
             element = $tx(element);
             var filter = $tx.getStyle(element, 'filter'), style = element.style;

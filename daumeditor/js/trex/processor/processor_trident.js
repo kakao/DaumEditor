@@ -48,7 +48,7 @@ Trex.I.Processor.Trident = {
 
 Trex.module("delete image element @when backspace key event fires",
 	function(editor, toolbar, sidebar, canvas) {
-		if ($tx.msie) {
+		if ($tx.msie_nonstd) {
 			canvas.observeKey({ 
 				ctrlKey: _FALSE,
 				altKey: _FALSE,
@@ -71,7 +71,7 @@ Trex.module("delete image element @when backspace key event fires",
 
 Trex.module("delete table element @when backspace key event fires",
 	function(editor, toolbar, sidebar, canvas) {
-		if ($tx.msie) {
+		if ($tx.msie_nonstd) {
 			var _oldRangeLeftOffset;
 			canvas.observeKey({ 
 				ctrlKey: _FALSE,
@@ -99,8 +99,6 @@ Trex.module("delete table element @when backspace key event fires",
 /*-------------------------------------------------------*/
 
 Object.extend(Trex.I.Processor.Trident, {
-	isRangeInsideWysiwyg: false,
-	lastRange: _NULL,
 	restoreRange: function() { //TODO: rename
 		if (!this.isRangeInsideWysiwyg && this.lastRange) {
 			try {
@@ -120,30 +118,3 @@ Object.extend(Trex.I.Processor.Trident, {
 		}
 	}
 });
-
-Trex.module("bind iframe activate or deactivate event",
-	function(editor, toolbar, sidebar, canvas) {
-		if ($tx.msie) {
-			canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function(panelDoc) {
-				var _processor = canvas.getProcessor(Trex.Canvas.__WYSIWYG_MODE);
-				
-				$tx.observe(panelDoc, 'beforedeactivate', function(ev) {
-					_processor.isRangeInsideWysiwyg = true;
-					_processor.lastRange = _processor.getRange();
-				});
-
-				$tx.observe(panelDoc, 'deactivate', function (ev) {
-					if (_processor.hasControl()) {
-						return;
-					}
-					_processor.isRangeInsideWysiwyg = false;
-				});
-
-				$tx.observe(panelDoc, 'activate', function() {
-					_processor.isRangeInsideWysiwyg = true;
-					_processor.lastRange = _NULL; 
-				});
-			});
-		}
-	}
-);

@@ -1006,7 +1006,7 @@ Object.extend($tom, /** @lends $tom */{
 			return _NULL;
 		}
         var _nNode = $tom.first(node);
-        if ($tx.msie) {
+        if ($tx.msie_nonstd) {
             node.removeNode();  // IE에서는 이게 더 빠름
         } else {
             $tom.moveChildToParent(node);
@@ -1672,7 +1672,7 @@ Object.extend($tom, /** @lends $tom */{
 	 * 편집영역에서 기본 빈 문단에 해당하는 HTML
 	 * @constant
 	 */
-    EMPTY_PARAGRAPH_HTML: ($tx.msie ? "<p>&nbsp;</p>" : "<p><br></p>")
+    EMPTY_PARAGRAPH_HTML: ($tx.msie_nonstd ? "<p>&nbsp;</p>" : "<p><br></p>")
 });
 
 _WIN.$tom = $tom;

@@ -2,7 +2,7 @@
 Trex.module("Register an eventhandler in order to resize block and edit search results & some images in wysiwig panel.",
 	function(editor, toolbar, sidebar, canvas) {
 		
-		if ($tx.msie) {
+		if ($tx.msie_nonstd) {
 			var _blockResizeHandler = function(element) {
 				if (element.onresizestart == _NULL) {
 					element.onresizestart = function() {
@@ -17,7 +17,7 @@ Trex.module("Register an eventhandler in order to resize block and edit search r
 		}
 		
 		var _blockSelectHandler;
-		if ($tx.msie) {
+		if ($tx.msie_nonstd) {
 			_blockSelectHandler = function(element) {
 				element.setAttribute("unselectable", "on");
 				$A(element.getElementsByTagName("*")).each(function(child) {

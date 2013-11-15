@@ -48,7 +48,7 @@
 						self.onceWysiwygFocused = true;
 					}
 				});
-                if ($tx.msie) {
+                if ($tx.msie_nonstd) {
                     var htmlEl = self.wysiwygDoc.getElementsByTagName('html');
                     if (htmlEl && htmlEl[0]) {
                         $tx.observe(htmlEl[0], 'click', function (event) {
@@ -451,7 +451,7 @@
 	 * NOTE: FTDUEDTR-900
 	 */
 	function preventRemovingNoScopeElementInIE(markup) {
-		if ($tx.msie) {
+		if ($tx.msie_nonstd) {
 			markup = markup.replace(/(<script|<style)/i, Trex.__WORD_JOINER + "$1");
 		}
 		return markup;
@@ -473,7 +473,7 @@
 	 * @param body
 	 */
 	function makeEmptyParagraphVisibleInIE(body) {
-		if ($tx.msie) {
+		if ($tx.msie_nonstd) {
 			var pNodes = $tom.collectAll(body, 'p,li');
 			for (var i = 0, len = pNodes.length; i < len; i++) {
 				var node = pNodes[i];
