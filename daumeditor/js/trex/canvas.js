@@ -674,7 +674,6 @@
                 self.fireJobs(Trex.Ev.__CANVAS_PANEL_MOUSEUP, event);
                 setTimeout(function() {
                     var googRange = self.getProcessor().createGoogRange();
-                    console.log(googRange);
                     if (googRange) {
                         self.fireJobs(Trex.Ev.__CANVAS_PANEL_QUERY_STATUS, googRange);
                     }
