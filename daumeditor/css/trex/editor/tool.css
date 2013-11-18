@@ -10,7 +10,7 @@
 		background-repeat: no-repeat;
 		font-size: 0;
 		line-height: 0px;
-		text-indent: -1000px;
+		text-indent: -9999em;
 		overflow: hidden;
 		display: block;
 	}
@@ -118,7 +118,7 @@
 		background-image:url(../../../images/icon/editor/skin/06/tx_icon_20130320.gif);
 		background-repeat:no-repeat;
 		height:18px;
-		text-indent:-1000px;	
+		text-indent:-9999em;	
 	}
 	.tx-styledlist-menu li.tx-menu-list-item a.tx-styledlist-0 {background-position:-122px -149px;}
 	.tx-styledlist-menu li.tx-menu-list-item a.tx-styledlist-1 {background-position:-122px -29px;}
@@ -133,7 +133,7 @@
 		background-image:url(../../../images/icon/editor/skin/05/icon_table_layer02.gif); 
 		background-repeat:no-repeat;
 		height:18px;
-		text-indent:-1000px;	
+		text-indent:-9999em;	
 	}
 	.tx-cellslineheight-menu li.tx-menu-list-item a.tx-cellslineheight-0 {background-position:-2px 0;}
 	.tx-cellslineheight-menu li.tx-menu-list-item a.tx-cellslineheight-1 {background-position:-2px 0;}
@@ -149,7 +149,7 @@
 		background-image:url(../../../images/icon/editor/skin/05/icon_table_layer02.gif); 
 		background-repeat:no-repeat;
 		height:17px;
-		text-indent:-1000px;	
+		text-indent:-9999em;	
 	}
 	.tx-cellslinestyle-menu li.tx-menu-list-item a.tx-cellslinestyle-0 {background-position:-2px 3px;}
 	.tx-cellslinestyle-menu li.tx-menu-list-item a.tx-cellslinestyle-1 {background-position:-2px -144px;}
@@ -227,7 +227,7 @@
 	.tx-tabletemplate-menu td.tx-menu-list-item a span {
 		background-image:url(../../../images/icon/editor/table/icon_form.gif); background-repeat:no-repeat;
 		height:31px;
-		text-indent:-1000px;	
+		text-indent:-9999em;
 		width:29px;
 		display:block;
 		margin:2px;
