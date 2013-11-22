@@ -87,15 +87,19 @@ var $tx = {};
 		 */
 		gecko_ver: isExistAgentString("firefox")?parseFloat(txua.replace(/.*firefox\/([\d\.]+).*/g,"$1")):0,
 		/**
-		 * MS IE 이면 true 
+		 * MS IE 이면 true
+         * IE7 이하는 msie로 구분
+         * IE8 이상은 trident로 구분
 		 * @field
 		 */
-        msie: isExistAgentString("trident"),
+        msie: isExistAgentString("msie") || isExistAgentString("trident"),
 		/**
 		 * MS IE browser 버전 a.match(/rv:(\d+)\.\d+/)
+         * IE7 이하는 msie로 구분
+         * IE8 이상은 trident & rv:x로 구분
 		 * @field
 		 */
-        msie_ver: isExistAgentString("trident")?(function(){
+        msie_ver: isExistAgentString("msie") || isExistAgentString("trident")?(function(){
             return isExistAgentString("msie") ? parseFloat(txua.split("msie")[1]) : parseFloat(txua.split("rv:")[1]);
         })():0,
         /**
