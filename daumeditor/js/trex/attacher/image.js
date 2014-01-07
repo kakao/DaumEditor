@@ -70,6 +70,7 @@ Trex.Attacher.Image = Trex.Class.create({
 	title: TXMSG("@image.title"),
 	canModified: _FALSE,
 	canResized: _TRUE,
+    matchRegexStartTag: /<(\w+)/,// 첨부시에 dispHtml을 기준으로 속성 및 스타일을 적용 할 태그를 찾을 때 사용
 	oninitialized: function() {
 		
 	},
