@@ -136,9 +136,9 @@ Trex.Attachment.Image = Trex.Class.create({
 		};
 	},
 	getBoxAttr: function(data) {
-		var _rectangle = data.width ? data.width + "x" + data.height + " / " : ""; 
+		var _rectangle = data.width ? data.width + "x" + data.height + " / " : "";
 		return {
-			name: data.filename + " (" +  _rectangle + data.filesize.toByteUnit() + ")",
+			name: data.filename + ((TrexConfig.get('sidebar').attachbox.view=="NOSIZE")? "":  " (" +  _rectangle + data.filesize.toByteUnit() + ")"),
 			image: data.thumburl
 		};
 	},

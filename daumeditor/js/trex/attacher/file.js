@@ -154,7 +154,7 @@ Trex.Attachment.File = Trex.Class.create({
 			}
 		}
 		return {
-			name: _filename + " (" + data.filesize.toByteUnit() + ")",
+			name: _filename + ((TrexConfig.get('sidebar').attachbox.view=="NOSIZE")?"":" (" + data.filesize.toByteUnit() + ")"),
 			image: data.thumburl
 		};
 	},
