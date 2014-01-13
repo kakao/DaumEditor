@@ -81,6 +81,20 @@
 		 * 	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_PASTE, function() {
 		 *	});
 		 */
+		/** 
+		 * wysiwyg 영역에 발생하는 drop 이벤트
+		 * @example
+		 * 	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DROP, function(ev) {
+		 *	});
+		 */
+		__CANVAS_PANEL_DROP: 'canvas.panel.drop',
+		/** 
+		 * wysiwyg 영역에 발생하는 dragover 이벤트
+		 * @example
+		 * 	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGOVER, function(ev) {
+		 *	});
+		 */
+		__CANVAS_PANEL_DRAGOVER: 'canvas.panel.dragover',
 		__CANVAS_PANEL_PASTE: 'canvas.panel.paste',
 		/** 
 		 * wysiwyg 영역에서 발생하는 스크롤 변경 이벤트<br/>

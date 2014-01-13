@@ -695,6 +695,14 @@
         onScroll: function(event) {
             this.fireJobs(Trex.Ev.__CANVAS_PANEL_SCROLLING, event);
         },
+        
+        onDrop: function(event) {
+            this.fireJobs(Trex.Ev.__CANVAS_PANEL_DROP, event);
+        },
+        
+        onDragOver: function(event) {
+            this.fireJobs(Trex.Ev.__CANVAS_PANEL_DRAGOVER, event);
+        },
 		
 		onPaste: function(event) {
 			this.fireJobs(Trex.Ev.__CANVAS_PANEL_PASTE, event);

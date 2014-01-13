@@ -47,6 +47,7 @@ var CORE_FILES = [
 	/** canvas & panels */
 	"trex/history.js",
 	"trex/canvas.js",
+	"trex/imgDrop.js",
 	"trex/panels/panel.js",
 	"trex/panels/wysiwyg/iframeloader.js",
 	"trex/panels/wysiwyg/webfontloader.js",

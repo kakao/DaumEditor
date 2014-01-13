@@ -15,8 +15,13 @@
             this.translateDocumentEventToCanvas('dblclick', 'onDoubleClick');
             this.translateDocumentEventToCanvas('mousedown', 'onMouseDown');
             this.translateDocumentEventToCanvas('mouseup', 'onMouseUp');
+            
+            this.translateDocumentEventToCanvas("drop", 'onDrop');
+            this.translateDocumentEventToCanvas("dragover", 'onDragOver');
+            
             this.translateWindowEventToCanvas('scroll', 'onScroll');
 			this.translateBodyEventToCanvas('paste', 'onPaste');
+			
 
             this.triggerQueryStatusWhenTenConsecutiveKeyPressesDetected();
         },
