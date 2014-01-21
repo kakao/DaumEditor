@@ -202,19 +202,19 @@
 			while ((_matchsAttr = _reg.exec(source)) != _NULL) {
 				_map["height"] = _matchsAttr[1];
 			}
-			_reg = new RegExp("\\s+([a-zA-Z]+)=\"([^\"]*)\"", "g");
+			_reg = new RegExp("\\s+([a-zA-Z\-]+)=\"([^\"]*)\"", "g");
 			while ((_matchsAttr = _reg.exec(source)) != _NULL) {
 				if (!_map[_matchsAttr[1].toLowerCase()]) {
 					_map[_matchsAttr[1].toLowerCase()] = _matchsAttr[2];
 				}
 			}
-			_reg = new RegExp("\\s+([a-zA-Z]+)='([^']*)'", "g");
+			_reg = new RegExp("\\s+([a-zA-Z\-]+)='([^']*)'", "g");
 			while ((_matchsAttr = _reg.exec(source)) != _NULL) {
 				if (!_map[_matchsAttr[1].toLowerCase()]) {
 					_map[_matchsAttr[1].toLowerCase()] = _matchsAttr[2];
 				}
 			}
-			_reg = new RegExp("\\s+([a-zA-Z]+)=([^\\s>]*)", "g");
+			_reg = new RegExp("\\s+([a-zA-Z\-]+)=([^\\s>]*)", "g");
 			while ((_matchsAttr = _reg.exec(source)) != _NULL) {
 				if (!_map[_matchsAttr[1].toLowerCase()]) {
 					_map[_matchsAttr[1].toLowerCase()] = _matchsAttr[2];
