@@ -672,15 +672,32 @@ $tx.extend($tx, /** @lends $tx */{
 		 * 이벤트의 디폴트 행위를 취소하고 위임을 연기하기 위해 이 함수를 사용
 		 * @function
 		 */
-		stop: function(event) {
-			if (event.preventDefault) {
-				event.preventDefault();
-				event.stopPropagation();
-			} else {
-				event.returnValue = _FALSE;
-				event.cancelBubble = _TRUE;
-			}
-		},
+        stop: function(event){
+            this.stopPropagation(event);
+            this.preventDefault(event);
+        },
+        /**
+         * 이벤트의 버블링을 막을 때 이 함수를 사용
+         * @function
+         */
+        stopPropagation: function(event) {
+          if(event.stopPropagation){
+              event.stopPropagation();
+          }else {
+              event.cancelBubble = _TRUE;
+          }
+        },
+        /**
+         * 이벤트 디폴트 실행 방지를 위해 이 함수를 사용
+         * @function
+         */
+        preventDefault: function(event){
+            if(event.preventDefault){
+                event.preventDefault();
+            }else{
+                event.returnValue = _FALSE;
+            }
+        },
 		/**
 		 * 이벤트가 시작된 노드로부터 상위로 순회하며 주어진 태그이름을 갖는 첫번째 노드를 찾는다.
 		 * find the first node with the given tagName, starting from the
