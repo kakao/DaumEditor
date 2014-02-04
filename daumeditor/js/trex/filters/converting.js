@@ -85,8 +85,31 @@ Trex.register("filter > mode change", function(editor, toolbar, sidebar, canvas,
 	function removeNewlineFromSource(source) {
 		return source.replace(/<\/(p)>\n+<(p[\s>])/gi, '</$1><$2');
 	}
-	
-	var _docparser = editor.getDocParser();
+
+    // FTDUEDTR-1387
+    function removeEditorOriginDomain(content) {
+        if(!($tx.msie && $tx.msie_docmode < 9))
+            return content;
+        if(!canvas.isWYSIWYG())
+            return content;
+
+        var wysiwygLocation = canvas.getCurrentPanel().getWindow().location,
+            wysiwygLocationHost = wysiwygLocation.protocol + '//' + wysiwygLocation.host,
+            wysiwygLocationHref = wysiwygLocation.href,
+            editorHostPath = wysiwygLocationHref.substring(0,wysiwygLocationHref.lastIndexOf('/')+1),
+            hrefRegexPattern = new RegExp("(href=[\"'])"
+                + "(" + wysiwygLocationHost.getRegExp() + "[^\"']*)"
+                + "([\"'])", "gi");
+
+        return content.replace(hrefRegexPattern, function(match, p1_prefix, p2_url, p3_postfix/*, offset, string*/){
+            var url = p2_url.replace(wysiwygLocationHref, '').
+                    replace(editorHostPath, '').
+                    replace(wysiwygLocationHost, '');
+            return p1_prefix + url + p3_postfix;
+        });
+    }
+
+    var _docparser = editor.getDocParser();
 	_docparser.registerFilter('filter/converting', {
 		'text@load': function(contents) {
 			return toText(contents);
@@ -113,7 +136,7 @@ Trex.register("filter > mode change", function(editor, toolbar, sidebar, canvas,
 			return contents;
 		},
 		'html4save': function(contents) {
-			return contents;
+			return removeEditorOriginDomain(contents);
 		},
 		'text2source': function(contents) {
 			return fromText(contents);
@@ -131,7 +154,7 @@ Trex.register("filter > mode change", function(editor, toolbar, sidebar, canvas,
 			return toText(contents);
 		},
 		'html2source': function(contents) {
-			return addNewlineToSource(contents);
+			return removeEditorOriginDomain(addNewlineToSource(contents));
 		}
 	});
 });
