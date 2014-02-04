@@ -1494,7 +1494,7 @@ Object.extend($tom, /** @lends $tom */{
 		if(!doc) {
 			return 0;
 		}
-		return (doc.documentElement.scrollTop || doc.body.scrollTop);
+		return doc.documentElement.scrollTop >= 0 ? doc.documentElement.scrollTop : doc.body.scrollTop;
 	},
 	/**
 	 * 수직 스크롤 값을 셋팅한다.
