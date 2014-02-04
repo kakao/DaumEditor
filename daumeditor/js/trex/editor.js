@@ -175,7 +175,21 @@ Trex.Editor = Trex.Class.create( /** @lends Trex.Editor.prototype */{
 			__MULTI_LIST: [],
 			__SELECTED_INDEX: 0
 		},
-		initialize: function(config) {
+        _initEditor: function (_editor, config) {
+            Editor.__EDITOR_LOADED = _FALSE;
+            Editor.__PANEL_LOADED = _FALSE;
+            _editor = new Trex.Editor(config);
+            var _initializedId = _editor.getInitializedId();
+            if (_initializedId != _NULL) {
+                var idx = _initializedId == "" ? 0 : _initializedId;
+                Editor.__MULTI_LIST[idx] = _editor;
+                Editor.__SELECTED_INDEX = idx;
+            }
+            Object.extend(Editor, _editor);
+            Editor.__EDITOR_LOADED = _TRUE;
+            Editor.__ACTIVE = _TRUE;
+        },
+        initialize: function(config) {
 			//for hanmail iframe load log.
 			if (Trex.hmailLogging) {
 				Trex.hmailLogging(config);
@@ -183,27 +197,21 @@ Trex.Editor = Trex.Class.create( /** @lends Trex.Editor.prototype */{
 			Editor.initStartTime = new Date().getTime();
 			
 			var _editor = null;
-			try {
-				Editor.__EDITOR_LOADED = _FALSE;
-				Editor.__PANEL_LOADED = _FALSE;
-				_editor = new Trex.Editor(config);
-				var _initializedId = _editor.getInitializedId();
-				if (_initializedId != _NULL) {
-					var idx = _initializedId == "" ? 0 : _initializedId;
-					Editor.__MULTI_LIST[idx] = _editor;
-					Editor.__SELECTED_INDEX = idx;
-				}
-				Object.extend(Editor, _editor);
-				Editor.__EDITOR_LOADED = _TRUE;
-				Editor.__ACTIVE = _TRUE;
-			} catch (e) {
-                if (_editor) {
-					_editor.fireJobs(Trex.Ev.__RUNTIME_EXCEPTION, e);
-				} else {
-                    throw 'failed to initialize editor. caused by ' + e;
-				}
-                throw e;
-			}
+
+            if (_WIN['DEBUG']) {
+                this._initEditor(_editor, config);
+            } else {
+                try {
+                    this._initEditor(_editor, config);
+                } catch (e) {
+                    if (_editor) {
+                        _editor.fireJobs(Trex.Ev.__RUNTIME_EXCEPTION, e);
+                    } else {
+                        throw 'failed to initialize editor. caused by ' + e;
+                    }
+                    throw e;
+                }
+            }
 		}
 	});
 	/**

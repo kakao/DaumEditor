@@ -1,4 +1,5 @@
 // TODO duplicated with editor_common.js
+var DEBUG = 1;
 var CORE_FILES = [
 	"scopeVariable.js",
 	/** common library */

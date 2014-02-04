@@ -1203,15 +1203,22 @@ $tx.extend($tx, /** @lends $tx */{
 (function() {
 	$tx.extend(Array.prototype, /** @lends Array.prototype */{
 		each: function(iterator) {
-            try {
+            if (_WIN['DEBUG']) {
                 for (var i = 0, length = this.length; i < length; i++) {
                     iterator(this[i]);
                 }
-            } catch (e) {
-				if (e != $break) {
-					throw e;
+            } else {
+                try {
+                    for (var i = 0, length = this.length; i < length; i++) {
+                        iterator(this[i]);
+                    }
+                } catch (e) {
+                    if (e != $break) {
+                        throw e;
+                    }
                 }
-			}
+            }
+
 			return this;
 		},
         indexOf: function(value) {
