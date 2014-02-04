@@ -61,18 +61,18 @@ Trex.I.Processor.TridentStandard = {
      */
     queryCommandState: function(command) {
         var range = this.getRange();
-        if (this.hasControl() && range.collapsed === false && range.endOffset - range.startOffset === 1) {
+        if (this.hasControl() && range.collapsed === _FALSE && range.endOffset - range.startOffset === 1) {
             if (command === "bold" || command === "underline" || command === "italic" || command === "strikethrough") {
                 var elem = this.getControl();
                 if (elem.tagName === "IMG" || elem.tagName === "BUTTON") {
-                    return false;
+                    return _FALSE;
                 }
             }
         }//<-여기까지 webkit 계열의 브라우저 queryCommandState 에러 처리.
         //위 코드와 관련된 티켓: #FTDUEDTR-1107
         try {
             return this.doc.queryCommandState(command);
-        } catch(e) { return false; }
+        } catch(e) { return _FALSE; }
     },
     /**
      * for safari bug. 빈노드에 글자크기, 글자폰트 기억 못시킴.
