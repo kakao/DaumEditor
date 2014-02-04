@@ -622,7 +622,6 @@
 
         onKeyUp: function(event) {
             var keyCode = event.keyCode;
-
             if (shouldTriggerQuery(keyCode)) {
                 this.getProcessor().clearDummy();
             }

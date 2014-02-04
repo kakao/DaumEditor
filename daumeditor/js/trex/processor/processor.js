@@ -291,9 +291,10 @@
 			
 			var remained = _NULL;
 //            console.log(__TEXT_GC_LIST.length);
-            for (var i = 0, len = __TEXT_GC_LIST.length - 1; i < len; i++) {
+            for (var i = 0, len = __TEXT_GC_LIST.length; i < len; i++) {
                 try {
                     var _dummy = __TEXT_GC_LIST.shift();
+//                    console.log(!!(_dummy && _dummy.nodeValue))
                     if (_dummy && _dummy.nodeValue) {
                         if (_dummy.nodeValue == Trex.__WORD_JOINER) {
                             if (startNode != _dummy) {

@@ -8,8 +8,16 @@ Trex.I.ButtonFontTool = Trex.Mixin.create({
         }
         self.bindKeyboard(config.hotKey, self.handler.bind(self));
     },
-    rangeExecutor: function(processor) {
+    rangeExecutor: function(processor, newStyle, range) {
+        var el = null;
+        if(this.wrapDummySpan && $tx.msie)
+            el = this.wrapDummySpan(processor, range);
         processor.execCommand(this.getQueryCommandName());
+
+        if(el){
+            var rng = processor.createGoogRangeFromNodes(el, 1, el, 1);
+            rng.select();
+        }
     },
     onAfterHandler: function(data) {
         // TODO 현재 툴의 state만 변경하면 되는데, 불필요하게 Trex.Ev.__CANVAS_PANEL_QUERY_STATUS를 fire한다.

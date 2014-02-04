@@ -70,9 +70,9 @@ Trex.I.WrappingSpanFontTool = Trex.Mixin.create({
         var affectedNodes;
         if (processor.isCollapsed()) {
             var startNode = range.getStartNode();
-        	if (startNode.nodeType == 3) {
-        		startNode = startNode.parentNode;
-        	}            
+            if (startNode.nodeType == 3) {
+                startNode = startNode.parentNode;
+            }
             var targetNode = this.findOrCreateDummySpan(startNode, processor, range);
             var wordJoiner = targetNode.firstChild;
             processor.createGoogRangeFromNodes(wordJoiner, wordJoiner.length, wordJoiner, wordJoiner.length).select();
@@ -153,6 +153,44 @@ Trex.I.WrappingSpanFontTool = Trex.Mixin.create({
         } else {
             newNode = processor.create('span');
         }
+        newNode.appendChild(processor.newDummy());
+        newNode = goog_range.insertNode(newNode);    // NOTE: IE에서는 return된 value를 사용해야 한다.
+
+        // insertNode로 인해 빈 TextNode가 생긴 경우, 바로 삭제해준다.
+        $tom.removeEmptyTextNode(newNode.previousSibling);
+        $tom.removeEmptyTextNode(newNode.nextSibling);
+        return newNode;
+    }
+});
+
+Trex.I.WrappingDummyFontTool = Trex.Mixin.create({
+    wrapDummySpan: function(processor, range) {
+        if (processor.isCollapsed()) {
+            var startNode = range.getStartNode();
+            if (startNode.nodeType == 3) {
+                startNode = startNode.parentNode;
+            }
+            var targetNode = this.findOrCreateDummySpan(startNode, processor, range);
+            var wordJoiner = targetNode.firstChild;
+            $tom.unwrap(targetNode);
+            processor.createGoogRangeFromNodes(wordJoiner, 0, wordJoiner, wordJoiner.length).select();
+            return wordJoiner;
+        }
+    },
+    /**
+     * collapsed 일 때에 style을 적용할 수 있는 span을 찾거나, 새로 span을 만든다.
+     */
+    findOrCreateDummySpan: function(node, processor, goog_range) {
+        var reuseExistNode = (node.tagName == "SPAN" && node.childNodes.length == 1 && node.firstChild.nodeType == 3 && node.firstChild.nodeValue == Trex.__WORD_JOINER);
+        if (reuseExistNode) {
+            return node;
+        } else {
+            return this.createDummySpan(node, processor, goog_range);
+        }
+    },
+    createDummySpan: function (parentNode, processor, goog_range) {
+        var newNode = null;
+        newNode = processor.create('span');
         newNode.appendChild(processor.newDummy());
         newNode = goog_range.insertNode(newNode);    // NOTE: IE에서는 return된 value를 사용해야 한다.
 

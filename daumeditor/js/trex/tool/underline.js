@@ -23,7 +23,7 @@ Trex.Tool.Underline = Trex.Class.create({
 		__Identity: 'underline'
 	},
 	$extend: Trex.Tool,
-    $mixins: [Trex.I.FontTool, Trex.I.ButtonFontTool],
+    $mixins: [Trex.I.FontTool, Trex.I.ButtonFontTool, Trex.I.WrappingDummyFontTool],
     getRelatedCssPropertyNames: function() {
         return [this.getCssPropertyName()];
     },

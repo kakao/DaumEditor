@@ -21,7 +21,7 @@ Trex.Tool.Bold = Trex.Class.create({
 		__Identity: 'bold'
 	},
 	$extend: Trex.Tool,
-    $mixins: [Trex.I.FontTool, Trex.I.ButtonFontTool],
+    $mixins: [Trex.I.FontTool, Trex.I.ButtonFontTool, Trex.I.WrappingDummyFontTool],
     getRelatedCssPropertyNames: function() {
         return ["font", this.getCssPropertyName()];
     },
