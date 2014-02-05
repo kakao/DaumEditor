@@ -19,18 +19,27 @@ Trex.I.History.Standard = {
 
 Trex.I.History.Webkit = {
     getRangeData: function() {
-        var p = this.canvas.getProcessor();
-        var txSel = p.getTxSel();
-        var range = txSel.getSel().getRangeAt(0);
-        var preSelectionRange = range.cloneRange();
-        preSelectionRange.selectNodeContents(this.canvas.getCurrentPanel().getDocument().body);
-        preSelectionRange.setEnd(range.startContainer, range.startOffset);
-        var start = preSelectionRange.toString().length;
+        var p = this.canvas.getProcessor(),
+            txSel = p.getTxSel(),
+            rangeCount = txSel.getSel().rangeCount;
+        var start, end;
+
+        if (rangeCount) {
+            var range = txSel.getSel().getRangeAt(0);
+            var preSelectionRange = range.cloneRange();
+            preSelectionRange.selectNodeContents(this.canvas.getCurrentPanel().getDocument().body);
+            preSelectionRange.setEnd(range.startContainer, range.startOffset);
+            start = preSelectionRange.toString().length;
+            end = start + range.toString().length;
+        } else {
+            start = 0;
+            end = 0;
+        }
 
         return {
             start: start,
-            end: start + range.toString().length
-        }
+            end: end
+        };
     },
     restoreRange: function(savedSel){
         var containerEl = this.canvas.getCurrentPanel().getDocument().body;
