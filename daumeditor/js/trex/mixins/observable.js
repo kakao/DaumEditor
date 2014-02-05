@@ -50,13 +50,20 @@ Trex.I.JobObservable = Trex.Faculty.create(/** @lends Trex.I.JobObservable */{
 		if(!this.jobObservers[name]) {
 			return;
 		}
-		try {
-			this.jobObservers[name].each(function(observer) {
-				observer.apply(_self, args);
-			});
-		} catch (e) {
-			if(e != $stop) { throw e; }
-		}
+        if (_WIN['DEBUG']) {
+            this.jobObservers[name].each(function(observer) {
+                observer.apply(_self, args);
+            });
+        } else {
+            try {
+                this.jobObservers[name].each(function(observer) {
+                    observer.apply(_self, args);
+                });
+            } catch (e) {
+                if(e != $stop) { throw e; }
+            }
+        }
+
 	}
 });
 

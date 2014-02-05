@@ -30,5 +30,6 @@ var testCases = [
 //    "testcase/well_formed_test.js", // not finished
     "testcase/embeder_test.js",
     "testcase/tableedit.js",
-	"testcase/range_test.js"
+	"testcase/range_test.js",
+    "testcase/panel_change_test.js"
 ];
