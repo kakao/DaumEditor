@@ -170,22 +170,11 @@ Trex.I.WrappingDummyFontTool = Trex.Mixin.create({
             if (startNode.nodeType == 3) {
                 startNode = startNode.parentNode;
             }
-            var targetNode = this.findOrCreateDummySpan(startNode, processor, range);
+            var targetNode = this.createDummySpan(startNode, processor, range);
             var wordJoiner = targetNode.firstChild;
             $tom.unwrap(targetNode);
             processor.createGoogRangeFromNodes(wordJoiner, 0, wordJoiner, wordJoiner.length).select();
             return wordJoiner;
-        }
-    },
-    /**
-     * collapsed 일 때에 style을 적용할 수 있는 span을 찾거나, 새로 span을 만든다.
-     */
-    findOrCreateDummySpan: function(node, processor, goog_range) {
-        var reuseExistNode = (node.tagName == "SPAN" && node.childNodes.length == 1 && node.firstChild.nodeType == 3 && node.firstChild.nodeValue == Trex.__WORD_JOINER);
-        if (reuseExistNode) {
-            return node;
-        } else {
-            return this.createDummySpan(node, processor, goog_range);
         }
     },
     createDummySpan: function (parentNode, processor, goog_range) {
