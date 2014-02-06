@@ -9,7 +9,14 @@
     <script type="text/javascript">
         // fixture
     </script>
-    <script type="text/javascript" src="testcase/lib/qunit_f2b99a6_patched.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/qunit/qunit-1.14.0.js"></script>
+    <script>
+        QUnit.config.testTimeout = 30
+        QUnit.start = start;
+        QUnit.stop = stop;
+    </script>
+    <script src="/testem.js"></script>
+    <!--script type="text/javascript" src="testcase/lib/qunit_f2b99a6_patched.js"></script-->
     <link rel="stylesheet" href="testcase/lib/qunit_f2b99a6_patched.css">
     <script type="text/javascript" src="testcase/lib/diff_match_patch.js"></script>
     <style type="text/css">

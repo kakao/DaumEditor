@@ -154,7 +154,7 @@
             QUnit.stop(1000);
             setTimeout(function() {
                 fn.call(this);
-                QUnit.start();
+                QUnit.start(1000);
             }, 0);
         },
 

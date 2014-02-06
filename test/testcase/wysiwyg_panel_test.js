@@ -246,9 +246,11 @@
     asyncTest("반복된 keypress시에 query trigger 되도록 함", 1, function() {
         canvas.triggerQueryStatus = function() {
             ok(true);
-            QUnit.start();
         };
         typeTenStrokes();
+        setTimeout(function() {
+            QUnit.start();
+        }, 50);
     });
 
     asyncTest("동일 key keypress시에 query trigger 하지 않음", 0, function() {
