@@ -6,6 +6,101 @@
  - table resize 를 한 후에 saveHistory 하지 않음 / modified+마우스클릭 조합일 때, saveHistory를 하는 로직으로 인해 saveHistory가 될 수 있는 경우가 있음, but 완벽하지 않음
  - backspace / delete 든 여러 번 눌렀을 때에 한 번만 saveHistory하고 싶다.
  */
+
+Trex.I.History = {};
+Trex.I.History.Standard = {
+    getRangeData: function () {
+        throw Error("Unimplemented abstract method");
+    },
+    restoreRange: function (rangeData){
+        throw Error("Unimplemented abstract method");
+    }
+};
+
+Trex.I.History.Webkit = {
+    getRangeData: function() {
+        var p = this.canvas.getProcessor(),
+            txSel = p.getTxSel(),
+            rangeCount = txSel.getSel().rangeCount;
+        var start, end;
+
+        if (rangeCount) {
+            var range = txSel.getSel().getRangeAt(0);
+            var preSelectionRange = range.cloneRange();
+            preSelectionRange.selectNodeContents(this.canvas.getCurrentPanel().getDocument().body);
+            preSelectionRange.setEnd(range.startContainer, range.startOffset);
+            start = preSelectionRange.toString().length;
+            end = start + range.toString().length;
+        } else {
+            start = 0;
+            end = 0;
+        }
+
+        return {
+            start: start,
+            end: end
+        };
+    },
+    restoreRange: function(savedSel){
+        var containerEl = this.canvas.getCurrentPanel().getDocument().body;
+        var charIndex = 0, range = document.createRange();
+        range.setStart(containerEl, 0);
+        range.collapse(true);
+        var nodeStack = [containerEl], node, foundStart = false, stop = false;
+
+        while (!stop && (node = nodeStack.pop())) {
+            if (node.nodeType == 3) {
+                var nextCharIndex = charIndex + node.length;
+                if (!foundStart && savedSel.start >= charIndex && savedSel.start <= nextCharIndex) {
+                    range.setStart(node, savedSel.start - charIndex);
+                    foundStart = true;
+                }
+                if (foundStart && savedSel.end >= charIndex && savedSel.end <= nextCharIndex) {
+                    range.setEnd(node, savedSel.end - charIndex);
+                    stop = true;
+                }
+                charIndex = nextCharIndex;
+            } else {
+                var i = node.childNodes.length;
+                while (i--) {
+                    nodeStack.push(node.childNodes[i]);
+                }
+            }
+        }
+
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
+};
+
+Trex.I.History.Trident = {
+    getRangeData: function() {
+        var doc = this.canvas.getCurrentPanel().getDocument();
+        var containerEl = doc.body;
+        var selectedTextRange = doc.selection.createRange();
+        var preSelectionTextRange = doc.body.createTextRange();
+        preSelectionTextRange.moveToElementText(containerEl);
+        preSelectionTextRange.setEndPoint("EndToStart", selectedTextRange);
+        var start = preSelectionTextRange.text.length;
+
+        return {
+            start: start,
+            end: start + selectedTextRange.text.length
+        }
+    },
+    restoreRange: function(savedSel) {
+        var doc = this.canvas.getCurrentPanel().getDocument();
+        var containerEl = doc.body;
+        var textRange = doc.body.createTextRange();
+        textRange.moveToElementText(containerEl);
+        textRange.collapse(true);
+        textRange.moveEnd("character", savedSel.end);
+        textRange.moveStart("character", savedSel.start);
+        textRange.select();
+    }
+};
+
 /**
  * @fileoverview default history class for redo/undo
  *
@@ -27,19 +122,22 @@
 	/**
 	 * @class
 	 */
-	Trex.History = Trex.Class.create({});
-	Trex.History.prototype = {
+	Trex.History = Trex.Class.create({
+        $mixins: [
+            Trex.I.History.Standard,
+            (($tx.msie_nonstd)? Trex.I.History.Trident: Trex.I.History.Webkit)
+        ],
         maxUndoCount: MAX_UNDO_COUNT,
-		canvas: _NULL,
-		undoMementoList: _NULL,
-		redoMementoList: _NULL,
-		currentMemento: _NULL,
-		contentModified: _FALSE,
-		initialize: function(canvas){
-			this.canvas = canvas;
+        canvas: _NULL,
+        undoMementoList: _NULL,
+        redoMementoList: _NULL,
+        currentMemento: _NULL,
+        contentModified: _FALSE,
+        initialize: function(canvas){
+            this.canvas = canvas;
             this.setupHistory();
             this.bindKeyEvent(canvas);
-		},
+        },
         bindKeyEvent: function(canvas) {
             var self = this;
             canvas.observeJob('canvas.panel.undo', function() {
@@ -162,21 +260,30 @@
         },
         getTextHandler: function() {
             var canvas = this.canvas;
+            var self = this;
             return function(data) {
                 canvas.setContent(data.content);
-                // #FTDUEDTR-1122
-                setTimeout(function() {
-                    canvas.setScrollTop(data.scrollTop);
-                }, 0);
+
+                var DEFAULT_RESRORE_RANGE = {start: 0, end: 0};
+                var range = data.range || DEFAULT_RESRORE_RANGE;
+                self.restoreRange(range);
+
+                if ($tx.msie_nonstd) {
+                    // #FTDUEDTR-1122
+                    setTimeout(function() {
+                        canvas.setScrollTop(data.scrollTop);
+                    }, 0);
+                }
             }
         },
         getTextData:function() {
             return {
                 content: this.canvas.getContent(),
-                scrollTop: this.canvas.getScrollTop()
+                scrollTop: this.canvas.getScrollTop(),
+                range: this.getRangeData()
             }
         }
-	};
+    });
 
     var Memento = Trex.Class.create({
         initialize: function() {

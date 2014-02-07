@@ -1494,7 +1494,7 @@ Object.extend($tom, /** @lends $tom */{
 		if(!doc) {
 			return 0;
 		}
-		return (doc.documentElement.scrollTop || doc.body.scrollTop);
+		return doc.documentElement.scrollTop >= 0 ? doc.documentElement.scrollTop : doc.body.scrollTop;
 	},
 	/**
 	 * 수직 스크롤 값을 셋팅한다.
@@ -1669,10 +1669,18 @@ Object.extend($tom, /** @lends $tom */{
 
 Object.extend($tom, /** @lends $tom */{
     /**
+     * 편집영역에서 기본 빈 문단에 해당하는 content
+     * @constant
+     */
+    EMPTY_BOGUS: ($tx.msie_nonstd ? "&nbsp;" : "<br>")
+});
+
+Object.extend($tom, /** @lends $tom */{
+    /**
 	 * 편집영역에서 기본 빈 문단에 해당하는 HTML
 	 * @constant
 	 */
-    EMPTY_PARAGRAPH_HTML: ($tx.msie_nonstd ? "<p>&nbsp;</p>" : "<p><br></p>")
+    EMPTY_PARAGRAPH_HTML: "<p>" + $tom.EMPTY_BOGUS + "</p>"
 });
 
 _WIN.$tom = $tom;
