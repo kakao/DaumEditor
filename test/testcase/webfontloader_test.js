@@ -17,16 +17,13 @@
         setup: function() {
             this.originalIsIEFlag = $tx.msie;
             loader = new Trex.WebfontLoader(document, config);
-            this.testTimeout = QUnit.config.testTimeout;
         },
         teardown: function() {
             $tx.msie = this.originalIsIEFlag;
-            QUnit.config.testTimeout = this.testTimeout;
         }
     });
 
     test("load() method should be ignored unless IE", function() {
-        QUnit.config.testTimeout = 200;
         expect(1);
         $tx.msie = false;
 

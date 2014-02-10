@@ -11,7 +11,7 @@
     </script>
     <script type="text/javascript" src="http://code.jquery.com/qunit/qunit-1.14.0.js"></script>
     <script>
-        QUnit.config.testTimeout = 1000
+        QUnit.config.testTimeout = 1000;
         QUnit.start = start;
         QUnit.stop = stop;
     </script>
@@ -507,6 +507,16 @@ EditorJSLoader.ready(function() {
         },
         size: {
             contentWidth: 700 /*#* 지정된 본문영역의 넓이가 있을 경우에 설정 *#*/
+        },
+        toolbar: {
+            fontfamily: {
+                webfont: {
+                    use: true,
+                    options: [
+                        { label: '릭스꼬꼬마 <span class="tx-txt">(가나다라)</span>',		title: '릭스꼬꼬마', data: 'RixKidD', klass: 'tx-RixKidD', url: 'RixKidD.css' }
+                    ]
+                }
+            }
         }
 
     };

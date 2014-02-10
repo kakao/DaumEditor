@@ -38,7 +38,7 @@
     }, function(root) {
         var _config = TrexConfig.get('canvas', root);
         var _evConfig = root.events;
-        _config.initializedId = root.initializedId;
+        _config.initializedId = root.initializedId || '';
         _config.useHotKey = _evConfig.useHotKey;
         var _switcher = TrexConfig.getTool('switcher', root);
         if (Trex.available(_switcher, "switcher" + _config.initializedId)) {
