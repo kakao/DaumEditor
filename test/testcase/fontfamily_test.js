@@ -50,13 +50,13 @@ test("웹폰트는 IE에서만 적용된다. (but myeditor.daum.net 등에서만
     assi.setContentElement(p);
     var range = new goog.dom.Range.createFromNodes(assi.$('span').firstChild, 2, assi.$('span').firstChild, 3);
     range.select();
-    var fontfamily = "MD_diary";
+    var fontfamily = "RixKidD";
     
     assi.executeTool("fontfamily", fontfamily);
     QUnit.stop(1000);
     setTimeout(function() {
         setTimeout(function() {
-        	var expectedContent = '<P><SPAN id=span>He<SPAN style="font-family: MD_diary">l</SPAN>lo World</SPAN></P>';
+        	var expectedContent = '<P><SPAN id=span>He<SPAN style="font-family: RixKidD">l</SPAN>lo World</SPAN></P>';
             var expectedSelectedText = 'l';
             assertFontFamilyResult(expectedContent, expectedSelectedText);
             var usedWebfonts = assi.canvas.getPanel('html').getUsedWebfont();
