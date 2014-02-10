@@ -9,16 +9,15 @@
     <script type="text/javascript">
         // fixture
     </script>
-    <script type="text/javascript" src="//code.jquery.com/qunit/qunit-1.14.0.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/qunit/qunit-1.14.0.js"></script>
     <script>
-        QUnit.config.testTimeout = 30
+        QUnit.config.testTimeout = 1000
         QUnit.start = start;
         QUnit.stop = stop;
     </script>
     <script src="/testem.js"></script>
     <!--script type="text/javascript" src="testcase/lib/qunit_f2b99a6_patched.js"></script-->
     <link rel="stylesheet" href="testcase/lib/qunit_f2b99a6_patched.css">
-    <script type="text/javascript" src="testcase/lib/diff_match_patch.js"></script>
     <style type="text/css">
         ol#qunit-tests li.fail ol {
             display: block !important;
@@ -26,22 +25,6 @@
     </style>
 
     <script type="text/javascript">
-        var dmp = new diff_match_patch();
-        QUnit.diff = function(o, n) {
-            var diffs = dmp.diff_main(o, n);
-            dmp.diff_cleanupSemantic(diffs);
-            //console.log(diffs);
-            return diffs.map(function(diff) {
-                    switch(diff[0]) {
-                        case -1:
-                            return '<del style="background-color:#E0F2BE; color:#374E0C; text-decoration:none;">' + diff[1] + '</del>';
-                        case 0:
-                            return diff[1];
-                        case 1:
-                            return '<ins style="background-color:#FFCACA; color:#500;">' + diff[1] + '</ins>';
-                    }
-                }).join("");
-        };
         var ignore_test = false;
     </script>
 

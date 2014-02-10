@@ -53,7 +53,7 @@ test("웹폰트는 IE에서만 적용된다. (but myeditor.daum.net 등에서만
     var fontfamily = "RixKidD";
     
     assi.executeTool("fontfamily", fontfamily);
-    QUnit.stop(1000);
+    QUnit.stop();
     setTimeout(function() {
         setTimeout(function() {
         	var expectedContent = '<P><SPAN id=span>He<SPAN style="font-family: RixKidD">l</SPAN>lo World</SPAN></P>';

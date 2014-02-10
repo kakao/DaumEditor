@@ -151,10 +151,10 @@
         },
 
         delayedAssertion: function(fn) {
-            QUnit.stop(1000);
+            QUnit.stop();
             setTimeout(function() {
                 fn.call(this);
-                QUnit.start(1000);
+                QUnit.start();
             }, 0);
         },
 

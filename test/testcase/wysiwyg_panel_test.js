@@ -157,7 +157,7 @@
     var eventBinder, iframe, wysiwygDoc, wysiwygWindow;
     module("wysiwyg panel > eventbinder", {
         setup: function() {
-            QUnit.stop(1000);
+            QUnit.stop();
             canvas = {
                 isWYSIWYG: function() {
                     return true;

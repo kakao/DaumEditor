@@ -33,7 +33,7 @@
         loader.imports = function() {
             ok(false, "should not be invoked");
         };
-        QUnit.stop(1000);
+        QUnit.stop();
         setTimeout(function() {
             QUnit.start();
         }, 20);
@@ -47,7 +47,7 @@
         loader.imports = function() {
             ok(false, "should not be invoked");
         };
-        QUnit.stop(1000);
+        QUnit.stop();
         setTimeout(function() {
             QUnit.start();
         }, 20);

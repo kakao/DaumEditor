@@ -19,7 +19,6 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-        //"testcase/lib/qunit_f2b99a6_patched.js",
         "testcase/lib/qunitdiff.js",
         "testcase/lib/qunitpatch.js",
         "../daumeditor/js/trex/header.js",
@@ -224,12 +223,11 @@ module.exports = function(config) {
         "testcase/align_test.js",
         "testcase/infinite_loop_test.js",
 
-        //"testcase/history_test.js",
-
-        //"testcase/wysiwyg_panel_test.js",
+        "testcase/history_test.js",
+        "testcase/wysiwyg_panel_test.js",
         "testcase/processor_test.js",
         "testcase/processor_webkit_test.js",
-        //"testcase/webfontloader_test.js",
+        "testcase/webfontloader_test.js",
         "testcase/fixing_test.js",
         //"testcase/htmlparser_test.js",
         "testcase/FontCssProperty_test.js",
@@ -237,7 +235,8 @@ module.exports = function(config) {
 //    "testcase/well_formed_test.js", // not finished
         "testcase/embeder_test.js",
         "testcase/tableedit.js",
-        "testcase/range_test.js"
+        "testcase/range_test.js",
+        "testcase/panel_change_test.js"
     ],
 
 
@@ -277,7 +276,7 @@ module.exports = function(config) {
     // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
     // - PhantomJS
     // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-    browsers: ['Chrome', 'IE', 'Firefox'],
+    browsers: ['Chrome'],
 
 
     // If browser does not capture in given timeout [ms], kill it
