@@ -20,6 +20,7 @@
     module("backspace");
 
     test("selection이 있는 상태에서 backspace -> default action", function() {
+        expect(0);
         var p = ax.p(INDENT_ONCE_STYLE, "Hello");
         assi.setContentElement(p);
         assi.selectForNodes(p.firstChild, 0, p.firstChild, 1);
@@ -54,6 +55,7 @@
     });
 
     test("td의 텍스트 중간에서 backspace -> default action", function() {
+        expect(0);
         var table = ax.table({border: 1}, ax.tr(ax.td({id: "td"}, "Text")));
         assi.setContent(assi.getHTML(table));
         var td = assi.$('td');
@@ -63,6 +65,7 @@
     });
 
     test("indented block의 중간에서 backspace -> default action", function() {
+        expect(0);
         var p = ax.p(INDENT_ONCE_STYLE, "Hello");
         assi.setContentElement(p);
         assi.selectForNodes(p.firstChild, 2, p.firstChild, 2);
@@ -71,6 +74,7 @@
     });
 
     test("no-indent block의 처음에서 backspace -> default action", function() {
+        expect(0);
         var p = ax.p("Hello");
         assi.setContentElement(p);
         assi.selectForNodes(p.firstChild, 0, p.firstChild, 0);
@@ -79,6 +83,7 @@
     });
 
     test("list item 끝에서 backspace -> default action", function() {
+        expect(0);
         var ol = ax.ol(ax.ol(ax.li({id: "li"}, "item1"), ax.li("item2")));
         assi.setContentElement(ol);
         var li = assi.$('li');

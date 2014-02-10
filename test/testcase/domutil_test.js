@@ -196,6 +196,7 @@
     });
 
     test("inlines", function() {
+        expect(0);
         assi.setContent("<span style='font-size: 10pt'>10pt<span style='font-size: 11pt'><span style='font-size: 12pt'>12pt</span></span></span>");
         var spans = assi.$$('span');
         var processor = assi.processor;
