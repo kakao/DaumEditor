@@ -1,5 +1,4 @@
 (function() {
-
     var WEBFONT_EMBEDDED_HTML = "<span style='font-family: RixKidD;'>hello</span>";
 
     var loader;
@@ -18,39 +17,28 @@
         setup: function() {
             this.originalIsIEFlag = $tx.msie;
             loader = new Trex.WebfontLoader(document, config);
+            this.testTimeout = QUnit.config.testTimeout;
         },
         teardown: function() {
             $tx.msie = this.originalIsIEFlag;
+            QUnit.config.testTimeout = this.testTimeout;
         }
     });
 
-
     test("load() method should be ignored unless IE", function() {
-        expect(0);
+        QUnit.config.testTimeout = 200;
+        expect(1);
         $tx.msie = false;
 
-        loader.load(WEBFONT_EMBEDDED_HTML)
         loader.imports = function() {
             ok(false, "should not be invoked");
         };
-        QUnit.stop();
-        setTimeout(function() {
-            QUnit.start();
-        }, 20);
-    });
-
-    test("load() method should be ignored unless IE", function() {
-        expect(0);
-        $tx.msie = false;
-
         loader.load(WEBFONT_EMBEDDED_HTML);
-        loader.imports = function() {
-            ok(false, "should not be invoked");
-        };
-        QUnit.stop();
+        stop();
         setTimeout(function() {
-            QUnit.start();
-        }, 20);
+            ok(true);
+            start();
+        }, 50);
     });
 
     test("getUsed() should return empty array unless IE", function() {
