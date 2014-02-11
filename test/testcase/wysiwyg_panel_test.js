@@ -136,10 +136,16 @@
     $tx.msie && test("IE에서만 post filter 수행", function() {
         panel.setBodyHTML("<p>&nbsp;</p><p>second line</p>");
         panel.doPostFilter(panel.getDocument().body);
-        var ps = panel.getDocument().getElementsByTagName("P");
-        var emptyP = ps[0], secondP = ps[1];
-        notEqual(panel.getPositionByNode(emptyP).y, panel.getPositionByNode(secondP).y, "empty paragraph should has a height");
-        equal(emptyP.innerHTML, "", "nbsp should be removed from empty paragraph");
+        if ($tx.msie_nonstd) {
+            // makeEmptyParagraphVisibleInIE 가 현재는 non-standard 를 기준으로만 동작한다
+            var ps = panel.getDocument().getElementsByTagName("P");
+            var emptyP = ps[0], secondP = ps[1];
+            notEqual(panel.getPositionByNode(emptyP).y, panel.getPositionByNode(secondP).y, "empty paragraph should has a height");
+            equal(emptyP.innerHTML, "", "nbsp should be removed from empty paragraph");
+        } else {
+            ok(true);
+        }
+
     });
 
 

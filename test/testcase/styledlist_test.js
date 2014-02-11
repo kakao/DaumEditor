@@ -6,7 +6,7 @@
         assi.selectForNodes(assi.doc.body, 0, assi.doc.body, 0);
 
         assi.assertToolExecution('styledlist', 'decimal', function() {
-            var li = ax.li($tx.msie ? "" : ax.br());
+            var li = ax.li($tx.msie_nonstd ? "" : ax.br());
             var ol = ax.ol({style: {listStyleType: "decimal"}}, li);
             var expectedHTML = assi.getHTML(ol);
             htmlEqual(assi.getBodyHTML(), expectedHTML);

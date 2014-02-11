@@ -451,7 +451,7 @@
 	 * NOTE: FTDUEDTR-900
 	 */
 	function preventRemovingNoScopeElementInIE(markup) {
-		if ($tx.msie_nonstd) {
+		if ($tx.msie) {
 			markup = markup.replace(/(<script|<style)/i, Trex.__WORD_JOINER + "$1");
 		}
 		return markup;
