@@ -105,6 +105,7 @@
 
     $tx.msie &&
     test("IE test 1 : TextRange로 두번째 li의 맨처음으로 select할 수 없다.", function() {
+        expect(0);
         var ol = ax.ol(ax.ol(ax.li({id: "li1"}, "item2")), ax.li({id: "li2"}, ax.span({id:"s"}), ax.span({id:"e"}), "item2"));
         assi.setContentElement(ol);
         var textRange = assi.doc.body.createTextRange();
@@ -115,6 +116,7 @@
     
     $tx.msie &&
     test("IE test 2 : 빈 span이 두 개 있으면 두번째 li 맨처음을 select할 수 있다.", function() {
+        expect(0);
         var ol = ax.ol(ax.ol(ax.li({id: "li1"}, "item2")), ax.li({id: "li2"}, ax.span({id:"s"}), ax.span({id:"e"}), "item2"));
         assi.setContentElement(ol);
         var li2 = assi.$('li2');
