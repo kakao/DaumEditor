@@ -307,7 +307,8 @@
     }
 
     function typeAStrokes(keyCode) {
-        var eventName = ($tx.webkit || $tx.msie/*wysiwygDoc.attachEvent*/) ? "keydown" : "keypress";
+        //var eventName = ($tx.webkit || $tx.msie/*wysiwygDoc.attachEvent*/) ? "keydown" : "keypress";
+        var eventName = 'keydown';
         $tx.simulateEvent(wysiwygDoc, eventName, {'keyCode': keyCode});
     }
 
