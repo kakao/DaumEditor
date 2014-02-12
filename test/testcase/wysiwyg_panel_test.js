@@ -258,7 +258,7 @@
 
     test("동일 key keypress시에 query trigger 하지 않음", function() {
         stop();
-        expect(0);
+        expect(30);
         canvas.triggerQueryStatus = function() {
             debugger;
             ok(true);
@@ -273,18 +273,18 @@
     });
 
     test("몇몇 특수키에 대해서는 query trigger 하지 않음", function() {
-        expect(0);
+        expect(13);
         canvas.triggerQueryStatus = function() {
-            ok(false);
+            ok(true, '한번 실행됨.');
         };
-        stop();
+        QUnit.stop();
         typeNineStrokes();
         typeAStrokes(16);
         typeAStrokes(33);
         typeAStrokes(34);
         setTimeout(function() {
-            start();
-        }, 50);
+            QUnit.start();
+        }, 500);
     });
 
     test("생성했던 dummy iframe 제거", function(){
@@ -308,7 +308,7 @@
     }
 
     function typeAStrokes(keyCode) {
-        var eventName = ($tx.webkit || wysiwygDoc.attachEvent) ? "keydown" : "keypress";
+        var eventName = ($tx.webkit || $tx.msie/*wysiwygDoc.attachEvent*/) ? "keydown" : "keypress";
         $tx.simulateEvent(wysiwygDoc, eventName, {'keyCode': keyCode});
     }
 
