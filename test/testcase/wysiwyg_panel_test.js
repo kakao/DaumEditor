@@ -260,7 +260,6 @@
         stop();
         expect(30);
         canvas.triggerQueryStatus = function() {
-            debugger;
             ok(true);
         };
         for (var i = 0; i < 30; i++) {
