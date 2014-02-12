@@ -27,8 +27,7 @@
     test("get media embeder instance", function() {
         ok(mediaEmbeder);
     });
-
-    test("embed media by html source", function() {
+    asyncTest("embed media by html source", function() {
         assi.setContent('');
 
         var data = {
@@ -40,9 +39,20 @@
 //        var resultCanvasContent = assi.getContent();
 //        equal(resultCanvasContent, expectCanvasContent);
 
-        var expectContent = "<p><object type='application/x-shockwave-flash' id='DaumVodPlayer_vdf9dTg64ysywv2u1TuwBg2' width=\"640\" height=\"360\" align='middle' classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000' codebase='http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10,3,0,0'><param name='movie' value='http://videofarm.daum.net/controller/player/VodPlayer.swf' /><param name='allowScriptAccess' value='always' /><param name='allowFullScreen' value='true' /><param name='bgcolor' value='#000000' /><param name='wmode' value='window' /><param name='flashvars' value='vid=vdf9dTg64ysywv2u1TuwBg2&playLoc=undefined' /><embed src=\"http://videofarm.daum.net/controller/player/VodPlayer.swf\" width=\"640\" height=\"360\" allowscriptaccess=\"always\" type=\"application/x-shockwave-flash\" allowfullscreen=\"true\" bgcolor=\"#000000\" flashvars=\"vid=vdf9dTg64ysywv2u1TuwBg2&playLoc=undefined\"></embed></object></p>";
-        var resultContent = Editor.getContent().replace(/<p><br><\/p>/g, '');
-        equal(resultContent, expectContent);
+        //var resultContent = Editor.getContent().replace(/<p><br><\/p>/g, '');
+        setTimeout(function(){
+            var resultContent = Editor.getContent().replace(/<p><br><\/p>/g, '');
+            QUnit.start();
+            var expectContent = '';
+            if($tx.msie && $tx.msie_ver >= 10){
+                expectContent = /<p><object width=\"640\" height=\"360\" align=\"middle\" id=\"DaumVodPlayer_vdf9dTg64ysywv2u1TuwBg2\" classid=\"clsid:d27cdb6e-ae6d-11cf-96b8-444553540000\" codebase=\"http:\/\/fpdownload.macromedia.com\/pub\/shockwave\/cabs\/flash\/swflash.cab#version=10,3,0,0\" type=\"application\/x-shockwave-flash\"><PARAM NAME=\"_cx\" VALUE=\"16933\"><PARAM NAME=\"_cy\" VALUE=\"9525\"><PARAM NAME=\"FlashVars\" VALUE=\"vid=vdf9dTg64ysywv2u1TuwBg2&amp;playLoc=undefined\"><PARAM NAME=\"Movie\" VALUE=\"http:\/\/videofarm.daum.net\/controller\/player\/VodPlayer.swf\"><PARAM NAME=\"Src\" VALUE=\"http:\/\/videofarm.daum.net\/controller\/player\/VodPlayer.swf\"><PARAM NAME=\"WMode\" VALUE=\"Transparent\"><PARAM NAME=\"Play\" VALUE=\"-1\"><PARAM NAME=\"Loop\" VALUE=\"-1\"><PARAM NAME=\"Quality\" VALUE=\"High\"><PARAM NAME=\"SAlign\" VALUE=\"\"><PARAM NAME=\"Menu\" VALUE=\"-1\"><PARAM NAME=\"Base\" VALUE=\"\"><PARAM NAME=\"AllowScriptAccess\" VALUE=\"always\"><PARAM NAME=\"Scale\" VALUE=\"ShowAll\"><PARAM NAME=\"DeviceFont\" VALUE=\"0\"><PARAM NAME=\"EmbedMovie\" VALUE=\"0\"><PARAM NAME=\"BGColor\" VALUE=\"000000\"><PARAM NAME=\"SWRemote\" VALUE=\"\"><PARAM NAME=\"MovieData\" VALUE=\"\"><PARAM NAME=\"SeamlessTabbing\" VALUE=\"1\"><PARAM NAME=\"Profile\" VALUE=\"0\"><PARAM NAME=\"ProfileAddress\" VALUE=\"\"><PARAM NAME=\"ProfilePort\" VALUE=\"0\"><PARAM NAME=\"AllowNetworking\" VALUE=\"all\"><PARAM NAME=\"AllowFullScreen\" VALUE=\"true\"><PARAM NAME=\"AllowFullScreenInteractive\" VALUE=\"false\"><PARAM NAME=\"IsDependent\" VALUE=\"\d*\"><param name=\"wmode\" value=\"transparent\"><param name=\"movie\" value=\"http:\/\/videofarm.daum.net\/controller\/player\/VodPlayer.swf\"><param name=\"allowScriptAccess\" value=\"always\"><param name=\"allowFullScreen\" value=\"true\"><param name=\"bgcolor\" value=\"#000000\"><param name=\"flashvars\" value=\"vid=vdf9dTg64ysywv2u1TuwBg2&amp;playLoc=undefined\"><embed width=\"640\" height=\"360\" src=\"http:\/\/videofarm.daum.net\/controller\/player\/VodPlayer.swf\" type=\"application\/x-shockwave-flash\" wmode=\"transparent\" flashvars=\"vid=vdf9dTg64ysywv2u1TuwBg2&amp;playLoc=undefined\" bgcolor=\"#000000\" allowfullscreen=\"true\" allowscriptaccess=\"always\"><\/object><\/p>/;
+                ok(expectContent.test(resultContent), 'ie10, ie11 embed ok');
+            }else{
+                expectContent = "<p><object height=360 width=640 type='application/x-shockwave-flash' id='DaumVodPlayer_vdf9dTg64ysywv2u1TuwBg2' width='640px' height='360px' align='middle' classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000' codebase='http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10,3,0,0'><param height=360 width=640 name='movie' value='http://videofarm.daum.net/controller/player/VodPlayer.swf' /><param height=360 width=640 name='allowScriptAccess' value='always' /><param height=360 width=640 name='allowFullScreen' value='true' /><param height=360 width=640 name='bgcolor' value='#000000' /><param height=360 width=640 name='wmode' value='window' /><param height=360 width=640 name='flashvars' value='vid=vdf9dTg64ysywv2u1TuwBg2&playLoc=undefined' /><embed height=360 width=640 src=\"http://videofarm.daum.net/controller/player/VodPlayer.swf\" width=\"640px\" height=\"360px\" allowscriptaccess=\"always\" type=\"application/x-shockwave-flash\" allowfullscreen=\"true\" bgcolor=\"#000000\" flashvars=\"vid=vdf9dTg64ysywv2u1TuwBg2&playLoc=undefined\"></embed></object></p>";
+                equal(resultContent, expectContent);
+            }
+            //
+        }, 30)
     });
 
     test("valid embed source - daum.net tvpot", function() {
