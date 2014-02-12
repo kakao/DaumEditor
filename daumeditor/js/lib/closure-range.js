@@ -1029,6 +1029,14 @@ goog.userAgent.ASSUME_OPERA = _FALSE;
 
 
 /**
+ * @define {boolean} Whether the
+ *     {@code goog.userAgent.isVersionOrHigher}
+ *     function will return true for any version.
+ */
+goog.userAgent.ASSUME_ANY_VERSION = _FALSE;
+
+
+/**
  * Whether we know the browser engine at compile-time.
  * @type {boolean}
  * @private
@@ -1393,14 +1401,29 @@ goog.userAgent.VERSION = goog.userAgent.determineVersion_();
 
 
 /**
+ * Compares two version numbers.
+ *
+ * @param {string} v1 Version of first item.
+ * @param {string} v2 Version of second item.
+ *
+ * @return {number}  1 if first argument is higher
+ *                   0 if arguments are equal
+ *                  -1 if second argument is higher.
+ * @deprecated Use goog.string.compareVersions.
+ */
+goog.userAgent.compare = function(v1, v2) {
+    return goog.string.compareVersions(v1, v2);
+};
+
+
+/**
  * Cache for {@link goog.userAgent.isVersion}. Calls to compareVersions are
  * surprisingly expensive and as a browsers version number is unlikely to change
  * during a session we cache the results.
  * @type {Object}
  * @private
  */
-goog.userAgent.isVersionCache_ = {};
-
+goog.userAgent.isVersionOrHigherCache_ = {};
 
 /**
  * Whether the user agent version is higher or the same as the given version.
@@ -1408,19 +1431,30 @@ goog.userAgent.isVersionCache_ = {};
  * use the engine's version, not the browser's version number.  For example,
  * Firefox 3.0 corresponds to Gecko 1.9 and Safari 3.0 to Webkit 522.11.
  * Opera and Internet Explorer versions match the product release number.<br>
- * @see <a href="http://en.wikipedia.org/wiki/Safari_(web_browser)">Webkit</a>
+ * @see <a href="http://en.wikipedia.org/wiki/Safari_version_history">
+ *     Webkit</a>
  * @see <a href="http://en.wikipedia.org/wiki/Gecko_engine">Gecko</a>
  *
  * @param {string|number} version The version to check.
  * @return {boolean} Whether the user agent version is higher or the same as
  *     the given version.
  */
-goog.userAgent.isVersion = function(version) {
-  return goog.userAgent.isVersionCache_[version] ||
-      (goog.userAgent.isVersionCache_[version] =
-          goog.string.compareVersions(goog.userAgent.VERSION, version) >= 0);
+goog.userAgent.isVersionOrHigher = function(version) {
+    return goog.userAgent.ASSUME_ANY_VERSION ||
+        goog.userAgent.isVersionOrHigherCache_[version] ||
+        (goog.userAgent.isVersionOrHigherCache_[version] =
+            goog.string.compareVersions(goog.userAgent.VERSION, version) >= 0);
 };
 
+
+/**
+ * Deprecated alias to {@code goog.userAgent.isVersionOrHigher}.
+ * @param {string|number} version The version to check.
+ * @return {boolean} Whether the user agent version is higher or the same as
+ *     the given version.
+ * @deprecated Use goog.userAgent.isVersionOrHigher().
+ */
+goog.userAgent.isVersion = goog.userAgent.isVersionOrHigher;
 
 /**
  * Cache for {@link goog.userAgent.isDocumentMode}.
@@ -1435,17 +1469,44 @@ goog.userAgent.isDocumentModeCache_ = {};
 /**
  * Whether the IE effective document mode is higher or the same as the given
  * document mode version.
- * NOTE: Only for IE, return _FALSE for another browser.
+ * NOTE: Only for IE, return false for another browser.
  *
  * @param {number} documentMode The document mode version to check.
  * @return {boolean} Whether the IE effective document mode is higher or the
  *     same as the given version.
  */
-goog.userAgent.isDocumentMode  = function(documentMode) {
-  return goog.userAgent.isDocumentModeCache_[documentMode] ||
-      (goog.userAgent.isDocumentModeCache_[documentMode] = goog.userAgent.IE &&
-      _DOC.documentMode && _DOC.documentMode >= documentMode);
+goog.userAgent.isDocumentModeOrHigher = function(documentMode) {
+    return goog.userAgent.IE && goog.userAgent.DOCUMENT_MODE >= documentMode;
 };
+
+
+/**
+ * Deprecated alias to {@code goog.userAgent.isDocumentModeOrHigher}.
+ * @param {number} version The version to check.
+ * @return {boolean} Whether the IE effective document mode is higher or the
+ *      same as the given version.
+ * @deprecated Use goog.userAgent.isDocumentModeOrHigher().
+ */
+goog.userAgent.isDocumentMode = goog.userAgent.isDocumentModeOrHigher;
+
+
+/**
+ * For IE version < 7, documentMode is undefined, so attempt to use the
+ * CSS1Compat property to see if we are in standards mode. If we are in
+ * standards mode, treat the browser version as the document mode. Otherwise,
+ * IE is emulating version 5.
+ * @type {number|undefined}
+ * @const
+ */
+goog.userAgent.DOCUMENT_MODE = (function() {
+    var doc = goog.global['document'];
+    if (!doc || !goog.userAgent.IE) {
+        return undefined;
+    }
+    var mode = goog.userAgent.getDocumentMode_();
+    return mode || (doc['compatMode'] == 'CSS1Compat' ?
+        parseInt(goog.userAgent.VERSION, 10) : 5);
+})();
 
 // Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
