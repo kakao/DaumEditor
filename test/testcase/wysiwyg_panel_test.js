@@ -148,9 +148,6 @@
 
     });
 
-
-
-    var canvas;
     var processor = {
         getTxSel: function() {
             return {
@@ -161,39 +158,38 @@
         }
     };
     var eventBinder, iframe, wysiwygDoc, wysiwygWindow;
+    var canvas = {
+        isWYSIWYG: function() {
+            return true;
+        },
+        onKeyDown: function() {
+        },
+        fireElements: function() {
+        }
+    };
+
+    window.onBlankPageLoaded = function(win, doc) {
+        eventBinder = new Trex.WysiwygEventBinder(win, doc, canvas, processor);
+        eventBinder.bindEvents();
+        wysiwygDoc = doc;
+        wysiwygWindow = win;
+    };
+
+    (function createIframeDummy() {
+        iframe = document.createElement("iframe");
+        document.body.appendChild(iframe);
+        var doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write('<html><head><title>mock iframe</title></head><body>' +
+            '<script type="text/javascript">parent.onBlankPageLoaded(this, document);<\/script>' +
+            '</body></html>');
+        doc.close();
+    })();
+
     module("wysiwyg panel > eventbinder", {
         setup: function() {
-            QUnit.stop();
-            canvas = {
-                isWYSIWYG: function() {
-                    return true;
-                },
-                onKeyDown: function() {
-                },
-                fireElements: function() {
-                }
-            };
-            iframe = document.createElement("iframe");
-            document.body.appendChild(iframe);
-
-            window.onBlankPageLoaded = function(win, doc) {
-                eventBinder = new Trex.WysiwygEventBinder(win, doc, canvas, processor);
-                eventBinder.bindEvents();
-                wysiwygDoc = doc;
-                wysiwygWindow = win;
-                QUnit.start();
-            };
-
-            var doc = iframe.contentWindow.document;
-            doc.open();
-            doc.write('<html><head><title>mock iframe</title></head><body>' +
-                      '<script type="text/javascript">parent.onBlankPageLoaded(this, document);<\/script>' +
-                      '</body></html>');
-            doc.close();
         },
         teardown: function() {
-            document.body.removeChild(iframe);
-            iframe = null;
         }
     });
 
@@ -249,41 +245,52 @@
         $tx.simulateEvent(wysiwygDoc, "mouseup", {});
     });
 
-    asyncTest("반복된 keypress시에 query trigger 되도록 함", 1, function() {
+    test("반복된 keypress시에 query trigger 되도록 함", function() {
+        stop();
         canvas.triggerQueryStatus = function() {
             ok(true);
         };
         typeTenStrokes();
         setTimeout(function() {
-            QUnit.start();
-        }, 50);
+            start();
+        }, 100);
     });
 
-    asyncTest("동일 key keypress시에 query trigger 하지 않음", 0, function() {
+    test("동일 key keypress시에 query trigger 하지 않음", function() {
+        stop();
+        expect(0);
         canvas.triggerQueryStatus = function() {
-            ok(false);
+            debugger;
+            ok(true);
         };
-        
         for (var i = 0; i < 30; i++) {
             typeAStrokes(3);
         }
         setTimeout(function() {
-            QUnit.start();
+            start();
         }, 50);
+
     });
 
-    asyncTest("몇몇 특수키에 대해서는 query trigger 하지 않음", 0, function() {
+    test("몇몇 특수키에 대해서는 query trigger 하지 않음", function() {
+        expect(0);
         canvas.triggerQueryStatus = function() {
             ok(false);
         };
-
+        stop();
         typeNineStrokes();
         typeAStrokes(16);
         typeAStrokes(33);
         typeAStrokes(34);
         setTimeout(function() {
-            QUnit.start();
+            start();
         }, 50);
+    });
+
+    test("생성했던 dummy iframe 제거", function(){
+        expect(0);
+        document.body.removeChild(iframe);
+        iframe = null;
     });
 
     function typeTenStrokes() {
