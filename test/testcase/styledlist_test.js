@@ -255,7 +255,7 @@
             var range = assi.createGoogRange();
             ok(range.isCollapsed());
 
-            var currentLocation = $tx.gecko ? range.getStartNode().innerHTML : range.getStartNode().parentNode.innerHTML;
+            var currentLocation = range.getStartNode().nodeType==3 ? range.getStartNode().parentNode.innerHTML : range.getStartNode().innerHTML;
             htmlEqual(currentLocation, "1");
         });
     });
