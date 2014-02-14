@@ -198,6 +198,14 @@
 		 *	});
 		 */
 		__ENTRYBOX_ENTRY_ADDED: 'entrybox.entryadded',
+        /**
+         * wysiwyg 영역에서 backspace 키가 눌렸을 경우 발생하는 사용자 정의 이벤트<br/>
+         * 테이블 삭제를 위해 사용한다.
+         * @example
+         * 	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_BACKSPACE_TABLE, function() {
+		 *	});
+         */
+        __CANVAS_PANEL_BACKSPACE_TABLE: 'canvas.panel.backspace.table',
 		/** 
 		 * Entry Box의 Entry가 수정되었을 때 발생하는 사용자 정의 이벤트
 		 * @example

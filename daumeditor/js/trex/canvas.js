@@ -614,14 +614,45 @@
 
 
         onKeyDown: function(event) {
+            var p = this.getProcessor();
+            var doc = this.getCurrentPanel().getDocument();
+            function getPrevUntilTable(){
+                var rng = goog.dom.Range.createFromBrowserSelection(doc.getSelection? doc.getSelection():p.getSel());
+                var node = rng.getStartNode();
+                var offset = rng.getStartOffset();
+                if(offset === 0)
+                    node = node.previousSibling;
+                else {
+                    node = node.childNodes[offset-1];
+                }
+                while(node&&node.lastChild){
+                    if(node.tagName === 'TABLE')
+                        break;
+                    node = node.lastChild;
+                }
+                return node;
+            }
+            function isPrevTable(node){
+                if(!node)
+                    return false;
+
+                if(node.tagName !== 'TABLE')
+                    return false;
+                return true;
+            }
             this.fireJobs(Trex.Ev.__CANVAS_PANEL_KEYDOWN, event);
+            var prev = null;
+            if(event.keyCode == Trex.__KEY.BACKSPACE && p.isCollapsed() && (prev = getPrevUntilTable()) && isPrevTable(prev)){
+                $tx.stop(event);
+                this.fireJobs(Trex.Ev.__CANVAS_PANEL_BACKSPACE_TABLE, prev);
+            }
             if (this.config.useHotKey) {
                 this.fireKeys(event);
             }
         },
 
         onKeyUp: function(event) {
-            var keyCode = event.keyCode;
+            var keyCode = event.keyCode+'';
 
             if (shouldTriggerQuery(keyCode)) {
                 this.getProcessor().clearDummy();
