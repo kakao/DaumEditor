@@ -616,33 +616,17 @@
         onKeyDown: function(event) {
             var p = this.getProcessor();
             var doc = this.getCurrentPanel().getDocument();
-            function getPrevUntilTable(){
+            function getNodeAndOffsetAtSel(){
                 var rng = goog.dom.Range.createFromBrowserSelection(doc.getSelection? doc.getSelection():p.getSel());
                 var node = rng.getStartNode();
                 var offset = rng.getStartOffset();
-                if(offset === 0)
-                    node = node.previousSibling;
-                else {
-                    node = node.childNodes[offset-1];
-                }
-                while(node&&node.lastChild){
-                    if(node.tagName === 'TABLE')
-                        break;
-                    node = node.lastChild;
-                }
-                return node;
+                return {node: node,
+                    offset: offset}
             }
-            function isPrevTable(node){
-                if(!node)
-                    return false;
-
-                if(node.tagName !== 'TABLE')
-                    return false;
-                return true;
-            }
+            var where = getNodeAndOffsetAtSel();
             this.fireJobs(Trex.Ev.__CANVAS_PANEL_KEYDOWN, event);
             var prev = null;
-            if(event.keyCode == Trex.__KEY.BACKSPACE && p.isCollapsed() && (prev = getPrevUntilTable()) && isPrevTable(prev)){
+            if(event.keyCode == Trex.__KEY.BACKSPACE && p.isCollapsed() && (prev = $tom.prevNodeUntilTagName(where.node, where.offset, 'table')) && $tom.isTagName(prev, 'table')){
                 $tx.stop(event);
                 this.fireJobs(Trex.Ev.__CANVAS_PANEL_BACKSPACE_TABLE, prev);
             }

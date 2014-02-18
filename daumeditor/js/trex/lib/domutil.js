@@ -1683,4 +1683,25 @@ Object.extend($tom, /** @lends $tom */{
     EMPTY_PARAGRAPH_HTML: "<p>" + $tom.EMPTY_BOGUS + "</p>"
 });
 
+Object.extend($tom, /** @lends $tom */{
+    prevNodeUntilTagName: function(node, offset, tagName){
+        tagName = tagName.toUpperCase();
+        if(offset === 0)
+            node = node.previousSibling;
+        else {
+            node = node.childNodes[offset-1];
+        }
+        while(node&&node.lastChild){
+            if(node.tagName === tagName)
+                break;
+            node = node.lastChild;
+        }
+        return node;
+    },
+    isTagName: function(element, tagName){
+        tagName = tagName.toUpperCase();
+        return element && element.tagName === tagName;
+
+    }
+});
 _WIN.$tom = $tom;
