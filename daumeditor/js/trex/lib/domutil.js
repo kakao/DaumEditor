@@ -159,6 +159,15 @@ Object.extend($tom, /** @lends $tom */{
 	isControl: function(node) {
 		return $tom.kindOf(node, '%control');
 	},
+    /**
+     * element가 tagName면 true를 반환한다.
+     * @function
+     */
+    isTagName: function(element, tagName){
+        tagName = tagName.toUpperCase();
+        return element && element.tagName === tagName;
+
+    },
     getOwnerDocument: function(node) {
         return node.ownerDocument || node.document;
     },
@@ -750,7 +759,25 @@ Object.extend($tom, /** @lends $tom */{
 				_node = _node.parentNode;
 			}
 			return _FALSE;
-		}
+		},
+        /**
+         * node, offset 이전 커서의 위치를 반환한다.
+         * @function
+         */
+        prevNodeUntilTagName: function(node, offset, tagName){
+            tagName = tagName.toUpperCase();
+            if(offset === 0)
+                node = node.previousSibling;
+            else {
+                node = node.childNodes[offset-1];
+            }
+            while(node&&node.lastChild){
+                if(node.tagName === tagName)
+                    break;
+                node = node.lastChild;
+            }
+            return node;
+        }
 	});
 	
 })();
@@ -1683,25 +1710,4 @@ Object.extend($tom, /** @lends $tom */{
     EMPTY_PARAGRAPH_HTML: "<p>" + $tom.EMPTY_BOGUS + "</p>"
 });
 
-Object.extend($tom, /** @lends $tom */{
-    prevNodeUntilTagName: function(node, offset, tagName){
-        tagName = tagName.toUpperCase();
-        if(offset === 0)
-            node = node.previousSibling;
-        else {
-            node = node.childNodes[offset-1];
-        }
-        while(node&&node.lastChild){
-            if(node.tagName === tagName)
-                break;
-            node = node.lastChild;
-        }
-        return node;
-    },
-    isTagName: function(element, tagName){
-        tagName = tagName.toUpperCase();
-        return element && element.tagName === tagName;
-
-    }
-});
 _WIN.$tom = $tom;
