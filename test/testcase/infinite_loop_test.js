@@ -1,6 +1,6 @@
 module("infinite loop");
 
-$tx.msie &&
+($tx.msie && $tx.msie_ver <= 8)&&
 test("infinite loop", function() {
     var cont =
     '<P id="s">P</P>' +

@@ -197,7 +197,7 @@
 
         assi.pressShiftTab();
         assi.delayedAssertion(function() {
-            htmlEqual(assi.getBodyHTML(), '<div id="div" style="margin-left:' + INDENT_ONCE + '">Hey' + ($tx.msie ? ' ' : '') + '<p id="p">Hello</p><p>World</p><p>!!</p></div>');
+            htmlEqual(assi.getBodyHTML(), '<div id="div" style="margin-left:' + INDENT_ONCE + '">Hey' + ($tx.msie_nonstd ? ' ' : '') + '<p id="p">Hello</p><p>World</p><p>!!</p></div>');
         });
     });
 

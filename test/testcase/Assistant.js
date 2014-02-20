@@ -150,12 +150,13 @@
             return Sizzle(selector, this.doc);
         },
 
-        delayedAssertion: function(fn) {
-            QUnit.stop(1000);
+        delayedAssertion: function(fn, timeout) {
+            QUnit.stop();
+            timeout = timeout || 0;
             setTimeout(function() {
                 fn.call(this);
                 QUnit.start();
-            }, 0);
+            }, timeout);
         },
 
         assertToolExecution: function(toolName, toolParam, testFunction) {

@@ -5,8 +5,8 @@
     
  */
 (function() {
-    function oneSpaceIfIE() {
-        return ($tx.msie ? ' ' : '');
+    function oneSpaceIfIENonStandard() {
+        return ($tx.msie_nonstd ? ' ' : '');
     }
     var INDENT_ONCE = "2em";
     var SAMPLE_TABLE, SAMPLE_LIST;
@@ -231,7 +231,7 @@
         assi.selectForNodes(div.firstChild, 0, div.firstChild, 0);
 
         assi.assertToolExecution("indent", null, function() {
-            htmlEqual(assi.getBodyHTML(), '<div><p style="margin-left:' + INDENT_ONCE + '">Wow' + oneSpaceIfIE() + '</p><p>Hello</p>World</div>');
+            htmlEqual(assi.getBodyHTML(), '<div><p style="margin-left:' + INDENT_ONCE + '">Wow' + oneSpaceIfIENonStandard() + '</p><p>Hello</p>World</div>');
         });
     });
 
@@ -245,8 +245,8 @@
     });
 })();
 (function() {
-    function oneSpaceIfIE() {
-        return ($tx.msie ? ' ' : '');
+    function oneSpaceIfIENonStandard() {
+        return ($tx.msie_nonstd ? ' ' : '');
     }
     var indentHelper = Trex.Tool.Indent.Helper;
     var INDENT_ONCE = "2em";
@@ -309,7 +309,7 @@
 
         assi.pressTab();
         assi.delayedAssertion(function() {
-            htmlEqual(assi.getBodyHTML(), '<div id="div">Hey' + oneSpaceIfIE() + '<p id="p" style="margin-left:' +
+            htmlEqual(assi.getBodyHTML(), '<div id="div">Hey' + oneSpaceIfIENonStandard() + '<p id="p" style="margin-left:' +
                     INDENT_ONCE + '">Hello</p><p style="margin-left:' + INDENT_ONCE + '">World</p><p>!!</p></div>');
         });
     });
@@ -360,7 +360,8 @@
             equal(div.style.marginLeft, "", "div에 margin이 들어가면 안된다");
             var range = assi.createGoogRange();
             var startNode = range.getStartNode();
-            equal($tx.gecko ? startNode.tagName : startNode.parentNode.tagName, "P", "textnode가 p로 감싸져야 한다.");
+            var tagName = startNode.nodeType == 1 ? startNode.tagName : startNode.parentNode.tagName;// TextNode인 경우 parentNode의 tagName을 추출한다.
+            equal(tagName, "P", "textnode가 p로 감싸져야 한다.");
         });
     });
 })();

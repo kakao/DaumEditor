@@ -1,4 +1,4 @@
-$tx.msie &&
+($tx.msie && $tx.msie_ver <= 8) &&
 (function() {
     var html = [];
     module("fixing html");

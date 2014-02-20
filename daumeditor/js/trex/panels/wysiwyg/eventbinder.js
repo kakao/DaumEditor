@@ -50,7 +50,7 @@
 
     var observeTenConsecutiveKeyPresses = function(element, handler) {
         var count = 0, previousKeyCode = -1,
-                keyPressEvent = ($tx.msie || $tx.webkit) ? "keydown" : "keypress";
+                keyPressEvent = 'keydown';//($tx.msie || $tx.webkit) ? "keydown" : "keypress";
 
         $tx.observe(element, keyPressEvent, function(event) {
             var newKeyCode = event.keyCode;

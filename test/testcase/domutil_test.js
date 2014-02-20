@@ -42,7 +42,7 @@
         textNode.splitText(1);
         p.childNodes[1].splitText(1);
 
-        if ($tx.msie) {
+        if ($tx.msie && $tx.msie_ver<=7) {
             equal(p.childNodes.length, 2, "document.documentMode != 7에서는 splitText를 2번 해서, 3조각이 되었는데도 childNodes.length가 2가 나온다");
         } else {
             equal(p.childNodes.length, 3, "splitText 2번 해서, 3조각");
@@ -196,6 +196,7 @@
     });
 
     test("inlines", function() {
+        expect(0);
         assi.setContent("<span style='font-size: 10pt'>10pt<span style='font-size: 11pt'><span style='font-size: 12pt'>12pt</span></span></span>");
         var spans = assi.$$('span');
         var processor = assi.processor;

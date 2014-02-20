@@ -451,7 +451,7 @@
 	 * NOTE: FTDUEDTR-900
 	 */
 	function preventRemovingNoScopeElementInIE(markup) {
-		if ($tx.msie_nonstd) {
+		if ($tx.msie) {
 			markup = markup.replace(/(<script|<style)/i, Trex.__WORD_JOINER + "$1");
 		}
 		return markup;
@@ -490,3 +490,20 @@
 		}
 	}
 })();
+
+Trex.module("canvas set focus on mousedown event. only IE.",
+    function(editor, toolbar, sidebar, canvas, config) {
+        if (!$tx.msie_std) {
+            return;
+        }
+
+        canvas.observeJob(Trex.Ev.__CANVAS_PANEL_MOUSEUP, function(ev){
+            if ($tx.isLeftClick(ev)) {
+                var tagName = $tx.element(ev).tagName;
+                if (tagName.toLocaleLowerCase() == 'html') {
+                    canvas.focusOnBottom();
+                }
+            }
+        });
+});
+

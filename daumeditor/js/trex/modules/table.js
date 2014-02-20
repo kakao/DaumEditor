@@ -20,6 +20,9 @@ Trex.module("table selector", function (editor, toolbar, sidebar, canvas, config
 		$tx.hide(colDragger);
 		$tx.hide(rowDragger);
 	};
+    canvas.observeJob(Trex.Ev.__CANVAS_PANEL_BACKSPACE_TABLE, function(node) {
+        $tom.remove(node);
+    });
 	canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function () {
 		var tableSelect, tableMerge, tableInsert, tableDelete, tableBorder, tableTemplateLoader;
 	

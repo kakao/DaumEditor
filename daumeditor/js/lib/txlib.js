@@ -742,7 +742,7 @@ $tx.extend($tx, /** @lends $tx */{
 		observe: function(element, name, observer, useCapture) {
 			element = $tx(element);
 			useCapture = useCapture || _FALSE;
-			if (name == 'keypress' && ($tx.webkit || element.attachEvent)) {
+			if (name == 'keypress' /*&& ($tx.webkit || element.attachEvent)*/) {
 				name = 'keydown';
 			}
 			$tx._observeAndCache(element, name, observer, useCapture);
@@ -758,8 +758,8 @@ $tx.extend($tx, /** @lends $tx */{
 		stopObserving: function(element, name, observer, useCapture) {
 			element = $tx(element);
 			useCapture = useCapture || _FALSE;
-			if (name == 'keypress' &&
-			($tx.webkit || element.attachEvent))
+			if (name == 'keypress' /*&&
+			($tx.webkit || element.attachEvent)*/)
 				name = 'keydown';
 			if (element.removeEventListener) {
 				element.removeEventListener(name, observer, useCapture);

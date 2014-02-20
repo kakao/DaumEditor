@@ -8,7 +8,7 @@
                     equal(assi.doc.queryCommandState('underline'), expectedStyle[command].indexOf("underline") >= 0, "underline miss-matched");
                     equal(assi.doc.queryCommandState('strikethrough'), expectedStyle[command].indexOf("line-through") >= 0, "line-through miss-matched");
                 } else {
-                    equal(assi.doc.queryCommandState(command), expectedStyle[command]);
+                    equal(assi.doc.queryCommandState(command), expectedStyle[command], command+" miss-matched");
                 }
             }
         });

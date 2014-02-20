@@ -38,7 +38,7 @@
     }, function(root) {
         var _config = TrexConfig.get('canvas', root);
         var _evConfig = root.events;
-        _config.initializedId = root.initializedId;
+        _config.initializedId = root.initializedId || '';
         _config.useHotKey = _evConfig.useHotKey;
         var _switcher = TrexConfig.getTool('switcher', root);
         if (Trex.available(_switcher, "switcher" + _config.initializedId)) {
@@ -615,14 +615,30 @@
 
 
         onKeyDown: function(event) {
+            var p = this.getProcessor();
+            var doc = this.getCurrentPanel().getDocument();
+            function getNodeAndOffsetAtSel(){
+                var rng = goog.dom.Range.createFromBrowserSelection(doc.getSelection? doc.getSelection():p.getSel());
+                var node = rng.getStartNode();
+                var offset = rng.getStartOffset();
+                return {node: node,
+                    offset: offset}
+            }
+            var where = getNodeAndOffsetAtSel();
             this.fireJobs(Trex.Ev.__CANVAS_PANEL_KEYDOWN, event);
+            var prev = null;
+            if(event.keyCode == Trex.__KEY.BACKSPACE && p.isCollapsed() && (prev = $tom.prevNodeUntilTagName(where.node, where.offset, 'table')) && $tom.isTagName(prev, 'table')){
+                $tx.stop(event);
+                this.fireJobs(Trex.Ev.__CANVAS_PANEL_BACKSPACE_TABLE, prev);
+            }
             if (this.config.useHotKey) {
                 this.fireKeys(event);
             }
         },
 
         onKeyUp: function(event) {
-            var keyCode = event.keyCode;
+            var keyCode = event.keyCode+'';
+
             if (shouldTriggerQuery(keyCode)) {
                 this.getProcessor().clearDummy();
             }

@@ -1,4 +1,4 @@
-$tx.msie &&
+($tx.msie && $tx.msie_ver <= 8) &&
 (function() {
     module("paste html");
 
@@ -10,6 +10,7 @@ $tx.msie &&
         assi.selectForNodes(textNode, 4, textNode, 4);
 
         var range = assi.createGoogRange();
+
         range.getBrowserRangeObject().pasteHTML('<span>inserted</span><p>text</p>');
 
         htmlEqual(assi.getContent(), '<p><span>text</span><span>inserted</span></p><p>text</p>');

@@ -9,9 +9,16 @@
     <script type="text/javascript">
         // fixture
     </script>
-    <script type="text/javascript" src="testcase/lib/qunit_f2b99a6_patched.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/qunit/qunit-1.14.0.js"></script>
+    <script>
+        QUnit.config.testTimeout = 1000;
+        QUnit.start = start;
+        QUnit.stop = stop;
+    </script>
+    <script src="/testem.js"></script>
+    <!--script type="text/javascript" src="testcase/lib/qunit_f2b99a6_patched.js"></script-->
     <link rel="stylesheet" href="testcase/lib/qunit_f2b99a6_patched.css">
-    <script type="text/javascript" src="testcase/lib/diff_match_patch.js"></script>
     <style type="text/css">
         ol#qunit-tests li.fail ol {
             display: block !important;
@@ -19,22 +26,6 @@
     </style>
 
     <script type="text/javascript">
-        var dmp = new diff_match_patch();
-        QUnit.diff = function(o, n) {
-            var diffs = dmp.diff_main(o, n);
-            dmp.diff_cleanupSemantic(diffs);
-            //console.log(diffs);
-            return diffs.map(function(diff) {
-                    switch(diff[0]) {
-                        case -1:
-                            return '<del style="background-color:#E0F2BE; color:#374E0C; text-decoration:none;">' + diff[1] + '</del>';
-                        case 0:
-                            return diff[1];
-                        case 1:
-                            return '<ins style="background-color:#FFCACA; color:#500;">' + diff[1] + '</ins>';
-                    }
-                }).join("");
-        };
         var ignore_test = false;
     </script>
 
@@ -517,6 +508,16 @@ EditorJSLoader.ready(function() {
         },
         size: {
             contentWidth: 700 /*#* 지정된 본문영역의 넓이가 있을 경우에 설정 *#*/
+        },
+        toolbar: {
+            fontfamily: {
+                webfont: {
+                    use: true,
+                    options: [
+                        { label: '릭스꼬꼬마 <span class="tx-txt">(가나다라)</span>',		title: '릭스꼬꼬마', data: 'RixKidD', klass: 'tx-RixKidD', url: 'RixKidD.css' }
+                    ]
+                }
+            }
         }
 
     };
@@ -537,9 +538,11 @@ EditorJSLoader.ready(function() {
 <script type="text/javascript" src="testcase/testsuites.js"></script>
 <script type="text/javascript">
     EditorJSLoader.ready(function() {
-        for (var i = 0; i < testCases.length; i++) {
+        head.load(testCases);
+        //$LAB.setOptions({AlwaysPreserveOrder:false}).script(testCases);
+        /*for (var i = 0; i < testCases.length; i++) {
             Trex.I.JSRequester.importScript(testCases[i]);
-        }
+        }*/
     });
 </script>
 </body>

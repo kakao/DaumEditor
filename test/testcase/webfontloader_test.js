@@ -1,6 +1,5 @@
 (function() {
-
-    var WEBFONT_EMBEDDED_HTML = "<span style='font-family: MD_diary;'>hello</span>";
+    var WEBFONT_EMBEDDED_HTML = "<span style='font-family: RixKidD;'>hello</span>";
 
     var loader;
     var config = {
@@ -8,7 +7,8 @@
         webfont: {
             use: true,
             options: [
-                { label: 'MD다이어리 <span class="tx-txt">(가나다라)</span>', title: 'MD다이어리', data: 'MD_diary', klass: 'tx-MD_diary', url: 'MD_diary.css' }
+                { label: '릭스꼬꼬마 <span class="tx-txt">(가나다라)</span>',		title: '릭스꼬꼬마',		data: 'RixKidD',			klass: 'tx-RixKidD',			url: 'RixKidD.css' },
+                { label: '릭스일요일맑음 <span class="tx-txt">(가나다라)</span>',	title: '릭스일요일맑음',	data: 'RixShinySundayD',	klass: 'tx-RixShinySundayD',	url: 'RixShinySundayD.css' }
             ]
         }
     };
@@ -23,33 +23,19 @@
         }
     });
 
-
     test("load() method should be ignored unless IE", function() {
-        expect(0);
+        expect(1);
         $tx.msie = false;
 
-        loader.load(WEBFONT_EMBEDDED_HTML)
         loader.imports = function() {
             ok(false, "should not be invoked");
         };
-        QUnit.stop(1000);
-        setTimeout(function() {
-            QUnit.start();
-        }, 20);
-    });
-
-    test("load() method should be ignored unless IE", function() {
-        expect(0);
-        $tx.msie = false;
-
         loader.load(WEBFONT_EMBEDDED_HTML);
-        loader.imports = function() {
-            ok(false, "should not be invoked");
-        };
-        QUnit.stop(1000);
+        stop();
         setTimeout(function() {
-            QUnit.start();
-        }, 20);
+            ok(true);
+            start();
+        }, 50);
     });
 
     test("getUsed() should return empty array unless IE", function() {
