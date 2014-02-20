@@ -104,6 +104,21 @@ Trex.Tool.StyledList = Trex.Class.create({
                 builder.createListForNodes(nodes);
             });
         });
+        this._removeBrInListItemForIE(processor);
+    },
+    _removeBrInListItemForIE: function(processor) {
+        // FTDUEDTR-1391
+        if ($tx.msie_docmode >= 11) {
+            var range = processor.createGoogRange();
+            var startNode = range.getStartNode();
+            if (range.isCollapsed()
+                && $tom.isElement(startNode)
+                && $tom.isElement(startNode.firstChild)
+                && $tom.isTagName(startNode.firstChild, 'br')) {
+                $tom.remove(startNode.firstChild);
+                startNode.appendChild(processor.newText(''));
+            }
+        }
     },
     groupEachList: function(blockNodes) {
         var indentHelper = this.indentHelper;
