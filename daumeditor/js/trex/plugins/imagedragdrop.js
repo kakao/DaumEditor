@@ -6,6 +6,7 @@
 TrexConfig.addPlugin(
     'imagedragdrop',
     {
+        use: _TRUE,
         maxFileSize: $tx.msie && $tx.msie_ver < 10 ? 32 * 1024 : 500 * 1024 // 500 kb
     }
 );
@@ -22,7 +23,10 @@ Trex.ImageDragDrop = Trex.Class.create({
 		this.canvas = canvas;
         this.config = config;
         this.skipfiles = [];
-        this.bindKeyEvent(canvas);
+
+        if (this.config.use) {
+            this.bindKeyEvent(canvas);
+        }
 	},
 
     bindKeyEvent: function(canvas) {
@@ -35,8 +39,10 @@ Trex.ImageDragDrop = Trex.Class.create({
         	dragStartInCanvas = _FALSE;
         });
         canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DROP, function(e) {
-        	if(e && e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) {
-        		self.imageDisplayHandler(e);
+        	if(e && e.dataTransfer && e.dataTransfer.files) {
+                if (e.dataTransfer.files.length) {
+                    self.imageDisplayHandler(e);
+                }
             } else {
                 alert(TXMSG("@imagedragdrop.not.supported.browser"));
             }
