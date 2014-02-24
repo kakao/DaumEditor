@@ -136,6 +136,7 @@ var CORE_FILES = [
 	"trex/tool/emoticon.js",
 	"trex/tool/redo.js",
 	"trex/tool/undo.js",
+	"trex/tool/removeformat.js",
 	"trex/tool/horizontalrule.js",
 	"trex/tool/specialchar.js",
 	"trex/tool/dictionary.js",
