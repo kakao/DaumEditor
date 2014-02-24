@@ -1196,7 +1196,25 @@ $tx.extend($tx, /** @lends $tx */{
 		 */
 		getRegExp: function() {
 			return this.toString().getRegExp();
-		}
+		},
+        humanReadable: function() {
+            var newSize = this;
+            var unit = 'Byte';
+            var pow = Math.pow, round = Math.round;
+
+            if (this > pow(1000, 3)) { // GB
+                newSize = round(this / pow(1000, 3) * 100) / 100;
+                unit = 'GB';
+            } else if (this > pow(1000, 2)) { // MB
+                newSize = round(this / pow(1000, 2) * 100) / 100;
+                unit = 'MB';
+            } else if (this > 1000) { // KB
+                newSize = round(this / 1000 * 100) / 100;
+                unit = 'KB';
+            }
+
+            return newSize + unit;
+        }
 	});
 })();
 

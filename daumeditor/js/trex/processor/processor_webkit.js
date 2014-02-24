@@ -87,5 +87,11 @@ Trex.I.Processor.Webkit = {
 				_node.firstChild.data = "\u00A0";
 			}
 		}
-	}
+	},
+    moveCaretPoint: function(px, py) {
+        var rng = this.doc.caretRangeFromPoint(px, py);
+        var sel = this.getSel();
+        sel.removeAllRanges();
+        sel.addRange(rng);
+    }
 };

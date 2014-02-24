@@ -43,7 +43,10 @@ Trex.I.Processor.Trident = {
 			});
 			this.moveCaretTo(_dvNode);
 		}
-	}
+	},
+    moveCaretPoint: function(px, py) {
+        // not supported
+    }
 };
 
 Trex.module("delete image element @when backspace key event fires",

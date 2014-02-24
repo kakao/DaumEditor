@@ -88,6 +88,9 @@ Trex.I.Processor.TridentStandard = {
                 _node.firstChild.data = "\u00A0";
             }
         }
+    },
+    moveCaretPoint: function(px, py) {
+        // not supported
     }
 };
 

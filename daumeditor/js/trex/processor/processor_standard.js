@@ -310,6 +310,26 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 			this.bookmark.select(this.txSelection);
 		}
 	},
+    /**
+     * panel의 x, y 좌표에 캐럿을 옮긴다.
+     * @param px
+     * @param py
+     */
+    moveCaretPoint: function(px, py) {
+        var doc = this.doc;
+        if (!doc.caretPositionFromPoint) {
+            return;
+        }
+
+        var rng = doc.createRange();
+        var pos = doc.caretPositionFromPoint(px, py);
+        rng.setStart(pos.offsetNode, pos.offset);
+        rng.setEnd(pos.offsetNode, pos.offset);
+
+        var sel = this.getSel();
+        sel.removeAllRanges();
+        sel.addRange(rng);
+    },
 	/**
 	 * 특정 노드를 감싸 선택한다.
 	 * @param {Element} node - 특정 노드
