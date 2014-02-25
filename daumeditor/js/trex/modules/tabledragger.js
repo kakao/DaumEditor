@@ -308,12 +308,12 @@ Trex.module("table resize dragger", function(editor, toolbar, sidebar, canvas) {
             var i;
             if (leftTdArray) {
                 for (i = 0; i < leftTdArray.length; i++) {
-                    leftTdArray[i].style.width = leftWidthArr[i] + movingX;
+                    leftTdArray[i].style.width = (leftWidthArr[i] + movingX).toPx();
                 }
             }
             if (rightTdArray) {
                 for (i = 0; i < rightTdArray.length; i++) {
-                    rightTdArray[i].style.width = rightWidthArr[i] - movingX;
+                    rightTdArray[i].style.width = (rightWidthArr[i] - movingX ).toPx();
                 }
             }
             if (leftTdArray && rightTdArray == _NULL) {
@@ -479,7 +479,7 @@ Trex.module("table resize dragger", function(editor, toolbar, sidebar, canvas) {
                 left = $tx.getCoordsTarget(dragger).left;
                 $tx.setStyle(dragger, {
                     "width": "2px",
-                    "height": wysiwygPanel.el.clientHeight,
+                    "height": wysiwygPanel.el.clientHeight.toPx(),
                     "border": "1px dotted #81aFFC",
                     "background":"",
                     "left": left.toPx()
@@ -491,7 +491,7 @@ Trex.module("table resize dragger", function(editor, toolbar, sidebar, canvas) {
                 left = posiX - $tom.getScrollLeft(doc);
                 $tx.setStyle(dragger, {
                     "width": "2px",
-                    "height": wysiwygPanel.el.clientHeight,
+                    "height": wysiwygPanel.el.clientHeight.toPx(),
                     "border": "",
                     "background":"#fff",
                     "left": left.toPx()
@@ -533,7 +533,7 @@ Trex.module("table resize dragger", function(editor, toolbar, sidebar, canvas) {
             var movingWidth = 0;
             if (currentTableWidth) {
                 movingWidth = parseInt(currentTableWidth) + movingX;
-                currentTable.width = movingWidth;
+                currentTable.width = movingWidth.toPx();
                 currentTable.style.width = movingWidth.toPx();
             }
         };
