@@ -69,8 +69,9 @@ Trex.I.XHRequester = Trex.Faculty.create(/** @lends Trex.I.XHRequester */{
 				_xmlHttp.open("POST", url, async);
 				_xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
 				_xmlHttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-				_xmlHttp.setRequestHeader("Content-Length", param.length);
-				_xmlHttp.setRequestHeader("Connetion","close");
+                //webkit 오류발생
+//				_xmlHttp.setRequestHeader("Content-Length", param.length);
+//				_xmlHttp.setRequestHeader("Connetion","close");
 				_xmlHttp.send(param);
 			} else {
 				if(param && param.length > 0) {
