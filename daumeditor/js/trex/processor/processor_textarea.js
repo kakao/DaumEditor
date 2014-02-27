@@ -31,9 +31,10 @@ Trex.Canvas.TextAreaProcessor = Trex.Class.create({
 		_WIN.focus();
 	},
 	savePosition: function() {
-		if (this.el.createTextRange) {
-			this.currentPos = _DOC.selection.createRange().duplicate();
-		}	
+        // 왜 사용되었는지 의문.. this.currentPos가 쓰이는 곳이 없음. #FTDUEDTR-1395
+//		if (this.el.createTextRange) {
+//			this.currentPos = _DOC.selection.createRange().duplicate();
+//		}
 	},
 	controlEnter: function() {
 		var _processor = this;

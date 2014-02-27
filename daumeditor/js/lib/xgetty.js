@@ -92,7 +92,7 @@
 	 * 			extend function as xText, xAttr, xGet, xGets
 	 */
 	_WIN.xCreate = function(text) {
-		if(!!(_WIN.attachEvent && !_WIN.opera)) {
+		if($tx.msie) {
 			var xObj = (function() {
 				var _xObj = _NULL;
 				for(var i=0; i<ieXmlParsers.length; i++) {
