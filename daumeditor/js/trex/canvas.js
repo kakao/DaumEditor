@@ -12,7 +12,7 @@
 
     TrexConfig.add({
         "canvas": {
-            doctype: "html", // xhtml, html
+            doctype: "edge", // edge
             mode: ["text", "html", "source"],
             styles: {
                 color: "#333333",
