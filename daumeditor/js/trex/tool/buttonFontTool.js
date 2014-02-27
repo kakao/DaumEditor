@@ -10,13 +10,13 @@ Trex.I.ButtonFontTool = Trex.Mixin.create({
     },
     rangeExecutor: function(processor, newStyle, range) {
         var el = null;
-        if(this.wrapDummySpan && $tx.msie)
-            el = this.wrapDummySpan(processor, range);
-        processor.execCommand(this.getQueryCommandName());
-        if(el){
-
+        if($tx.msie && this.wrapDummy && processor.isCollapsed()){
+            el = this.wrapDummy(processor, range);
+            processor.execCommand(this.getQueryCommandName());
             var rng = processor.createGoogRangeFromNodes(el, 1, el, 1);
             rng.select();
+        }else {
+            processor.execCommand(this.getQueryCommandName());
         }
     },
     onAfterHandler: function(data) {

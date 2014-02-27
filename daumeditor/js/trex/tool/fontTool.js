@@ -164,25 +164,18 @@ Trex.I.WrappingSpanFontTool = Trex.Mixin.create({
 });
 
 Trex.I.WrappingDummyFontTool = Trex.Mixin.create({
-    wrapDummySpan: function(processor, range) {
-        if (processor.isCollapsed()) {
-            var startNode = range.getStartNode();
-            if (startNode.nodeType == 3) {
-                startNode = startNode.parentNode;
-            }
-            var targetNode = this.createDummySpan(startNode, processor, range);
-            var wordJoiner = targetNode.firstChild;
-            $tom.unwrap(targetNode);
-            processor.createGoogRangeFromNodes(wordJoiner, 0, wordJoiner, wordJoiner.length).select();
-            return wordJoiner;
-        }
+    wrapDummy: function(processor, range) {
+        var targetNode = this.createDummySpan(processor, range);
+        var wordJoiner = targetNode.firstChild;
+        $tom.unwrap(targetNode);
+        processor.createGoogRangeFromNodes(wordJoiner, 0, wordJoiner, wordJoiner.length).select();
+        return wordJoiner;
     },
-    createDummySpan: function (parentNode, processor, goog_range) {
+    createDummySpan: function (processor, goog_range) {
         var newNode = null;
         newNode = processor.create('span');
         newNode.appendChild(processor.newDummy());
         newNode = goog_range.insertNode(newNode);    // NOTE: IE에서는 return된 value를 사용해야 한다.
-
         // insertNode로 인해 빈 TextNode가 생긴 경우, 바로 삭제해준다.
         $tom.removeEmptyTextNode(newNode.previousSibling);
         $tom.removeEmptyTextNode(newNode.nextSibling);
