@@ -158,3 +158,52 @@ Trex.register("filter > mode change", function(editor, toolbar, sidebar, canvas,
 		}
 	});
 });
+
+
+
+Trex.register("filter > non-breaking space", function(editor/*, toolbar, sidebar, canvas, config*/) {
+
+    function convertNonBreakingSpaceToNoramlSpace(contents) {
+        return contents.replace(/\u00A0/g, ' ');
+    }
+
+    var _docparser = editor.getDocParser();
+    _docparser.registerFilter('filter/converting/nonbreakingsapce', {
+        'text@load': function(contents) {
+            return convertNonBreakingSpaceToNoramlSpace(contents);
+        },
+        'source@load': function(contents) {
+            return convertNonBreakingSpaceToNoramlSpace(contents);
+        },
+        'html@load': function(contents) {
+            return convertNonBreakingSpaceToNoramlSpace(contents);
+        },
+        'text4save': function(contents) {
+            return convertNonBreakingSpaceToNoramlSpace(contents);
+        },
+        'source4save': function(contents) {
+            return convertNonBreakingSpaceToNoramlSpace(contents);
+        },
+        'html4save': function(contents) {
+            return convertNonBreakingSpaceToNoramlSpace(contents);
+        },
+//        'text2source': function(contents) {
+//            return contents;
+//        },
+        'text2html': function(contents) {
+            return convertNonBreakingSpaceToNoramlSpace(contents);
+        },
+//        'source2text': function(contents) {
+//            return contents;
+//        },
+        'source2html': function(contents) {
+            return convertNonBreakingSpaceToNoramlSpace(contents);
+        },
+//        'html2text': function(contents) {
+//            return contents;
+//        },
+        'html2source': function(contents) {
+            return convertNonBreakingSpaceToNoramlSpace(contents);
+        }
+    });
+});
