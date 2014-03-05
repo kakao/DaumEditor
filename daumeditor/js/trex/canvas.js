@@ -280,8 +280,8 @@
             this.mode = newMode;
             this.fireJobs(Trex.Ev.__CANVAS_MODE_CHANGE, oldMode, newMode);
             _newPanel.setPanelHeight(_oldPanel.getPanelHeight());
-            _oldPanel.hide();
             _newPanel.show();
+            _oldPanel.hide();
             // FF2 bug:: When display is none,  designMode can't be set to on
             try {
                 if (newMode == "html" && !this.getPanel("html").designModeActivated && $tx.gecko) {
