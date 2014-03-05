@@ -12,7 +12,7 @@
 
     TrexConfig.add({
         "canvas": {
-            doctype: "edge", // edge
+            doctype: "auto", // edge
             mode: ["text", "html", "source"],
             styles: {
                 color: "#333333",
@@ -63,6 +63,21 @@
          */
         //_config.wysiwygUrl = TrexConfig.getUrl(["#host#path/pages/daumx/", "wysiwyg_", (_config.serviceWysiwyg || "" ), ((_config.doctype == "html") ? "html" : "xhtml"), ".", (_config.ext ? _config.ext : "html"), "?prefix=" + root.initializedId, "&", _config.param].join(""));
         _config.wysiwygUrl = TrexConfig.getUrl([(_config.wysiwygPath || "#host#path/pages/daumx/"), "wysiwyg_", (_config.serviceWysiwyg || "" ), ((_config.doctype == "html") ? "html" : "xhtml"), ".", (_config.ext ? _config.ext : "html"), "?prefix=" + root.initializedId, "&", _config.param].join(""));
+
+        /**
+         * doctype 결정기준
+         */
+        if (_config.doctype == 'auto') {
+            if ($tx.msie_nonstd) {
+                _config.doctype = 'quirks';
+            } else {
+                _config.doctype = 'edge';
+            }
+
+        }
+
+
+
     });
 
     TrexConfig.add({
