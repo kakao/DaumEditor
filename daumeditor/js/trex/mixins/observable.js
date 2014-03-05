@@ -37,6 +37,20 @@ Trex.I.JobObservable = Trex.Faculty.create(/** @lends Trex.I.JobObservable */{
 			}, delay);
 		});
 	},
+    removeJob: function(name, observe){
+        if(!this.jobObservers[name])
+            return;
+        if(!observe){
+            this.jobObservers[name].length = 0;
+        }else {
+            for(var i = 0 ; i < this.jobObservers[name].length; i++){
+                if(this.jobObservers[name][i]===observe){
+                    this.jobObservers[name].splice(i,1);
+                }
+            }
+        }
+
+    },
 	/**
 	 * custom 이벤트를 발생시킨다. 이때 발생시킨 이벤트는 observerJob를 통해 등록된 observer들에게 전파된다.
 	 * @param {String} name - custom 이벤트의 이름 
