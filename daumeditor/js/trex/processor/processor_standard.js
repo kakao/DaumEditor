@@ -479,11 +479,18 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 			this.stuffNode(_dvNode);
 			this.bookmark.saveIntoFirst(_dvNode);
 		} else {
-			this.execWithMarker(function(marker) {
-				nodes.each(function(node) {
-					$tom.insertAt(node, marker.endMarker);
-				});
-			});
+            var self = this;
+            this.executeUsingCaret(function(range, savedCaret) {
+                var startCaret = savedCaret.getCaret(_FALSE),
+                    endCaret = savedCaret.getCaret(_FALSE);
+                var targetNode = $tx.msie_nonstd ? startCaret : _NULL;
+                nodes.each(function(node) {
+                    range.insertNode(node, targetNode);
+                });
+                if (endCaret && endCaret.nextSibling) {
+                    self.moveCaretTo(endCaret.nextSibling, 0);
+                }
+            });
 		}
 		return nodes[0];
 	},
