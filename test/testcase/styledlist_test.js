@@ -205,21 +205,20 @@
     });
 
     test("테이블을 포함해서 ul 추가", function() {
-        var html = assi.getHTML(ax.p("Hello"), ax.p(ax.table(ax.tr(ax.td("cell1"), ax.td("cell2")))), ax.p(ax.br()));
+        var html = assi.getHTML(ax.p("Hello"), ax.table(ax.tr(ax.td("cell1"), ax.td("cell2"))), ax.p("world"));
         assi.setContent(html);
         var p0 = assi.byTag("p", 0);
-        var p2 = assi.byTag("p", 2);
-        assi.selectForNodes(p0, 0, p2, 1);
-
+        var p1 = assi.byTag("p", 1);
+        assi.selectForNodes(p0, 0, p1, 1);
         assi.assertToolExecution('styledlist', 'disc', function() {
             var expected = assi.getHTML(
                     ax.ul({style: {listStyleType:"disc"}}, ax.li("Hello")),
-                    ax.p(ax.table(ax.tr(ax.td(ax.ul({style: {listStyleType:"disc"}}, ax.li("cell1"))), ax.td(ax.ul({style: {listStyleType:"disc"}}, ax.li("cell2")))))),
-                    ax.ul({style: {listStyleType:"disc"}}, ax.li(ax.br())));
+                    ax.table(ax.tr(ax.td(ax.ul({style: {listStyleType:"disc"}}, ax.li("cell1"))), ax.td(ax.ul({style: {listStyleType:"disc"}}, ax.li("cell2"))))),
+                    ax.ul({style: {listStyleType:"disc"}}, ax.li("world")));
             htmlEqual(assi.getBodyHTML(), expected);
 
             var selectedText = assi.getText();
-            regexpEqual(selectedText, "\\s*Hello\\s*cell1\\s*cell2\\s*");
+            regexpEqual(selectedText, "\\s*Hello\\s*cell1\\s*cell2\\s*world");
         });
     });
 
