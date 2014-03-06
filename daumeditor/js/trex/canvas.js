@@ -532,8 +532,7 @@
 			        setTimeout(function () { //NOTE: #FTDUEDTR-435
 				        _processor.restoreRange();
 				        handler(_processor);
-                        if(!_processor.isCollapsed())
-				            _history.saveHistory();
+			            _history.saveHistory();
 				        _processor.restore();
 			        }, 0);
 		        } else {
