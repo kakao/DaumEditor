@@ -81,12 +81,22 @@ Trex.I.History.Trident = {
         var selectedTextRange = doc.selection.createRange();
         var preSelectionTextRange = doc.body.createTextRange();
         preSelectionTextRange.moveToElementText(containerEl);
-        preSelectionTextRange.setEndPoint("EndToStart", selectedTextRange);
-        var start = preSelectionTextRange.text.length;
+        try {
+            preSelectionTextRange.setEndPoint("EndToStart", selectedTextRange);
+            var start = preSelectionTextRange.text.length;
 
+            return {
+                start: start,
+                end: start + selectedTextRange.text.length
+            }
+        }catch(e){
+
+        }
+
+        var onepoint = preSelectionTextRange.text.length;
         return {
-            start: start,
-            end: start + selectedTextRange.text.length
+            start: onepoint,
+            end: onepoint
         }
     },
     restoreRange: function(savedSel) {
