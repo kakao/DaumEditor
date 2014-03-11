@@ -71,7 +71,12 @@
 				if($tom.kindOf(_node, this.pTranslator.getExpression())) {
 					return _node;
 				}
-				_node = _node.parentNode;
+                if(_node.nextSibling && _node.nodeType == 3) {
+                    // BlockIterator 이니까 TextNode 는 찾는 대상이 아님.
+                    _node = _node.nextSibling;
+                } else {
+                    _node = _node.parentNode;
+                }
 			}
 			var _innerName = $tom.paragraphOf($tom.getName(_bNode));
 			var _wNode = this.processor.newNode(_innerName);
