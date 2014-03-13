@@ -500,7 +500,9 @@ EditorJSLoader.ready(function() {
         wrapper: "tx_trex_container", /*#* 에디터를 둘러싸고 있는 레이어 이름(에디터 컨테이너) *#*/
         form: 'tx_editor_form', /*#* 등록하기 위한 Form 이름 *#*/
         canvas: {
-            showGuideArea: false
+            showGuideArea: false,
+            doctype: "quirks"
+            //doctype: "edge"
         },
 
         events: {
@@ -534,6 +536,22 @@ EditorJSLoader.ready(function() {
 </script>
 
 <!-- @Test Suites -->
+<script type="text/javascript">
+    if(!window.console){
+        var div = document.createElement('div');
+        div.style.position = 'fixed';
+        div.style.top = '10px';
+        div.style.left = '10px';
+        document.body.appendChild(div);
+        window.console = {
+            log: function(message){
+                var log = document.createElement('div');
+                log.innerHTML = message;
+                div.appendChild(log);
+            }
+        };
+    }
+</script>
 <script type="text/javascript" src="testcase/lib/sizzle-1.5.1.js"></script>
 <script type="text/javascript" src="testcase/testsuites.js"></script>
 <script type="text/javascript">

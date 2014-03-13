@@ -43,7 +43,7 @@ var CORE_FILES = [
 	"trex/entryproxy.js",
 	"trex/formproxy.js",
 	"trex/saver.js",
-	"trex/resizer.js",
+	//"trex/resizer.js",
 
 	/** canvas & panels */
 	"trex/history.js",
@@ -156,6 +156,7 @@ var CORE_FILES = [
 	/** each > module */
 	"trex/modules/blockingunload.js",
 	"trex/modules/alignbuttons.js",
+    "trex/modules/autosize.js",
 	"trex/modules/canvassize.js",
 	"trex/modules/blockingedit.js",
 	"trex/modules/saveimagehistory.js",
