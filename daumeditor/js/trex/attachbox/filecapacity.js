@@ -93,7 +93,7 @@ Trex.I.FileCapacity = {
 		 *  @alias empty
 		 */
 		var _setAttachSize = function(fileSize) {
-			var uploaded = _fileConfig.uploaded + fileSize;
+			var uploaded = _fileConfig.uploaded + fileSize.toNumber();
             if( uploaded < 0 ){
                 uploaded = 0;
             }
