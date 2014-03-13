@@ -42,7 +42,7 @@ TrexConfig.addAttacher(
 	{	
 		multiple: _TRUE,
 		multipleuse: _FALSE,
-		checksize: _FALSE,
+		checksize: _TRUE,
 		boxonly: _FALSE,
 		wysiwygonly: _TRUE,
 		objattr: {},
