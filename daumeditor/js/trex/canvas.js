@@ -68,15 +68,12 @@
          * doctype 결정기준
          */
         if (_config.doctype == 'auto') {
-            if ($tx.msie_nonstd) {
+            if ($tx.msie && $tx.msie_docmode < 9) {
                 _config.doctype = 'quirks';
             } else {
                 _config.doctype = 'edge';
             }
-
         }
-
-
 
     });
 
