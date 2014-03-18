@@ -47,8 +47,8 @@
 			}, _toolHandler);
 		}
 	});
-	
-	
+
+
 	TrexMessage.addMsg({
 		'@fullscreen.attach.close.btn': "파일첨부박스",
 		'@fullscreen.noti.btn': "일반 글쓰기로",
@@ -251,7 +251,7 @@
 			}
 			
 			this.canvas.fireJobs("canvas.fullscreen.change");
-			
+
 			// make trace element and move container to body's direct child
 			_WIN.wrapper = _wrapper;
 			this.relativeParents = [];
@@ -266,7 +266,7 @@
 						position: "static"
 					});
 				}
-				parentOfWarpper = parent.offsetParent;
+				parentOfWarpper = parentOfWarpper.offsetParent;
 			}
 			
 			this.isFullScreen = _TRUE;
