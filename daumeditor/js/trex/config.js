@@ -126,7 +126,7 @@ var TrexConfig = function() {
 		 */
 		getUrl: function(url, params) {
 			if(typeof url !== 'string') { return url; };
-            var loader = _WIN['EditorJSLoader'] || opener['EditorJSLoader'];
+            var loader = _WIN['EditorJSLoader'] || opener && opener['EditorJSLoader'] || (PopupUtil && PopupUtil.getOpener()['EditorJSLoader']);
 			url = url.replace(/#host#path\/pages\//g, loader.getPageBasePath());
 			url = url.replace(/#host/g, __TREX_CONFIGURE["txHost"]);
 			url = url.replace(/#path\/?/g, __TREX_CONFIGURE["txPath"]);

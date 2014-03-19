@@ -68,7 +68,7 @@
          * doctype 결정기준
          */
         if (_config.doctype == 'auto') {
-            if ($tx.msie && $tx.msie_docmode < 9) {
+            if ($tx.msie && $tx.msie_quirks) {
                 _config.doctype = 'quirks';
             } else {
                 _config.doctype = 'edge';
