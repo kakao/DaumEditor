@@ -194,7 +194,7 @@ goog.typeOf = function(value) {
            // boundaries (not iframe though) so we have to do object detection
            // for this edge case
            typeof value.length == 'number' &&
-           isTypeOfUndefined(value.splice) != _UNDEFINED+'' &&
+           typeof value.splice != _UNDEFINED+'' &&
            typeof value.propertyIsEnumerable != _UNDEFINED+'' &&
            !value.propertyIsEnumerable('splice')
 
