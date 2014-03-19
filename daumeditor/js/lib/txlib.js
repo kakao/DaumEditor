@@ -182,7 +182,7 @@ var $tx = {};
         msie_std: ($tx.msie && !_DOC.selection),
         msie_nonstd: ($tx.msie && !!_DOC.selection),
         msie6: ($tx.msie && 6 <= $tx.msie_ver && $tx.msie_ver < 7),
-        msie_quirks: $tx.msie && _DOC.compatMode!=='CSS1Compat'
+        msie_quirks: $tx.msie && _WIN.top.document.compatMode!=='CSS1Compat'
     });
 
 	Object.extend($tx, /** @lends $tx */{
