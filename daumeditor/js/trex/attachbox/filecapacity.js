@@ -86,6 +86,19 @@ Trex.I.FileCapacity = {
 			return _FALSE;
 		};
 
+        /**
+         * Change maximum capacity
+         * @memberOf Trex.AttachBox.prototype
+         * @alias changeMaximumCapacity
+         * @param {Number} size
+         */
+        this.changeMaximumCapacity = function(size){
+            if ( _setCapacity("maximum", size ) ){
+                return size;
+            }
+            return _FALSE;
+        };
+
 		/**
 		 *  Resets uploaded file count & size
 		 *
