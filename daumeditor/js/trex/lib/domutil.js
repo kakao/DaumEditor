@@ -1699,7 +1699,7 @@ Object.extend($tom, /** @lends $tom */{
      * 편집영역에서 기본 빈 문단에 해당하는 content
      * @constant
      */
-    EMPTY_BOGUS: ($tx.msie_nonstd ? "&nbsp;" : "<br>")
+    EMPTY_BOGUS: ($tx.msie_nonstd ? "&nbsp;" : "<br />")
 });
 
 Object.extend($tom, /** @lends $tom */{
