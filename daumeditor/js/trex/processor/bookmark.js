@@ -223,7 +223,7 @@ Trex.Canvas.Bookmark = Trex.Class.create(/** @lends Trex.Canvas.Bookmark.prototy
 		}
 		
 		this.endContainer = _tNode;
-		this.endOffset = 0;
+		this.endOffset = _tNode.length;
 	},
 	/**
 	 * @private
@@ -237,7 +237,7 @@ Trex.Canvas.Bookmark = Trex.Class.create(/** @lends Trex.Canvas.Bookmark.prototy
 		$tom.insertNext(_tNode, node);
 		
 		this.endContainer = _tNode;
-		this.endOffset = 0;
+		this.endOffset = _tNode.length;
 	},
 	/**
 	 * @private

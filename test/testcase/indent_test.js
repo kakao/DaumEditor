@@ -70,7 +70,7 @@
             var range = assi.createGoogRange();
             ok(range.isCollapsed());
             ok($tom.include(assi.$("p"), range.getStartNode()));
-            equal(range.getStartOffset(), 0);
+            equal(range.getStartOffset(), 1);
         });
     });
 
