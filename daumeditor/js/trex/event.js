@@ -360,11 +360,6 @@
          */
         __SHOULD_CLOSE_MENUS: "editor.shouldclosemenus",
         /**
-         * 자동저장 리스트를 열 때 발생하는 사용자 정의 이벤트
-         * @private
-         */
-        __AUTOSAVER_LIST_OPENED: "editor.autosaver.listopened",
-        /**
          * wysiwyg 영역에서 발생하는 이미지의 더블클릭 이벤트<br/>
          * @example
          * 	canvas.observeJob(Trex.Ev.__CANVAS_IMAGE_PLACEHOLDER_DBLCLICK, function(ev) {
