@@ -10,8 +10,8 @@ var $tom = {};
 		'%inline': ['span','font','u','i','b','em','strong','big','small','a','sub','sup','span'],//['tt','dfn','code','samp','kbd','var','cite','abbr','acronym','img','object','br','script','map','q','bdo','input','select','textarea','label','button'],
 		'%block': ['p','div','ul','ol','h1','h2','h3','h4','h5','h6','pre','dl','hr','table','button'], //['noscript','blockquote','form','fieldset','address'], !button
 		'%paragraph': ['p','li','dd','dt','h1','h2','h3','h4','h5','h6','td','th','div','caption'], //!button
-		'%wrapper': ['div','ul','ol','dl','pre','xmp','table','button'],
-		'%innergroup': ['li','dd','dt','td', 'th'],
+		'%wrapper': ['div','ul','ol','dl','pre','xmp','table','button','blockquote'],// FTDUEDTR-1412
+        '%innergroup': ['li','dd','dt','td', 'th'],
 		'%outergroup': ['ul','ol','dl','tr','tbody','thead','tfoot','table'],
 		'%tablegroup': ['td', 'th','tr','tbody','thead','tfoot','table'],
 		'%listgroup': ['li','ul','ol'],

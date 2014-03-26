@@ -174,9 +174,24 @@ function testAlign(alignDirection) {
         equal(tool.button.currentState(), "pushed");
         equal(tool.button.elIcon.title, TXMSG("@align.text.align." + alignDirection));
     });
+
+    test("인용구 포함 " + currentToolName + " 정렬", function() {
+        var html = '<p>1</p><p>2</p><blockquote class="tx-quote1"><p>quote</p></blockquote><p>3</p><p>4</p>';
+        assi.setContent(html);
+
+        var plist = assi.$$('p');
+        assi.selectForNodes(plist[0].firstChild, 0, plist[plist.length-1].firstChild, 1);
+        assi.assertToolExecution(currentToolName, null, function() {
+            equal(plist[0].style.textAlign, tool.constructor.__TextModeProps.paragraph.style.textAlign);
+            equal(plist[1].style.textAlign, tool.constructor.__TextModeProps.paragraph.style.textAlign);
+            equal(assi.$$('blockquote')[0].style.cssText, "");
+            equal(plist[2].style.textAlign, tool.constructor.__TextModeProps.paragraph.style.textAlign);
+            equal(plist[3].style.textAlign, tool.constructor.__TextModeProps.paragraph.style.textAlign);
+            equal(plist[4].style.textAlign, tool.constructor.__TextModeProps.paragraph.style.textAlign);
+        });
+    });
 }
 testAlign("center");
 testAlign("left");
 testAlign("right");
 testAlign("full");
-
