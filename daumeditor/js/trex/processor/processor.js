@@ -48,7 +48,7 @@
 			
 			while(_node) {
 				_bNode = _node;
-				if($tom.isBody(_node) || $tom.kindOf(_node, "%tablegroup")) {
+				if($tom.isBody(_node)) {
 					break;
 				} 
 				

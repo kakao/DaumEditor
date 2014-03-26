@@ -33,7 +33,13 @@ function testAlign(alignDirection) {
         assi.selectNodeContents(p);
         assi.assertToolExecution(currentToolName, null, function() {
             equal(p.style.textAlign, tool.constructor.__TextModeProps.paragraph.style.textAlign);
-            equal(assi.byTag("table").getAttribute("align"), tool.constructor.__TextModeProps.paragraph.style.textAlign);
+            var table = assi.$$('p table');
+            if (table.length) {
+                equal(table[0].getAttribute("align"), tool.constructor.__TextModeProps.paragraph.style.textAlign);
+            } else {
+                ok(true, '랜더링이 되면 p 태그 내부에 table이 존재하지 않음.')
+            }
+
         });
     });
 
@@ -188,6 +194,82 @@ function testAlign(alignDirection) {
             equal(plist[2].style.textAlign, tool.constructor.__TextModeProps.paragraph.style.textAlign);
             equal(plist[3].style.textAlign, tool.constructor.__TextModeProps.paragraph.style.textAlign);
             equal(plist[4].style.textAlign, tool.constructor.__TextModeProps.paragraph.style.textAlign);
+        });
+    });
+
+    test("P로 감싸지지 않은 테이블 포함 " + currentToolName + " 정렬", function() {
+        var html = '<p>123</p>'
+            + '<table class="txc-table" width="200" border="1" cellspacing="3" cellpadding="5"><tbody><tr>'
+                + '<td><p>1</p></td>'
+                + '<td><p>2</p></td>'
+            + '</tr>'
+            + '<tr><td><p>3</p></td>'
+                + '<td><p>4</p></td>'
+            + '</tr>'
+            + '</tbody></table>'
+            + '<p>123</p>';
+
+        assi.setContent(html);
+
+        var plist = assi.$$('p');
+        assi.selectForNodes(plist[0].firstChild, 1, plist[plist.length-1].firstChild, 2);
+
+        assi.assertToolExecution(currentToolName, null, function() {
+            var CURRENT_ALIGN = tool.constructor.__TextModeProps.paragraph.style.textAlign;
+            equal(plist[0].style.textAlign, CURRENT_ALIGN);
+            equal(assi.$$('table')[0].style.cssText, "");
+            equal(assi.$$('tr')[0].style.cssText, "");
+            equal(assi.$$('td')[0].style.textAlign, CURRENT_ALIGN);
+            equal(assi.$$('td')[1].style.textAlign, CURRENT_ALIGN);
+            equal(assi.$$('td')[2].style.textAlign, CURRENT_ALIGN);
+            equal(assi.$$('td')[3].style.textAlign, CURRENT_ALIGN);
+            equal(plist[1].style.cssText, "");
+            equal(plist[2].style.cssText, "");
+            equal(plist[3].style.cssText, "");
+            equal(plist[4].style.cssText, "");
+            equal(plist[5].style.textAlign, CURRENT_ALIGN);
+        });
+    });
+
+    test("P로 감싸진 테이블 포함 " + currentToolName + " 정렬", function() {
+        var html = '<p>123</p>'
+            + '<p><table class="txc-table" width="200" border="1" cellspacing="3" cellpadding="5"><tbody><tr>'
+            + '<td><p>1</p></td>'
+            + '<td><p>2</p></td>'
+            + '</tr>'
+            + '<tr><td><p>3</p></td>'
+            + '<td><p>4</p></td>'
+            + '</tr>'
+            + '</tbody></table></p>'
+            + '<p>123</p>';
+
+        assi.setContent(html);
+
+        var plist = assi.$$('p');
+        assi.selectForNodes(plist[0].firstChild, 1, plist[plist.length-1].firstChild, 2);
+
+        assi.assertToolExecution(currentToolName, null, function() {
+            var CURRENT_ALIGN = tool.constructor.__TextModeProps.paragraph.style.textAlign;
+            equal(plist[0].style.textAlign, CURRENT_ALIGN);
+            equal(assi.$$('table')[0].style.cssText, "");
+            equal(assi.$$('tr')[0].style.cssText, "");
+            if($tx.msie_quirks) {
+                equal(assi.$$('td')[0].style.cssText, "");
+                equal(assi.$$('td')[1].style.cssText, "");
+                equal(assi.$$('td')[2].style.cssText, "");
+                equal(assi.$$('td')[3].style.cssText, "");
+            } else {
+                equal(assi.$$('td')[0].style.textAlign, CURRENT_ALIGN);
+                equal(assi.$$('td')[1].style.textAlign, CURRENT_ALIGN);
+                equal(assi.$$('td')[2].style.textAlign, CURRENT_ALIGN);
+                equal(assi.$$('td')[3].style.textAlign, CURRENT_ALIGN);
+            }
+            equal(plist[1].style.textAlign, CURRENT_ALIGN);
+            equal(plist[2].style.cssText, "");
+            equal(plist[3].style.cssText, "");
+            equal(plist[4].style.cssText, "");
+            equal(plist[5].style.cssText, "");
+            equal(plist[6].style.textAlign, CURRENT_ALIGN);
         });
     });
 }

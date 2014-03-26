@@ -55,14 +55,23 @@ Trex.Tool.RichTextBox = Trex.Class.create({
 				"backgroundColor": _this.elPreview.style.backgroundColor,
 				"padding": _this.padding
 			};
+            var _tag = "div";
+            var _attributes = { "className": 'txc-textbox', style: _style };
             _canvas.execute(function(processor) {
                 var _nodes = processor.blocks(function() {
-                    return '%wrapper,p,dd,dt,h1,h2,h3,h4,h5,h6,div,caption';
+                    return '%wrapper,%paragraph';
                 });
-                var _bNode = processor.wrap(_nodes, 'div', {
-                    'className': 'txc-textbox',
-                    'style': _style
+                var _bNode;
+                _nodes = _nodes.findAll(function(node) {
+                    if($tom.kindOf(node, "%innergroup")) {
+                        _bNode = processor.wrap($tom.children(node), _tag, _attributes);
+                        _toolbar.fireJobs('cmd.textbox.added', _bNode);
+                        return _FALSE;
+                    } else {
+                        return _TRUE;
+                    }
                 });
+                _bNode = processor.wrap(_nodes, _tag, _attributes);
                 _toolbar.fireJobs('cmd.textbox.added', _bNode);
             });
 		};
