@@ -65,12 +65,95 @@ TrexConfig.addEmbeder(
 		title: TXMSG("@media.title"),
 		canResized: _TRUE,
 		getCreatedHtml: function(data){
-			var _source = data.code || makeSourceByUrl(data.url, this.config);
+			var _source = data.code || this.makeSourceByUrl(data.url);
 			return convertToHtml(_source);
 		},
 		getDataForEntry: function(){
 			//This function is not needed anymore but absence may generate initializing error. So remained...
-		}
+		},
+        makeSourceByUrl: function(url) {
+            var ext = this.getUrlExt(url);
+            var size = getDefaultSizeByUrl(url);
+
+            switch (ext) {
+                case "swf":
+                    return this.generateHTMLForFlash(url, size);
+                case "mp3":
+                case "wma":
+                case "asf":
+                case "asx":
+                case "mpg":
+                case "mpeg":
+                case "wmv":
+                case "avi":
+                    return this.generateHTMLForMoviePlayer(url, size);
+                case "mov":
+                    return this.generateHTMLForQuicktime(url, size);
+                case 'jpg':
+                case 'bmp':
+                case 'gif':
+                case 'png':
+                    return this.generateHTMLForImage(url);
+                default:
+                    var iframeHtml = this.generateHTMLIfIframeSource(url, size);
+                    if (iframeHtml) {
+                        return iframeHtml;
+                    }
+
+                    return this.generateHTMLForDefaultEmbed(url, size);
+            }
+        },
+        getUrlExt: function(url) {
+            return url.split(".").pop().split("?")[0].toLowerCase();
+        },
+        getAllowScriptAccess: function(url) {
+            var allowScriptAccessAttr = " allowScriptAccess='never'";
+            if (this.config.allowNetworkingFilter && this.isAllowNetworkingSite(url, this.config) == _FALSE) {
+                allowScriptAccessAttr += " allowNetworking='internal'";
+            }
+            return allowScriptAccessAttr;
+        },
+        isAllowNetworkingSite: function (url, config) {
+            var _matchs, host, i, len;
+            host = "";
+            _matchs = /[\/]*\/\/([^\/]+)\//i.exec(url);
+            if (_matchs && _matchs[1]) {
+                host = _matchs[1];
+            }
+            len = config.allowNetworkingSites.length;
+            for (i = 0; i < len; i += 1) {
+                if (host == config.allowNetworkingSites[i].host) {
+                    return _TRUE;
+                }
+            }
+            return _FALSE;
+        },
+        generateHTMLForDefaultEmbed: function (url, size) {
+            return "<embed src=\"" + url + "\" width='" + size.width + "' height='" + size.height + "' " + this.getAllowScriptAccess(url) + " ></embed>";
+        },
+        generateHTMLForImage: function (url, size) {
+            return "<img src=\"" + url + "\" border=\"0\"/>";
+        },
+        generateHTMLForFlash: function (url, size) {
+            return "<embed src=\"" + url + "\" quality='high' " + this.getAllowScriptAccess(url) + " type='application/x-shockwave-flash' allowfullscreen='true' pluginspage='http://www.macromedia.com/go/getflashplayer' wmode='transparent' width='" + size.width + "' height='" + size.height + "'></embed>";
+        },
+        generateHTMLForMoviePlayer: function (url, size) {
+            return "<embed src=\"" + url + "\" type=\"application/x-mplayer2\" pluginspage=\"http://www.microsoft.com/Windows/MediaPlayer/\" width='" + size.width + "' height='" + size.height + "'></embed>";
+        },
+        generateHTMLForQuicktime: function (url, size) {
+            return "<embed src=\"" + url + "\" type=\"video/quicktime\" pluginspage=\"http://www.apple.com/quicktime/download/indext.html\" width='" + size.width + "' height='" + size.height + "'></embed>";
+        },
+        generateHTMLIfIframeSource: function(url, size) {
+            var tvpotKey = getTvPotKey(url);
+            if (tvpotKey) {
+                return "<iframe src=\"http://videofarm.daum.net/controller/video/viewer/Video.html?play_loc=editorembed&wmode=transparent&permitWideScreen=true&vid=" + tvpotKey + "\" width='"+size.width+"' height='"+size.height+"' frameborder=\"0\" allowfullscreen></iframe>";
+            }
+
+            var youtubeMovieKey = getYouTubeMovieKey(url);
+            if (youtubeMovieKey) {
+                return "<iframe src=\"http://www.youtube.com/embed/" + youtubeMovieKey + "\" width='"+size.width+"' height='"+size.height+"' frameborder=\"0\" allowfullscreen></iframe>";
+            }
+        }
 	});
 	
 	Trex.register("filter > media ", function(editor, toolbar, sidebar){
@@ -118,22 +201,6 @@ TrexConfig.addEmbeder(
 			}
 		});
 	});
-	
-	function isAllowNetworkingSite (url, config) {
-		var _matchs, host, i, len;
-		host = "";
-		_matchs = /[\/]*\/\/([^\/]+)\//i.exec(url);
-		if (_matchs && _matchs[1]) {
-			host = _matchs[1];
-		}
-		len = config.allowNetworkingSites.length;
-		for (i = 0; i < len; i += 1) {
-			if (host == config.allowNetworkingSites[i].host) {
-                return _TRUE;
-            }
-		}
-		return _FALSE;
-	}
 	
 	function addFlashOptAllowNetworking (content, config) {
 		var filteredContent;
@@ -206,14 +273,16 @@ TrexConfig.addEmbeder(
 		
 	function convertToHtml(content) {
 		if ($tx.msie) { //NOTE: #FTDUEDTR-366 + #FTDUEDTR-372 -> #FTDUEDTR-403
-			content = content.replace(/<iframe[^>]*src=("|'|)https?:\/\/www\.youtube\.com\/embed\/(\w+)\1[^>]*><\/iframe>/i, function (html, quote, vid) {
-                var matched, width, height;
-				matched = html.match(/\swidth=['"]?(\d+)/);
-				width = (matched && matched[1]) || "560";
-				matched = html.match(/\sheight=['"]?(\d+)/);
-				height = (matched && matched[1]) || "315";
-				return '<object width="' + width + '" height="' + height + '"><param name="movie" ' + 'value="https://www.youtube.com/v/' + vid + '?version=3&amp;hl=ko_KR"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><param name="wmode" value="transparent"></param><embed src="https://www.youtube.com/v/' + vid + '?version=3&amp;hl=ko_KR" type="application/x-shockwave-flash" width="' + width + '" height="' + height + '" allowscriptaccess="always" allowfullscreen="true" wmode="transparent"></embed></object>';
-            });
+            if ($tx.msie_ver < 10) {
+                content = content.replace(/<iframe[^>]*src=("|'|)https?:\/\/www\.youtube\.com\/embed\/(\w+)\1[^>]*><\/iframe>/i, function (html, quote, vid) {
+                    var matched, width, height;
+                    matched = html.match(/\swidth=['"]?(\d+)/);
+                    width = (matched && matched[1]) || "560";
+                    matched = html.match(/\sheight=['"]?(\d+)/);
+                    height = (matched && matched[1]) || "315";
+                    return '<object width="' + width + '" height="' + height + '"><param name="movie" ' + 'value="https://www.youtube.com/v/' + vid + '?version=3&amp;hl=ko_KR"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><param name="wmode" value="transparent"></param><embed src="https://www.youtube.com/v/' + vid + '?version=3&amp;hl=ko_KR" type="application/x-shockwave-flash" width="' + width + '" height="' + height + '" allowscriptaccess="always" allowfullscreen="true" wmode="transparent"></embed></object>';
+                });
+            }
 			content = content.replace(/(<object[^>]*>)((?:\n|.)*?)(<\/object>)/gi, function(match, start, param, end) {
 				param = param.replace(/<param[^>]*=[^\w]*wmode[^\w]+[^>]*>/i, "");
 				param = param.replace(/<param[^>]*=[^\w]*play[^\w]+[^>]*>/i, "");
@@ -230,7 +299,7 @@ TrexConfig.addEmbeder(
 		} else {
 			var _matchs, _source, _html, _embed;
 			var tempContent = content;
-			
+
 			/* Substitute <embed tag within script to <xxembed */
 			var _regScript = new RegExp("<(?:script)[^>]*>[\\S\\s]*?(<(?:embed|EMBED)[^>]*src=[^>]*>)[\\S\\s]*?<\/(?:script)>", "gim");
 			while ((_matchs = _regScript.exec(tempContent)) != _NULL) {
@@ -245,7 +314,7 @@ TrexConfig.addEmbeder(
 				_html = getHtmlByExt(_source, _embed);
 				content = content.replace(_source, _html);
 			}
-			
+
 			_regLoad = new RegExp("<(?:embed|EMBED)[^>]*src=[^>]*(?:\/?>|><\/(?:embed|EMBED)>)", "gim");
 			while ((_matchs = _regLoad.exec(tempContent)) != _NULL) {
 				_source = _matchs[0];
@@ -253,7 +322,7 @@ TrexConfig.addEmbeder(
 				_html = getHtmlByExt(_source, _embed);
 				content = content.replace(_source, _html);
 			}
-			
+
 			content = content.replace(/<xxembed/i, "<embed");
 			return content;
 		}
@@ -323,50 +392,14 @@ TrexConfig.addEmbeder(
 		return _source;
 	}
 	
-	function makeSourceByUrl(url, config) {
-		var _ext, _size, _allowScriptAccess, _TVPOT_URL, vid;
-		_ext = url.split(".").pop().split("?")[0].toLowerCase();
-		_size = getDefaultSizeByUrl(url);
-		if (url.indexOf("http://flvs.daum.net") == 0) { //NOTE: #FTDUEDTR-109
-			_allowScriptAccess = " allowScriptAccess='always'";
-		}
-		else {
-			_allowScriptAccess = " allowScriptAccess='never'";
-			if (config.allowNetworkingFilter && isAllowNetworkingSite(url, config) == _FALSE) {
-				_allowScriptAccess += " allowNetworking='internal'";
-			}
-		}
-		_TVPOT_URL = "http://tvpot.daum.net/clip/ClipViewByVid.do?vid=";
-		if (url.indexOf(_TVPOT_URL) == 0) { //NOTE: #FTDUEDTR-1104
-			vid = url.substr(_TVPOT_URL.length);
-			url = "http://flvs.daum.net/flvPlayer.swf?vid=" + vid;
-			_ext = "swf";
-			_allowScriptAccess = " allowScriptAccess='always'";
-		}
-		switch (_ext) {
-			case "swf":
-				return "<embed src=\"" + url + "\" quality='high' "+ _allowScriptAccess +" type='application/x-shockwave-flash' allowfullscreen='true' pluginspage='http://www.macromedia.com/go/getflashplayer' wmode='transparent' width='"+_size.width+"' height='"+_size.height+"'></embed>";
-			case "mp3":
-			case "wma":
-			case "asf":
-			case "asx":
-			case "mpg":
-			case "mpeg":
-			case "wmv":
-			case "avi":
-				return "<embed src=\"" + url + "\" type=\"application/x-mplayer2\" pluginspage=\"http://www.microsoft.com/Windows/MediaPlayer/\" width='"+_size.width+"' height='"+_size.height+"'></embed>";
-			case "mov":
-				return "<embed src=\"" + url + "\" type=\"video/quicktime\" pluginspage=\"http://www.apple.com/quicktime/download/indext.html\" width='"+_size.width+"' height='"+_size.height+"'></embed>";
-			case 'jpg':
-			case 'bmp':
-			case 'gif':
-			case 'png':	
-				return "<img src=\"" + url + "\" border=\"0\"/>";
-			default:
-				return "<embed src=\"" + url + "\" width='"+_size.width+"' height='"+_size.height+"' "+ _allowScriptAccess +" ></embed>";
-		}
-	}
-	
+    function getTvPotKey(url) {
+        return (url.match(/http:\/\/tvpot\.daum\.net\/v\/(.{23})/) || [])[1];
+    }
+
+    function getYouTubeMovieKey(url) {
+        return (url.match(/(?:http:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)/) || [])[1];
+    }
+
 	function getDefaultSizeByUrl(url) {
 		var _width, _height;
 		if(url.indexOf("api.bloggernews.media.daum.net/static/recombox1") > -1) {
@@ -375,6 +408,16 @@ TrexConfig.addEmbeder(
 		} else if(url.indexOf("flvs.daum.net/flvPlayer") > -1) {
 			_width = 502;
 			_height = 399;
+        } else if(url.indexOf('youtube') != -1 || url.indexOf('youtu.be') != -1 || url.indexOf('tvpot.daum.net') != -1) {
+            var size = TrexConfig.get('size');
+            if (size.contentWidth > 640) {
+                _width = 640;
+                _height = 360;
+            } else {
+                _width = 560;
+                _height = 315;
+            }
+            // else 853x480
 		} else {
 			var _ext = url.split(".").pop().split("?")[0].toLowerCase();
 			switch (_ext) {
