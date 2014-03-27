@@ -152,6 +152,7 @@ Trex.Save = Trex.Class.create({
 		}
 	*/
 	load: function(jsonData) { //NOTE: data format = JSON
+        this.editor.fireJobs(Trex.Ev.__EDITOR_LOAD_DATA_BEGIN);
 		if (!jsonData) {
 			throw new Error("[Exception]Trex.Save : not exist argument(data)");
 		}
@@ -164,12 +165,15 @@ Trex.Save = Trex.Class.create({
 		} catch (error) {
 			alert(' - Error: ' + error.message + '\n소스보기 모드로 전환합니다.\n잘못된 HTML이 있는지 확인해주세요.');
 			jsonData.inputmode = Trex.Canvas.__HTML_MODE;
-			this.setDataByJSONToEditor(jsonData);
+            try {
+                this.setDataByJSONToEditor(jsonData);
+            } catch(ignore) {}
 		}
 		
 		if (typeof postLoad == "function") {
 			postLoad(this.editor, jsonData);
 		}
+        this.editor.fireJobs(Trex.Ev.__EDITOR_LOAD_DATA_END);
 	},
 	setDataByJSONToEditor: function (jsonData) {
 		this.editor.setDataByJSON({

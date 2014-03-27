@@ -11,7 +11,21 @@
 	Trex.Ev = /** @lends Trex.Ev */ {
 		/** wysiwyg mode */
 		__EDITOR_PANEL_MOUSEDOWN: 'editor.panel.mousedown',
-		/** 
+        /**
+         * Editor에 데이터의 셋팅이 시작되면 발생하는 이벤트
+         * @example
+         * 	editor.observeJob(Trex.Ev.__EDITOR_LOAD_DATA_BEGIN, function(ev) {
+		 *	});
+         */
+        __EDITOR_LOAD_DATA_BEGIN: 'editor.load.data.begin',
+        /**
+         * Editor에 데이터의 셋팅이 완료되면 발생하는 이벤트
+         * @example
+         * 	editor.observeJob(Trex.Ev.__EDITOR_LOAD_DATA_END, function(ev) {
+		 *	});
+         */
+        __EDITOR_LOAD_DATA_END: 'editor.load.data.end',
+		/**
 		 * wysiwyg 영역에 발생하는 keydown 이벤트
 		 * @example
 		 * 	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_KEYDOWN, function(ev) {
