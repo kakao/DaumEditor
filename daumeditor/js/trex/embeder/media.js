@@ -93,7 +93,7 @@ TrexConfig.addEmbeder(
                 case 'bmp':
                 case 'gif':
                 case 'png':
-                    return this.generateHTMLForImage(url);
+                    return this.generateHTMLForImage(url, size);
                 default:
                     var iframeHtml = this.generateHTMLIfIframeSource(url, size);
                     if (iframeHtml) {
@@ -108,25 +108,10 @@ TrexConfig.addEmbeder(
         },
         getAllowScriptAccess: function(url) {
             var allowScriptAccessAttr = " allowScriptAccess='never'";
-            if (this.config.allowNetworkingFilter && this.isAllowNetworkingSite(url, this.config) == _FALSE) {
+            if (this.config.allowNetworkingFilter && isAllowNetworkingSite(url, this.config) == _FALSE) {
                 allowScriptAccessAttr += " allowNetworking='internal'";
             }
             return allowScriptAccessAttr;
-        },
-        isAllowNetworkingSite: function (url, config) {
-            var _matchs, host, i, len;
-            host = "";
-            _matchs = /[\/]*\/\/([^\/]+)\//i.exec(url);
-            if (_matchs && _matchs[1]) {
-                host = _matchs[1];
-            }
-            len = config.allowNetworkingSites.length;
-            for (i = 0; i < len; i += 1) {
-                if (host == config.allowNetworkingSites[i].host) {
-                    return _TRUE;
-                }
-            }
-            return _FALSE;
         },
         generateHTMLForDefaultEmbed: function (url, size) {
             return "<embed src=\"" + url + "\" width='" + size.width + "' height='" + size.height + "' " + this.getAllowScriptAccess(url) + " ></embed>";
@@ -153,6 +138,8 @@ TrexConfig.addEmbeder(
             if (youtubeMovieKey) {
                 return "<iframe src=\"http://www.youtube.com/embed/" + youtubeMovieKey + "\" width='"+size.width+"' height='"+size.height+"' frameborder=\"0\" allowfullscreen></iframe>";
             }
+
+            return _NULL;
         }
 	});
 	
@@ -201,6 +188,22 @@ TrexConfig.addEmbeder(
 			}
 		});
 	});
+
+    function isAllowNetworkingSite(url, config) {
+        var _matchs, host, i, len;
+        host = "";
+        _matchs = /[\/]*\/\/([^\/]+)\//i.exec(url);
+        if (_matchs && _matchs[1]) {
+            host = _matchs[1];
+        }
+        len = config.allowNetworkingSites.length;
+        for (i = 0; i < len; i += 1) {
+            if (host == config.allowNetworkingSites[i].host) {
+                return _TRUE;
+            }
+        }
+        return _FALSE;
+    }
 	
 	function addFlashOptAllowNetworking (content, config) {
 		var filteredContent;
@@ -280,7 +283,7 @@ TrexConfig.addEmbeder(
                     width = (matched && matched[1]) || "560";
                     matched = html.match(/\sheight=['"]?(\d+)/);
                     height = (matched && matched[1]) || "315";
-                    return '<object width="' + width + '" height="' + height + '"><param name="movie" ' + 'value="https://www.youtube.com/v/' + vid + '?version=3&amp;hl=ko_KR"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><param name="wmode" value="transparent"></param><embed src="https://www.youtube.com/v/' + vid + '?version=3&amp;hl=ko_KR" type="application/x-shockwave-flash" width="' + width + '" height="' + height + '" allowscriptaccess="always" allowfullscreen="true" wmode="transparent"></embed></object>';
+                    return '<object width="' + width + '" height="' + height + '"><param name="movie" ' + 'value="https://www.youtube.com/v/' + vid + '?version=3&amp;hl=ko_KR" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="wmode" value="transparent" /><embed src="https://www.youtube.com/v/' + vid + '?version=3&amp;hl=ko_KR" type="application/x-shockwave-flash" width="' + width + '" height="' + height + '" allowscriptaccess="always" allowfullscreen="true" wmode="transparent"></embed></object>';
                 });
             }
 			content = content.replace(/(<object[^>]*>)((?:\n|.)*?)(<\/object>)/gi, function(match, start, param, end) {
@@ -342,7 +345,9 @@ TrexConfig.addEmbeder(
 		/* make new embed source */
 		var _newEmbedSrc = "<embed";
 		for( var name in _attrs ){
-			_newEmbedSrc += " " + name + "=\""+_attrs[name]+"\"";
+            if (_attrs.hasOwnProperty(name)) {
+                _newEmbedSrc += " " + name + "=\""+_attrs[name]+"\"";
+            }
 		}
 		_newEmbedSrc += ">";
 		
