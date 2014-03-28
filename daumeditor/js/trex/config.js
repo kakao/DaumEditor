@@ -89,7 +89,8 @@ var TrexConfig = function() {
 			attacher: { },
 			searcher: { }
 		},
-		plugin: { }
+		plugin: { },
+        	postbackenabled : _FALSE /* support aspnet postback mode*/
 	};
 	
     var _createAnchors = function() {
