@@ -18,9 +18,12 @@ Trex.FormProxy =Trex.Class.create( {
 			throw new Error("[Exception]Trex.Form : not exist element - " + config.form);
 		}
 
-		_elForm.onsubmit = function() {
-			return _FALSE;
-		};
+		/*this event will be disabled when postbackenabled param is _TRUE */
+	        if (config.postbackenabled == _FALSE) {
+	            _elForm.onsubmit = function () {
+	                return _FALSE;
+	            };
+	        }
 	},
 	submit: function() {
 		this.elForm.submit();
