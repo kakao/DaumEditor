@@ -192,6 +192,11 @@ Trex.Menu.RichTextbox = Trex.Class.create({
 				$tx.show(_this.advancedPalette);
 				copyStyles();
 			}
+            _this.fireJobs(Trex.Ev.__MENU_LAYER_CHANGE_SIZE, {
+                detail: {
+                    menu: _this
+                }
+            });
 		};
 		
 		(function bindingEvents(){
@@ -311,8 +316,18 @@ Trex.Menu.RichTextbox = Trex.Class.create({
 		return _elWrap;
 	},
 	createColorPallete: function(element, cmd) {
+        var self = this;
 		var pallete = new Trex.Menu.ColorPallete({el: element, thumbs: this.config.thumbs});
 		pallete.setCommand(cmd);
+        pallete.observeJob(Trex.Ev.__MENU_LAYER_SHOW, function(ev){
+            self.fireJobs(Trex.Ev.__MENU_LAYER_SHOW, ev);
+        });
+        pallete.observeJob(Trex.Ev.__MENU_LAYER_HIDE, function(ev){
+            self.fireJobs(Trex.Ev.__MENU_LAYER_HIDE, ev);
+        });
+        pallete.observeJob(Trex.Ev.__MENU_LAYER_CHANGE_SIZE, function(ev){
+            self.fireJobs(Trex.Ev.__MENU_LAYER_CHANGE_SIZE, ev);
+        });
 		return pallete;
 	},
 	generateBgColor: function() {

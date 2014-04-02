@@ -379,7 +379,20 @@
          * 	canvas.observeJob(Trex.Ev.__CANVAS_IMAGE_PLACEHOLDER_DBLCLICK, function(ev) {
 		 *	});
          */
-        __CANVAS_IMAGE_PLACEHOLDER_DBLCLICK: 'canvas.image.placeholder.dbclick'
+        __CANVAS_IMAGE_PLACEHOLDER_DBLCLICK: 'canvas.image.placeholder.dbclick',
+        /**
+         * 툴바의 레이어형 메뉴가 화면에 표시되면 호출.
+         */
+        __MENU_LAYER_SHOW: 'menu.layer.show',
+        /**
+         * 툴바의 레이어형 메뉴가 화면에 사라지면 호출.
+         */
+        __MENU_LAYER_HIDE: 'menu.layer.hide',
+        /**
+         * 툴바의 레이어형 메뉴의 크기가 변경되면 호출.
+         */
+        __MENU_LAYER_CHANGE_SIZE: 'menu.layer.change.size'
+
 	};
 })(Trex);
 

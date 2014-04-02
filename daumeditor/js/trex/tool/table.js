@@ -329,6 +329,11 @@ Trex.Menu.Table = Trex.Class.create({
 		$tx.observe( _elA, "click", function(ev){
 			_self.showTextSizer();
 			$tx.stop(ev);
+            _self.fireJobs(Trex.Ev.__MENU_LAYER_CHANGE_SIZE, {
+                detail: {
+                    menu: _self
+                }
+            });
 		});
 		
 		var _elButton = tx.div({className:"tx-more-button"});

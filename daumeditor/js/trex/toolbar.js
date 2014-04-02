@@ -400,6 +400,16 @@ Trex.Tool = Trex.Class.draft(/** @lends Trex.Tool.prototype */{
 					return _TRUE;
 				}
 			);
+
+            menu.observeJob(Trex.Ev.__MENU_LAYER_SHOW, function(ev){
+                _toolbar.fireJobs(Trex.Ev.__MENU_LAYER_SHOW, ev);
+            });
+            menu.observeJob(Trex.Ev.__MENU_LAYER_HIDE, function(ev){
+                _toolbar.fireJobs(Trex.Ev.__MENU_LAYER_HIDE, ev);
+            });
+            menu.observeJob(Trex.Ev.__MENU_LAYER_CHANGE_SIZE, function(ev){
+                _toolbar.fireJobs(Trex.Ev.__MENU_LAYER_CHANGE_SIZE, ev);
+            });
 		}
 		this.execute = cmd;
 	},

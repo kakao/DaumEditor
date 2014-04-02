@@ -35,6 +35,7 @@ TrexMessage.addMsg({
  *	});
  */
 Trex.Menu = Trex.Class.create(/** @lends Trex.Menu.prototype */{
+    $mixins: [Trex.I.JobObservable],
 	isInit: _FALSE,
 	isDisplayed: _FALSE,
 	_command: function(){},
@@ -77,7 +78,7 @@ Trex.Menu = Trex.Class.create(/** @lends Trex.Menu.prototype */{
 		if(_config.left){
 			_elMenu.style.left = _config.left + 'px';
 		}
-		
+
 		if(this.oninitialized) {
 			this.oninitialized.bind(this)(config);
 		}
@@ -170,6 +171,11 @@ Trex.Menu = Trex.Class.create(/** @lends Trex.Menu.prototype */{
 			this.showSpecial();
 		}
 		this.isDisplayed = _TRUE;
+        this.fireJobs(Trex.Ev.__MENU_LAYER_SHOW, {
+            detail: {
+                menu: this
+            }
+        });
 	},
 	lazyGenerate: function(initValue) {
 		var _menu = this;
@@ -196,6 +202,11 @@ Trex.Menu = Trex.Class.create(/** @lends Trex.Menu.prototype */{
 	hide: function() {
 		$tx.hide(this.elMenu);
 		this.isDisplayed = _FALSE;
+        this.fireJobs(Trex.Ev.__MENU_LAYER_HIDE, {
+            detail: {
+                menu: this
+            }
+        });
 	},
 	/**
 	 * menu 를 열거나 닫는다.
@@ -255,11 +266,11 @@ Trex.Menu.Select = Trex.Class.create(/** @lends Trex.Menu.Select.prototype */{
 		*/
 		var _config = this.config;
 		var _optionz = this.getValidOptions(_config);
-		
+
 		var _elList = this.generateList(_optionz);
 		$tom.insertFirst(this.elMenu, _elList);
-		
-		if (this.generateHandler) {
+
+        if (this.generateHandler) {
 			this.generateHandler(_config);
 		}
 		if (this.ongeneratedList) {
@@ -366,8 +377,8 @@ Trex.Menu.List = Trex.Class.create(/** @lends Trex.Menu.List.prototype */{
 
 		var _elList = this.generateList(_optionz);
 		$tom.insertFirst(this.elMenu, _elList);
-		
-		if (this.ongeneratedList) {
+
+        if (this.ongeneratedList) {
 			this.generateList = this.ongeneratedList.bind(this);
 		}
 		if (this.ongeneratedListItem) {
@@ -485,7 +496,7 @@ Trex.Menu.Matrix = Trex.Class.create(/** @lends Trex.Menu.Matrix.prototype */{
 
 		var _elList = this.generateMatrix(_matrices);
 		$tom.insertFirst(this.elMenu, _elList);
-		
+
 		if (this.ongeneratedList) {
 			this.generateList = this.ongeneratedList.bind(this);
 		}
@@ -544,7 +555,7 @@ Trex.Menu.Matrix = Trex.Class.create(/** @lends Trex.Menu.Matrix.prototype */{
 		var _elInner = Trex.MarkupTemplate.get('menu.matrix').evaluateAsDom({
 			'matrices': matrices
 		});
-				
+
 		var _elLists = $tom.collectAll(_elInner, 'div.tx-menu-matrix-listset div.tx-menu-matrix-list');
 		var _elTitles = $tom.collectAll(_elInner, 'ul.tx-menu-matrix-title li');
 		
@@ -685,6 +696,8 @@ Trex.Menu.ColorPallete = Trex.Class.create(/** @lends Trex.Menu.ColorPallete.pro
 		if (this.generateHandler) {
 			this.generateHandler(_config);
 		}
+
+        this.bindEvents();
 	},
 	/**
 	 * menu 의 list item(color) 이 선택되었을 때 command 를 실행한다.
@@ -707,5 +720,15 @@ Trex.Menu.ColorPallete = Trex.Class.create(/** @lends Trex.Menu.ColorPallete.pro
 		if(color) {
 			this.setColorValueAtInputbox(color);	
 		}
-	}
+	},
+    bindEvents: function() {
+        var self = this;
+        $tx.observe(this.elMore, 'click', function(ev){
+            self.fireJobs(Trex.Ev.__MENU_LAYER_CHANGE_SIZE, {
+                detail: {
+                    menu: self
+                }
+            });
+        });
+    }
 });

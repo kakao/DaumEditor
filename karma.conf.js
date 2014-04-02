@@ -55,6 +55,7 @@ module.exports = function(config) {
     /** trex common */
         "../daumeditor/js/trex/common/button.js",
         "../daumeditor/js/trex/common/menu.js",
+        "../daumeditor/js/trex/common/menuback.js",
 
     /** editor core */
         "../daumeditor/js/trex/editor.js",
