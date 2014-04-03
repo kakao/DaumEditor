@@ -761,6 +761,24 @@ test("delete col 4", function(){
 </table>');
 });
 
+test("delete col 5", function(){
+    tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[1]);
+    tableDelete.deleteCol(tableSelect);
+    htmlEqual(Editor.getContent(), '<table id="test" border="1">\
+<tbody>\
+<tr>\
+<td rowspan="1" colspan="1">3</td>\
+</tr>\
+<tr>\
+<td rowspan="1" colspan="1">6</td>\
+</tr>\
+<tr>\
+<td rowspan="1" colspan="1">9</td>\
+</tr>\
+</tbody>\
+</table>');
+});
+
 test("delete row", function(){
 	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[0].cells[0]);
 	tableDelete.deleteRow(tableSelect);
@@ -852,6 +870,20 @@ test("delete row 5", function(){
 <tr>\
 <td rowspan="1" colspan="1">7</td>\
 <td rowspan="1" colspan="2">2</td>\
+</tr>\
+</tbody>\
+</table>');
+});
+
+test("delete row 6", function(){
+    tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[1]);
+    tableDelete.deleteRow(tableSelect);
+    htmlEqual(Editor.getContent(), '<table id="test" border="1">\
+<tbody>\
+<tr>\
+<td rowspan="1" colspan="1">7</td>\
+<td rowspan="1" colspan="1">8</td>\
+<td rowspan="1" colspan="1">9</td>\
 </tr>\
 </tbody>\
 </table>');

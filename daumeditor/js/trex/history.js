@@ -78,7 +78,15 @@ Trex.I.History.Trident = {
     getRangeData: function() {
         var doc = this.canvas.getCurrentPanel().getDocument();
         var containerEl = doc.body;
-        var selectedTextRange = doc.selection.createRange();
+        //refactory 필요.
+        try{
+            var selectedTextRange = doc.selection.createRange();
+        }catch(e){
+            return {
+                start:0,
+                end:0
+            }
+        }
         var preSelectionTextRange = doc.body.createTextRange();
         preSelectionTextRange.moveToElementText(containerEl);
         try {
