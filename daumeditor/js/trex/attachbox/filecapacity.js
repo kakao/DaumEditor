@@ -11,6 +11,7 @@ TrexConfig.addSidebar('capacity',
 	{
 		show: _TRUE,
 		maximum: 3145728, //3M <= 1024
+        filemaximum: _NULL,
 		filter: {
 			use: '', //sound,movie
 			sound: {
@@ -94,6 +95,19 @@ Trex.I.FileCapacity = {
          */
         this.changeMaximumCapacity = function(size){
             if ( _setCapacity("maximum", size ) ){
+                return size;
+            }
+            return _FALSE;
+        };
+
+        /**
+         * Change one file maximum capacity
+         * @memberOf Trex.AttachBox.prototype
+         * @alias changeFileMaximumCapacity
+         * @param {Number} size
+         */
+        this.changeFileMaximumCapacity = function(size){
+            if ( _setCapacity("filemaximum", size ) ){
                 return size;
             }
             return _FALSE;
