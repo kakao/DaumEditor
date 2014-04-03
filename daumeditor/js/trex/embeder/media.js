@@ -286,6 +286,10 @@ TrexConfig.addEmbeder(
                     return '<object width="' + width + '" height="' + height + '"><param name="movie" ' + 'value="https://www.youtube.com/v/' + vid + '?version=3&amp;hl=ko_KR" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="wmode" value="transparent" /><embed src="https://www.youtube.com/v/' + vid + '?version=3&amp;hl=ko_KR" type="application/x-shockwave-flash" width="' + width + '" height="' + height + '" allowscriptaccess="always" allowfullscreen="true" wmode="transparent"></embed></object>';
                 });
             }
+            if(/<object/.test(content) && /<embed[^>]*type=['"]application\/x-shockwave-flash['"][^>]*>/i.test(content) &&!/<object[^>]*type=['"]application\/x-shockwave-flash['"][^>]*>/i.test(content)) {
+                var index = content.indexOf('>');
+                content = content.substring(0,index)+ ' type="application\/x-shockwave-flash"' + content.substring(index);
+            }
 //			content = content.replace(/(<object[^>]*>)((?:\n|.)*?)(<\/object>)/gi, function(match, start, param, end) {
 //				param = param.replace(/<param[^>]*=[^\w]*wmode[^\w]+[^>]*>/i, "");
 //				param = param.replace(/<param[^>]*=[^\w]*play[^\w]+[^>]*>/i, "");
@@ -297,7 +301,7 @@ TrexConfig.addEmbeder(
 //				attr += ' wmode=transparent';
 //				return start + attr + end;
 //			});
-			
+
 			return content;
 		} else {
 			var _matchs, _source, _html, _embed;
