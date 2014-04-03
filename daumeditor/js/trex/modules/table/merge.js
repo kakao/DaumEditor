@@ -1,5 +1,10 @@
 /*jslint nomen: false*/
-/*global Trex, $tom, $tx, _FALSE, _NULL, _TRUE */
+/*global Trex, $tom, $tx, _FALSE, _NULL, _TRUE, TXMSG */
+TrexMessage.addMsg({
+    '@table.merge.confirm': '셀을 병합하면 맨 위쪽 셀에 있는 값만 남고 나머지 값은 잃게 됩니다.',
+    '@table.merge.more.select.cells': '두 개 이상의 셀을 선택해주세요.'
+});
+
 Trex.Table.Merge = Trex.Class.create({
 	initialize: function (editor/*, config*/) {
 		var canvas;
@@ -16,6 +21,11 @@ Trex.Table.Merge = Trex.Class.create({
 		tableSelector.reloadIndexer();
 		tdArr = tableSelector.getSelectedTdArr();
 		if (1 < tdArr.length) {
+            var isExistContent = this.isExistContents(tdArr, 1);// 0번째는 merge시 남겨지는 데이터이므로 무시한다.
+            if (isExistContent && confirm(TXMSG('@table.merge.confirm')) == _FALSE) {
+                return;
+            }
+
 			selectedSize = tableSelector.getSizeOfSelected();
 			td = tdArr[0];
 			
@@ -26,9 +36,26 @@ Trex.Table.Merge = Trex.Class.create({
 			tableSelector.selectByTd(td, td);
 			Trex.TableUtil.collapseCaret(this.wysiwygPanel, td);
 		} else {
-			alert("두개 이상의 셀을 선택해주세요.");
+			alert(TXMSG('@table.merge.more.select.cells'));
 		}
 	},
+    isExistContents: function(tdArr, startIndex) {
+        startIndex = startIndex || 0;// default 0
+        var flag = _TRUE;
+        for(var i= startIndex, max=tdArr.length; i<max; i++) {
+            var entry = tdArr[i] || "";
+            var html = entry.innerHTML.trim().toLowerCase();
+            var equalBogusType1 = (html == "<p>&nbsp;</p>"),
+                equalBogusType2 = (html == "<p><br></p>"),
+                equalEmpty = (html == "");
+
+            if (equalBogusType1 || equalBogusType2 || equalEmpty) {
+                flag = _FALSE;
+                break;
+            }
+        }
+        return flag;
+    },
 	/**
 	 * @private
 	 * @param {Array} tdArr

@@ -1,4 +1,11 @@
-var tableSelect, tableMerge, testTable;
+var tableSelect, tableMerge, testTable, checkContentsOrigin;
+
+function ignoreMergeCheckContents() {
+    tableMerge.isExistContents = function() {
+        return false;
+    }
+}
+
 module("merge", {
 	setup: function(){
 		var canvas, wysiwygPanel, doc;
@@ -57,8 +64,47 @@ test("original check", function(){
 </table>');
 });
 
+
+test("isExistContents", function() {
+    assi.setContent('<table id="test" border="1">\
+<tbody>\
+<tr>\
+<td>1</td><td>2</td><td>3</td>\
+</tr>\
+<tr>\
+<td>4</td><td><p>5</p></td><td><P>&nbsp;</P></td>\
+</tr>\
+<tr>\
+<td>6</td><td><p><br></p></td><td><p><br /></p></td>\
+</tr>\
+<tr>\
+<td>7</td><td></td><td> </td>\
+</tr>\
+</tbody>\
+</table>');
+    var tdArr, result;
+    testTable = assi.$('test');
+
+    tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[1]);
+    tdArr = tableSelect.getSelectedTdArr();
+    result = tableMerge.isExistContents(tdArr, 1);
+    equal(result, true, '(0,0) ~ (1,1) 에는 데이터가 모두 있음');
+
+    tableSelect.selectByTd(testTable.rows[1].cells[1], testTable.rows[2].cells[2]);
+    tdArr = tableSelect.getSelectedTdArr();
+    result = tableMerge.isExistContents(tdArr, 1);
+    equal(result, false, '(1,1) ~ (2,2) 에는 첫번째 셀을 제외하고 데이터가 없음 (<p>&nbsp</p>, <p><br></p> 무시)');
+
+    tableSelect.selectByTd(testTable.rows[2].cells[1], testTable.rows[3].cells[2]);
+    tdArr = tableSelect.getSelectedTdArr();
+    result = tableMerge.isExistContents(tdArr, 1);
+    equal(result, false, '(2,1) ~ (3,2) 에는 모두 데이터가 없음 (공백무시)');
+
+});
+
 test("merge col", function(){
-	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[0].cells[1]);
+    ignoreMergeCheckContents();
+    tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[0].cells[1]);
 	tableMerge.merge(tableSelect);
 	htmlEqual(Editor.getContent(), '<table id="test" border="1">\
 <tbody>\
@@ -81,8 +127,9 @@ test("merge col", function(){
 });
 
 test("merge row", function(){
-	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[0]);
-	tableMerge.merge(tableSelect);
+    ignoreMergeCheckContents();
+    tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[0]);
+    tableMerge.merge(tableSelect);
 	htmlEqual(Editor.getContent(), '<table id="test" border="1">\
 <tbody>\
 <tr>\
@@ -104,7 +151,8 @@ test("merge row", function(){
 });
 
 test("merge rect", function(){
-	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[1]);
+    ignoreMergeCheckContents();
+    tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[1]);
 	tableMerge.merge(tableSelect);
 	htmlEqual(Editor.getContent(), '<table id="test" border="1">\
 <tbody>\
@@ -125,7 +173,8 @@ test("merge rect", function(){
 });
 
 test("merge rect 2", function(){
-	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[2].cells[2]);
+    ignoreMergeCheckContents();
+    tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[2].cells[2]);
 	tableMerge.merge(tableSelect);
 	htmlEqual(Editor.getContent(), '<table id="test" border="1">\
 <tbody>\
@@ -141,7 +190,8 @@ test("merge rect 2", function(){
 });
 
 test("cancel merge col", function(){
-	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[0].cells[1]);
+    ignoreMergeCheckContents();
+    tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[0].cells[1]);
 	tableMerge.merge(tableSelect);
 	tableMerge.resetMerge(tableSelect);
 	htmlEqual(Editor.getContent(), '<table id="test" border="1">\
@@ -166,7 +216,8 @@ test("cancel merge col", function(){
 });
 
 test("cancel merge row", function(){
-	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[0]);
+    ignoreMergeCheckContents();
+    tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[0]);
 	tableMerge.merge(tableSelect);
 	tableMerge.resetMerge(tableSelect);
 	htmlEqual(Editor.getContent(), '<table id="test" border="1">\
@@ -191,7 +242,8 @@ test("cancel merge row", function(){
 });
 
 test("cancel merge row 2", function(){
-	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[2]);
+    ignoreMergeCheckContents();
+    tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[2]);
 	tableMerge.merge(tableSelect);
 	tableMerge.resetMerge(tableSelect);
 	htmlEqual(Editor.getContent(), '<table id="test" border="1">\
@@ -216,7 +268,8 @@ test("cancel merge row 2", function(){
 });
 
 test("cancel merge row 3", function(){
-	tableSelect.selectByTd(testTable.rows[0].cells[1], testTable.rows[1].cells[2]);
+    ignoreMergeCheckContents();
+    tableSelect.selectByTd(testTable.rows[0].cells[1], testTable.rows[1].cells[2]);
 	tableMerge.merge(tableSelect);
 	tableMerge.resetMerge(tableSelect);
 	htmlEqual(Editor.getContent(), '<table id="test" border="1">\
@@ -241,7 +294,8 @@ test("cancel merge row 3", function(){
 });
 
 test("cancel merge row 3", function(){
-	tableSelect.selectByTd(testTable.rows[0].cells[1], testTable.rows[1].cells[1]);
+    ignoreMergeCheckContents();
+    tableSelect.selectByTd(testTable.rows[0].cells[1], testTable.rows[1].cells[1]);
 	tableMerge.merge(tableSelect);
 	tableSelect.selectByTd(testTable.rows[2].cells[1], testTable.rows[2].cells[2]);
 	tableMerge.merge(tableSelect);
@@ -332,6 +386,7 @@ test("insert row above 2", function(){
 });
 
 test("insert row above 3", function(){
+    ignoreMergeCheckContents();
 	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[1]);
 	tableMerge.merge(tableSelect);
 	tableInsert.insertRowAbove(tableSelect);
@@ -425,6 +480,7 @@ test("insert row below 2", function(){
 });
 
 test("insert row below 3", function(){
+    ignoreMergeCheckContents();
 	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[1]);
 	tableMerge.merge(tableSelect);
 	tableInsert.insertRowBelow(tableSelect);
@@ -455,6 +511,7 @@ test("insert row below 3", function(){
 });
 
 test("insert row below 4", function(){
+    ignoreMergeCheckContents();
 	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[1]);
 	tableMerge.merge(tableSelect);
 	tableSelect.selectByTd(testTable.rows[0].cells[1], testTable.rows[0].cells[1]);
@@ -508,6 +565,7 @@ test("insert col left", function(){
 });
 
 test("insert col left 2", function(){
+    ignoreMergeCheckContents();
 	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[2]);
 	tableMerge.merge(tableSelect);
 	tableSelect.selectByTd(testTable.rows[2].cells[0], testTable.rows[2].cells[1]);
@@ -560,6 +618,7 @@ test("insert col right", function(){
 });
 
 test("insert col right 2", function(){
+    ignoreMergeCheckContents();
 	tableSelect.selectByTd(testTable.rows[1].cells[0], testTable.rows[1].cells[2]);
 	tableMerge.merge(tableSelect);
 	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[0].cells[0]);
@@ -586,6 +645,7 @@ test("insert col right 2", function(){
 });
 
 test("insert col right 3", function(){
+    ignoreMergeCheckContents();
 	tableSelect.selectByTd(testTable.rows[1].cells[0], testTable.rows[2].cells[1]);
 	tableMerge.merge(tableSelect);
 	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[0].cells[0]);
@@ -631,6 +691,7 @@ test("delete col", function(){
 });
 
 test("delete col 2", function(){
+    ignoreMergeCheckContents();
 	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[0].cells[1]);
 	tableMerge.merge(tableSelect);
 	tableSelect.selectByTd(testTable.rows[1].cells[0], testTable.rows[1].cells[0]);
@@ -654,6 +715,7 @@ test("delete col 2", function(){
 });
 
 test("delete col 3", function(){
+    ignoreMergeCheckContents();
 	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[0].cells[1]);
 	tableMerge.merge(tableSelect);
 	tableSelect.selectByTd(testTable.rows[2].cells[1], testTable.rows[2].cells[1]);
@@ -677,6 +739,7 @@ test("delete col 3", function(){
 });
 
 test("delete col 4", function(){
+    ignoreMergeCheckContents();
 	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[1]);
 	tableMerge.merge(tableSelect);
 	tableSelect.selectByTd(testTable.rows[2].cells[1], testTable.rows[2].cells[1]);
@@ -718,6 +781,7 @@ test("delete row", function(){
 });
 
 test("delete row 2", function(){
+    ignoreMergeCheckContents();
 	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[1]);
 	tableMerge.merge(tableSelect);
 	tableSelect.selectByTd(testTable.rows[0].cells[1], testTable.rows[0].cells[1]);
@@ -738,6 +802,7 @@ test("delete row 2", function(){
 });
 
 test("delete row 3", function(){
+    ignoreMergeCheckContents();
 	tableSelect.selectByTd(testTable.rows[0].cells[1], testTable.rows[1].cells[2]);
 	tableMerge.merge(tableSelect);
 	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[0].cells[0]);
@@ -758,6 +823,7 @@ test("delete row 3", function(){
 });
 
 test("delete row 4", function(){
+    ignoreMergeCheckContents();
 	tableSelect.selectByTd(testTable.rows[0].cells[1], testTable.rows[2].cells[2]);
 	tableMerge.merge(tableSelect);
 	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[0].cells[0]);
@@ -776,6 +842,7 @@ test("delete row 4", function(){
 });
 
 test("delete row 5", function(){
+    ignoreMergeCheckContents();
 	tableSelect.selectByTd(testTable.rows[0].cells[1], testTable.rows[2].cells[2]);
 	tableMerge.merge(tableSelect);
 	tableSelect.selectByTd(testTable.rows[0].cells[0], testTable.rows[1].cells[0]);
