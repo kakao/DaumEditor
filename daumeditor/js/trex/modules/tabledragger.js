@@ -131,9 +131,6 @@ Trex.module("table resize dragger", function(editor, toolbar, sidebar, canvas) {
                     stopResizeRow();
                     break;
             }
-            if (edgeType != EDGE_TYPE.NONE) {
-                canvas.history.saveHistory();
-            }
         };
 
         var mousemoveHandler = function() {
@@ -302,6 +299,7 @@ Trex.module("table resize dragger", function(editor, toolbar, sidebar, canvas) {
             resizeWidth();
             initDragger();
 			moveUnDraggingAction();
+            saveHistory();
         };
 
         var resizeWidth = function() {
@@ -368,6 +366,7 @@ Trex.module("table resize dragger", function(editor, toolbar, sidebar, canvas) {
             resizeHeight();
             initDragger();
 			moveUnDraggingAction();
+            saveHistory();
         };
 
         var resizeHeight = function() {
@@ -631,6 +630,11 @@ Trex.module("table resize dragger", function(editor, toolbar, sidebar, canvas) {
 
         function minimumOfArray(array) {
             return Math.min.apply(Math, array);
+        }
+
+        function saveHistory() {
+            console.log("saveHistory");
+            canvas.history.saveHistory();
         }
 
         initDragger();
