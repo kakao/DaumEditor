@@ -78,7 +78,7 @@ test("isExistContents", function() {
 <td>6</td><td><p><br></p></td><td><p><br /></p></td>\
 </tr>\
 <tr>\
-<td>7</td><td></td><td> </td>\
+<td>7</td><td>&nbsp;</td><td> </td>\
 </tr>\
 </tbody>\
 </table>');

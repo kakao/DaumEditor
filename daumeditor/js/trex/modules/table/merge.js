@@ -44,8 +44,8 @@ Trex.Table.Merge = Trex.Class.create({
         var flag = _TRUE;
         for(var i= startIndex, max=tdArr.length; i<max; i++) {
             var entry = tdArr[i] || "";
-            var html = entry.innerHTML.trim().toLowerCase();
-            var equalBogusType1 = (html == "<p>&nbsp;</p>"),
+            var html = entry.innerHTML.trim().toLowerCase().replace(/(&nbsp;|\s)/g, '');
+            var equalBogusType1 = (html == "<p></p>"),// &nbsp; 는 치환하므로 존재할 수 없음
                 equalBogusType2 = (html == "<p><br></p>"),
                 equalEmpty = (html == "");
 
