@@ -37,7 +37,8 @@ Trex.Tool.Table = Trex.Class.create({
 		},
 		__DEFAULT_TABLE_PROPERTY_STR: "cellspacing=\"0\" cellpadding=\"0\" border=\"0\"",
 		__DEFAULT_TABLE_STYLE: "border:none;border-collapse:collapse;",
-		__DEFAULT_TABLE_CLASS: "txc-table"
+		__DEFAULT_TABLE_CLASS: "txc-table",
+        __DEFAULT_TABLE_CELL_HEIGHT: 24
 	},
 	$extend: Trex.Tool,
 	oninitialized: function(config) {
@@ -85,7 +86,8 @@ Trex.Tool.Table = Trex.Class.create({
 		
 		var borderStyleText = this.config.borderStyle;
 		//var tdWidth = parseInt(100/col) + "%";
-		var tdWidth = parseInt(tableWidth/col);
+		var tdWidth = parseInt(tableWidth/col).toPx(),
+            tdHeight = Trex.Tool.Table.__DEFAULT_TABLE_CELL_HEIGHT.toPx();
 		var basicBorder = ["border-bottom:",borderStyleText,";border-right:",borderStyleText,";"].join("");
 		
 		for( var i = 0; i < row; i++ ){
@@ -95,7 +97,7 @@ Trex.Tool.Table = Trex.Class.create({
 				tableStringArr.push("<td style=\"width:");
 				tableStringArr.push(tdWidth);
 				tableStringArr.push(";");
-				tableStringArr.push("height:",24,";");
+				tableStringArr.push("height:",tdHeight,";");
 				tableStringArr.push(basicBorder);
 				if ( i == 0 ){
 					tableStringArr.push("border-top:",borderStyleText,";");
@@ -103,7 +105,7 @@ Trex.Tool.Table = Trex.Class.create({
 				if ( j == 0 ){
 					tableStringArr.push("border-left:",borderStyleText,";");
 				}
-				tableStringArr.push(";\"><p>&nbsp;</p></td>\n");
+				tableStringArr.push(";\"><p>" + $tom.EMPTY_BOGUS + "</p></td>");
 			}
 			tableStringArr.push("</tr>\n")
 		}
