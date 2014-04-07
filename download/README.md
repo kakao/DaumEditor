@@ -1,9 +1,10 @@
 ## How to download ##
 
-####
-* Click the right mouse button
-* Click Save Link As
 
-#### 
-* Click the daumeditor-version.zip
-* Click the Raw Button
+1. Click the right mouse button
+2. Click Save Link As
+
+or
+
+1. Click the daumeditor-version.zip
+1. Click the Raw Button
