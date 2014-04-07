@@ -274,7 +274,7 @@ Object.extend($tom, /** @lends $tom */{
 			_inner = node.nodeValue;
 		}
 		_inner = $tom.removeMeaninglessSpace( _inner );
-		if(_inner == '') {
+		if(_inner.trim() == '') {// #PCCAFEQA-11
 			return _FALSE;
 		}
 		if(_inner.stripTags() != '') {
