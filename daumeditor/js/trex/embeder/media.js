@@ -131,7 +131,7 @@ TrexConfig.addEmbeder(
         generateHTMLIfIframeSource: function(url, size) {
             var tvpotKey = getTvPotKey(url);
             if (tvpotKey) {
-                return "<iframe src=\"http://videofarm.daum.net/controller/video/viewer/Video.html?play_loc=editorembed&wmode=transparent&permitWideScreen=true&vid=" + tvpotKey + "\" width='"+size.width+"' height='"+size.height+"' frameborder=\"0\" allowfullscreen></iframe>";
+                return "<iframe src=\"http://videofarm.daum.net/controller/video/viewer/Video.html?play_loc=undefined&vid=" + tvpotKey + "\" width='"+size.width+"' height='"+size.height+"' frameborder=\"0\" allowfullscreen></iframe>";
             }
 
             var youtubeMovieKey = getYouTubeMovieKey(url);
