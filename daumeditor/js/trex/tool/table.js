@@ -71,10 +71,9 @@ Trex.Tool.Table = Trex.Class.create({
 	},
 	makeEmptyTable: function(row, col){
 		var tableStringArr = [];
-		var tableWidth = this._createDefaultTableWidth();
-		
-		tableStringArr.push("<table class=\""+Trex.Tool.Table.__DEFAULT_TABLE_CLASS+"\" width=\"" + tableWidth + "\" ");
-		//tableStringArr.push("<table class=\""+Trex.Tool.Table.__DEFAULT_TABLE_CLASS+"\" ");
+		var tableWidth = this.getDefaultTableWidth();
+
+        tableStringArr.push("<table class=\""+Trex.Tool.Table.__DEFAULT_TABLE_CLASS+"\" width=\"" + tableWidth + "\" ");
 		tableStringArr.push(Trex.Tool.Table.__DEFAULT_TABLE_PROPERTY_STR);
 		tableStringArr.push(" style=\"");
 		tableStringArr.push(Trex.Tool.Table.__DEFAULT_TABLE_STYLE);
@@ -85,9 +84,8 @@ Trex.Tool.Table = Trex.Class.create({
 		tableStringArr.push("\"><tbody>");
 		
 		var borderStyleText = this.config.borderStyle;
-		//var tdWidth = parseInt(100/col) + "%";
-		var tdWidth = parseInt(tableWidth/col).toPx(),
-            tdHeight = Trex.Tool.Table.__DEFAULT_TABLE_CELL_HEIGHT.toPx();
+		var tdWidth = this.getDefaultCellWidth(col),
+            tdHeight = this.getDefaultCellHeight(row);
 		var basicBorder = ["border-bottom:",borderStyleText,";border-right:",borderStyleText,";"].join("");
 		
 		for( var i = 0; i < row; i++ ){
@@ -107,20 +105,38 @@ Trex.Tool.Table = Trex.Class.create({
 				}
 				tableStringArr.push(";\"><p>" + $tom.EMPTY_BOGUS + "</p></td>");
 			}
-			tableStringArr.push("</tr>\n")
+			tableStringArr.push("</tr>")
 		}
 		tableStringArr.push("</tbody></table>");
 		return tableStringArr.join(""); 	
 	},
-	_createDefaultTableWidth: function(){ //NOTE: #FTDUEDTR-905
+    getDefaultCellWidth: function(columnCount) {
+        var tableWidth = this.getDefaultTableWidth();
+        var width;
+        if (tableWidth.toString().indexOf('%') !== -1) {
+            width = (100 / columnCount) + '%';
+        } else {
+            width = parseInt(parseInt(tableWidth,10)/columnCount, 10);
+            if (isNaN(width)) {
+                width = 0;
+            }
+        }
+        return width;
+    },
+    getDefaultCellHeight: function(rowCount) {
+        return Trex.Tool.Table.__DEFAULT_TABLE_CELL_HEIGHT.toPx();
+    },
+	getDefaultTableWidth: function(){ //NOTE: #FTDUEDTR-905
 		var tableWidth = this.config.tableWidth;
-		if ( !tableWidth ) {
-			var padding = this.canvas.getSizeConfig().contentPadding || 8;
-			tableWidth = (this.canvas.getSizeConfig().contentWidth || 600) - padding * 2 - 20;
+		if (!tableWidth) {
+            tableWidth = this.getCanvasInnerWidth();
 		}
-		
 		return tableWidth;
-	}
+	},
+    getCanvasInnerWidth: function() {
+        var padding = this.canvas.getSizeConfig().contentPadding || 8;
+        return (this.canvas.getSizeConfig().contentWidth || 600) - padding * 2 - 20;
+    }
 });
 
 
