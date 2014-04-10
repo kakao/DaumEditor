@@ -36,7 +36,9 @@ Trex.I.ButtonFontTool = Trex.Mixin.create({
         var self = this;
         var state = self.canvas.query(function(processor) {
             var command = self.getQueryCommandName();
-            if (command && !$tx.opera && !$tx.gecko) {
+            var minGeckoVersion = 20;
+            var geckoQueryCommandStateNotWorkingVersion = ($tx.gecko && $tx.gecko_ver < minGeckoVersion);
+            if (command && !$tx.opera && !geckoQueryCommandStateNotWorkingVersion) {
                 // gecko? : FTDUEDTR-1181
                 // opera?: <span style="font-weight: bold">...</span> 인 경우에 bold 상태가 false로 나온다. <b>...</b>인 경우는 제대로 나옴.
                 return processor.queryCommandState(command);

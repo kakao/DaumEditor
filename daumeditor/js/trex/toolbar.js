@@ -477,4 +477,30 @@ Trex.AsyncTool = Trex.Class.draft(/** @lends Trex.Tool.prototype */{
         return basePath;
     }
 });
-	
+
+
+Trex.I.Tool = {};
+Trex.I.Tool.QueryStyle = {};
+Trex.I.Tool.QueryStyle.Standard = Trex.Mixin.create({
+    queryNodeStyle: function(currentNode, cssPropertyName, queryCommandName, matchTagName) {
+        return $tx.getStyle(currentNode, cssPropertyName).include(queryCommandName);
+    }
+});
+
+Trex.I.Tool.QueryStyle.Gecko = Trex.Mixin.create({
+    queryNodeStyle: function(currentNode, cssPropertyName, queryCommandName, matchTagName) {
+        var tempNode = currentNode;
+        var isInclude = _FALSE;
+        while(tempNode && !$tom.isBody(tempNode) && !isInclude) {
+            if ($tom.isTagName(tempNode, matchTagName)) {
+                isInclude = _TRUE;
+            } else {
+                isInclude = $tx.getStyle(currentNode, cssPropertyName).include(queryCommandName);
+            }
+
+            // move to parent
+            tempNode = tempNode.parentNode;
+        }
+        return isInclude;
+    }
+});

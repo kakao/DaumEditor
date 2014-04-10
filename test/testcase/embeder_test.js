@@ -131,7 +131,7 @@
     testEmbedObjectByUrl('tvpot url',
         'http://tvpot.daum.net/v/vbb55CznNImnvxxUvaxa221',
         function compareCallback(url) {
-            var playerUrl = 'http://videofarm.daum.net/controller/video/viewer/Video.html?play_loc=editorembed&wmode=transparent&permitWideScreen=true&vid=vbb55CznNImnvxxUvaxa221';
+            var playerUrl = 'http://videofarm.daum.net/controller/video/viewer/Video.html?play_loc=undefined&vid=vbb55CznNImnvxxUvaxa221';
             if ($tx.msie) {
                 if ($tx.msie_ver < 10) {
                     ok(assi.$$('embed')[0], 'IE10 이하는 object(embed)로 iframe을 변형한다');

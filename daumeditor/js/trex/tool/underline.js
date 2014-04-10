@@ -23,7 +23,12 @@ Trex.Tool.Underline = Trex.Class.create({
 		__Identity: 'underline'
 	},
 	$extend: Trex.Tool,
-    $mixins: [Trex.I.FontTool, Trex.I.ButtonFontTool, Trex.I.WrappingDummyFontTool],
+    $mixins: [
+        Trex.I.FontTool,
+        Trex.I.ButtonFontTool,
+        Trex.I.WrappingDummyFontTool,
+        ($tx.gecko ? Trex.I.Tool.QueryStyle.Gecko : Trex.I.Tool.QueryStyle.Standard)
+    ],
     getRelatedCssPropertyNames: function() {
         return [this.getCssPropertyName()];
     },
@@ -34,6 +39,7 @@ Trex.Tool.Underline = Trex.Class.create({
         return "underline";
     },
     isStyleApplied: function(node) {
-        return $tx.getStyle(node, "textDecoration").include("underline");
+        var matchTagName = 'u';
+        return this.queryNodeStyle(node, this.getCssPropertyName(), this.getQueryCommandName(), matchTagName);
     }
 });
