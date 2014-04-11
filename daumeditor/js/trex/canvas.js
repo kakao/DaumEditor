@@ -810,3 +810,34 @@ Trex.module("sync attachment data periodically", function(editor, toolbar, sideb
         }, 3000);
     }, 10000);
 });
+
+Trex.module("synchronize the font style when caret is in end of paragraph", function(editor, toolbar, sidebar, canvas/*, config*/) {
+    // only gecko #FTDUEDTR-1415
+    $tx.gecko && canvas.observeJob(Trex.Ev.__CANVAS_PANEL_MOUSEUP, function(ev){
+        if (canvas.isWYSIWYG()) {
+            var clickEl = ev.target;
+            var isParagraph = clickEl instanceof HTMLParagraphElement;
+            var isHtml = clickEl instanceof HTMLHtmlElement;
+            if (!isParagraph && !isHtml) {
+                return;
+            }
+
+            var processor = canvas.getProcessor();
+            var x = ev.pageX,
+                y = ev.pageY;
+
+            var caret = processor.doc.caretPositionFromPoint(x, y);
+            var node = caret && caret.offsetNode;
+            var des = node && $tom.descendants(node, '#text');
+            if (!des || !des.length) {
+                return;
+            }
+
+            var lastTextNode = des[des.length-1];
+            if (lastTextNode) {
+                var newRange = processor.createGoogRangeFromNodes(lastTextNode, lastTextNode.length, lastTextNode, lastTextNode.length);
+                newRange.select();
+            }
+        }
+    });
+});
