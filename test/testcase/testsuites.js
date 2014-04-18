@@ -1,6 +1,7 @@
 var testCases = [
 	"testcase/Assistant.js",
 	"testcase/txlib_test.js",
+    "testcase/utils_test.js",
 	"testcase/richtextbox_test.js",
 	"testcase/fontTool_test.js",
 	"testcase/fontExecCommand_test.js",
