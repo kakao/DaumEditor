@@ -299,18 +299,12 @@
          * 본문의 처음으로 캐럿을 옮긴다. - Only Wysiwyg
          */
         focusOnTop: function() {
-            if(!this.isWYSIWYG()) {
-                return;
-            }
             this.getProcessor().focusOnTop();
         },
         /**
          * 본문의 마지막으로 캐럿을 옮긴다. - Only Wysiwyg
          */
         focusOnBottom: function() {
-            if(!this.isWYSIWYG()) {
-                return;
-            }
             this.getProcessor().focusOnBottom();
         },
         /**
