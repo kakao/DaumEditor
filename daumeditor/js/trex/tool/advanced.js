@@ -40,13 +40,13 @@ Trex.Tool.Advanced = Trex.Class.create({
 			return;
 		}
 
-		_toolbar.observeJob("toolbar.advanced.fold", function() {
+		_toolbar.observeJob(Trex.Ev.__CMD_ADVANCED_FOLD, function() {
 			
 			$tx.hide(_elAdvanced);
 			$tx.removeClassName(_elBasic, 'tx-toolbar-basic-open');
 		});
 
-		_toolbar.observeJob("toolbar.advanced.spread", function() {
+		_toolbar.observeJob(Trex.Ev.__CMD_ADVANCED_SPREAD, function() {
 			
 			$tx.show(_elAdvanced);
 			$tx.addClassName(_elBasic, 'tx-toolbar-basic-open');
@@ -54,9 +54,9 @@ Trex.Tool.Advanced = Trex.Class.create({
 
 		var _toolHandler = function() {
 			if(self.opened) {
-				_toolbar.fireJobs("toolbar.advanced.fold");
+				_toolbar.fireJobs(Trex.Ev.__CMD_ADVANCED_FOLD);
 			} else {
-				_toolbar.fireJobs("toolbar.advanced.spread");
+				_toolbar.fireJobs(Trex.Ev.__CMD_ADVANCED_SPREAD);
 			}
 			self.opened = !self.opened;
 		};
@@ -71,15 +71,13 @@ Trex.Tool.Advanced = Trex.Class.create({
 			_toolHandler
 		);
 
-		if(config.opened == _TRUE) { 
-			_elAdvanced.show();
-			$tx.addClassName(_elBasic, 'tx-toolbar-basic-open');
-			self.opened = _TRUE;
+		if(config.opened == _TRUE) {
+			this.forceOpen();
 		}
 	},
 	forceOpen: function(){
 		this.button.pushedState();
-		this.toolbar.fireJobs("toolbar.advanced.spread");
+		this.toolbar.fireJobs(Trex.Ev.__CMD_ADVANCED_SPREAD);
 		this.opened = _TRUE;
 	}
 });

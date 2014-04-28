@@ -331,6 +331,14 @@
 		 * @private
 		 */
 		__CMD_ALIGN_IMG_FLOAT_RIGHT: 'align.img.floatright',
+        /**
+         * 툴바의 축소를을 실행하고 발생하는 사용자 정의 이벤트
+         */
+        __CMD_ADVANCED_FOLD: 'toolbar.advanced.fold',
+        /**
+         * 툴바의 확장을 실행하고 발생하는 사용자 정의 이벤트
+         */
+        __CMD_ADVANCED_SPREAD: 'toolbar.advanced.spread',
 		/**
 		 * table 의 border 를 조정하는 세가지 속성중에 한가지가 변경될 때 발생함.
 		 * border 의 세가지 속성: cellslinecolor, cellslineheight, cellslinestyle.
