@@ -527,8 +527,8 @@
 				        _processor.restore();
 			        }, 0);
 		        } else {
+                    _processor.focus();
 			        handler(_processor);
-			        _processor.focus();
 			        _history.saveHistory();
 			        _processor.restore();
 		        }
