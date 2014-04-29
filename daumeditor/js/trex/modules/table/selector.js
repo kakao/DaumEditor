@@ -56,7 +56,14 @@ Trex.Table.Selector = Trex.Class.create({
 		this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_MOUSEUP, function (e) {
 			self.onmouseup();
 		});
-		$tx.observe(_WIN.top, "mouseup", function (e) {
+        var _tempWinTop; // #FTDUEDTR-1426
+        try {
+            _tempWinTop = _WIN.top;
+            var _tempWinDoc = _tempWinTop.document;
+        } catch(e) {
+            _tempWinTop = _WIN;
+        }
+		$tx.observe(_tempWinTop, "mouseup", function (e) {
 			self.onmouseup();
 		});
 		this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_KEYDOWN, function (e) {
