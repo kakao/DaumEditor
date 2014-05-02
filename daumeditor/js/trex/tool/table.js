@@ -120,6 +120,7 @@ Trex.Tool.Table = Trex.Class.create({
             if (isNaN(width)) {
                 width = 0;
             }
+            width = width.toPx();
         }
         return width;
     },
