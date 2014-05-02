@@ -206,7 +206,7 @@
             var _config = this.config;
             this.panels = {};
             this.mode = _config.selectedMode || Trex.Canvas.__WYSIWYG_MODE;
-            if (($tx.ios && $tx.ios_ver < 5) || ($tx.android && $tx.android_ver < 3)) {
+            if (this._isForceTextMode()) {
                 this.mode = Trex.Canvas.__TEXT_MODE;
             }
             var _panelCreater = {
@@ -236,6 +236,11 @@
                 _canvas.fireJobs(Trex.Ev.__IFRAME_LOAD_COMPLETE, panelDoc);
             });
         },
+        _isForceTextMode: function() {
+            // 기존에는 아래의 조건이었으나 모바일에서의 호환은 아직 문제가 많아 제한함. 20140430
+            // ($tx.ios && $tx.ios_ver < 5) || ($tx.android && $tx.android_ver < 3)
+            return $tx.ios || $tx.android;
+        },
         /**
          * Canvas의 mode를 바꾸는것으로, 현재 활성화되어있는 panel을 변경한다.
          * @param {String} newMode - 변경 할 mode에 해당하는 문자열
@@ -248,6 +253,9 @@
             var _editor = this.editor;
             var oldMode = this.mode;
             if (oldMode == newMode) {
+                return;
+            }
+            if (this._isForceTextMode() && oldMode == Trex.Canvas.__TEXT_MODE) {
                 return;
             }
             var _oldPanel = this.panels[oldMode];
