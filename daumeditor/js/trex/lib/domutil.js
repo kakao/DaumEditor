@@ -777,6 +777,19 @@ Object.extend($tom, /** @lends $tom */{
                 node = node.lastChild;
             }
             return node;
+        },
+        /**
+         * node 다음 content를 반환한다.
+         * @function
+         */
+        nextContent : function (node, filter){
+            do{
+                var _node = $tom.next(node, filter);
+                if(_node)
+                    return _node;
+                node = $tom.parent(node);
+            }while(node && !$tom.isBody(node));
+            return null;
         }
 	});
 	

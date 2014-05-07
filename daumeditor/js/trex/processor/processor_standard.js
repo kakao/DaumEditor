@@ -679,7 +679,13 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 			nodes = [].concat(nodes);
 		}
 		attributes = attributes || {};
-		return $tom.wrap(this.create(tag, attributes), nodes);
+		var res = $tom.wrap(this.create(tag, attributes), nodes);
+        if($tx.msie && !$tom.nextContent(res)){
+            var e = this.doc.createElement('p');
+            e.innerHTML = $tom.EMPTY_BOGUS;
+            this.doc.body.appendChild(e);
+        }
+        return res;
 	},
 	/**
 	 * 블럭으로 감싸진 노드들을 빼내고 블럭을 삭제한다.
