@@ -6,6 +6,7 @@ Trex.module("make padding area inside Canvas with editor width",
             return;
         }
         var _elWysiwyg = _wysiwygPanel.el;
+        var _htmlWysiwyg = _elWysiwyg.contentDocument.documentElement;
 
         var SCROLL_WIDTH = 16;
         var REQUIRED_MINIMUM_PADDING = 28;
@@ -68,6 +69,11 @@ Trex.module("make padding area inside Canvas with editor width",
             if (!$tx.msie_nonstd) {
                 if ($tx.gecko) {
                     $tx.setStyle(_elWysiwyg, {
+                        overflowX: 'auto',
+                        overflowY: 'auto'
+                    });
+                } else if ($tx.chrome){
+                    $tx.setStyle(_htmlWysiwyg, {
                         overflowX: 'auto',
                         overflowY: 'auto'
                     });
