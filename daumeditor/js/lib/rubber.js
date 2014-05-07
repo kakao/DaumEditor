@@ -132,8 +132,6 @@
 
     var _rubber;
     window.resizeHeight = function(width, wrapper) {
-        console.log("rubber");
-
         if(!_rubber) {
             _rubber = new Rubber(0);
         }
