@@ -485,7 +485,10 @@ $tx.extend($tx, /** @lends $tx */{
                 } else {
                     // "{ \"string\": \"[1,2,3]\" }" 의 경우 => { "string": [1, 2, 3] } 으로 파싱된다.
                     // WHY???
-                    return JSON.parse(value, arguments.callee);
+                    try {
+                        // "[말머리]" 와 같은 값은 파싱 중 오류가 발생한다. 이런 경우는 무시하고 value를 그대로 반환하도록 한다. #FTDUEDTR-1432
+                        return JSON.parse(value, arguments.callee);
+                    } catch(ignore) {}
                 }
             }
             return value;
