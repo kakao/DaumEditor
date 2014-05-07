@@ -33,7 +33,8 @@
             showGuideArea: _TRUE,
             convertingText: _TRUE,
 			escapeTextModeContents: _TRUE,
-			removeTextModeBr: _FALSE
+			removeTextModeBr: _FALSE,
+            respectVisibilityInDesign: _TRUE
         }
     }, function(root) {
         var _config = TrexConfig.get('canvas', root);
@@ -842,4 +843,29 @@ Trex.module("synchronize the font style when caret is in end of paragraph", func
             }
         }
     });
+});
+
+// FTDUEDTR-1431
+Trex.module("apply respectVisibilityInDesign for old IE", function(editor, toolbar, sidebar, canvas, config) {
+    var isOldIE = ($tx.msie && ($tx.msie_docmode < 9));
+    isOldIE && canvas.observeJob(Trex.Ev.__CANVAS_MODE_CHANGE, function(oldMode, newMode){
+        changeVisibilityValue();
+    });
+    isOldIE && canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function(ev){
+        changeVisibilityValue();
+    });
+
+    var COMMAND_API = 'RespectVisibilityInDesign';
+    function changeVisibilityValue() {
+        if (canvas.isWYSIWYG()) {
+            var processor = canvas.getProcessor();
+            var state = processor.doc.queryCommandState(COMMAND_API);
+            var configFlag = canvas.config.respectVisibilityInDesign;
+
+            if (state != configFlag) {
+                processor.doc.execCommand(COMMAND_API, false, configFlag);
+                console.log('RespectVisibilityInDesign ', configFlag);
+            }
+        }
+    }
 });
