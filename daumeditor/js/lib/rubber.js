@@ -4,82 +4,80 @@
 (function(){
 
     var getScrollBarSize = function() {
-        var scrollDiv = document.createElement('div');
+        var scrollDiv = _DOC.createElement('div');
         scrollDiv.style.width = '100px';
         scrollDiv.style.height = '100px';
         scrollDiv.style.overflow = 'scroll';
         scrollDiv.style.position = 'absolute';
         scrollDiv.style.top = '-9999px';
 
-        document.body.appendChild(scrollDiv);
+        _DOC.body.appendChild(scrollDiv);
 
         var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
         var scrollbarHeight = scrollDiv.offsetHeight - scrollDiv.clientHeight;
 
-        document.body.removeChild(scrollDiv);
+        _DOC.body.removeChild(scrollDiv);
 
         return {
             width: scrollbarWidth,
             height: scrollbarHeight
         }
-    }
+    };
 
     var getScreenMargin = function() {
         if(!$tx.msie) {
             return {left: 0, top: 0};
         }
-        var _win = window.top;
-        var prevLeft = (_win.screenLeft) ? _win.screenLeft : _win.screenX;
-        var prevTop = (_win.screenTop) ? _win.screenTop : _win.screenY;
+        var prevLeft = (_WIN.screenLeft) ? _WIN.screenLeft : _WIN.screenX;
+        var prevTop = (_WIN.screenTop) ? _WIN.screenTop : _WIN.screenY;
 
-        _win.moveTo(0, 0);
+        _WIN.moveTo(0, 0);
 
-        var marginLeft = (_win.screenLeft) ? _win.screenLeft : _win.screenX;
-        var marginTop = (_win.screenTop) ? _win.screenTop : _win.screenY;
+        var marginLeft = (_WIN.screenLeft) ? _WIN.screenLeft : _WIN.screenX;
+        var marginTop = (_WIN.screenTop) ? _WIN.screenTop : _WIN.screenY;
 
-        _win.moveTo(prevLeft - marginLeft, prevTop - marginTop);
+        _WIN.moveTo(prevLeft - marginLeft, prevTop - marginTop);
 
         return {
             left: marginLeft,
             top: marginTop
         }
-    }
+    };
 
     var Rubber = function() {
-        var _win = window.top;
-        var _docEl = document.documentElement;
-        var _screenHeight = top.screen.availHeight;
-        var _screenWidth = top.screen.availWidth;
+        var _docEl = _DOC.documentElement;
+        var _screenHeight = _WIN.screen.availHeight;
+        var _screenWidth = _WIN.screen.availWidth;
 
         var _scrollbarSize = getScrollBarSize();
         var _screenMargin = getScreenMargin();
 
         this.resize = function(wrapper) {
             if ($tx.msie) {
-                document.body.scroll = "no";
+                _DOC.body.scroll = "no";
             }
 
-            var popLeft = (_win.screenLeft) ? _win.screenLeft : _win.screenX;
-            var popTop = (_win.screenTop) ? _win.screenTop : _win.screenY;
+            var popLeft = (_WIN.screenLeft) ? _WIN.screenLeft : _WIN.screenX;
+            var popTop = (_WIN.screenTop) ? _WIN.screenTop : _WIN.screenY;
 
             var deltaHeight = 0, deltaWidth = 0;
 
             //content size
-            if (window.outerHeight === 0) {
+            if (_WIN.outerHeight === 0) {
                 setTimeout(function () {
                     _rubber.resize(wrapper);
                 }, 100);
                 return;
             }
-            else if (window.outerHeight) {
-                deltaWidth = window.outerWidth - window.innerWidth;
-                deltaHeight = window.outerHeight - window.innerHeight;
+            else if (_WIN.outerHeight) {
+                deltaWidth = _WIN.outerWidth - _WIN.innerWidth;
+                deltaHeight = _WIN.outerHeight - _WIN.innerHeight;
             }
             else if(_docEl.clientWidth) {
                 var fakeOuterWidth = _docEl.clientWidth;
                 var fakeOuterHeight = _docEl.clientHeight;
 
-                _win.resizeTo(fakeOuterWidth, fakeOuterHeight);
+                _WIN.resizeTo(fakeOuterWidth, fakeOuterHeight);
 
                 var fakeInnerWidth = _docEl.clientWidth;
                 var fakeInnerHeight = _docEl.clientHeight;
@@ -97,7 +95,7 @@
             //scrollbar
             if (contentWidth > _screenWidth) {
                 if ($tx.msie) {
-                    document.body.scroll = "yes";
+                    _DOC.body.scroll = "yes";
                 }
 
                 contentWidth = _screenWidth;
@@ -106,7 +104,7 @@
 
             if(contentHeight > _screenHeight) {
                 if ($tx.msie) {
-                    document.body.scroll = "yes";
+                    _DOC.body.scroll = "yes";
                 }
                 contentHeight = _screenHeight;
                 contentWidth += _scrollbarSize.width;
@@ -125,13 +123,13 @@
                 popTop = 0;
             }
 
-            _win.moveTo(popLeft - _screenMargin.left, popTop - _screenMargin.top);
-            _win.resizeTo(contentWidth, contentHeight);
+            _WIN.moveTo(popLeft - _screenMargin.left, popTop - _screenMargin.top);
+            _WIN.resizeTo(contentWidth, contentHeight);
         };
     };
 
     var _rubber;
-    window.resizeHeight = function(width, wrapper) {
+    _WIN.resizeHeight = function(width, wrapper) {
         if(!_rubber) {
             _rubber = new Rubber(0);
         }
