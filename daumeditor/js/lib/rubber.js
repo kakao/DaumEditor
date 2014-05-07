@@ -2,84 +2,140 @@
  * Rubber - Very Very Simple Popup Resize Function
  */
 (function(){
-	
-	var __STATUSBAR_SIZE = 16 * 3;
-	var __SCROLLBAR_SIZE = 16;
 
-	var getContentWidth = function(docEl) {
-		return (docEl.clientWidth == docEl.scrollWidth && docEl.scrollWidth != docEl.offsetWidth) ? docEl.offsetWidth : docEl.scrollWidth;	
-	};
-	
-	var getContentHeight = function(docEl, wrapper) {
-		if (wrapper) return wrapper.offsetHeight;
-		return (docEl.clientHeight == docEl.scrollHeight && docEl.scrollHeight != docEl.offsetHeight) ? docEl.offsetHeight : docEl.scrollHeight;
-	};
-		
-	var Rubber = function(width) {
-		var _win = window.top;
-		var _docEl = document.documentElement;
-		var _screenHeight = top.screen.availHeight - __STATUSBAR_SIZE;
-		
-		var _initWidth = width || getContentWidth(_docEl);
-		var _initHeight = getContentHeight(_docEl);
-		var _shownVerScroll = false;
-		
-		if(_screenHeight < _initHeight) {
-			_initHeight = _screenHeight;
-			_win.resizeBy(0, _initHeight - _docEl.clientHeight);
-		}
-		
-		this.resize = function(wrapper) {
-			var _horOverflow = (_docEl.clientWidth < _docEl.scrollWidth);
+    var getScrollBarSize = function() {
+        var scrollDiv = document.createElement('div');
+        scrollDiv.style.width = '100px';
+        scrollDiv.style.height = '100px';
+        scrollDiv.style.overflow = 'scroll';
+        scrollDiv.style.position = 'absolute';
+        scrollDiv.style.top = '-9999px';
 
-			var _popWidth = _docEl.clientWidth;
-			var _popHeight = _docEl.clientHeight;
-			var _popLeft = (_win.screenLeft) ? _win.screenLeft : _win.screenX;
-			var _popTop = (_win.screenTop) ? _win.screenTop : _win.screenY;
+        document.body.appendChild(scrollDiv);
 
-			var _contentWidth = getContentWidth(_docEl);
-			var _contentHeight = getContentHeight(_docEl, wrapper);
-			
-			if (_screenHeight < _contentHeight) { //모니터가 컨텐츠보다 작으면 모니터 크기에 맞춰서
-				_win.moveTo(_popLeft - ($tx.msie? 3:0), 0); //창 위치를 옮기고
-				if ($tx.msie) {
-					document.body.scroll = "yes";
-				} 
-				_win.resizeBy(0, _screenHeight - _popHeight);
+        var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+        var scrollbarHeight = scrollDiv.offsetHeight - scrollDiv.clientHeight;
 
-				if(!_shownVerScroll) { // X->O
-					//_win.resizeBy(__SCROLLBAR_SIZE, -__SCROLLBAR_SIZE);
-					_win.resizeBy(0, -__SCROLLBAR_SIZE);
-				}
-				_shownVerScroll = true;
-			} else { //모니터가 컨텐츠보다 크면 컨텐츠 크기에 맞춰서
-				if ($tx.msie) {
-					document.body.scroll = "no";
-				}
-				_win.resizeBy(0, _contentHeight - _popHeight);
+        document.body.removeChild(scrollDiv);
 
-				if(_shownVerScroll) { // O->X
-					_win.resizeBy(-__SCROLLBAR_SIZE, 0);
-				}
-				if(_horOverflow) {
-					_win.resizeBy(0, -__SCROLLBAR_SIZE);
-				}
-				_shownVerScroll = false;
-			}
-		};
-	};
- 
- 	var _rubber;
-	window.resizeHeight = function(width, wrapper) {
-		if(!_rubber) {
-			_rubber = new Rubber(width);
-		}
-		if ($tx.webkit && opener && opener.innerHeight == window.innerHeight) {
-			setTimeout(function () {
-				_rubber.resize(wrapper);
-			}, 100);
-		} else {
-			_rubber.resize(wrapper);
-		}
-	};
+        return {
+            width: scrollbarWidth,
+            height: scrollbarHeight
+        }
+    }
+
+    var getScreenMargin = function() {
+        if(!$tx.msie) {
+            return {left: 0, top: 0};
+        }
+        var _win = window.top;
+        var prevLeft = (_win.screenLeft) ? _win.screenLeft : _win.screenX;
+        var prevTop = (_win.screenTop) ? _win.screenTop : _win.screenY;
+
+        _win.moveTo(0, 0);
+
+        var marginLeft = (_win.screenLeft) ? _win.screenLeft : _win.screenX;
+        var marginTop = (_win.screenTop) ? _win.screenTop : _win.screenY;
+
+        _win.moveTo(prevLeft - marginLeft, prevTop - marginTop);
+
+        return {
+            left: marginLeft,
+            top: marginTop
+        }
+    }
+
+    var Rubber = function() {
+        var _win = window.top;
+        var _docEl = document.documentElement;
+        var _screenHeight = top.screen.availHeight;
+        var _screenWidth = top.screen.availWidth;
+
+        var _scrollbarSize = getScrollBarSize();
+        var _screenMargin = getScreenMargin();
+
+        this.resize = function(wrapper) {
+            if ($tx.msie) {
+                document.body.scroll = "no";
+            }
+
+            var popLeft = (_win.screenLeft) ? _win.screenLeft : _win.screenX;
+            var popTop = (_win.screenTop) ? _win.screenTop : _win.screenY;
+
+            var deltaHeight = 0, deltaWidth = 0;
+
+            //content size
+            if (window.outerHeight === 0) {
+                setTimeout(function () {
+                    _rubber.resize(wrapper);
+                }, 100);
+                return;
+            }
+            else if (window.outerHeight) {
+                deltaWidth = window.outerWidth - window.innerWidth;
+                deltaHeight = window.outerHeight - window.innerHeight;
+            }
+            else if(_docEl.clientWidth) {
+                var fakeOuterWidth = _docEl.clientWidth;
+                var fakeOuterHeight = _docEl.clientHeight;
+
+                _win.resizeTo(fakeOuterWidth, fakeOuterHeight);
+
+                var fakeInnerWidth = _docEl.clientWidth;
+                var fakeInnerHeight = _docEl.clientHeight;
+
+                deltaWidth = fakeOuterWidth - fakeInnerWidth;
+                deltaHeight = fakeOuterHeight - fakeInnerHeight;
+            }
+            else {
+                throw 'browser does not support';
+            }
+
+            var contentWidth = wrapper.clientWidth + deltaWidth;
+            var contentHeight = wrapper.clientHeight + deltaHeight;
+
+            //scrollbar
+            if (contentWidth > _screenWidth) {
+                if ($tx.msie) {
+                    document.body.scroll = "yes";
+                }
+
+                contentWidth = _screenWidth;
+                contentHeight += _scrollbarSize.height;
+            }
+
+            if(contentHeight > _screenHeight) {
+                if ($tx.msie) {
+                    document.body.scroll = "yes";
+                }
+                contentHeight = _screenHeight;
+                contentWidth += _scrollbarSize.width;
+
+                if (contentWidth > _screenWidth) {
+                    contentWidth = _screenWidth;
+                }
+            }
+
+            //position
+            if (contentWidth + popLeft > _screenWidth) {
+                popLeft = 0;
+
+            }
+            if (contentHeight + popTop > _screenHeight) {
+                popTop = 0;
+            }
+
+            _win.moveTo(popLeft - _screenMargin.left, popTop - _screenMargin.top);
+            _win.resizeTo(contentWidth, contentHeight);
+        };
+    };
+
+    var _rubber;
+    window.resizeHeight = function(width, wrapper) {
+        if(!_rubber) {
+            _rubber = new Rubber(0);
+        }
+
+        _rubber.resize(wrapper);
+    };
 })();
