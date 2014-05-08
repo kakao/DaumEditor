@@ -119,10 +119,10 @@
 		attachClickHandler: function (isAttachBoxDisplay) {
 			if (isAttachBoxDisplay) {
 				this.showAttachBox();
-                this.attachBox.fireJobs(Trex.Ev.__ATTACHBOX_SHOW, _TRUE);
+                this.attachBox.fireJobs(Trex.Ev.__ATTACHBOX_FULLSCREEN_SHOW);
 			} else {
 				this.hideAttachBox();
-                this.attachBox.fireJobs(Trex.Ev.__ATTACHBOX_HIDE, _FALSE);
+                this.attachBox.fireJobs(Trex.Ev.__ATTACHBOX_FULLSCREEN_HIDE);
 			}
 		},
 		showNormalScreen: function () {

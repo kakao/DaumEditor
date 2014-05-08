@@ -272,6 +272,20 @@
 		 *	});
 		 */
 		__ATTACHBOX_HIDE: 'attachbox.hide',
+        /**
+         * fullscreen 상태에서 Attach Box가 보여질 때 발생하는 사용자 정의 이벤트
+         * @example
+         * 	attachbox.observeJob(Trex.Ev.__ATTACHBOX_FULLSCREEN_SHOW, function() {
+		 *	});
+         */
+        __ATTACHBOX_FULLSCREEN_SHOW: 'attachbox.fullscreen.show',
+        /**
+         * fullscreen 상태에서 Attach Box가 감춰질 때 발생하는 사용자 정의 이벤트
+         * @example
+         * 	attachbox.observeJob(Trex.Ev.__ATTACHBOX_FULLSCREEN_HIDE, function() {
+		 *	});
+         */
+        __ATTACHBOX_FULLSCREEN_HIDE: 'attachbox.fullscreen.hide',
 		/** 
 		 * 에디터 페이지를 벗어나기 전에 발생하는 사용자 정의 이벤트
 		 * @example

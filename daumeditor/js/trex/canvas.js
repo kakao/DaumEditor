@@ -808,10 +808,10 @@ Trex.module("make getter for 'iframeheight' and 'iframetop' size",
 
         // attachbox change ui
         var attachbox = editor.getAttachBox();
-        attachbox.observeJob(Trex.Ev.__ATTACHBOX_SHOW, function() {
+        attachbox.observeJob(Trex.Ev.__ATTACHBOX_FULLSCREEN_SHOW, function() {
             resetIframeAttributes();
         });
-        attachbox.observeJob(Trex.Ev.__ATTACHBOX_HIDE, function() {
+        attachbox.observeJob(Trex.Ev.__ATTACHBOX_FULLSCREEN_HIDE, function() {
             resetIframeAttributes();
         });
 
