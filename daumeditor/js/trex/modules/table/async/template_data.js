@@ -184,14 +184,14 @@ function getTableTemplateList() {
 			backgroundColor:"transparent"
 		},
 		firstRow: {
-			borderTop:"1px solid #fff",
+			borderTop:"1px solid #000",
 			borderBottom:"1px solid #fff",
 			borderRight:"1px solid #fff",
 			backgroundColor: "#000",
 			color: "#fff"
 		},
 		firstCol: {
-			borderLeft:"1px solid #fff",
+			borderLeft:"1px solid #000",
 			borderRight:"1px solid #fff",
 			borderBottom:"1px solid #fff",
 			backgroundColor: "#000",
@@ -216,7 +216,7 @@ function getTableTemplateList() {
 		firstRow: {
 			backgroundColor: "#000",
 			borderRight:"1px solid #fff",
-			borderTop:"1px solid #fff",
+			borderTop:"1px solid #000",
 			borderBottom:"1px solid #fff",
 			color: "#fff"
 		},
@@ -225,7 +225,7 @@ function getTableTemplateList() {
 		},
 		lastCol: {
 			borderBottom:"1px solid #fff",
-			borderRight:"1px solid #fff",
+			borderRight:"1px solid #000",
 			backgroundColor: "#000",
 			color: "#fff"
 		},
@@ -403,14 +403,14 @@ function getTableTemplateList() {
 			backgroundColor:"transparent"
 		},
 		firstRow: {
-			borderTop:"1px solid #fff",
+			borderTop:"1px solid #5f8eef",
 			borderBottom:"1px solid #fff",
 			borderRight:"1px solid #fff",
 			backgroundColor: "#5f8eef",
 			color: "#fff"
 		},
 		firstCol: {
-			borderLeft:"1px solid #fff",
+			borderLeft:"1px solid #5f8eef",
 			borderRight:"1px solid #fff",
 			borderBottom:"1px solid #fff",
 			backgroundColor: "#5f8eef",
@@ -435,7 +435,7 @@ function getTableTemplateList() {
 		firstRow: {
 			backgroundColor: "#5f8eef",
 			borderRight:"1px solid #fff",
-			borderTop:"1px solid #fff",
+			borderTop:"1px solid #5f8eef",
 			borderBottom:"1px solid #fff",
 			color: "#fff"
 		},
@@ -444,7 +444,7 @@ function getTableTemplateList() {
 		},
 		lastCol: {
 			borderBottom:"1px solid #fff",
-			borderRight:"1px solid #fff",
+			borderRight:"1px solid #5f8eef",
 			backgroundColor: "#5f8eef",
 			color: "#fff"
 		},
@@ -622,14 +622,14 @@ function getTableTemplateList() {
 			backgroundColor:"transparent"
 		},
 		firstRow: {
-			borderTop:"1px solid #fff",
+			borderTop:"1px solid #97dc20",
 			borderBottom:"1px solid #fff",
 			borderRight:"1px solid #fff",
 			backgroundColor: "#97dc20",
 			color: "#fff"
 		},
 		firstCol: {
-			borderLeft:"1px solid #fff",
+			borderLeft:"1px solid #97dc20",
 			borderRight:"1px solid #fff",
 			borderBottom:"1px solid #fff",
 			backgroundColor: "#97dc20",
@@ -654,7 +654,7 @@ function getTableTemplateList() {
 		firstRow: {
 			backgroundColor: "#97dc20",
 			borderRight:"1px solid #fff",
-			borderTop:"1px solid #fff",
+			borderTop:"1px solid #97dc20",
 			borderBottom:"1px solid #fff",
 			color: "#fff"
 		},
@@ -663,7 +663,7 @@ function getTableTemplateList() {
 		},
 		lastCol: {
 			borderBottom:"1px solid #fff",
-			borderRight:"1px solid #fff",
+			borderRight:"1px solid #97dc20",
 			backgroundColor: "#97dc20",
 			color: "#fff"
 		},
@@ -841,14 +841,14 @@ function getTableTemplateList() {
 			backgroundColor:"transparent"
 		},
 		firstRow: {
-			borderTop:"1px solid #fff",
+			borderTop:"1px solid #ea2d2d",
 			borderBottom:"1px solid #fff",
 			borderRight:"1px solid #fff",
 			backgroundColor: "#ea2d2d",
 			color: "#fff"
 		},
 		firstCol: {
-			borderLeft:"1px solid #fff",
+			borderLeft:"1px solid #ea2d2d",
 			borderRight:"1px solid #fff",
 			borderBottom:"1px solid #fff",
 			backgroundColor: "#ea2d2d",
@@ -873,7 +873,7 @@ function getTableTemplateList() {
 		firstRow: {
 			backgroundColor: "#ea2d2d",
 			borderRight:"1px solid #fff",
-			borderTop:"1px solid #fff",
+			borderTop:"1px solid #ea2d2d",
 			borderBottom:"1px solid #fff",
 			color: "#fff"
 		},
@@ -882,7 +882,7 @@ function getTableTemplateList() {
 		},
 		lastCol: {
 			borderBottom:"1px solid #fff",
-			borderRight:"1px solid #fff",
+			borderRight:"1px solid #ea2d2d",
 			backgroundColor: "#ea2d2d",
 			color: "#fff"
 		},
@@ -1060,14 +1060,14 @@ function getTableTemplateList() {
 			backgroundColor:"transparent"
 		},
 		firstRow: {
-			borderTop:"1px solid #fff",
+			borderTop:"1px solid #fb861f",
 			borderBottom:"1px solid #fff",
 			borderRight:"1px solid #fff",
 			backgroundColor: "#fb861f",
 			color: "#fff"
 		},
 		firstCol: {
-			borderLeft:"1px solid #fff",
+			borderLeft:"1px solid #fb861f",
 			borderRight:"1px solid #fff",
 			borderBottom:"1px solid #fff",
 			backgroundColor: "#fb861f",
@@ -1092,7 +1092,7 @@ function getTableTemplateList() {
 		firstRow: {
 			backgroundColor: "#fb861f",
 			borderRight:"1px solid #fff",
-			borderTop:"1px solid #fff",
+			borderTop:"1px solid #fb861f",
 			borderBottom:"1px solid #fff",
 			color: "#fff"
 		},
@@ -1101,7 +1101,7 @@ function getTableTemplateList() {
 		},
 		lastCol: {
 			borderBottom:"1px solid #fff",
-			borderRight:"1px solid #fff",
+			borderRight:"1px solid #fb861f",
 			backgroundColor: "#fb861f",
 			color: "#fff"
 		},

@@ -21,6 +21,9 @@
         },
         loadTemplate: function(onLoadComplete) {
             var url = this.getJSBasePath() + "trex/modules/table/async/template_data.js";
+            if (EditorJSLoader.getOption('environment') == 'development') {
+                url += '?dummy=' + (new Date()).getTime();
+            }
             EditorJSLoader.asyncLoadModule({
                 url: TrexConfig.getUrl(url),
                 callback: function() {

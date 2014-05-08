@@ -247,14 +247,82 @@ Trex.module("table selector", function (editor, toolbar, sidebar, canvas, config
 			
 			setTemplateStyle: function (table, templateIndex) {
 				if (table) {
+                    var self = this;
                     tableTemplateLoader.getTemplate(templateIndex, function(template) {
                         template.apply(table);
+                        self._applyTemplateOutline(table, template.templateData);
                         tableSelect.reset();
                     });
 				} else {
 					alertFromNoSelect();
 				}
-			}
+			},
+            /**
+             * 테이블 템플릿을 적용해도 테두리에 대한 정확한 적용이 되지않아 흰색 혹은 none의 상태가 된다.
+             * 이를 보완하기 위해서 테이블 기본 기능을 이용해서 테두리를 재설정 한다.
+             *
+             * @param table
+             * @param templateData
+             * @private
+             */
+            _applyTemplateOutline: function(table, templateData) {
+                var item = templateData;
+                var self = this;
+                var outlineBorder = {
+                    top: this._parseBorderStyle(item.firstRow.borderTop),
+                    right: this._parseBorderStyle(item.lastCol.borderRight || item.common.borderRight),
+                    bottom: this._parseBorderStyle(item.lastRow.borderBottom || item.common.borderBottom),
+                    left: this._parseBorderStyle(item.firstCol.borderLeft)
+                };
+
+                var tableMatrixer = new Trex.Tool.Table.TableCellMatrixer(table);
+                var tdMatrix = tableMatrixer.getTdMatrix();
+                var rowSize = tableMatrixer.getRowSize();
+                var colSize = tableMatrixer.getColSize();
+
+                if (tdMatrix && tdMatrix.length) {
+                    tableSelect.selectByTd(tdMatrix[0][0], tdMatrix[rowSize-1][colSize-1]);
+                    tableBorder.setTableSelect(tableSelect);
+
+                    var direction = ['top', 'right', 'bottom', 'left'];
+                    direction.each(function(dir){
+                        tableBorder.setBorderRange(dir);
+                        tableBorder.changeBorderColor(self.getTdArr(), outlineBorder[dir]['color']);
+                        tableBorder.changeBorderHeight(self.getTdArr(), outlineBorder[dir]['height']);
+                        tableBorder.changeBorderType(self.getTdArr(), outlineBorder[dir]['type']);
+                    });
+                }
+            },
+            /**
+             * border style을 파싱해서 object로 반환한다.
+             *
+             * ex1. "1px solid red"
+             * ex2. "none"
+             *
+             * @param styleString
+             * @returns {object}
+             * @private
+             */
+            _parseBorderStyle: function(styleString) {
+                styleString = styleString.trim().toLowerCase();
+                if (styleString === 'none') {
+                    return {
+                        height: 'none',
+                        type: 'solid',
+                        color: 'transparent'
+                    };
+                } else {
+                    var parts = styleString.split(' ');
+                    if (parts.length != 3) {
+                        parts = ['1px', 'solid', '#000'];
+                    }
+                    return {
+                        height: parts[0].parsePx() || 1,
+                        type: parts[1],
+                        color: parts[2]
+                    };
+                }
+            }
 		};
 		
 		toolbar.fireJobs(Trex.Ev.__TOOL_CELL_LINE_CHANGE, {
