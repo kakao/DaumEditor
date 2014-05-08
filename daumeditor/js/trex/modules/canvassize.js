@@ -60,8 +60,8 @@ Trex.module("make padding area inside Canvas with editor width",
     		
     		//에디터 래퍼의 너비가 변하였을 경우 패딩영역의 위치를 조절한다.
             canvas.observeJob(Trex.Ev.__CANVAS_WRAP_WIDTH_CHANGE, onCanvasWidthChanged);
-            canvas.observeJob('canvas.normalscreen.change', onCanvasWidthChanged);
-            canvas.observeJob('canvas.fullscreen.change', onCanvasWidthChanged);
+            canvas.observeJob(Trex.Ev.__CANVAS_NORMAL_SCREEN_CHANGE, onCanvasWidthChanged);
+            canvas.observeJob(Trex.Ev.__CANVAS_FULL_SCREEN_CHANGE, onCanvasWidthChanged);
 
 
             // 아래 코드의 필요성은 확인 필요

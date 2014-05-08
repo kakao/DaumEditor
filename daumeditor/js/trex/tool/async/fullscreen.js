@@ -96,8 +96,8 @@
 					self.resizeContainer();
 				}
 			};
-			this.toolbar.observeJob("toolbar.advanced.fold", this.resizeHandler);
-			this.toolbar.observeJob("toolbar.advanced.spread", this.resizeHandler);
+			this.toolbar.observeJob(Trex.Ev.__CMD_ADVANCED_FOLD, this.resizeHandler);
+			this.toolbar.observeJob(Trex.Ev.__CMD_ADVANCED_SPREAD, this.resizeHandler);
 			if (typeof showAttachBox === "function") {
 				this.showAttachBoxAtServiceForSave = showAttachBox; //NOTE: fullscreen 모드에서는 다른 모양의 첨부박스를 사용한다.
 			}
@@ -119,8 +119,10 @@
 		attachClickHandler: function (isAttachBoxDisplay) {
 			if (isAttachBoxDisplay) {
 				this.showAttachBox();
+                this.attachBox.fireJobs(Trex.Ev.__ATTACHBOX_SHOW, _TRUE);
 			} else {
 				this.hideAttachBox();
+                this.attachBox.fireJobs(Trex.Ev.__ATTACHBOX_HIDE, _FALSE);
 			}
 		},
 		showNormalScreen: function () {
@@ -163,8 +165,6 @@
 				this.attachClickHandler(this.attachBox.checkDisplay());
 			}
 			
-			this.canvas.fireJobs("canvas.normalscreen.change");
-			
 			//NOTE: Service Specific
 			if (this.showAttachBoxAtServiceForSave) {
 				_WIN.showAttachBox = this.showAttachBoxAtServiceForSave;
@@ -190,6 +190,8 @@
 					_elIcon.focus();
 				}, 500);
 			}
+
+            this.canvas.fireJobs(Trex.Ev.__CANVAS_NORMAL_SCREEN_CHANGE);
 		},
 		showFullScreen: function () {
 			var self = this;
@@ -250,8 +252,6 @@
 				$tx.observe(window, 'resize', this.resizeHandler);
 			}
 			
-			this.canvas.fireJobs("canvas.fullscreen.change");
-
 			// make trace element and move container to body's direct child
 			_WIN.wrapper = _wrapper;
 			this.relativeParents = [];
@@ -271,6 +271,8 @@
 			
 			this.isFullScreen = _TRUE;
 			this.resizeContainer();
+
+            this.canvas.fireJobs(Trex.Ev.__CANVAS_FULL_SCREEN_CHANGE);
 		},
 		_hideScrollbar: function () {
 			if (_DOC_EL.scrollTop || _DOC_EL.scrollLeft) {

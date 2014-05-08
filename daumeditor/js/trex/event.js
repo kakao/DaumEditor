@@ -152,7 +152,15 @@
 		 *	});
 		 */
 		__CANVAS_MODE_CHANGE: 'canvas.mode.change',
-		/** 
+        /**
+         * 전체화면용 canvas로 변경 시 발생
+         */
+        __CANVAS_FULL_SCREEN_CHANGE: 'canvas.fullscreen.change',
+        /**
+         * 일반화면용 canvas로 변경 시 발생
+         */
+        __CANVAS_NORMAL_SCREEN_CHANGE: 'canvas.normalscreen.change',
+		/**
 		 * 툴바의 버튼이 눌렸을 경우 발생하는 사용자 정의 이벤트
 		 * @example
 		 * 	canvas.observeJob(Trex.Ev.__TOOL_CLICK, function(identity) {

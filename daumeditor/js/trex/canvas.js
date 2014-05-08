@@ -778,21 +778,49 @@ Trex.module("make getter for 'iframeheight' and 'iframetop' size",
     function(editor, toolbar, sidebar, canvas/*, config*/) {
         var _iframeHeight = 0;
         var _iframeTop = 0;
-        canvas.observeJob(Trex.Ev.__CANVAS_HEIGHT_CHANGE, function(height) {
-            _iframeHeight = height.parsePx();
-        });
-        canvas.observeJob('canvas.apply.background', function() {
-            var _wysiwygPanel = canvas.getPanel(Trex.Canvas.__WYSIWYG_MODE);
-            var _position = $tom.getPosition(_wysiwygPanel.el);
-            _iframeTop = _position.y;
-        });
-        canvas.reserveJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function() {
+
+        function resetIframeAttributes() {
             var _wysiwygPanel = canvas.getPanel(Trex.Canvas.__WYSIWYG_MODE);
             _iframeHeight = _wysiwygPanel.getPanelHeight().parsePx();
             var _position = $tom.getPosition(_wysiwygPanel.el);
             _iframeTop = _position.y;
+        }
+
+        // canvas resize
+        canvas.observeJob(Trex.Ev.__CANVAS_HEIGHT_CHANGE, function(height) {
+            resetIframeAttributes();
+        });
+        canvas.observeJob(Trex.Ev.__CANVAS_FULL_SCREEN_CHANGE, function() {
+            resetIframeAttributes();
+        });
+        canvas.observeJob(Trex.Ev.__CANVAS_NORMAL_SCREEN_CHANGE, function() {
+            resetIframeAttributes();
+        });
+        canvas.observeJob('canvas.apply.background', function() {
+            resetIframeAttributes();
+        });
+        canvas.observeJob('canvas.apply.letterpaper', function() {
+            resetIframeAttributes();
+        });
+        canvas.reserveJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function() {
+            resetIframeAttributes();
         },300);
 
+        // attachbox change ui
+        var attachbox = editor.getAttachBox();
+        attachbox.observeJob(Trex.Ev.__ATTACHBOX_SHOW, function() {
+            resetIframeAttributes();
+        });
+        attachbox.observeJob(Trex.Ev.__ATTACHBOX_HIDE, function() {
+            resetIframeAttributes();
+        });
+
+        // window resize
+        $tx.observe(_WIN, 'resize', function(){
+            resetIframeAttributes();
+        });
+
+        // create interface
         canvas.getIframeHeight = function(){
             return _iframeHeight;
         };

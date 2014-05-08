@@ -152,11 +152,11 @@ Trex.Resizer = Trex.Class.create({
 		$tx.observe(_elBar, 'mousedown', this.startDragHandler);
 
 		var _canvas = editor.getCanvas();
-		_canvas.observeJob('canvas.fullscreen.change', function() {
+		_canvas.observeJob(Trex.Ev.__CANVAS_FULL_SCREEN_CHANGE, function() {
 			$tx.hide(_elBar);
 		});
 
-		_canvas.observeJob('canvas.normalscreen.change', function() {
+		_canvas.observeJob(Trex.Ev.__CANVAS_NORMAL_SCREEN_CHANGE, function() {
 			$tx.show(_elBar);
 		});
 
