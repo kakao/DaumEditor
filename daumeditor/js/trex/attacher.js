@@ -162,6 +162,13 @@ Trex.Attacher = Trex.Class.draft(/** @lends Trex.Attacher.prototype */{
 		return new Trex.Attachment[_attachmentType.capitalize()](this, data);
 	},
 	checkInsertable: function() {
-		return (this.isMultiple || this.getDatalist().length === 0);
+        if (this.isMultiple) {
+            return _TRUE;
+        }
+
+        var list = this.getDatalist().findAll(function(entry) {
+            return entry.deletedMark != _TRUE;
+        });
+        return list.length === 0;
 	}
 });

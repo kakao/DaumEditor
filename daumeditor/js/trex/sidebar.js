@@ -296,10 +296,15 @@ Trex.Actor = Trex.Class.draft({
         }
     },
 	existEntry: function() {
-		return ((this.getDatalist().length == 0)? _FALSE: _TRUE);
+        var list = this.getDatalist().findAll(function(entry) {
+            return entry.deletedMark != _TRUE;
+        });
+		return list.length !== 0;
 	},
 	getFirstEntryData: function() {
-		var list = this.getDatalist();
+        var list = this.getDatalist().findAll(function(entry) {
+            return entry.deletedMark != _TRUE;
+        });
 		return ((list.length == 0)? _NULL: list[0].data);
 	}
 });
