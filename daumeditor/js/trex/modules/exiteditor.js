@@ -22,7 +22,7 @@ Trex.module("exit Editor", function(editor, toolbar, sidebar, canvas, config) {
                 return;
             }
             var el = _elWysiwyg;
-            var pattern = 'button,a,input';
+            var pattern = 'button,a,input,select,object';
             var searchElement = null;
             do{
                 var next = $tom.nextContent(el,'#element');
@@ -31,12 +31,19 @@ Trex.module("exit Editor", function(editor, toolbar, sidebar, canvas, config) {
                 }else {
                     searchElement = $tom.descendant(next, pattern);
                 }
-                if(searchElement && searchElement.tagName.toLowerCase() === 'a' && (searchElement.href||'').trim() == ''){
-                    searchElement = null;
+                if(searchElement){
+                    if($tx.getStyle(searchElement,'display') == 'none'||
+                        $tx.getStyle(searchElement,'visibility') == 'hidden' ||
+                        searchElement.tagName.toLowerCase() === 'input' && searchElement.type == 'hidden'||
+                        searchElement.tagName.toLowerCase() === 'a' && (searchElement.href||'').trim() == '')
+                        searchElement = null;
                 }
                 el = next;
             }while(!searchElement&&el);
-            searchElement.focus();
+            if(searchElement)
+                searchElement.focus();
+            else
+                canvas.getProcessor().blur();
         }catch(e){
             canvas.getProcessor().blur();
         }
