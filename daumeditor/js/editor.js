@@ -173,7 +173,8 @@ var CORE_FILES = [
 	"trex/modules/table/border.js",
 	"trex/modules/table/template.js",
 
-	"trex/modules/tabledragger.js"
+	"trex/modules/tabledragger.js",
+    "trex/modules/exiteditor.js"
 ];
 var DE_PREFIX = EditorJSLoader.getJSBasePath("editor.js");
 EditorJSLoader.loadModule(DE_PREFIX + "development_environments.js");
