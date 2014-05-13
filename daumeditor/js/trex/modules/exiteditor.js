@@ -14,7 +14,13 @@ Trex.module("exit Editor", function(editor, toolbar, sidebar, canvas, config) {
     var _wysiwygPanel = canvas.getPanel(Trex.Canvas.__WYSIWYG_MODE);
     var _elWysiwyg = _wysiwygPanel.el;
     var _config = config.canvas.exitEditor;
-
+    function isSearchElement(searchElement){
+        return !($tx.getStyle(searchElement,'display') == 'none'||
+            $tx.getStyle(searchElement,'visibility') == 'hidden' ||
+            searchElement.tagName.toLowerCase() === 'input' && searchElement.type == 'hidden'||
+            searchElement.tagName.toLowerCase() === 'a' && (searchElement.href||'').trim() == ''||
+            searchElement.offsetLeft <= 0);
+    }
     function execHandler(e){
         try{
             if(_config.nextElement){
@@ -24,18 +30,17 @@ Trex.module("exit Editor", function(editor, toolbar, sidebar, canvas, config) {
             var el = _elWysiwyg;
             var pattern = 'button,a,input,select,object';
             var searchElement = null;
+            var els = null;
             do{
                 var next = $tom.nextContent(el,'#element');
                 if($tom.kindOf(next, pattern)){
                     searchElement = next;
                 }else {
-                    searchElement = $tom.descendant(next, pattern);
+                    els = $tom.descendants(next, pattern);
+                    searchElement = els.find(isSearchElement);
                 }
                 if(searchElement){
-                    if($tx.getStyle(searchElement,'display') == 'none'||
-                        $tx.getStyle(searchElement,'visibility') == 'hidden' ||
-                        searchElement.tagName.toLowerCase() === 'input' && searchElement.type == 'hidden'||
-                        searchElement.tagName.toLowerCase() === 'a' && (searchElement.href||'').trim() == '')
+                    if(!isSearchElement(searchElement))
                         searchElement = null;
                 }
                 el = next;
