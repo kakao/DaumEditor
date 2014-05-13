@@ -7,6 +7,15 @@ Trex.install("attachbox.onFileCapacityInitialized @if sidebar.capacity.show = tr
 		}
 	}
 );
+Trex.module("attachbox.updateCapacity @if sidebar.capacity.show = true",
+    function(editor, toolbar, sidebar, canvas, config) {
+        var attachbox = editor.getAttachBox();
+        if (config.sidebar.capacity.show === _TRUE) {
+            attachbox.updateCapacity();
+        }
+    }
+);
+
 TrexConfig.addSidebar('capacity',
 	{
 		show: _TRUE,
@@ -112,6 +121,10 @@ Trex.I.FileCapacity = {
             }
             return _FALSE;
         };
+
+        this.updateCapacity = function() {
+            capacityUpdateEvent();
+        }
 
 		/**
 		 *  Resets uploaded file count & size
