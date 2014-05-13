@@ -74,7 +74,11 @@ Trex.Tool.HorizontalRule = Trex.Class.create({
 				var _item = map[data];
 				if (_canvas.isWYSIWYG()) {
 					_canvas.execute(function(processor){
-						processor.pasteContent(_item.html, _TRUE);
+                        // hr 태그는 p 태그 하위에 포함 될 수 없으므로 newline으로 내용을 추가 한 뒤에 래핑된 p태그를 제거한다.
+                        var pastedNode = processor.pasteContent(_item.html, _TRUE);
+                        if ($tom.isTagName(pastedNode.parentNode, 'p')) {
+                            $tom.unwrap(pastedNode.parentNode);
+                        }
 					});
 				} else {
 					_canvas.execute(function(processor) {
