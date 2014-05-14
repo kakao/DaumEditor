@@ -10,6 +10,7 @@
             this.translateDocumentEventToCanvas("keyup", 'onKeyUp');
             this.translateDocumentEventToCanvas('keydown', 'onKeyDown');
             this.translateDocumentEventToCanvas('mouseover', 'onMouseOver');
+            this.translateDocumentEventToCanvas('mousemove', 'onMouseMove');
             this.translateDocumentEventToCanvas('mouseout', 'onMouseOut');
             this.translateDocumentEventToCanvas('click', 'onClick');
             this.translateDocumentEventToCanvas('dblclick', 'onDoubleClick');

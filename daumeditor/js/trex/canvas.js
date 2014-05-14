@@ -680,6 +680,13 @@
             }
         },
 
+        onMouseMove: function(event) {
+            try {
+                this.fireJobs(Trex.Ev.__CANVAS_PANEL_MOUSEMOVE, event);
+            } catch (ignore) {
+            }
+        },
+
         onMouseOut: function(event) {
             try {
                 this.fireJobs(Trex.Ev.__CANVAS_PANEL_MOUSEOUT, event);

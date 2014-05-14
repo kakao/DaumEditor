@@ -75,6 +75,14 @@
 		 *	});
 		 */
 		__CANVAS_PANEL_MOUSEOUT: 'canvas.panel.mouseout',
+        /**
+         * wysiwyg 영역에 발생하는 movemove 이벤트<br/>
+         * wysiwyg 영역에서 마우스를 움직일 때마다 발생하므로 과하게 사용하지 않도록 한다.
+         * @example
+         * 	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_MOUSEMOVE, function(ev) {
+		 *	});
+         */
+        __CANVAS_PANEL_MOUSEMOVE: 'canvas.panel.mousemove',
 		/** 
 		 * wysiwyg 영역에 발생하는 click 이벤트
 		 * @example
