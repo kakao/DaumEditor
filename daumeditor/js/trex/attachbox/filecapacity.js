@@ -7,12 +7,12 @@ Trex.install("attachbox.onFileCapacityInitialized @if sidebar.capacity.show = tr
 		}
 	}
 );
-Trex.module("attachbox.updateCapacity @if sidebar.capacity.show = true",
-    function(editor, toolbar, sidebar, canvas, config) {
+Trex.module("attachbox.updateCapacity on Trex.Ev.__ATTACHBOX_SHOW",
+    function(editor/*, toolbar, sidebar, canvas, config*/) {
         var attachbox = editor.getAttachBox();
-        if (config.sidebar.capacity.show === _TRUE) {
+        attachbox.observeJob(Trex.Ev.__ATTACHBOX_SHOW, function() {
             attachbox.updateCapacity();
-        }
+        });
     }
 );
 
