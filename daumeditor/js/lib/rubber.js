@@ -3,6 +3,13 @@
  */
 (function(){
 
+    var targetWindow;
+    try {
+        targetWindow = top;
+    } catch(e) {
+        targetWindow = _WIN;
+    }
+
     var getScrollBarSize = function() {
         var scrollDiv = _DOC.createElement('div');
         scrollDiv.style.width = '100px';
@@ -31,12 +38,12 @@
         var prevLeft = (_WIN.screenLeft) ? _WIN.screenLeft : _WIN.screenX;
         var prevTop = (_WIN.screenTop) ? _WIN.screenTop : _WIN.screenY;
 
-        _WIN.moveTo(0, 0);
+        targetWindow.moveTo(0, 0);
 
         var marginLeft = (_WIN.screenLeft) ? _WIN.screenLeft : _WIN.screenX;
         var marginTop = (_WIN.screenTop) ? _WIN.screenTop : _WIN.screenY;
 
-        _WIN.moveTo(prevLeft - marginLeft, prevTop - marginTop);
+        targetWindow.moveTo(prevLeft - marginLeft, prevTop - marginTop);
 
         return {
             left: marginLeft,
@@ -63,21 +70,21 @@
             var deltaHeight = 0, deltaWidth = 0;
 
             //content size
-            if (_WIN.outerHeight === 0) {
+            if (targetWindow.outerHeight === 0) {
                 setTimeout(function () {
                     _rubber.resize(wrapper);
                 }, 100);
                 return;
             }
-            else if (_WIN.outerHeight) {
-                deltaWidth = _WIN.outerWidth - _WIN.innerWidth;
-                deltaHeight = _WIN.outerHeight - _WIN.innerHeight;
+            else if (targetWindow.outerHeight) {
+                deltaWidth = targetWindow.outerWidth - targetWindow.innerWidth;
+                deltaHeight = targetWindow.outerHeight - targetWindow.innerHeight;
             }
             else if(_docEl.clientWidth) {
                 var fakeOuterWidth = _docEl.clientWidth;
                 var fakeOuterHeight = _docEl.clientHeight;
 
-                _WIN.resizeTo(fakeOuterWidth, fakeOuterHeight);
+                targetWindow.resizeTo(fakeOuterWidth, fakeOuterHeight);
 
                 var fakeInnerWidth = _docEl.clientWidth;
                 var fakeInnerHeight = _docEl.clientHeight;
@@ -123,8 +130,8 @@
                 popTop = 0;
             }
 
-            _WIN.moveTo(popLeft - _screenMargin.left, popTop - _screenMargin.top);
-            _WIN.resizeTo(contentWidth, contentHeight);
+            targetWindow.moveTo(popLeft - _screenMargin.left, popTop - _screenMargin.top);
+            targetWindow.resizeTo(contentWidth, contentHeight);
         };
     };
 
