@@ -28,7 +28,15 @@
 					return;
 				}
 				_canvas.execute(function(processor) {
-					processor.pasteContent(value, _FALSE);
+					if ($tx.msie_docmode < 9) {
+                        // ie에서 특수문자 입력시 savedCaret 내부가 아닌 상위 p태그의 이전으로 insert가 되는 현상이 있어서 분기.
+                        var timekey = 'char' + (new Date()).getTime();
+                        processor.pasteContent('<span id="' + timekey + '">' + value + '</span>', _FALSE);
+                        var spanInDoc = processor.doc.getElementById(timekey);
+                        $tom.unwrap(spanInDoc);
+                    } else {
+                        processor.pasteContent(value, _FALSE);
+                    }
 				});
 			};
 	
