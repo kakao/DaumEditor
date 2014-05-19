@@ -55,7 +55,8 @@ Trex.Tool.Link = Trex.Class.create({
 								$tom.wrap(processor.create('a', _attributes), _nodes);
 							} else if(processor.isCollapsed()) {
 								_aNode = processor.create('a', _attributes);
-								_aNode.innerHTML = data.link;
+                                var text = processor.doc.createTextNode(data.link);
+                                _aNode.appendChild(text);
 								processor.pasteNode(_aNode, _FALSE);
 							} else {
 								_nodes = processor.inlines(function() {
