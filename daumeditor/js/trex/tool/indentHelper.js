@@ -137,6 +137,9 @@
                 startNode = startNode.childNodes[startOffset];
                 startOffset = 0;
             }
+            if (!startNode) {
+                return _TRUE;
+            }
             var iterator = new goog.dom.TextRangeIterator(node, 0, startNode, startOffset);
             var hasContent = _FALSE;
             goog.iter.forEach(iterator, function(visiting) {

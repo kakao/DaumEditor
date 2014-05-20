@@ -47,6 +47,7 @@ Trex.EntryProxy =Trex.Class.create( {
                 }
             } catch(ignore) {
                 // 첨부데이터 일부를 정상적으로 불러오지 못했습니다.
+                console.error("첨부데이터 일부를 정상적으로 불러오지 못했습니다:", ignore);
             }
 		});
 	},
