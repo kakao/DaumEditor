@@ -53,8 +53,9 @@ Trex.Tool.Indent = Trex.Class.create({
             new ChainHandler(Judge.And(Judge.HeadOfParagraph, Judge.ListItem), Operation.IndentListItem),
             new ChainHandler(Judge.ChildOfLastTableCell, Operation.GoToBelowTable),
             new ChainHandler(Judge.ChildOfTableCell, Operation.GoToNextCell),
-            new ChainHandler(Judge.And(Judge.HeadOfParagraph, Judge.BlockNode), Operation.IndentBlockNode),
-            new ChainHandler(Judge.AlwaysTrue, Operation.AddFourSpaces)
+            new ChainHandler(Judge.AlwaysTrue, Operation.IndentBlockNode)
+//            new ChainHandler(Judge.And(Judge.HeadOfParagraph, Judge.BlockNode), Operation.IndentBlockNode),
+//            new ChainHandler(Judge.AlwaysTrue, Operation.AddFourSpaces)
         ]);
 
         this.onTabPressed = new Handler(onCollapsedTabPressed, onDefaultIndent, onDefaultIndent);

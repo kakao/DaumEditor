@@ -301,9 +301,9 @@
         IndentBlockNode: function(node) {
             $tom.applyStyles(node, {marginLeft: "+2em"});
         },
-        AddFourSpaces: function(node, processor) {
-            processor.pasteContent("&nbsp;&nbsp;&nbsp;&nbsp;", _FALSE);
-        },
+//        AddFourSpaces: function(node, processor) {
+//            processor.pasteContent("&nbsp;&nbsp;&nbsp;&nbsp;", _FALSE);
+//        },
         /* outdent */
         GoToAboveTable: function(node, processor) {
             var table = $tom.ancestor(node, 'table');
