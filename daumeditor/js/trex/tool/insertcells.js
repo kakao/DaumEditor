@@ -37,7 +37,7 @@ Trex.Tool.Insertcells = Trex.Class.create({
 		 * "addRowUpper", "addRowBelow", "addColLeft", "addColRight"
 		 */
 		var _toolHandler = function(command) {
-			_canvas.query(function(processor){
+			_canvas.execute(function(processor){
 				if (processor.table) {
 					switch(command){
 						case "addRowUpper":
