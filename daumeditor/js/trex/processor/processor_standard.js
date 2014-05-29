@@ -297,6 +297,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 		if(!node) {
 			return;
 		}
+        this.focus();
 		this.bookmarkInto(node, toStart);
 		this.bookmark.select(this.txSelection);
 	},
@@ -310,6 +311,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 		if(!scope) { return; }
 		var _elOuter = this.findNode(scope);
 		if(_elOuter) {
+            this.focus();
 			this.bookmark.saveNextTo(_elOuter);
 			this.bookmark.select(this.txSelection);
 		}
@@ -324,6 +326,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 		if(!node) {
 			return;
 		}
+        this.focus();
 		this.bookmark.saveAroundNode(node);
 		this.bookmark.select(this.txSelection);
 	},
