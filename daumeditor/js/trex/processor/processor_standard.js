@@ -470,6 +470,15 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 				if(wrapStyle) {
 					$tom.applyAttributes(_wpNode, wrapStyle);
 				}
+                // #FTDUEDTR-1442
+                if (nodes.length == 1) {
+                    var firstChildNode = nodes[0];
+                    var disableBlockTag = $tom.kindOf(firstChildNode, 'table,hr,blockquote,pre,h1,h2,h3,h4,h5,h6,div');
+                    var isParagraphTag = $tom.isTagName(_wpNode, 'p');
+                    if (disableBlockTag && isParagraphTag) {
+                        $tom.unwrap(_wpNode);
+                    }
+                }
 			});
 			if(_curNode) {
 				if(!$tom.hasData(_curNode)) {
