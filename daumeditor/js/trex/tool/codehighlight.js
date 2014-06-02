@@ -36,20 +36,13 @@ Trex.Tool.Codehighlight = Trex.Class.create({
     oninitialized: function(config) {
         var self = this;
         this.highlight = config.highlight;
-        this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_CLICK, function(e){
-            var element = $tx.element(e);
-            var pre = null;
-            if(element.className !='txc-code-wrap'){
-                pre = $tom.ancestor(element, 'pre.txc-code');
-                if(!pre || pre.parentNode.tagName.toUpperCase() != 'BUTTON')
-                    return;
-            }else {
-                pre = $tom.first(element, 'pre');
-            }
+        this.canvas.observeElement({ tag: "button", klass: "txc-code-wrap" }, function(el){
+            var  pre = $tom.first(el, 'pre');
             self.isModify = true;
             self.target = pre;
             self.toolbar.fireJobs(Trex.Ev.__TOOL_CLICK, self.identity, _TRUE);
         });
+
         this.toolbar.observeJob(Trex.Ev.__TOOL_CLICK, function(e, isModify){
             if(e != 'codehighlight')
                 return;
@@ -75,7 +68,10 @@ Trex.Tool.Codehighlight = Trex.Class.create({
 
                     _url = (self.pvUrl? self.pvUrl + ((self.pvUrl.indexOf("?") > -1) ? "&" : "?") + "u="+escape(_url): _url);
                     var win = _WIN.open(_url, "at" + self.name, self.config.features);
-                    win.data = self.target? self.target.textContent: '';
+                    win.data = self.target? (function(){
+                        var buf = [];
+                        goog.dom.getTextContent_(self.target, buf, _FALSE);
+                        return buf.join('');})():'';
                     win.focus();
                 } catch (e) {}
             }
