@@ -174,7 +174,7 @@
             equal(p.style.marginLeft, INDENT_ONCE);
         });
     });
-
+/*
     test("문단 중간에서 tab키를 눌러서 공백넣기", function() {
         var p = ax.p("Hello");
         assi.setContentElement(p);
@@ -185,7 +185,7 @@
             htmlEqual(p.innerHTML, 'H&nbsp;&nbsp;&nbsp;&nbsp;ello');
         });
     });
-
+*/
     test("문단 중간에서 indent 버튼을 눌러서 indent하기", function() {
         var p = ax.p("Hello", {id: 'p'});
         assi.setContentElement(p);
@@ -696,7 +696,7 @@
 })();
 (function() {
     module("tab press");
-
+/*
     test("P로 감싸여 있지 않은 텍스트에서 tab 누르기", function() {
         assi.setContent("Hello");
         var textNode = assi.doc.body.firstChild;
@@ -706,4 +706,5 @@
             htmlEqual(assi.getContent(), "<p>H&nbsp;&nbsp;&nbsp;&nbsp;ello</p>");
         });
     });
+*/
 })();
