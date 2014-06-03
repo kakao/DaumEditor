@@ -671,28 +671,30 @@
             } catch(ignore) {
             }
         },
-
-        onMouseOver: function(event) {
+        /**
+         * @function
+         */
+        onMouseOver: $tx.throttle(function(event) {
             try {
                 this.fireMouseover($tx.element(event));
                 this.fireJobs(Trex.Ev.__CANVAS_PANEL_MOUSEOVER, event);
             } catch (ignore) {
             }
-        },
+        }, 50),
 
-        onMouseMove: function(event) {
+        onMouseMove: $tx.throttle(function(event) {
             try {
                 this.fireJobs(Trex.Ev.__CANVAS_PANEL_MOUSEMOVE, event);
             } catch (ignore) {
             }
-        },
+        }, 50),
 
-        onMouseOut: function(event) {
+        onMouseOut: $tx.throttle(function(event) {
             try {
                 this.fireJobs(Trex.Ev.__CANVAS_PANEL_MOUSEOUT, event);
             } catch (ignore) {
             }
-        },
+        }, 50),
 
         onMouseDown: function(event) {
             this.getProcessor().clearDummy();
@@ -729,9 +731,9 @@
             this.fireJobs(Trex.Ev.__CANVAS_PANEL_DBLCLICK, event);
         },
 
-        onScroll: function(event) {
+        onScroll: $tx.throttle(function(event) {
             this.fireJobs(Trex.Ev.__CANVAS_PANEL_SCROLLING, event);
-        },
+        }, 50),
 		
 		onPaste: function(event) {
 			this.fireJobs(Trex.Ev.__CANVAS_PANEL_PASTE, event);
