@@ -94,7 +94,8 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 			var _pastescope = this.pastescope;
 			var _dispHtml = this.dispHtml;
 			var objectElemTagName = "img";
-			var matched = _dispHtml.match(/<(\w+)/);
+            var findRegex = this.matchRegexStartTag;// /<(\w+)/
+			var matched = _dispHtml.match(findRegex);
 			//for other elements(Exam: button of file attachment).
 			if (matched && matched[1]) {
 				objectElemTagName = matched[1];
@@ -191,5 +192,14 @@ Trex.Attachment = Trex.Class.draft(/** @lends Trex.Attachment.prototype */{
 	getParaStyle: function(data) {
 		var parastyle = Object.extend({}, this.actor.config.parastyle || this.actor.config.defaultstyle);
 		return parastyle;
-	}
+	},
+    updateEntryElement: function(targetElement) {
+        if (!targetElement) {
+            return;
+        }
+
+        var tempNode = _DOC.createElement('div');
+        tempNode.innerHTML = this.dispHtml;
+        targetElement.innerHTML = $tom.first(tempNode).innerHTML;
+    }
 });

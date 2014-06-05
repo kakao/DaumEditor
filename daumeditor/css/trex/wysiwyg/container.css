@@ -16,6 +16,7 @@ body {
 	scrollbar-track-color:#F3F3F3;
 	margin:0;
 	padding:8px;
+    word-wrap: break-word;
 }
 
 a:hover, a:link, a:active, a:visited  { text-decoration:none; border-bottom:1px dashed #840000; }

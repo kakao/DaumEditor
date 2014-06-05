@@ -91,6 +91,9 @@
         <replaceregexp match="(console\.\w{3,6}\([^)]*\);?)" replace="" flags="g" byline="true" encoding="utf-8">
             <fileset dir="${build.target.js.escaped.dir}" includes="**/*.js"/>
         </replaceregexp>
+        <replaceregexp match="(debugger;)" replace="" flags="g" byline="true" encoding="utf-8">
+            <fileset dir="${build.target.js.escaped.dir}" includes="**/*.js"/>
+        </replaceregexp>
     </target>
     <target name="minify_javascripts">
     	<copy todir="${build.target.js.minified.dir}">

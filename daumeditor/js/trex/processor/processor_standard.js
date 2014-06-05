@@ -297,6 +297,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 		if(!node) {
 			return;
 		}
+        this.focus();
 		this.bookmarkInto(node, toStart);
 		this.bookmark.select(this.txSelection);
 	},
@@ -310,6 +311,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 		if(!scope) { return; }
 		var _elOuter = this.findNode(scope);
 		if(_elOuter) {
+            this.focus();
 			this.bookmark.saveNextTo(_elOuter);
 			this.bookmark.select(this.txSelection);
 		}
@@ -324,6 +326,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 		if(!node) {
 			return;
 		}
+        this.focus();
 		this.bookmark.saveAroundNode(node);
 		this.bookmark.select(this.txSelection);
 	},
@@ -470,6 +473,15 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 				if(wrapStyle) {
 					$tom.applyAttributes(_wpNode, wrapStyle);
 				}
+                // #FTDUEDTR-1442
+                if (nodes.length == 1) {
+                    var firstChildNode = nodes[0];
+                    var disableBlockTag = $tom.kindOf(firstChildNode, 'table,hr,blockquote,pre,h1,h2,h3,h4,h5,h6,div');
+                    var isParagraphTag = $tom.isTagName(_wpNode, 'p');
+                    if (disableBlockTag && isParagraphTag) {
+                        $tom.unwrap(_wpNode);
+                    }
+                }
 			});
 			if(_curNode) {
 				if(!$tom.hasData(_curNode)) {

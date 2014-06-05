@@ -28,7 +28,7 @@ Trex.Tool.Mergecells = Trex.Class.create({
 		var _defaultProperty = _canvas.getStyleConfig().insert;
 		
 		var _toolHandler = function(command) {
-			_canvas.query(function(processor){
+			_canvas.execute(function(processor){
 				if (processor.table) {
 					switch(command){
 						case "merge":

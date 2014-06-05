@@ -15,7 +15,7 @@ $tx.webkit && (function() {
         var innerLi = assi.byTag("li", 1);
         equal(foundNode, innerLi, "td 내의 li를 찾아야 한다.");
     });
-
+/*
     test("li > div > #text 중 #text 끝에서 enter 입력시 새로운li 생성", function() {
         var div = ax.div("Hello");
         var ol = ax.ol(ax.li(div));
@@ -35,4 +35,5 @@ $tx.webkit && (function() {
         assi.pressEnter();
         equal(assi.getBodyHTML(), '<ol><li><p>H</p></li><li><p>' + Trex.__WORD_JOINER + Trex.__WORD_JOINER + 'ello</p></li></ol>');
     });
+*/
 })();

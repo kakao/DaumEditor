@@ -1,6 +1,21 @@
 /**
  * Created by sungwon on 14. 4. 25.
  */
+
+asyncTest("li > div > #text 중 #text 끝에서 enter 입력시 새로운li 생성", function() {
+    var div = ax.div("Hello");
+    var ol = ax.ol(ax.li(div));
+    assi.setContentElement(ol);
+    assi.selectForNodes(div.firstChild, 5, div.firstChild, 5);
+    assi.doc.body.focus();
+
+    //assi.pressEnter();
+    robot.type('\n', false, function() {
+        ok(RegExp('^<ol><li><div>Hello</div></li><li>(<div>)?'+$tom.EMPTY_BOGUS+'(</div>)?</li></ol>', 'i').test(assi.getBodyHTML()), assi.getBodyHTML());
+        QUnit.start();
+    });
+});
+
 asyncTest("li > p > #text #text중간에서 enter key", function() {
     var p = ax.p("Hello");
     var ol = ax.ol(ax.li(p));
@@ -9,7 +24,7 @@ asyncTest("li > p > #text #text중간에서 enter key", function() {
     assi.doc.body.focus();
     //assi.pressEnter();
     robot.type('\n', false, function() {
-        equal(assi.getBodyHTML(), '<ol><li><p>H</p></li><li><p>ello</p></li></ol>');
+        ok(/^<ol><li><p>H<\/p><\/li><li><p>ello<\/p><\/li><\/ol>/i.test(assi.getBodyHTML()), '<ol><li><p>H</p></li><li><p>ello</p></li></ol> ,' + assi.getBodyHTML());
         QUnit.start();
     });
 });

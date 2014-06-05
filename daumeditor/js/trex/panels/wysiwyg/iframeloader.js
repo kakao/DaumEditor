@@ -58,11 +58,7 @@
                 self.loadLocalIframe(callback, ''); //이 시점에선 어차피 doctype 을 설정할 수 없음.
             };
 	        if (!this.iframeUrl) {
-		        try { // core dev mode, core production mode, dex dev mode
-			        var basePath = EditorJSLoader.getPageBasePath('editor.js');
-		        } catch (e) { // dex production mode
-			        basePath = EditorJSLoader.getPageBasePath();
-		        }
+		        var basePath = this.getIframePagePath();
 				var doctype = this.doctype;
 				switch (doctype) {
 				case "edge":
@@ -80,6 +76,10 @@
                 this.iframeUrl = this.iframeUrl + ((this.iframeUrl.indexOf("?") > -1) ? "&" : "?") + "xssDomain=" + document.domain;
             }
             this.iframe.src = this.iframeUrl;
+        },
+
+        getIframePagePath: function() {
+            return EditorJSLoader.getPageBasePath('editor.js');
         },
 
         // 옛날 스타일
