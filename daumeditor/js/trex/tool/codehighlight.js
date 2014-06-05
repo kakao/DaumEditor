@@ -10,10 +10,10 @@ TrexConfig.addTool(
         wysiwygonly: _TRUE,
         features: { left:250, top:65, width:797, height:385 },
         popPageUrl: "#host#path/pages/trex/code_highlight.html",
-        styleSheetUrl: "http://editor7.daum.net/DaumEditor/daumeditor/lib/prettify.css",
-        highlight: function(code){
-            return prettyPrintOne(code);
+        highlight: function (){
+            alert(TXMSG("@codehighlight.insert.alert"));
         }
+
     },
     function(root){
         var _config = TrexConfig.getTool("codehighlight", root);
@@ -23,7 +23,8 @@ TrexConfig.addTool(
 );
 
 TrexMessage.addMsg({
-    '@codehighlight.insert.alert': "에디터 상태에서만 삽입할 수 있습니다."
+    '@codehighlight.insert.alert': "에디터 상태에서만 삽입할 수 있습니다.",
+    '@codehighlight.init.error': '코드 강조 표현 함수가 정의되어 있지 않습니다.'
 });
 
 Trex.Tool.Codehighlight = Trex.Class.create({
@@ -106,11 +107,23 @@ Trex.Tool.Codehighlight = Trex.Class.create({
 Trex.register("add highlight css",
     function(editor, toolbar, sidebar, canvas, config) {
         canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function(_doc){
-            var link = _doc.createElement('link');
-            link.setAttribute('rel', 'stylesheet');
-            link.setAttribute('type', 'text/css');
-            link.href = config.toolbar.codehighlight.styleSheetUrl;
-            (_doc.head||_doc.getElementsByTagName('head')[0]).appendChild(link);
+            function addStyleSheet(url){
+                var link = _doc.createElement('link');
+                link.setAttribute('rel', 'stylesheet');
+                link.setAttribute('type', 'text/css');
+                link.href = url;
+                (_doc.head||_doc.getElementsByTagName('head')[0]).appendChild(link);
+            }
+            var url = config.toolbar.codehighlight.styleSheetUrl;
+            if(!url)
+                return;
+            if($tx.isString(url)){
+                addStyleSheet(url);
+            }else if($tx.isArray(url)){
+                url.each(addStyleSheet)
+            }else if($tx.isFunction(url)){
+                url();
+            }
         });
     }
 );

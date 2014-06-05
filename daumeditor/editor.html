@@ -23,7 +23,7 @@
     -->
     <link rel="stylesheet" href="css/editor.css" type="text/css" charset="utf-8"/>
     <script src="js/editor_loader.js?environment=development" type="text/javascript" charset="utf-8"></script>
-    <script src="lib/prettify.js"></script>
+    <script src="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
 </head>
 <body>
 <div class="body">
@@ -504,7 +504,15 @@
 		},
 		size: {
 			contentWidth: 700 /* 지정된 본문영역의 넓이가 있을 경우에 설정 */
-		}
+		},
+        toolbar: {
+            codehighlight: {
+                styleSheetUrl: ["http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css"],
+                highlight: function(code){
+                    return prettyPrintOne(code);
+                }
+            }
+        }
 	};
 
 	EditorJSLoader.ready(function(Editor) {

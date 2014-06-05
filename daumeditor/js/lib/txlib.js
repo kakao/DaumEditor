@@ -65,6 +65,20 @@ var $tx = {};
     var isExistAgentStringByRegx = function(regx){
         return regx.test(txua);
     };
+    /**
+     * goog 코드 호출
+     * type 확인 함수
+     */
+    Object.extend($tx, {
+        isArray: function(v){ return goog.isArray(v)},
+        isArrayLike: function(v){ return goog.isArrayLike(v)},
+        isString:function(v){ return goog.isString(v)},
+        isBoolean: function(v){ return goog.isBoolean(v)},
+        isNumber: function(v){ return goog.isNumber(v)},
+        isFunction: function(v){ return goog.isFunction(v)},
+        isObject: function(v){ return goog.isObject(v)}
+    });
+
 	Object.extend($tx, /** @lends $tx */{
 		/**
 		 * Chrome browser 이면 true
