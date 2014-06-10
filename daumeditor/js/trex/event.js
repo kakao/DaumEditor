@@ -90,13 +90,34 @@
 		 *	});
 		 */
 		__CANVAS_PANEL_CLICK: 'canvas.panel.click',
-		/** 
-		 * wysiwyg 영역에서 발생하는 더블클릭 이벤트<br/>
-		 * @example
-		 * 	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DBLCLICK, function(ev) {
+		/**
+         * wysiwyg 영역에서 발생하는 더블클릭 이벤트<br/>
+         * @example
+         * 	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DBLCLICK, function(ev) {
 		 *	});
-		 */
-		__CANVAS_PANEL_DBLCLICK: 'canvas.panel.dbclick',
+         */
+        __CANVAS_PANEL_DBLCLICK: 'canvas.panel.dbclick',
+        /**
+         * wysiwyg 영역에서 발생하는 dragover 이벤트<br/>
+         * @example
+         * 	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DBLCLICK, function(ev) {
+		 *	});
+         */
+        __CANVAS_PANEL_DRAGOVER: 'canvas.panel.dragover',
+        /**
+         * wysiwyg 영역에서 발생하는 dragenter 이벤트<br/>
+         * @example
+         * 	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGENTER, function(ev) {
+		 *	});
+         */
+        __CANVAS_PANEL_DRAGENTER: 'canvas.panel.dragenter',
+        /**
+         * wysiwyg 영역에서 발생하는 드롭 이벤트<br/>
+         * @example
+         * 	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DROP, function(ev) {
+		 *	});
+         */
+        __CANVAS_PANEL_DROP: 'canvas.panel.drop',
 		/** 
 		 * wysiwyg 영역에서 발생하는 붙여넣기 이벤트<br/>
 		 * @example
