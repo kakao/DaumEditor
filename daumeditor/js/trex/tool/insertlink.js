@@ -194,7 +194,7 @@ Trex.Menu.Link = Trex.Class.create({
 	ongenerated: function() {
 		var _elMenu = this.elMenu;
 		Trex.MarkupTemplate.get('menu.insertlink').evaluateToDom({}, _elMenu);
-		
+
 		var _elTargets = $tom.collectAll(_elMenu, ".tx-rp input");
 		var _newInput = this.newInput = _elTargets[0];
 		$tx.observe(_newInput, "click", function(){
@@ -206,7 +206,7 @@ Trex.Menu.Link = Trex.Class.create({
 				_currInput.checked = "checked";
 				_newInput.checked = "";
 		});
-			
+
 		var _checkValidation = this.urlValidator;
 		var _elInput = this.elInput = $tom.collect(_elMenu, 'input.tx-text-input');
 		$tx.observe(_elInput, "keydown", function(ev) {
@@ -226,7 +226,7 @@ Trex.Menu.Link = Trex.Class.create({
 				$tx.stop(ev);
 			}
 		}.bindAsEventListener(this));
-		
+
 		var _elImgs = $tom.collectAll(_elMenu, 'img');
 		$tx.observe(_elImgs[0], "click", function(ev) {
 			var _val = _checkValidation(_elInput.value);
@@ -243,7 +243,7 @@ Trex.Menu.Link = Trex.Class.create({
 				});
 			$tx.stop(ev);
 		}.bind(this));
-		
+
 		$tx.observe(_elImgs[1], "click", function() {
 			this.onCancel();
 		}.bindAsEventListener(this));
@@ -267,10 +267,10 @@ Trex.Menu.Link = Trex.Class.create({
 			this.newInput.checked = "checked";
 			this.currInput.checked = "";
 		}
-		
+
 		this.toggleRemoveBtn(_initData.exist);
 		_elInput.focus();
-		
+
 		// Set focus to end of input box. ( For IE );
 		if ($tx.msie_nonstd) {
 			setTimeout(function() {

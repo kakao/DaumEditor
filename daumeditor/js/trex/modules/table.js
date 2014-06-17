@@ -22,15 +22,18 @@ Trex.module("table selector", function (editor, toolbar, sidebar, canvas, config
 	};
     canvas.observeJob(Trex.Ev.__CANVAS_PANEL_BACKSPACE_TABLE, function(node) {
         $tom.remove(node);
+        //var rng = goog.dom.Range.createFromNodeContents(node, true);
+        //rng.select();
     });
 	canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function () {
-		var tableSelect, tableMerge, tableInsert, tableDelete, tableBorder, tableTemplateLoader;
+		var tableSelect, tableMerge, tableInsert, tableDelete, tableBorder, tableTemplateLoader, tableResize;
 	
 		tableSelect = new Trex.Table.Selector(editor, config);
 		tableMerge = new Trex.Table.Merge(editor, config);
 		tableInsert = new Trex.Table.Insert(editor, config);
 		tableDelete = new Trex.Table.Delete(editor, config);
 		tableBorder = new Trex.Table.Border(editor, config);
+        tableResize = new Trex.Table.Resize(editor, config);
         tableTemplateLoader = new Trex.Table.TemplateLoader();
 
 		initDragger(canvas);
@@ -322,6 +325,17 @@ Trex.module("table selector", function (editor, toolbar, sidebar, canvas, config
                         color: parts[2]
                     };
                 }
+            },
+            /**
+             *
+             * @param {String} mode
+             * @param {Number} d
+             * @param {Boolean=} isDifference
+             */
+            resize: function(mode, d, isDifference){
+                this.execute(function () {
+                    tableResize.resize(tableSelect, mode, d, isDifference);
+                });
             }
 		};
 		
@@ -358,7 +372,9 @@ Trex.module("table selector", function (editor, toolbar, sidebar, canvas, config
 				"cellslinestyle",
 				"cellslinepreview",
 				"tablebackcolor",
-				"tabletemplate"
+				"tabletemplate",
+                "tableresize",
+                "tablevalign"
 			].contains(identity) === _FALSE) {
 				tableSelect.reset();
 			}

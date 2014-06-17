@@ -338,7 +338,46 @@ Trex.TableUtil.Indexer = Trex.Class.create({
 		}
 		return result;
 	},
-	
+    /**
+     * getTdArrCol
+     * 해당하는 index에 해당하는 Col안에 있는 td들을 가져온다.
+     * @param {number..} index
+     * @return {Array} tdArr [td, td, ...] (order by left-top)
+     */
+    getTdArrCol: function(){
+        var indexs = $A(arguments);
+        var res = [];
+        var self = this;
+        var len = this.getRowSize();
+        indexs.each(function(idx){
+            for (var i = 0; i < len; i += 1) {
+                res.push(self.getTd(i, idx));
+
+            }
+        });
+        res.uniq(_FALSE);
+        return res;
+    },
+    /**
+     * getTdArrCol
+     * 해당하는 index에 해당하는 Col안에 있는 td들을 가져온다.
+     * @param {number..} index
+     * @return {Array} tdArr [td, td, ...] (order by left-top)
+     */
+    getTdArrRow: function(){
+        var indexs = $A(arguments);
+        var res = [];
+        var self = this;
+        var len = this.getColSize();
+        indexs.each(function(idx){
+            for (var i = 0; i < len; i += 1) {
+                res.push(self.getTd(idx, i));
+
+            }
+        });
+        res.uniq(_FALSE);
+        return res;
+    },
 	/**
 	 * getTdArrHasTop
 	 * 해당하는 row index 를 top 으로 가지는 cell 들을 가져온다. 
@@ -411,7 +450,7 @@ Trex.TableUtil.Indexer = Trex.Class.create({
 	/**
 	 * getBoundary
 	 * td 에 해당하는 boundary 를 구한다.
-	 * @param {Elememt} td
+	 * @param {Element} td
 	 * @return {Trex.TableUtil.Boundary} boundary
 	 */
 	getBoundary: function (td) {

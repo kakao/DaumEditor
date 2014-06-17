@@ -8,6 +8,7 @@ Trex.Table.Selector = Trex.Class.create({
 		this.wysiwygPanel = this.canvas.getPanel(Trex.Canvas.__WYSIWYG_MODE);
 		this.htmlBody = this.getHtmlBody();
 		this.isDragging = _FALSE;
+        this.isSelectMode = _FALSE;
 		this.currentTable = _NULL;
 		this.currentTd = _NULL;
 		this.paintedTdArr = [];
@@ -15,7 +16,10 @@ Trex.Table.Selector = Trex.Class.create({
 		this.endCellBoundary = this.startCellBoundary;
 		this.selectedBoundary = new Trex.TableUtil.Boundary();
 		this.tableIndexer = _NULL;
-		
+
+        this.selectModeKeyObserver = new (Trex.Class.create({$mixins: [Trex.I.KeyObservable], initialize: function(){}}));
+        this.normalModeKeyObserver = new (Trex.Class.create({$mixins: [Trex.I.KeyObservable], initialize: function(){}}));
+
 		this.applyCss();
 		this.observeEvent();
 	},
@@ -71,7 +75,7 @@ Trex.Table.Selector = Trex.Class.create({
 				$tx.stop(e);
 				self.reset();
 			} else {
-				self.onkeydown(e.ctrlKey, e.keyCode);
+				self.onkeydown(e);
 			}
 		});
 		
@@ -80,6 +84,214 @@ Trex.Table.Selector = Trex.Class.create({
 				self.clearSelected();
 			}
 		});
+
+        function getTdFromElement(elem){
+            var td, isTxInfo;
+            if (self.canvas.config.readonly === _FALSE) {
+                td = Trex.TableUtil.getClosestByTagNames(["td", "th"], elem);
+                isTxInfo = $tom.find(td, ".txc-info");
+                if (td && !isTxInfo) {
+                    return td
+                }
+            }
+            return _NULL;
+        }
+
+        this.canvas.observeKey({
+            shiftKey: true,
+            keyCode:35
+        }, function (e){
+            var elem, td;
+            elem = self.canvas.getProcessor().getNode();
+            td = getTdFromElement(elem);
+            if(!td) return;
+            self.isSelectMode = _TRUE;
+            self.selectStart(td);
+            self.applySelected();
+            Trex.TableUtil.collapseCaret(self.wysiwygPanel, elem);
+        });
+
+        function selectByArrowKey(f){
+            var b = self.tableIndexer.getBoundary(self.currentTd);
+            var pos = f(b);
+            var elem = self.tableIndexer.getTd(pos.top, pos.left);
+            if(!elem) return;
+            self.selectEnd(elem);
+            self.applySelected();
+            Trex.TableUtil.collapseCaret(self.wysiwygPanel, elem);
+
+        }
+        //왼쪽 화살표
+        this.selectModeKeyObserver.observeKey({
+            keyCode: 37
+        }, function(e){
+            selectByArrowKey(function(pos){
+                return {top:pos.top, left:pos.left - 1}
+            });
+        });
+        //위 화살표
+        this.selectModeKeyObserver.observeKey({
+            keyCode: 38
+        }, function(e){
+            selectByArrowKey(function(pos){
+                return {top:pos.top - 1, left:pos.left}
+            });
+        });
+        //오른쪽 화살표
+        this.selectModeKeyObserver.observeKey({
+            keyCode: 39
+        }, function(e){
+            selectByArrowKey(function(pos){
+                return {top:pos.top, left:pos.right+1};
+            });
+        });
+        //아래 화살표
+        this.selectModeKeyObserver.observeKey({
+            keyCode: 40
+        }, function(e){
+            selectByArrowKey(function(pos){
+                return {top:pos.bottom+1, left:pos.left};
+            });
+        });
+        //esc누르면 table변경 모드에서 빠져 나온다.
+        this.selectModeKeyObserver.observeKey({
+            keyCode: 27
+        }, function(e){
+            self.reset();
+        });
+        //del키를 누르면 내용을 지운다.
+        this.selectModeKeyObserver.observeKey({
+            keyCode: 46
+        }, function(e){
+            self.deleteContents();
+        });
+        //ctrl + shiftKey + m 표를 병합한다.
+        this.selectModeKeyObserver.observeKey({
+            ctrlKey: _TRUE,
+            shiftKey: _TRUE,
+            keyCode: 77
+        }, function(e){
+            self.canvas.getProcessor().table.merge(self)
+        });
+        //ctrl + shiftKey + s 표를 분할한다.
+        this.selectModeKeyObserver.observeKey({
+            ctrlKey: _TRUE,
+            shiftKey: _TRUE,
+            keyCode: 83
+        }, function(e){
+            self.canvas.getProcessor().table.resetMerge(self)
+        });
+
+        //shift + 오른쪽 화살표
+        this.selectModeKeyObserver.observeKey({
+            shiftKey: _TRUE,
+            keyCode: 39
+        }, function(e){
+            self.selectRow(self.currentTd, 'RIGHT');
+            self.applySelected();
+            Trex.TableUtil.collapseCaret(self.wysiwygPanel, self.currentTd);
+        });
+
+        //shift + 왼쪽 화살표
+        this.selectModeKeyObserver.observeKey({
+            shiftKey: _TRUE,
+            keyCode: 37
+        }, function(e){
+            self.selectRow(self.currentTd, 'LEFT');
+            self.applySelected();
+            Trex.TableUtil.collapseCaret(self.wysiwygPanel, self.currentTd);
+        });
+
+        //shift + 윗쪽 화살표
+        this.selectModeKeyObserver.observeKey({
+            shiftKey: _TRUE,
+            keyCode: 38
+        }, function(e){
+            self.selectCol(self.currentTd, 'TOP');
+            self.applySelected();
+            Trex.TableUtil.collapseCaret(self.wysiwygPanel, self.currentTd);
+        });
+
+        //shift + 아랫쪽 화살표
+        this.selectModeKeyObserver.observeKey({
+            shiftKey: _TRUE,
+            keyCode: 40
+        }, function(e){
+            self.selectCol(self.currentTd, 'BOTTOM');
+            self.applySelected();
+            Trex.TableUtil.collapseCaret(self.wysiwygPanel, self.currentTd);
+        });
+
+        //ctrl + 오른쪽 화살표
+        this.selectModeKeyObserver.observeKey({
+            ctrlKey: _TRUE,
+            keyCode: 39
+        }, function(e){
+            self.canvas.getProcessor().table.resize('WIDTH', 5, _TRUE);
+        });
+        //ctrl + 왼쪽 화살표
+        this.selectModeKeyObserver.observeKey({
+            ctrlKey: _TRUE,
+            keyCode: 37
+        }, function(e){
+            self.canvas.getProcessor().table.resize('WIDTH', -5, _TRUE);
+        });
+        //ctrl + 윗쪽 화살표
+        this.selectModeKeyObserver.observeKey({
+            ctrlKey: _TRUE,
+            keyCode: 38
+        }, function(e){
+            self.canvas.getProcessor().table.resize('HEIGHT', -5, _TRUE);
+        });
+        //ctrl + 아랫쪽 화살표
+        this.selectModeKeyObserver.observeKey({
+            ctrlKey: _TRUE,
+            keyCode: 40
+        }, function(e){
+            self.canvas.getProcessor().table.resize('HEIGHT', 5, _TRUE);
+        });
+        //ctrl + a
+        this.selectModeKeyObserver.observeKey({
+            ctrlKey: _TRUE,
+            keyCode: 65
+        }, function(e){
+            self.selectTable();
+            self.applySelected();
+            Trex.TableUtil.collapseCaret(self.wysiwygPanel, self.currentTd);
+        });
+
+        //normalMode
+        $tx.chrome&&this.normalModeKeyObserver.observeKey({
+            keyCode:38
+        }, function(e){
+            var elem, td;
+            elem = self.canvas.getProcessor().getNode();
+            td = getTdFromElement(elem);
+            if(!td) return;
+            if(!self.currentTable){
+                self.setTable(td);
+            }
+            var b = self.tableIndexer.getBoundary(td);
+            td = self.tableIndexer.getTd(b.top-1, b.left);
+            Trex.TableUtil.collapseCaret(self.wysiwygPanel, td);
+
+        });
+        $tx.chrome&&this.normalModeKeyObserver.observeKey({
+            keyCode:40
+        }, function(e){
+            var elem, td;
+            elem = self.canvas.getProcessor().getNode();
+            td = getTdFromElement(elem);
+            if(!td) return;
+            if(!self.currentTable){
+                self.setTable(td);
+            }
+            var b = self.tableIndexer.getBoundary(td);
+            td = self.tableIndexer.getTd(b.bottom+1, b.left);
+            Trex.TableUtil.collapseCaret(self.wysiwygPanel, td);
+
+        });
+
 	},
 	/**
 	 * @private
@@ -108,6 +320,7 @@ Trex.Table.Selector = Trex.Class.create({
 			if (td) {
 				table = Trex.TableUtil.getClosestByTagNames(["table"], td);
 				if (table === this.currentTable && td !== this.currentTd) {
+                    this.isSelectMode = _TRUE;
 					this.selectEnd(td);
 					this.applySelected();
 					Trex.TableUtil.collapseCaret(this.wysiwygPanel, elem);
@@ -133,26 +346,44 @@ Trex.Table.Selector = Trex.Class.create({
 	/**
 	 * @private
 	 */
-	onkeydown: function (ctrlKey, keyCode) {
-		var selectedTdArr, len, i;
-		if (ctrlKey === _FALSE) {
-			if (keyCode === $tx.KEY_DELETE) {
-				selectedTdArr = this.getSelectedTdArr();
-				len = selectedTdArr.length;
-				for (i = 0; i < len; i += 1) {
-					Trex.TableUtil.emptyTd(selectedTdArr[i]);
-				}
-			}
-			this.reset();
-		}
+	onkeydown: function (e) {
+        var keyCode = e.keyCode;
+        var ctrlKey = e.ctrlKey;
+        var shiftKey = e.shiftKey;
+
+        if (this.isSelectMode){
+            //표 hotkey
+            $tx.stop(e);
+            this.selectModeKeyObserver.fireKeys(e);
+        }else if (ctrlKey === _FALSE) {
+            this.normalModeKeyObserver.fireKeys(e);
+            this.reset();
+
+        }
 	},
+
+    deleteContents: function(){
+        var selectedTdArr, len, i;
+        selectedTdArr = this.getSelectedTdArr();
+        len = selectedTdArr.length;
+        for (i = 0; i < len; i += 1) {
+            Trex.TableUtil.emptyTd(selectedTdArr[i]);
+        }
+    },
+    /**
+     * @private
+     * @param {Element} td
+     */
+    setTable : function (td) {
+        this.currentTable = Trex.TableUtil.getClosestByTagNames(["table"], td);
+        this.tableIndexer = new Trex.TableUtil.Indexer(this.currentTable);
+    },
 	/**
 	 * @private
 	 * @param {Element} td
 	 */
 	selectStart: function (td) {
-		this.currentTable = Trex.TableUtil.getClosestByTagNames(["table"], td);
-		this.tableIndexer = new Trex.TableUtil.Indexer(this.currentTable);
+        this.setTable(td);
 		this.startCellBoundary = this.tableIndexer.getBoundary(td);
 		this.endCellBoundary = this.startCellBoundary;
 		this.currentTd = td;
@@ -165,6 +396,60 @@ Trex.Table.Selector = Trex.Class.create({
 		this.endCellBoundary = this.tableIndexer.getBoundary(td);
 		this.currentTd = td;
 	},
+    /**
+     * selectStart가 선행되어야 한다.
+     * @param {Element} td
+     * @param {String} mode
+     */
+    selectRow: function(td, mode){
+        this.currentTd = td;
+        var b = this.tableIndexer.getBoundary(td);
+        var start = _NULL,  end= _NULL;
+        if(mode == 'RIGHT'){
+            end = this.tableIndexer.getTd(b.top, this.tableIndexer.getColSize()-1);
+        }else if(mode == 'LEFT'){
+            end = this.tableIndexer.getTd(b.top, 0);
+        }else {
+            start = this.tableIndexer.getTd(b.top, 0);
+            end = this.tableIndexer.getTd(b.top, this.tableIndexer.getColSize()-1);
+            this.startCellBoundary = this.tableIndexer.getBoundary(start);
+        }
+        this.endCellBoundary = this.tableIndexer.getBoundary(end);
+        this.currentTd = end;
+    },
+    /**
+     * selectStart가 선행되어야 한다.
+     * @param {Element} td
+     * @param {String} mode
+     */
+    selectCol: function(td, mode){
+        this.currentTd = td;
+        var b = this.tableIndexer.getBoundary(td);
+        var start = _NULL,  end= _NULL;
+        if(mode == 'BOTTOM'){
+            end = this.tableIndexer.getTd(this.tableIndexer.getRowSize()-1, b.left);
+        }else if(mode == 'TOP'){
+            end = this.tableIndexer.getTd(0, b.left);
+        }else {
+            start = this.tableIndexer.getTd(0, b.left);
+            end = this.tableIndexer.getTd(this.tableIndexer.getRowSize()-1, b.left);
+            this.startCellBoundary = this.tableIndexer.getBoundary(start);
+        }
+
+        this.endCellBoundary = this.tableIndexer.getBoundary(end);
+        this.currentTd = end;
+    },
+    /**
+     * selectStart가 선행되어야 한다.
+     */
+    selectTable: function(){
+        var start = this.tableIndexer.getTd(0, 0);
+        var end = this.tableIndexer.getTd(this.tableIndexer.getRowSize()-1, this.tableIndexer.getColSize()-1);
+        this.startCellBoundary = this.tableIndexer.getBoundary(start);
+        this.endCellBoundary = this.tableIndexer.getBoundary(end);
+        this.currentTd = end;
+    },
+
 	/**
 	 * @private
 	 */
@@ -292,9 +577,14 @@ Trex.Table.Selector = Trex.Class.create({
 	 */
 	resetDragging: function () {
 		this.isDragging = _FALSE;
-		this.currentTable = _NULL;
-		this.currentTd = _NULL;
 	},
+    resetSelectMode: function(){
+        this.isSelectMode = _FALSE;
+    },
+    resetData: function(){
+        this.currentTable = _NULL;
+        this.currentTd = _NULL;
+    },
 	/**
 	 * isDuringSelection
 	 * @return {boolean} isDragging
@@ -352,6 +642,8 @@ Trex.Table.Selector = Trex.Class.create({
 		this.clearSelected();
 		this.resetBoundary();
 		this.resetDragging();
+        this.resetSelectMode();
+        this.resetData();
 		this.reloadIndexer();
 	},
 	/**

@@ -128,6 +128,8 @@ var CORE_FILES = [
 	"trex/tool/tablebackcolor.js",
 	"trex/tool/tableedittool.js",
 	"trex/tool/tabletemplate.js",
+    "trex/tool/tableresize.js",
+    "trex/tool/tablevalign.js",
 
 	"trex/tool/lineheight.js",
 	"trex/tool/styledlist.js",
@@ -170,6 +172,7 @@ var CORE_FILES = [
 	"trex/modules/table/merge.js",
 	"trex/modules/table/insert.js",
 	"trex/modules/table/delete.js",
+    "trex/modules/table/resize.js",
 
 	"trex/modules/table/border.js",
 	"trex/modules/table/template.js",
