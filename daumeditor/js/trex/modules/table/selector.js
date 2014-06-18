@@ -276,6 +276,7 @@ Trex.Table.Selector = Trex.Class.create({
             elem = self.canvas.getProcessor().getNode();
             td = getTdFromElement(elem);
             if(!td) return;
+            $tx.stop(e);
             if(!self.currentTable){
                 self.setTable(td);
             }
@@ -294,6 +295,7 @@ Trex.Table.Selector = Trex.Class.create({
             elem = self.canvas.getProcessor().getNode();
             td = getTdFromElement(elem);
             if(!td) return;
+            $tx.stop(e);
             if(!self.currentTable){
                 self.setTable(td);
             }
@@ -370,7 +372,7 @@ Trex.Table.Selector = Trex.Class.create({
             $tx.stop(e);
             this.selectModeKeyObserver.fireKeys(e);
         }else if (ctrlKey === _FALSE) {
-            this.normalModeKeyObserver.fireKeys(e);
+            this.normalModeKeyObserver.fireKeys(e, _TRUE);
             this.reset();
 
         }

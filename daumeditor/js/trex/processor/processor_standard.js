@@ -479,6 +479,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
                     var disableBlockTag = $tom.kindOf(firstChildNode, 'table,hr,blockquote,pre,h1,h2,h3,h4,h5,h6,div');
                     var isParagraphTag = $tom.isTagName(_wpNode, 'p');
                     if (disableBlockTag && isParagraphTag) {
+                        firstChildNode.style.marginLeft = _wpNode.style.marginLeft;
                         $tom.unwrap(_wpNode);
                     }
                 }

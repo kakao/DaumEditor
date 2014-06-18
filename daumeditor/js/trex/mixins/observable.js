@@ -110,10 +110,11 @@ Trex.I.KeyObservable = Trex.Faculty.create(/** @lends Trex.I.KeyObservable */{
 	/**
 	 * 사용자가 정의한 custom key event를 발생시킨다. 이때 발생시킨 이벤트는 observerKey를 통해 등록된 observer들에게 전파된다.
 	 * @param {Object} ev - 사용자가 정의한 key의 pushed 상태 객체
+     * @param {Boolean=} isBubble
 	 * @example
 	 * canvas.fireKyes({ctrlKey:'T', altKey:'F', keyCode:32}), function(){alert('영화가 첨부되었네요')}) 
 	 */
-	fireKeys: function(ev) {
+	fireKeys: function(ev, isBubble) {
 		var _name = function(ev) {
 			return (ev.ctrlKey? 'T': 'F') + (ev.altKey? 'T': 'F') + (ev.shiftKey? 'T': 'F') + "_" + ev.keyCode;
 		}(ev);
@@ -131,7 +132,7 @@ Trex.I.KeyObservable = Trex.Faculty.create(/** @lends Trex.I.KeyObservable */{
 		this.keyObservers[_name].each(function(observer) {
 			try {
 				observer.apply(_self, [ev]);
-				stopEventOnce();
+                !isBubble&&stopEventOnce();
 			} catch (e1) {
 				if(e1 === $stop) {
 					stopEventOnce();
