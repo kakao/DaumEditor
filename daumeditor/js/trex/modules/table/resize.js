@@ -39,7 +39,8 @@ Trex.Table.Resize = Trex.Class.create({
             return;
         }
         if(type == this.TYPE.WIDTH){
-            if(isDifference&&this.canvas.getSizeConfig().contentWidth <= this._getTableWidth(select.currentTable)+d) return;
+            var curBoundery = select.getSelected();
+            if(isDifference&&this.canvas.getSizeConfig().contentWidth < this._getTableWidth(select.currentTable)+(curBoundery.right-curBoundery.left)*d) return;
             this._resizeWidth(els.expandElement, d, isDifference);
             this._resizeTableWidth(select.currentTable);
         }else {
@@ -134,7 +135,7 @@ Trex.Table.Resize = Trex.Class.create({
      * @private
      */
     _getTdWidth: function(td){
-        var width = td.width||td.style.width
+        var width = td.width||td.style.width;
         if(width.indexOf("%")!=-1)
             return td.offsetWidth;
         else

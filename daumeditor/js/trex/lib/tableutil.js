@@ -355,8 +355,7 @@ Trex.TableUtil.Indexer = Trex.Class.create({
 
             }
         });
-        res.uniq(_FALSE);
-        return res;
+        return res.uniq(_FALSE);
     },
     /**
      * getTdArrCol
@@ -375,8 +374,7 @@ Trex.TableUtil.Indexer = Trex.Class.create({
 
             }
         });
-        res.uniq(_FALSE);
-        return res;
+        return res.uniq(_FALSE);
     },
 	/**
 	 * getTdArrHasTop
