@@ -19,13 +19,7 @@ TrexConfig.addTool(
     {
         wysiwygonly: _TRUE,
         sync: _FALSE,
-        status: _TRUE,
-        rows: 2,
-        cols: 1,
-        options: [
-            { label: 'image', data: 1 , klass: 'tx-tabletemplate-1' },
-            { label: 'image', data: 2 , klass: 'tx-tabletemplate-2' }
-        ]
+        status: _TRUE
     }
 );
 
@@ -149,6 +143,7 @@ Trex.Menu.TableResize = Trex.Class.create({
         return  n > 0;
     },
     onregenerated: function() {
+        console.log(arguments);
         var _elMenu = this.elMenu;
         var _elInput =$tom.collectAll(_elMenu, 'input.tx-text-input');
         _elInput[0].value = '';

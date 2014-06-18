@@ -260,6 +260,14 @@ Trex.Table.Selector = Trex.Class.create({
             Trex.TableUtil.collapseCaret(self.wysiwygPanel, self.currentTd);
         });
 
+        //ie9이상 동작함.
+        function collapseTableAround(isStart){
+            var rng = self.canvas.getProcessor().getRange();
+            rng[(isStart?'setEndBefore':'setEndAfter')](self.currentTable);
+            rng.collapse(_FALSE);
+            goog.dom.Range.createFromBrowserRange(rng).select();
+        }
+
         //normalMode
         $tx.chrome&&this.normalModeKeyObserver.observeKey({
             keyCode:38
@@ -273,7 +281,10 @@ Trex.Table.Selector = Trex.Class.create({
             }
             var b = self.tableIndexer.getBoundary(td);
             td = self.tableIndexer.getTd(b.top-1, b.left);
-            Trex.TableUtil.collapseCaret(self.wysiwygPanel, td);
+            if(!td){
+                collapseTableAround(_TRUE);
+            }else
+                Trex.TableUtil.collapseCaret(self.wysiwygPanel, td);
 
         });
         $tx.chrome&&this.normalModeKeyObserver.observeKey({
@@ -288,7 +299,10 @@ Trex.Table.Selector = Trex.Class.create({
             }
             var b = self.tableIndexer.getBoundary(td);
             td = self.tableIndexer.getTd(b.bottom+1, b.left);
-            Trex.TableUtil.collapseCaret(self.wysiwygPanel, td);
+            if(!td){
+                collapseTableAround(_FALSE);
+            }else
+                Trex.TableUtil.collapseCaret(self.wysiwygPanel, td);
 
         });
 
