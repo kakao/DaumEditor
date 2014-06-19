@@ -760,8 +760,14 @@ Trex.module("bind iframe activate or deactivate event",
                 var _processor = canvas.getProcessor(Trex.Canvas.__WYSIWYG_MODE);
 
                 $tx.observe(panelDoc, 'beforedeactivate', function(ev) {
-                    _processor.isRangeInsideWysiwyg = true;
-                    _processor.lastRange = _processor.getRange();
+                    try {
+                        var range = _processor.getRange();
+                        _processor.isRangeInsideWysiwyg = true;
+                        _processor.lastRange = range;
+
+                    } catch (ignore) {
+                        // range를 가져올 때 오류가 발생하기도 한다.
+                    }
                 });
 
                 $tx.observe(panelDoc, 'deactivate', function (ev) {
