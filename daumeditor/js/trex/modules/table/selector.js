@@ -2,7 +2,7 @@
 /*global Trex, $tom, $tx, _FALSE, _NULL, _TRUE */
 Trex.Table.Selector = Trex.Class.create({
 	SELECTED_CLASS_NAME: "tx_table_selected_cell",
-	SELECTED_CSS_TEXT: "{background:#e9eeff !important}",
+    SELECTED_CSS_TEXT: "{background:#D8E9FD !important;background:rgba(179, 212, 253, 0.5) !important;}",
 	initialize: function (editor/*, config*/) {
 		this.canvas = editor.getCanvas();
 		this.wysiwygPanel = this.canvas.getPanel(Trex.Canvas.__WYSIWYG_MODE);
