@@ -76,6 +76,9 @@ Trex.I.History.Webkit = {
 
 Trex.I.History.Trident = {
     getRangeData: function() {
+        if (!this.canvas.isWYSIWYG()) {
+            return;
+        }
         var doc = this.canvas.getCurrentPanel().getDocument();
         var containerEl = doc.body;
         //refactory 필요.
@@ -108,6 +111,9 @@ Trex.I.History.Trident = {
         }
     },
     restoreRange: function(savedSel) {
+        if (!this.canvas.isWYSIWYG()) {
+            return;
+        }
         var doc = this.canvas.getCurrentPanel().getDocument();
         var containerEl = doc.body;
         var textRange = doc.body.createTextRange();
