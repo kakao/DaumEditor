@@ -29,6 +29,7 @@
             minHeight: 200,
             ext: 'html',
             param: "",
+
             newlinepolicy: "p",
             showGuideArea: _TRUE,
             convertingText: _TRUE,
@@ -36,8 +37,8 @@
 			removeTextModeBr: _FALSE,
             respectVisibilityInDesign: _TRUE,
             dropZone: {
-                use:true,
-                adaptor:'dropZone'
+                use:_FALSE,
+                adaptor: 'tenth2'
             }
         }
     }, function(root) {
@@ -742,6 +743,11 @@
 
         onDragEnter: function(event) {
             this.fireJobs(Trex.Ev.__CANVAS_PANEL_DRAGENTER, event);
+            $tx.stop(event);
+        },
+
+        onDragLeave: function(event) {
+            this.fireJobs(Trex.Ev.__CANVAS_PANEL_DRAGLEAVE, event);
             $tx.stop(event);
         },
 

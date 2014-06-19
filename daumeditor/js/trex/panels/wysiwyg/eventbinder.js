@@ -16,6 +16,7 @@
             this.translateDocumentEventToCanvas('dblclick', 'onDoubleClick');
             this.translateDocumentEventToCanvas('dragover', 'onDragOver');
             this.translateDocumentEventToCanvas('dragenter', 'onDragEnter');
+            this.translateDocumentEventToCanvas('dragleave', 'onDragLeave');
             this.translateDocumentEventToCanvas('drop', 'onDrop');
             this.translateDocumentEventToCanvas('dblclick', 'onDoubleClick');
             this.translateDocumentEventToCanvas('mousedown', 'onMouseDown');

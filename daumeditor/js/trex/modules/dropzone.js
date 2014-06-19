@@ -1,53 +1,74 @@
 
-Trex.module("drag & drop file, image attacher",
-    function(editor, toolbar, sidebar, canvas, config) {
-        var dropzone;
-
-        if (config.canvas.dropZone.use && _WIN.FileReader) {
-            dropzone = new Trex.DropZone(canvas, config.canvas.dropZone);
-        }
-
-        editor.getDropZone = function() {
-            return dropzone;
-        }
+Trex.module('register drag and drop attacher on canvas', function(editor, toolbar, sidebar, canvas, config){
+    if (!_WIN.FileReader || !config.canvas.dropZone.use) {
+        return;
     }
-);
+
+    var dropZone = new Trex.DropZone(editor, sidebar, canvas, config.canvas.dropZone);
+    editor.getDropZone = function(){
+        return dropZone;
+    };
+});
 
 Trex.DropZone = Trex.Class.create({
+    initialize: function(editor, sidebar, canvas, config) {
+        this.editor = editor;
+        this.sidebar = sidebar;
+        this.canvas = canvas;
+        this.config = config;
 
-    initialize: function(canvas, config){
-        var _adaptor = new Trex.Tenth2(TrexConfig.getAdaptor(config.adaptor));
+        this.canvasObjserveJobs();
+    },
+    canvasObserveJobs: function() {
+        var self = this;
 
-        var dropAtWysiwyg = function(ev) {
+        this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGENTER, this.showDragArea);
+        this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGLEAVE, this.hideDragArea);
+        this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DROP, function(ev) {
+            console.log(ev);
+
             var dt = ev.dataTransfer;
-            var files = dt.files;
-
-            for (var i= 0, len = files.length; i < len; i++) {
-                var file = files[i];
-                if (_adaptor) {
-                    _adaptor.upload(file);
-                }
-
-                /*
-                 var reader = new FileReader();
-                 reader.readAsDataURL(file);
-                 $tx.observe(reader, 'loadend', function(e) {
-                 var data = {};
-                 data.filesize = file.size;
-                 data.filename = file.name;
-                 data.imageurl = this.result;
-                 _attacher.execAttach(data);
-                 });      */
+            if (dt && dt.files && dt.files.length) {
+                var files = dt.files;
+                self.attachFiles($A(files));
+            } else {
+                // TODO:필요하면 처리추가
 
             }
-        }
+        });
 
-        canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGOVER, function() {
-            console.log("over");
+    },
+    attachFiles: function(files) {
+        var self = this;
+        files.each(function(file){
+            self.attachFile(file);
         });
-        canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGENTER, function() {
-            console.log("enter");
+    },
+    attachFile: function(file) {
+        var self = this;
+        if (file.type && file.type.split('/')[0].toUpperCase() == 'IMAGE'){
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            $tx.observe(reader, 'loadend', function(e) {
+                var data = {};
+                data.imageurl = this.result;
+                self.execAttach(data);
+            });
+        }
+    },
+    execAttach: function(data) {
+        var _img = _DOC.createElement('img');
+        _img.src = data.imageurl;
+        var _style = {clear:'none', float: 'none'};
+        this.canvas.execute(function(processor) {
+            // TODO: ie에서 확인, 문제가 있다면 processor.lastRange 를 이용해서 range를 복원하고 paste를 한다.
+            processor.pasteNode(_img, _TRUE, _style);
         });
-        canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DROP, dropAtWysiwyg);
+    },
+    showDragArea: function() {
+        console.log("show");
+    },
+    hideDragArea: function() {
+        console.log("hide");
     }
 })

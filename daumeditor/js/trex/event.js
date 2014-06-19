@@ -112,6 +112,13 @@
          */
         __CANVAS_PANEL_DRAGENTER: 'canvas.panel.dragenter',
         /**
+         * wysiwyg 영역에서 발생하는 dragleave 이벤트<br/>
+         * @example
+         * 	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGLEAVE, function(ev) {
+		 *	});
+         */
+        __CANVAS_PANEL_DRAGLEAVE: 'canvas.panel.dragleave',
+        /**
          * wysiwyg 영역에서 발생하는 드롭 이벤트<br/>
          * @example
          * 	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DROP, function(ev) {
