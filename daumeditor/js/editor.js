@@ -45,6 +45,7 @@ var CORE_FILES = [
 	"trex/formproxy.js",
 	"trex/saver.js",
 	"trex/resizer.js",
+	"trex/paste.js",
 
 	/** canvas & panels */
 	"trex/history.js",
