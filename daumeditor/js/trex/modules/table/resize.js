@@ -39,8 +39,6 @@ Trex.Table.Resize = Trex.Class.create({
             return;
         }
         if(type == this.TYPE.WIDTH){
-            var curBoundery = select.getSelected();
-            if(isDifference&&this.canvas.getSizeConfig().contentWidth < this._getTableWidth(select.currentTable)+(curBoundery.right-curBoundery.left)*d) return;
             this._resizeWidth(els.expandElement, d, isDifference);
             this._resizeTableWidth(select.currentTable);
         }else {
@@ -96,9 +94,10 @@ Trex.Table.Resize = Trex.Class.create({
      * @private
      */
     _resizeWidth: function(tds, d, isDifference){
+        var MIN_WIDTH = 10;
         if (tds) {
             for (var i = 0; i < tds.length; i++) {
-                tds[i].style.width = ((isDifference?this._getTdWidth(tds[i]):0) + (d*tds[i].colSpan||1)).toPx();
+                tds[i].style.width = Math.max((isDifference?this._getTdWidth(tds[i]):0) + (d*tds[i].colSpan||1),MIN_WIDTH).toPx();
             }
         }
     },
@@ -109,7 +108,7 @@ Trex.Table.Resize = Trex.Class.create({
      */
     _resizeTableWidth: function(table) {
         if(!table || !table.rows) return;
-        var movingWidth = this._getTableWidth(table);
+        var movingWidth = Math.min(this._getTableWidth(table), this.canvas.getSizeConfig().contentWidth);
         table.width = movingWidth.toPx();
         table.style.width = movingWidth.toPx();
     },

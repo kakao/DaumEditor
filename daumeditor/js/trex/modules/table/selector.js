@@ -171,7 +171,9 @@ Trex.Table.Selector = Trex.Class.create({
             shiftKey: _TRUE,
             keyCode: 77
         }, function(e){
-            self.canvas.getProcessor().table.merge(self)
+            self.canvas.execute(function(processor){
+                processor.table.merge(self)
+            });
         });
         //ctrl + shiftKey + s 표를 분할한다.
         this.selectModeKeyObserver.observeKey({
@@ -179,7 +181,9 @@ Trex.Table.Selector = Trex.Class.create({
             shiftKey: _TRUE,
             keyCode: 83
         }, function(e){
-            self.canvas.getProcessor().table.resetMerge(self)
+            self.canvas.execute(function(processor){
+                processor.table.resetMerge(self)
+            });
         });
 
         //shift + 오른쪽 화살표

@@ -35,10 +35,12 @@ Trex.Tool.TableResize = Trex.Class.create({
         this.button = new Trex.Button(this.buttonCfg);
 
         var _toolHandler = function(data) {
-            if(data.width != null)
-                canvas.getProcessor().table.resize('WIDTH', data.width);
-            if(data.height != null)
-                canvas.getProcessor().table.resize('HEIGHT', data.height);
+            canvas.execute(function(processor){
+                if(data.width != null)
+                    processor.table.resize('WIDTH', data.width);
+                if(data.height != null)
+                    processor.table.resize('HEIGHT', data.height);
+            });
         };
 
 
@@ -87,37 +89,6 @@ Trex.Menu.TableResize = Trex.Class.create({
         Trex.MarkupTemplate.get('menu.tableresize').evaluateToDom({}, _elMenu);
         var self = this;
         var _elInput = $tom.collectAll(_elMenu, 'input.tx-text-input');
-        $tx.observe(_elInput[0], "keydown", function(ev) {
-            var element = $tx.element(ev);
-            if(ev.keyCode == 13) { //Enter
-                var _val = self._isValidation(element.value);
-                if (!_val) {
-                    alert( TXMSG("@tableresize.invalid") );
-                    $tx.stop(ev);
-                    return;
-                }
-                this.onSelect(ev, {
-                    width: parseInt(element.value)
-                });
-                $tx.stop(ev);
-            }
-        }.bindAsEventListener(this));
-        $tx.observe(_elInput[1], "keydown", function(ev) {
-            var element = $tx.element(ev);
-            if(ev.keyCode == 13) { //Enter
-                var _val = self._isValidation(element.value);
-                if (!_val) {
-                    alert( TXMSG("@tableresize.invalid") );
-                    $tx.stop(ev);
-                    return;
-                }
-                this.onSelect(ev, {
-                    height: parseInt(element.value)
-                });
-                $tx.stop(ev);
-            }
-        }.bindAsEventListener(this));
-
         var _elImgs = $tom.collectAll(_elMenu, 'img');
         $tx.observe(_elImgs[0], "click", function(ev) {
             var _val = self._isValidation(_elInput[0].value)&&self._isValidation(_elInput[1].value);
@@ -130,7 +101,6 @@ Trex.Menu.TableResize = Trex.Class.create({
                 width: parseInt(_elInput[0].value),
                 height: parseInt(_elInput[1].value)
             });
-
             $tx.stop(ev);
         }.bind(this));
 
@@ -143,7 +113,6 @@ Trex.Menu.TableResize = Trex.Class.create({
         return  n > 0;
     },
     onregenerated: function() {
-        console.log(arguments);
         var _elMenu = this.elMenu;
         var _elInput =$tom.collectAll(_elMenu, 'input.tx-text-input');
         _elInput[0].value = '';
