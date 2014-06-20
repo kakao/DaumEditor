@@ -6,7 +6,10 @@
      */
     Trex.Paste = {
         I: {},
-        isMSSelection: typeof _WIN.getSelection != 'function'
+        isMSSelection: typeof _WIN.getSelection != 'function',
+        MODE_OFF: 'off',
+        MODE_HTML: 'html',
+        MODE_TEXT: 'text'
     };
 
     Trex.Paste.I.CleanerStandard = Trex.Mixin.create({
@@ -48,8 +51,8 @@
             html = html.replace(/(<[a-z]+[^>]*>)/gi, '\n$1');// 태그 제거를 위한 줄바꿈 문자 추가
             html = html.replace(/\n<head>.*<\/head>/gi, '');// head태그 제거
             html = html.replace(/<\/?(html|body)[^>]*>/gi, '');
-            html = html.replace(/<!--/gi, '\n<!--');// 주석 제거를 위한 줄바꿈 문자 추가
-            html = html.replace(/\n<!--.*-->/gi, '');// 주석 제거
+            html = html.replace(/<!--/g, '\n<!--');// 주석 제거를 위한 줄바꿈 문자 추가
+            html = html.replace(/\n<!--.*-->/g, '');// 주석 제거
             html = html.replace(/<p[^>]*>/gi, '<p>');// p태그에 속성 제거
             html = html.replace(/\n<(font|span)[^>]*>\s*<\/\1>/gi, '');// 빈 태그 제거
             html = html.replace(/(\d+)?\.(\d+)([a-z]+)/gi, function (matched, p1, p2, p3) {
@@ -128,6 +131,8 @@
         $const: {
             __Identity: 'paste-standard'
         },
+        isTextOnly: _FALSE,
+        isEnable: _FALSE,
         isPasteProcessing: _FALSE,
         initialize: function (editor, canvas, cleaner) {
             this.editor = editor;
@@ -141,10 +146,12 @@
         bindEvents: function () {
             var self = this;
             this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_PASTE, function (ev) {
-                if (!self.isPasteProcessing) {
-                    self.onNativePaste(ev);
-                } else {
-                    self.preventPasteDefault(ev);
+                if (self.isEnable) {
+                    if (!self.isPasteProcessing) {
+                        self.onNativePaste(ev);
+                    } else {
+                        self.preventPasteDefault(ev);
+                    }
                 }
             });
         },
@@ -167,6 +174,27 @@
                 console.log('paste redirect range');
                 return this.pasteByRedirection(ev);
             }
+        },
+        /**
+         * 붙여넣기 결과를 off/html/text 상태 3가지 중 1개로 변경한다.
+         * @param pasteMode
+         */
+        switchMode: function(pasteMode) {
+            switch(pasteMode) {
+                case Trex.Paste.MODE_HTML:
+                    this.isTextOnly = _FALSE;
+                    this.isEnable = _TRUE;
+                    break;
+                case Trex.Paste.MODE_TEXT:
+                    this.isTextOnly = _TRUE;
+                    this.isEnable = _TRUE;
+                    break;
+                case Trex.Paste.MODE_OFF:
+                default:
+                    this.isTextOnly = _FALSE;
+                    this.isEnable = _FALSE;
+            }
+
         },
         /**
          * paste가 실행되는 wysiwyg document 객체
@@ -194,8 +222,8 @@
                 ev.preventDefault();
                 ev.stopPropagation();
             } else {
-                ev.returnValue = false;
-                ev.cancelBubble = false;
+                ev.returnValue = _FALSE;
+                ev.cancelBubble = _FALSE;
             }
         },
         pasteByClipboardGetData: function (ev) {
@@ -207,7 +235,7 @@
             var types = $A(clipboardData.types);
             var html = '';
             var self = this;
-            if (types.include('text/html')) {
+            if (!this.isTextOnly && types.include('text/html')) {
                 html = clipboardData.getData('text/html');
             } else if (types.include('text/plain')) {
                 html = clipboardData.getData('text/plain');
@@ -215,7 +243,11 @@
                 html = '???';
             }
 
+            this.removeRangeContents();
+            this.saveRange();
+
             this.canvas.execute(function (processor) {
+                self.restoreRange();
                 processor.pasteContent(self.cleaner.execute(html));
                 self.isPasteProcessing = _FALSE;
             });
@@ -224,13 +256,15 @@
             var self = this;
             this.isPasteProcessing = _TRUE;
 
+            this.removeRangeContents();
+            this.saveRange();
             var dummy = this.createPasteDummy();
-            console.log(dummy)
             this.appendPasteDummy(dummy);
             this.setRangeToDummy(dummy);
             this.execPasteCommand();
 
             setTimeout(function () {
+                self.restoreRange();
                 self.copyContentToOriginalRange(dummy);
                 self.isPasteProcessing = _FALSE;
             }, 1);
@@ -239,12 +273,12 @@
         copyContentToOriginalRange: function (dummyNode) {
             var dummy = dummyNode || this.getPasteDummy();
             if (!dummy) {
-                alert('div가 없다?');
+                throw new Error('paste-dummy node is not found');
                 return;
             }
 
-            var cleanHtml = this.cleaner.execute(dummy.innerHTML);
-            this.canvas.focusOnTop();
+            var cleanHtml = this.isTextOnly ? dummy.innerText : this.cleaner.execute(dummy.innerHTML);
+
             this.canvas.execute(function (processor) {
                 dummy.parentNode.removeChild(dummy);
                 dummy = null;
@@ -290,9 +324,22 @@
                 this.getDocument().execCommand('paste');
             } catch (e) {
                 console.log(e);
-                return false;
+                return _FALSE;
             }
-            return true;
+            return _TRUE;
+        },
+        removeRangeContents: function() {
+            var range = this.canvas.getProcessor().createGoogRange();
+            range.removeContents();
+        },
+        saveRange: function() {
+            var range = this.canvas.getProcessor().createGoogRange();
+            this.savedCaret = range.saveUsingCarets();
+        },
+        restoreRange: function() {
+            if (!this.savedCaret.isDisposed()) {
+                this.savedCaret.restore();
+            }
         }
     });
 
@@ -332,12 +379,15 @@
             // IE는 paste기본 동작을 무조건 막는다.
             this.preventPasteDefault(ev);
 
+            this.removeRangeContents();
+            this.saveRange();
             var dummy = this.createPasteDummy();
             this.appendPasteDummy(dummy);
             this.setRangeToDummy(dummy);
             this.execPasteCommand();
 
             setTimeout(function () {
+                self.restoreRange();
                 self.copyContentToOriginalRange(dummy);
                 self.isPasteProcessing = _FALSE;
             }, 10);
@@ -357,7 +407,7 @@
 
             var range = dummy.createTextRange();
             range.moveToElementText(dummy);
-            range.collapse(true);
+            range.collapse(_TRUE);
             range.moveStart("character", 0);
             range.moveEnd("character", 0);
 
@@ -404,7 +454,6 @@
         ]
     });
 
-
     Trex.install("editor.getPaster",
         function (editor, toolbar, sidebar, canvas, config) {
             var cleaner = new Trex.Paste.Cleaner(editor, canvas);
@@ -419,5 +468,4 @@
             };
         }
     );
-
 }();

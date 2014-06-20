@@ -147,6 +147,7 @@ var CORE_FILES = [
 	"trex/tool/advanced.js",
 	"trex/tool/extraButtonDropdown.js",
 	"trex/tool/fullscreen.js",
+	"trex/tool/paste.js",
 
 	/** each > attacher */
 	"trex/attacher/image.js",
