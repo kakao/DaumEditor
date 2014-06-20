@@ -1153,3 +1153,10 @@
 		background-position: -519px 6px;
 	}
 	.tx-formula a:hover {background-position: -519px -18px;}
+
+/*==== paste ====*/
+    .tx-paste a.tx-icon {width:21px;}
+    .tx-paste a.tx-icon {background-position:-44px -90px;}
+    .tx-paste-off a.tx-icon {background-position:-44px -90px;}
+    .tx-paste-html a.tx-icon {background-position:-44px -30px;}
+    .tx-paste-text a.tx-icon {background-position:-105px -50px;}
