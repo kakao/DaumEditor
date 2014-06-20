@@ -8,7 +8,7 @@
                 range.getStartNode();
                 range.getStartOffset();
                 var node = this.findBlockToIndent(startCaret, processor);
-                var isEmptyParagraph = (node.tagName == "P" && node.firstChild == startCaret && node.lastChild == endCaret);
+                var isEmptyParagraph = (node && node.tagName == "P" && node.firstChild == startCaret && node.lastChild == endCaret);
                 if (isEmptyParagraph) {
                     processor.stuffNode(node);
                 }

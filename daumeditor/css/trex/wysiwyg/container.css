@@ -31,3 +31,5 @@ button {
 button a:hover, button a:link, button a:active, button a:visited  { border:none; }
 
 blockquote { margin:0; }
+
+table td { border:1px dashed #eee; }
