@@ -302,8 +302,8 @@ Trex.MarkupTemplate.add(
 	'menu.table.direct', [
 		'<div>@table.title.setDirectly</div>',
 		'<div class="tx-table-input-area">',
-		'<div class="tx-field tx-col-field">@table.title.row<input type="text" value="1"><a class="tx-btn tx-btn-add" href="javascript:;">@table.title.row+</a><a class="tx-btn tx-btn-sub" href="javascript:;">@table.title.row-</a></div>',
-		'<div class="tx-field tx-row-field">@table.title.col<input type="text" value="1"><a class="tx-btn tx-btn-add" href="javascript:;">@table.title.col+</a><a class="tx-btn tx-btn-sub" href="javascript:;">@table.title.col-</a></div>',
+		'<div class="tx-field tx-col-field">@table.title.row<input type="text" value="1"><a class="tx-btn tx-btn-add" href="javascript:void 0;">@table.title.row+</a><a class="tx-btn tx-btn-sub" href="javascript:void 0;">@table.title.row-</a></div>',
+		'<div class="tx-field tx-row-field">@table.title.col<input type="text" value="1"><a class="tx-btn tx-btn-add" href="javascript:void 0;">@table.title.col+</a><a class="tx-btn tx-btn-sub" href="javascript:void 0;">@table.title.col-</a></div>',
 		'</div>'
 	].join("")
 );
