@@ -272,6 +272,26 @@ Trex.Table.Selector = Trex.Class.create({
             goog.dom.Range.createFromBrowserRange(rng).select();
         }
 
+        /**
+         * @desc 위아래 버튼을 눌러서 td간에 이동이 발생예측하여 발생하면 true를 반환한다.
+         * @param {Boolean} isBefore
+         * @returns {boolean}
+         */
+        function isDifferent(isBefore){
+            var rng = self.canvas.getProcessor().getRange();
+            rng.collapse(_FALSE);
+            var _node = rng.startContainer;
+            while(_node && (_node.nodeType == 3 || _node.tagName.toUpperCase() != 'TD')){
+                var t = _node[isBefore?'previousSibling':'nextSibling'];
+                if(t&&(
+                    (t.nodeType == 1&& t.tagName.toUpperCase() != 'BR')
+                    ||(t.nodeType == 3 && t.length)))
+                    return false;
+                _node = _node.parentNode;
+            }
+            return true;
+        }
+
         //normalMode
         $tx.chrome&&this.normalModeKeyObserver.observeKey({
             keyCode:38
@@ -280,6 +300,8 @@ Trex.Table.Selector = Trex.Class.create({
             elem = self.canvas.getProcessor().getNode();
             td = getTdFromElement(elem);
             if(!td) return;
+            if(!isDifferent(_TRUE))
+                return;
             $tx.stop(e);
             if(!self.currentTable){
                 self.setTable(td);
@@ -299,6 +321,8 @@ Trex.Table.Selector = Trex.Class.create({
             elem = self.canvas.getProcessor().getNode();
             td = getTdFromElement(elem);
             if(!td) return;
+            if(!isDifferent(_FALSE))
+                return;
             $tx.stop(e);
             if(!self.currentTable){
                 self.setTable(td);
@@ -309,7 +333,6 @@ Trex.Table.Selector = Trex.Class.create({
                 collapseTableAround(_FALSE);
             }else
                 Trex.TableUtil.collapseCaret(self.wysiwygPanel, td);
-
         });
 
 	},
