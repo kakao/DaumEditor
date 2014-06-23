@@ -49,19 +49,34 @@ Trex.TableUtil = {
 		}
 	},
 	/**
-	 * collapseCaret
-	 * @param {Trex.Canvas.WysiwygPanel} wysiwygPanel
-	 * @param {Element} node
-	 */
-	collapseCaret: function (wysiwygPanel, node) {
-		var range;
-		try {
-			range = wysiwygPanel.getProcessor().createGoogRangeFromNodes(node, 0, node, 0);
-			range.select();
-		} catch (ignore) {}
-		//td space bug from create textnode.
-		//wysiwygPanel.getProcessor().moveCaretTo(node);
-	},
+     * collapseCaret
+     * @param {Trex.Canvas.WysiwygPanel} wysiwygPanel
+     * @param {Element} node
+     */
+    collapseCaret: function (wysiwygPanel, node) {
+        var range;
+        try {
+            range = wysiwygPanel.getProcessor().createGoogRangeFromNodes(node, 0, node, 0);
+            range.select();
+        } catch (ignore) {}
+        //td space bug from create textnode.
+        //wysiwygPanel.getProcessor().moveCaretTo(node);
+    },
+    /**
+     * collapseLastCaret
+     * @param {Trex.Canvas.WysiwygPanel} wysiwygPanel
+     * @param {Element} node
+     */
+    collapseLastCaret: function (wysiwygPanel, node) {
+        var range;
+        try {
+            var offset = node.length?node.length:node.childNodes.length;
+            range = wysiwygPanel.getProcessor().createGoogRangeFromNodes(node, offset, node, offset);
+            range.select();
+        } catch (ignore) {}
+        //td space bug from create textnode.
+        //wysiwygPanel.getProcessor().moveCaretTo(node);
+    },
 	/**
 	 * getClosestByTagNames
 	 * @param {Array} tagNames

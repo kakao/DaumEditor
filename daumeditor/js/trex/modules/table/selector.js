@@ -281,10 +281,14 @@ Trex.Table.Selector = Trex.Class.create({
             var rng = self.canvas.getProcessor().getRange();
             rng.collapse(_FALSE);
             var _node = rng.startContainer;
+            var _offset = rng.startOffset;
+            if(_node.nodeType==1 && _node.tagName.toUpperCase() == 'TD'){
+                _node = _node.childNodes[_offset];
+            }
             while(_node && (_node.nodeType == 3 || _node.tagName.toUpperCase() != 'TD')){
                 var t = _node[isBefore?'previousSibling':'nextSibling'];
                 if(t&&(
-                    (t.nodeType == 1&& t.tagName.toUpperCase() != 'BR')
+                    (t.nodeType == 1 && t.tagName.toUpperCase() != 'BR')
                     ||(t.nodeType == 3 && t.length)))
                     return false;
                 _node = _node.parentNode;
@@ -311,7 +315,7 @@ Trex.Table.Selector = Trex.Class.create({
             if(!td){
                 collapseTableAround(_TRUE);
             }else
-                Trex.TableUtil.collapseCaret(self.wysiwygPanel, td);
+                Trex.TableUtil.collapseLastCaret(self.wysiwygPanel, td);
 
         });
         $tx.chrome&&this.normalModeKeyObserver.observeKey({
