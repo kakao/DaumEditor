@@ -1033,14 +1033,16 @@ $tx.extend($tx, /** @lends $tx */{
 		};
 	};
 	//////
-	$tx.extend(String.prototype, /** @lends String.prototype */{
-		/**
-		 * 문자열 앞,뒤의 공백을 제거
-		 * @function
-		 */
-		trim: function() {
+    if (!String.prototype.trim) {
+        /**
+         * 문자열 앞,뒤의 공백을 제거
+         * @function
+         */
+        String.prototype.trim = function() {
 			return this.replace(/(^\s*)|(\s*$)/g, "");
-		},
+		}
+    }
+	$tx.extend(String.prototype, /** @lends String.prototype */{
 		/**
 		 * 정규표현식에서 사용되는 메타문자를 이스케이프해서 반환한다.
 		 * @function
