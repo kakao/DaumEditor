@@ -274,69 +274,69 @@ Trex.Table.Selector = Trex.Class.create({
 
         /**
          * @desc 위아래 버튼을 눌러서 td간에 이동이 발생예측하여 발생하면 true를 반환한다.
-         * @param {Boolean} isBefore
+         * @param {Node} preNode
          * @returns {boolean}
          */
-        function isDifferent(isBefore){
+        function shouldFixCaret(preNode){
             var rng = self.canvas.getProcessor().getRange();
             rng.collapse(_FALSE);
             var _node = rng.startContainer;
-            var _offset = rng.startOffset;
-            if(_node.nodeType==1 && _node.tagName.toUpperCase() == 'TD'){
-                _node = _node.childNodes[_offset];
-            }
-            while(_node && (_node.nodeType == 3 || _node.tagName.toUpperCase() != 'TD')){
-                var t = _node[isBefore?'previousSibling':'nextSibling'];
-                if(t&&(
-                    (t.nodeType == 1 && t.tagName.toUpperCase() != 'BR')
-                    ||(t.nodeType == 3 && t.length)))
-                    return false;
-                _node = _node.parentNode;
-            }
-            return true;
+            if(_node.nodeType == 3) _node = _node.parentElement;
+            var pre = getTdFromElement(preNode);
+            var cur = getTdFromElement(_node);
+            return cur && cur !== pre && isSameTable(cur, pre);
+        }
+
+
+        function isSameTable(n1, n2){
+            console.log($tom.ancestor(n1, 'table'), $tom.ancestor(n2, 'table'))
+            return $tom.ancestor(n1, 'table') === $tom.ancestor(n2, 'table')
         }
 
         //normalMode
-        $tx.chrome&&this.normalModeKeyObserver.observeKey({
+        $tx.webkit&&this.normalModeKeyObserver.observeKey({
             keyCode:38
         }, function(e){
             var elem, td;
             elem = self.canvas.getProcessor().getNode();
             td = getTdFromElement(elem);
             if(!td) return;
-            if(!isDifferent(_TRUE))
-                return;
-            $tx.stop(e);
-            if(!self.currentTable){
-                self.setTable(td);
-            }
-            var b = self.tableIndexer.getBoundary(td);
-            td = self.tableIndexer.getTd(b.top-1, b.left);
-            if(!td){
-                collapseTableAround(_TRUE);
-            }else
-                Trex.TableUtil.collapseLastCaret(self.wysiwygPanel, td);
-
+            setTimeout(function(){
+                if(shouldFixCaret(elem)){
+                    $tx.stop(e);
+                    if(!self.currentTable){
+                        self.setTable(td);
+                    }
+                    var b = self.tableIndexer.getBoundary(td);
+                    td = self.tableIndexer.getTd(b.top-1, b.left);
+                    if(!td){
+                        collapseTableAround(_TRUE);
+                    }else
+                        Trex.TableUtil.collapseLastCaret(self.wysiwygPanel, td);
+                }
+            },0);
         });
-        $tx.chrome&&this.normalModeKeyObserver.observeKey({
+        $tx.webkit&&this.normalModeKeyObserver.observeKey({
             keyCode:40
         }, function(e){
             var elem, td;
             elem = self.canvas.getProcessor().getNode();
             td = getTdFromElement(elem);
             if(!td) return;
-            if(!isDifferent(_FALSE))
-                return;
-            $tx.stop(e);
-            if(!self.currentTable){
-                self.setTable(td);
-            }
-            var b = self.tableIndexer.getBoundary(td);
-            td = self.tableIndexer.getTd(b.bottom+1, b.left);
-            if(!td){
-                collapseTableAround(_FALSE);
-            }else
-                Trex.TableUtil.collapseCaret(self.wysiwygPanel, td);
+            setTimeout(function(){
+                if(shouldFixCaret(elem)){
+                    $tx.stop(e);
+                    if(!self.currentTable){
+                        self.setTable(td);
+                    }
+                    var b = self.tableIndexer.getBoundary(td);
+                    td = self.tableIndexer.getTd(b.bottom+1, b.left);
+                    if(!td){
+                        collapseTableAround(_FALSE);
+                    }else
+                        Trex.TableUtil.collapseCaret(self.wysiwygPanel, td);
+                }
+            },0);
         });
 
 	},
