@@ -106,7 +106,22 @@ Trex.TableUtil = {
 		var currentTable;
 		currentTable = Trex.TableUtil.getClosestByTagNames(["table"], td);
 		return new Trex.TableUtil.Indexer(currentTable);
-	}
+	},
+    /**
+     * getCellOffset
+     * @param {Element} td
+     * @return {Object}
+     */
+    getCellOffset: function(td){
+        var get = function(td, key){
+            var val = td[key]||td.style[key];
+            if(val.indexOf("%")!=-1)
+                return td['offset'+key.capitalize()];
+            else
+                return parseInt(val,10);
+        };
+        return {width: get(td,'width'), height: get(td,'height')}
+    }
 };
 //////////////////////////////////////////////////////////
 /**

@@ -36,10 +36,7 @@ Trex.Tool.TableResize = Trex.Class.create({
 
         var _toolHandler = function(data) {
             canvas.execute(function(processor){
-                if(data.width != null)
-                    processor.table.resize('WIDTH', data.width);
-                if(data.height != null)
-                    processor.table.resize('HEIGHT', data.height);
+                processor.table.resize(data);
             });
         };
 
@@ -114,9 +111,17 @@ Trex.Menu.TableResize = Trex.Class.create({
     },
     onregenerated: function() {
         var _elMenu = this.elMenu;
+        var p = Editor.getCanvas().getProcessor();
+        var td = p.table.getTdArr()[0];
         var _elInput =$tom.collectAll(_elMenu, 'input.tx-text-input');
-        _elInput[0].value = '';
-        _elInput[1].value = '';
+        if(!td){
+            _elInput[0].value = '';
+            _elInput[1].value = '';
+        }else {
+            var offset = Trex.TableUtil.getCellOffset(td);
+            _elInput[0].value = offset.width;
+            _elInput[1].value = offset.height;
+        }
     }
 });
 
