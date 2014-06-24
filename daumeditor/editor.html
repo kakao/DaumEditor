@@ -518,7 +518,8 @@
 				lineHeight: "1.5", /*기본 줄간격 */
 				padding: "8px" /* 위지윅 영역의 여백 */
 			},
-			showGuideArea: false
+			showGuideArea: false,
+            autolink: false
 		},
 		events: {
 			preventUnload: false
@@ -540,8 +541,7 @@
                 }
             },
             paste: {
-                defaultMode: Trex.Paste.MODE_HTML,
-                autolink: true
+                defaultMode: Trex.Paste.MODE_HTML
             }
         }
 	};

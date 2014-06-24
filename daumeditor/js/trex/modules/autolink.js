@@ -1,5 +1,10 @@
-Trex.module('paste anchor controller', function(editor, toolbar, sidebar, canvas, config) {
+!function(){
+    // config.canvas.autolink 값을 true로 설정한다.
+    var canvasConfig = TrexConfig.get('canvas');
+    canvasConfig.autolink = _TRUE;
+}();
 
+Trex.module('paste anchor controller', function(editor, toolbar, sidebar, canvas, config) {
     Trex.Paste.AutolinkConverter = Trex.Class.create({
         initialize: function(){
             this.patternSpace = /\s/;

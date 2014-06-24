@@ -11,7 +11,6 @@ TrexConfig.addTool(
         wysiwygonly: _TRUE,
         sync: _FALSE,
         status: _TRUE,
-        autolink: _TRUE,
         options: [
             { label: '끄기', title: '붙여넣기는 브라우저 기본 기능을 사용합니다', data: Trex.Paste.MODE_OFF },
             { label: '켜기', title: '내용을 정제해서 HTML로 붙여 넣습니다', data: Trex.Paste.MODE_HTML },
