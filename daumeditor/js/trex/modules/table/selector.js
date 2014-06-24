@@ -231,28 +231,28 @@ Trex.Table.Selector = Trex.Class.create({
             ctrlKey: _TRUE,
             keyCode: 39
         }, function(e){
-            self.canvas.getProcessor().table.resize('WIDTH', 5, _TRUE);
+            self.canvas.getProcessor().table.resize({width: 5}, _TRUE);
         });
         //ctrl + 왼쪽 화살표
         this.selectModeKeyObserver.observeKey({
             ctrlKey: _TRUE,
             keyCode: 37
         }, function(e){
-            self.canvas.getProcessor().table.resize('WIDTH', -5, _TRUE);
+            self.canvas.getProcessor().table.resize({width: -5}, _TRUE);
         });
         //ctrl + 윗쪽 화살표
         this.selectModeKeyObserver.observeKey({
             ctrlKey: _TRUE,
             keyCode: 38
         }, function(e){
-            self.canvas.getProcessor().table.resize('HEIGHT', -5, _TRUE);
+            self.canvas.getProcessor().table.resize({height: -5}, _TRUE);
         });
         //ctrl + 아랫쪽 화살표
         this.selectModeKeyObserver.observeKey({
             ctrlKey: _TRUE,
             keyCode: 40
         }, function(e){
-            self.canvas.getProcessor().table.resize('HEIGHT', 5, _TRUE);
+            self.canvas.getProcessor().table.resize({height: 5}, _TRUE);
         });
         //ctrl + a
         this.selectModeKeyObserver.observeKey({

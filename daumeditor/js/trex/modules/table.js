@@ -328,13 +328,15 @@ Trex.module("table selector", function (editor, toolbar, sidebar, canvas, config
             },
             /**
              *
-             * @param {String} mode
-             * @param {Number} d
+             * @param {Object} data
              * @param {Boolean=} isDifference
              */
-            resize: function(mode, d, isDifference){
+            resize: function(data, isDifference){
                 this.execute(function () {
-                    tableResize.resize(tableSelect, mode, d, isDifference);
+                    if(data.width != null)
+                        tableResize.resize(tableSelect,'WIDTH', data.width, isDifference);
+                    if(data.height != null)
+                        tableResize.resize(tableSelect, 'HEIGHT', data.height, isDifference);
                 });
             }
 		};
