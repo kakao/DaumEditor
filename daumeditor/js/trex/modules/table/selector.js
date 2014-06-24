@@ -287,9 +287,14 @@ Trex.Table.Selector = Trex.Class.create({
             return cur && cur !== pre && isSameTable(cur, pre);
         }
 
-
+        /**
+         * isSameTable
+         * @desc 같은 테이블인지 여부를 확인한다.
+         * @param {Node} n1
+         * @param {Node} n2
+         * @returns {boolean}
+         */
         function isSameTable(n1, n2){
-            console.log($tom.ancestor(n1, 'table'), $tom.ancestor(n2, 'table'))
             return $tom.ancestor(n1, 'table') === $tom.ancestor(n2, 'table')
         }
 
