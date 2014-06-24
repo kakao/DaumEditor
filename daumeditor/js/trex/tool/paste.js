@@ -11,6 +11,7 @@ TrexConfig.addTool(
         wysiwygonly: _TRUE,
         sync: _FALSE,
         status: _TRUE,
+        autolink: _TRUE,
         options: [
             { label: '끄기', title: '붙여넣기는 브라우저 기본 기능을 사용합니다', data: Trex.Paste.MODE_OFF },
             { label: '켜기', title: '내용을 정제해서 HTML로 붙여 넣습니다', data: Trex.Paste.MODE_HTML },
@@ -56,3 +57,8 @@ Trex.Tool.Paste = Trex.Class.create({
     }
 });
 
+Trex.install('force init paste mode', function(editor, toolbar, sidebar, canvas, config) {
+    // Toolbar가 활성화 되지 않더라도 defaultMode로 paster를 셋팅하기 위함.
+    var paster = editor.getPaster();
+    paster.switchMode(config.toolbar.paste.defaultMode);
+});

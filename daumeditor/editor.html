@@ -284,11 +284,6 @@
 						<div id="tx_background_menu" class="tx-menu tx-background-menu tx-colorpallete"
 							 unselectable="on"></div>
 					</li>
-                    <li class="tx-list">
-                        <div unselectable="on" class="		 tx-btn-bg 	tx-codehighlight" id="tx_codehighlight">
-                            <a href="javascript:;" class="tx-icon" title="코드삽입">코드삽입</a>
-                        </div>
-                    </li>
 					<li class="tx-list">
 						<div unselectable="on" class="		 tx-btn-rbg 	tx-dictionary" id="tx_dictionary">
 							<a href="javascript:;" class="tx-icon" title="사전">사전</a>
@@ -307,6 +302,20 @@
 						</div>
 					</li>
 				</ul>
+                <ul class="tx-bar tx-bar-left">
+                    <li class="tx-list">
+                        <div unselectable="on" class="tx-slt-31lbg tx-paste" id="tx_paste">
+                            <a href="javascript:;" class="tx-icon" title="붙여넣기">붙여넣기</a>
+                            <a href="javascript:;" class="tx-arrow" title="붙여넣기">붙여넣기 선택</a>
+                        </div>
+                        <div id="tx_paste_menu" class="tx-paste-menu tx-menu" unselectable="on"></div>
+                    </li>
+                    <li class="tx-list">
+                        <div unselectable="on" class="		 tx-btn-bg 	tx-codehighlight" id="tx_codehighlight">
+                            <a href="javascript:;" class="tx-icon" title="코드삽입">코드삽입</a>
+                        </div>
+                    </li>
+                </ul>
 				<ul class="tx-bar tx-bar-right">
 					<li class="tx-list">
 						<div unselectable="on" class="tx-btn-nlrbg tx-advanced" id="tx_advanced">
@@ -529,6 +538,10 @@
                 highlight: function(code){
                     return prettyPrintOne(code);
                 }
+            },
+            paste: {
+                defaultMode: Trex.Paste.MODE_HTML,
+                autolink: true
             }
         }
 	};
