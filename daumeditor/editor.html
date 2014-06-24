@@ -23,7 +23,7 @@
     -->
     <link rel="stylesheet" href="css/editor.css" type="text/css" charset="utf-8"/>
     <script src="js/editor_loader.js?environment=development" type="text/javascript" charset="utf-8"></script>
-
+    <script src="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
 </head>
 <body>
 <div class="body">
@@ -302,6 +302,20 @@
 						</div>
 					</li>
 				</ul>
+                <ul class="tx-bar tx-bar-left">
+                    <li class="tx-list">
+                        <div unselectable="on" class="tx-slt-31lbg tx-paste" id="tx_paste">
+                            <a href="javascript:;" class="tx-icon" title="붙여넣기">붙여넣기</a>
+                            <a href="javascript:;" class="tx-arrow" title="붙여넣기">붙여넣기 선택</a>
+                        </div>
+                        <div id="tx_paste_menu" class="tx-paste-menu tx-menu" unselectable="on"></div>
+                    </li>
+                    <li class="tx-list">
+                        <div unselectable="on" class="		 tx-btn-bg 	tx-codehighlight" id="tx_codehighlight">
+                            <a href="javascript:;" class="tx-icon" title="코드삽입">코드삽입</a>
+                        </div>
+                    </li>
+                </ul>
 				<ul class="tx-bar tx-bar-right">
 					<li class="tx-list">
 						<div unselectable="on" class="tx-btn-nlrbg tx-advanced" id="tx_advanced">
@@ -398,6 +412,24 @@
 							 unselectable="on"></div>
 					</li>
 				</ul>
+                <ul class="tx-bar tx-bar-left">
+                    <li class="tx-list">
+                        <div id="tx_tableresize" unselectable="on" class="tx-btn-lrbg tx-tableresize">
+                            <a href="javascript:;" class="tx-icon2" title="테이블 서식">테이블 서식</a>
+                        </div>
+                        <div id="tx_tableresize_menu" class="tx-tableresize-menu tx-menu tx-colorpallete"
+                             unselectable="on"></div>
+                    </li>
+                </ul>
+                <ul class="tx-bar tx-bar-left">
+                    <li class="tx-list">
+                        <div id="tx_tablevalign" unselectable="on" class="tx-btn-lrbg tx-tablevalign">
+                            <a href="javascript:;" class="tx-icon2" title="테이블 서식">테이블 서식</a>
+                        </div>
+                        <div id="tx_tablevalign_menu" class="tx-tablevalign-menu tx-menu"
+                             unselectable="on"></div>
+                    </li>
+                </ul>
 
 			</div></div>
 			<!-- 툴바 - 더보기 끝 -->
@@ -499,7 +531,19 @@
 		},
 		size: {
 			contentWidth: 700 /* 지정된 본문영역의 넓이가 있을 경우에 설정 */
-		}
+		},
+        toolbar: {
+            codehighlight: {
+                styleSheetUrl: ["http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css"],
+                highlight: function(code){
+                    return prettyPrintOne(code);
+                }
+            },
+            paste: {
+                defaultMode: Trex.Paste.MODE_HTML,
+                autolink: true
+            }
+        }
 	};
 
 	EditorJSLoader.ready(function(Editor) {

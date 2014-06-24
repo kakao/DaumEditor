@@ -194,7 +194,15 @@
                     this.isTextOnly = _FALSE;
                     this.isEnable = _FALSE;
             }
-
+        },
+        getMode: function() {
+            if (!this.isTextOnly && this.isEnable) {
+                return Trex.Paste.MODE_HTML;
+            } else if (this.isTextOnly && this.isEnable) {
+                return Trex.Paste.MODE_TEXT;
+            } else {
+                return Trex.Paste.MODE_OFF;
+            }
         },
         /**
          * paste가 실행되는 wysiwyg document 객체
