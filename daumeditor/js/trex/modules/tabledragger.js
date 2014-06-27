@@ -324,11 +324,11 @@ Trex.Table.Dragger = Trex.Class.create({
     _getPointByEvent: function(e){
         var el = $tx.element(e);
         var doc = el.ownerDocument;
-        var x = $tx.pointerX(e);
-        var y = $tx.pointerY(e);
+        var x = this.pageX(e);
+        var y = this.pageY(e);
         if(doc !== this._doc){
             var of = this._getOffset(this._panel.el);
-            return [x-of.left, y-of.top];
+            return [x-of.left+(this._win.pageXOffset || this._doc.documentElement.scrollLeft), y-of.top+(this._win.pageYOffset || this._doc.documentElement.scrollTop)];
         }
         return [x,y]
     },
@@ -405,7 +405,7 @@ Trex.Table.Dragger = Trex.Class.create({
         }
     },
     /**
-     * @param {{expandElements:HTMLElement,contractElements:HTMLElement}} tdArr
+     * @param {{expandElements:Array,contractElements:Array}} tdArr
      * @param {Number[]} point
      * @param {String} type
      * @return {Number[]}
@@ -492,6 +492,18 @@ Trex.Table.Dragger = Trex.Class.create({
         tdArr.contractElements.each(function(td){
             td.style.height = (self._getTdHeight(td) - d).toPx();
         });
+    },
+    pageX: function(event){
+        var eventDoc = $tx.element(event).ownerDocument;
+        var doc = eventDoc.documentElement;
+        var body = eventDoc.body;
+        return event.pageX || (event.clientX + ( doc && doc.scrollLeft || body && body.scrollLeft || 0 ) - ( doc && doc.clientLeft || body && body.clientLeft || 0 ));
+    },
+    pageY: function(event){
+        var eventDoc = $tx.element(event).ownerDocument;
+        var doc = eventDoc.documentElement;
+        var body = eventDoc.body;
+        return event.pageY || (event.clientY + ( doc && doc.scrollTop  || body && body.scrollTop  || 0 ) - ( doc && doc.clientTop  || body && body.clientTop  || 0 ));
     }
 });
 
