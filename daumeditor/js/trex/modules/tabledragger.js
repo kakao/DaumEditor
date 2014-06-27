@@ -72,6 +72,7 @@ Trex.Table.Dragger = Trex.Class.create({
             this._setMouseDownData(td, point);
             this._changeState('READY');
         }
+
     },
     mousemove: function(e){
         var point = this._getPointByEvent(e);
@@ -101,10 +102,7 @@ Trex.Table.Dragger = Trex.Class.create({
             var point = this._getPointByEvent(ev);
             this._resize(tdArr, point, this._mouseData.downType)
         }
-        if(this._state != 'DRAG'){
-            if(this._mouseData.moveTd)
-                Trex.TableUtil.collapseCaret(this._panel, this._mouseData.moveTd);
-        }
+
         if(this._state != 'NONE'){
             this._changeState('NONE');
             this._makeGuide(this.EDGE_TYPE.NONE, 'NONE', this._getPointByEvent(ev));
@@ -128,9 +126,17 @@ Trex.Table.Dragger = Trex.Class.create({
         });
         $tx.observe(this._rowGuide, "mousedown", function(ev) {
             self.mousedown(ev);
+            if(self._state != 'DRAG'){
+                if(self._mouseData.moveTd)
+                    Trex.TableUtil.collapseCaret(self._panel, self._mouseData.moveTd);
+            }
         });
         $tx.observe(this._colGuide, "mousedown", function(ev) {
             self.mousedown(ev);
+            if(self._state != 'DRAG'){
+                if(self._mouseData.moveTd)
+                    Trex.TableUtil.collapseCaret(self._panel, self._mouseData.moveTd);
+            }
         });
         $tx.observe(this._rowGuide, "mouseup", function(ev) {
             self.mouseup(ev);
