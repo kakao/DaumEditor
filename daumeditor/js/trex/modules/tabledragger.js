@@ -23,7 +23,7 @@ Trex.Table.Dragger = Trex.Class.create({
          */
         this._doc = this._panel.getDocument();
         /**
-         * @type {HTMLElement}
+         * @type {Window}
          * @private
          */
         this._win = this._panel.getWindow();
@@ -84,7 +84,7 @@ Trex.Table.Dragger = Trex.Class.create({
             this._makeGuide(type, this._state, point);
         }
         if(this._state == 'READY'){
-            if(this._distancePoint(this._mouseData.downPoint, point) > 10){
+            if(this._distancePoint(this._mouseData.downPoint, point) > 6){
                 this._changeState('DRAG');
             }
             this._makeGuide(this._mouseData.downType, this._state, point);
@@ -244,12 +244,12 @@ Trex.Table.Dragger = Trex.Class.create({
 
         $tx.show(g);
         if(g == this._colGuide){
-            style['left'] = point[0].toPx();
+            style['left'] = (point[0]-(this._win.pageXOffset || this._doc.documentElement.scrollLeft)).toPx();
             style['width'] = "2px";
             style['height'] = this._panel.el.clientHeight.toPx();
             style['background'] = "";
         }else {
-            style['top'] = point[1].toPx();
+            style['top'] = (point[1]-(this._win.pageYOffset || this._doc.documentElement.scrollTop)).toPx();
             style['width'] = this._panel.el.clientWidth.toPx();
             style['height'] = "2px";
             style['background'] = "";
@@ -444,7 +444,7 @@ Trex.Table.Dragger = Trex.Class.create({
 
     /**
      *
-     * @param {expandElements:Array, contractElements:Array}} tdArr
+     * @param {{expandElements:Array, contractElements:Array}} tdArr
      * @param {String} type
      * @param {Number[]} point
      * @private
