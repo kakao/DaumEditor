@@ -1,643 +1,496 @@
+Trex.Table.Dragger = Trex.Class.create({
+    EDGE_TYPE: {
+        TOP: "EDGE_TOP",
+        BOTTOM: "EDGE_BOTTOM",
+        LEFT: "EDGE_LEFT",
+        RIGHT: "EDGE_RIGHT",
+        NONE: "NONE"
+    },
+    initialize: function(editor, config){
+        /**
+         * @type {Trex.Editor.canvas}
+         * @private
+         */
+        this._canvas = editor.canvas;
+        /**
+         * @type {Trex.Canvas.WysiwygPanel}
+         * @private
+         */
+        this._panel = this._canvas.getPanel(Trex.Canvas.__WYSIWYG_MODE);
+        /**
+         * @type {HTMLDocument}
+         * @private
+         */
+        this._doc = this._panel.getDocument();
+        /**
+         * @type {HTMLElement}
+         * @private
+         */
+        this._win = this._panel.getWindow();
+        /**
+         * @type {*}
+         * @private
+         */
+        this._config = config;
+        /**
+         * @type {HTMLElement}
+         * @private
+         */
+        this._colGuide = $tom.collect(this._canvas.wysiwygEl, ".tx-table-col-resize-dragger");
+        /**
+         * @type {HTMLElement}
+         * @private
+         */
+        this._rowGuide = $tom.collect(this._canvas.wysiwygEl, ".tx-table-row-resize-dragger");
+        /**
+         * @type {Object}
+         * @private
+         */
+        this._mouseData = {
+            downPoint: [0,0],
+            moveTd: _NULL,
+            downType: this.EDGE_TYPE.NONE,
+            downTd: _NULL
+        };
+        this._observeEvent();
+        /**
+         * @desc NONE: 일반, READY: 드래그 전, DRAG: 드래그 중
+         * @type {string}
+         * @private
+         */
+        this._state = 'NONE';
+        this._MINWIDTH = 10;
+        this._MINHEIGHT = 20;
+    },
+    mousedown: function(e){
+        if(this._state =='NONE'){
+            var td = this._mouseData.moveTd;
+            if(!td) return;
+            var point = this._getPointByEvent(e);
+            if(this._getType(td,point)=='NONE') return;
+            $tx.stop(e);
+            this._setMouseDownData(td, point);
+            this._changeState('READY');
+        }
+    },
+    mousemove: function(e){
+        var point = this._getPointByEvent(e);
+        if(this._state =='NONE'){
+            if(this._canvas.getProcessor().table.isDuringSelection()) return;
+            var td = this._getTdByEvent(e);
+            this._mouseData.moveTd= td;
+            var type = this._getType(td, point);
+            this._makeGuide(type, this._state, point);
+        }
+        if(this._state == 'READY'){
+            if(this._distancePoint(this._mouseData.downPoint, point) > 10){
+                this._changeState('DRAG');
+            }
+            this._makeGuide(this._mouseData.downType, this._state, point);
+        }
+        if(this._state == 'DRAG'){
+            var tdArr = this._makeTDArr(this._mouseData.downTd, this._mouseData.downType, $tom.find(this._mouseData.downTd, 'table'));
+            var p = this._calMinMaxPoint(tdArr, point,this._mouseData.downType);
+            this._makeGuide(this._mouseData.downType, this._state, p);
+        }
+
+    },
+    mouseup: function(ev){
+        if(this._state == 'DRAG'){
+            var tdArr = this._makeTDArr(this._mouseData.downTd, this._mouseData.downType, $tom.find(this._mouseData.downTd, 'table'));
+            var point = this._getPointByEvent(ev);
+            this._resize(tdArr, point, this._mouseData.downType)
+        }
+        if(this._state != 'DRAG'){
+            if(this._mouseData.moveTd)
+                Trex.TableUtil.collapseCaret(this._panel, this._mouseData.moveTd);
+        }
+        if(this._state != 'NONE'){
+            this._changeState('NONE');
+            this._makeGuide(this.EDGE_TYPE.NONE, 'NONE', this._getPointByEvent(ev));
+            this._setMouseDownData(_NULL, [0,0]);
+        }
+
+    },
+    _observeEvent: function(){
+        var self = this;
+        $tx.observe(_DOC.body, "mouseup", function(ev) {
+            self.mouseup(ev);
+        });
+        this._canvas.observeJob(Trex.Ev.__CANVAS_PANEL_MOUSEUP, function(ev){
+            self.mouseup(ev);
+        });
+        this._canvas.observeJob(Trex.Ev.__CANVAS_PANEL_MOUSEMOVE, function(ev){
+            self.mousemove(ev);
+        });
+        this._canvas.observeJob(Trex.Ev.__CANVAS_PANEL_MOUSEDOWN, function(ev){
+            self.mousedown(ev);
+        });
+        $tx.observe(this._rowGuide, "mousedown", function(ev) {
+            self.mousedown(ev);
+        });
+        $tx.observe(this._colGuide, "mousedown", function(ev) {
+            self.mousedown(ev);
+        });
+        $tx.observe(this._rowGuide, "mouseup", function(ev) {
+            self.mouseup(ev);
+        });
+        $tx.observe(this._colGuide, "mouseup", function(ev) {
+            self.mouseup(ev);
+        });
+    },
+    /**
+     * @param mode
+     * @private
+     */
+    _changeState: function(mode){
+        if(!['NONE', 'READY', 'DRAG'].contains(mode)) return;
+        this._state = mode;
+    },
+    /**
+     *
+     * @private
+     * @param {String} type
+     * @param {HTMLElement} table
+     * @param {HTMLElement} td
+     */
+    _makeTDArr: function(td, type, table){
+        var indexer = new Trex.TableUtil.Indexer(table);
+        var curBoundery = indexer.getBoundary(td);
+        var expandElements = [],contractElements = [];
+        var mapping = {
+            EDGE_TOP: function(){expandElements = indexer.getTdArrHasBottom(curBoundery.top - 1)},
+            EDGE_BOTTOM: function(){expandElements = indexer.getTdArrHasTop(curBoundery.bottom)},
+            EDGE_LEFT: function(){
+                if (curBoundery.left > 0) {
+                    expandElements = indexer.getTdArrHasRight(curBoundery.left - 1);
+                    contractElements = indexer.getTdArrHasLeft(curBoundery.left);
+                }
+            },
+            EDGE_RIGHT: function(){
+                expandElements = indexer.getTdArrHasRight(curBoundery.right);
+                if (curBoundery.right < indexer.getColSize() - 1) {
+                    contractElements = indexer.getTdArrHasLeft(curBoundery.right + 1);
+                }
+            }
+
+        };
+        mapping[type]();
+        return {
+            expandElements: expandElements,
+            contractElements: contractElements
+        }
+    },
+    /**
+     * @param {String} type
+     * @returns {HTMLElement}
+     * @private
+     */
+    _getGuide : function(type) {
+        switch (type) {
+            case this.EDGE_TYPE.LEFT:
+            case this.EDGE_TYPE.RIGHT:
+                return this._colGuide;
+            case this.EDGE_TYPE.TOP:
+            case this.EDGE_TYPE.BOTTOM:
+                return this._rowGuide;
+                break;
+        }
+        return _NULL;
+    },
+    /**
+     * @param {HTMLElement} guide
+     * @param {Object} style
+     * @private
+     */
+    _setGuideStyle: function(guide, style) {
+        $tx.setStyle(guide, style);
+    },
+    /**
+     *
+     * @param {String} type
+     * @param {String} state
+     * @param {[]} point
+     * @private
+     */
+    _makeGuide: function(type, state, point){
+        $tx.hide(this._colGuide);
+        $tx.hide(this._rowGuide);
+        var g = this._getGuide(type);
+        if(!g) return;
+        var style = {
+            "border": "1px dotted #81aFFC",
+            "background":""
+        };
+        var mapping = {
+            READY: function(g){
+                style.border = "1px dotted #F5A9A9"
+                $tx.setOpacity(g, 1);
+            },
+            DRAG: function(g){
+                $tx.setOpacity(g, 1);
+            },
+            NONE: function(g){
+                style.border = "1px dotted #CCC"
+                $tx.setOpacity(g, 0.5);
+            }
+        };
+
+        $tx.show(g);
+        if(g == this._colGuide){
+            style['left'] = point[0].toPx();
+            style['width'] = "2px";
+            style['height'] = this._panel.el.clientHeight.toPx();
+            style['background'] = "";
+        }else {
+            style['top'] = point[1].toPx();
+            style['width'] = this._panel.el.clientWidth.toPx();
+            style['height'] = "2px";
+            style['background'] = "";
+        }
+        mapping[state](g);
+        this._setGuideStyle(g, style);
+    },
+    /**
+     * @param {HTMLElement} node
+     * @returns {Object} {top:Number, left:Number}
+     * @private
+     */
+    _getOffset: function(node){
+        var doc = node.ownerDocument;
+        if ("getBoundingClientRect" in doc.documentElement) {
+            var docElem = doc.documentElement;
+            var win = doc.defaultView || doc.parentWindow;
+            var box = node.getBoundingClientRect();
+            var ot = (win.pageYOffset || docElem.scrollTop) - (docElem.clientTop||0);
+            var or = (win.pageXOffset || docElem.scrollLeft) - (docElem.clientLeft||0);
+            return {
+                'top': box.top + ot,
+                'bottom': box.bottom + ot,
+                'left': box.left + or,
+                'right': box.right + or
+            }
+        }else {
+            return $tx.getCoordsTarget(node);
+        }
+    },
+    /**
+     *
+     * @param {[]} point
+     * @param {HTMLElement} node
+     * @returns {string}
+     * @private
+     */
+    _getType : function(node, point){
+        var edgeType = this.EDGE_TYPE.NONE;
+        if(!node) return edgeType;
+        var MAX_SELECTION = 5;
+        var rect = this._getOffset(node);
+        if ((point[0] - rect.left) < MAX_SELECTION && node.cellIndex != 0) {
+            edgeType = this.EDGE_TYPE.LEFT;
+        }
+        else if ((rect.right - MAX_SELECTION) < point[0]) {
+            edgeType = this.EDGE_TYPE.RIGHT;
+        }
+        else if ((point[1] - rect.top) < MAX_SELECTION && node.parentNode.rowIndex != 0) {
+            edgeType = this.EDGE_TYPE.TOP;
+        }
+        else if ((rect.bottom - MAX_SELECTION) < point[1]) {
+            edgeType = this.EDGE_TYPE.BOTTOM;
+        }
+        return edgeType;
+    },
+    /**
+     * @param {HTMLElement} node
+     * @param {[]} point
+     * @private
+     */
+    _setMouseDownData: function(node,point){
+        this._mouseData.downPoint = point;
+        this._mouseData.downTd = node;
+        this._mouseData.downType = this._getType(node, point);
+    },
+    /**
+     * @param {Event} e
+     * @returns {Number[]}
+     * @private
+     */
+    _getPointByEvent: function(e){
+        var el = $tx.element(e);
+        var doc = el.ownerDocument;
+        var x = $tx.pointerX(e);
+        var y = $tx.pointerY(e);
+        if(doc !== this._doc){
+            var of = this._getOffset(this._panel.el);
+            return [x-of.left, y-of.top];
+        }
+        return [x,y]
+    },
+    /**
+     * @param {Number[]} p1
+     * @param {Number[]} p2
+     * @return {Number[]}
+     * @private
+     */
+    _subtractPoint: function(p1, p2){
+        return [ p1[0] - p2[0], p1[1] - p2[1] ];
+    },
+    _addPoint: function(p1, p2){
+        return [ p1[0] + p2[0], p1[1] + p2[1] ];
+    },
+    /**
+     * @param {Number[]} p1
+     * @param {Number[]} p2
+     * @returns {number}
+     * @private
+     */
+    _distancePoint: function(p1, p2){
+        var point = this._subtractPoint(p1,p2);
+        return Math.sqrt(Math.pow(point[0],2) + Math.pow(point[1],2));
+    },
+    /**
+     * @param {Event} e
+     * @return {HTMLElement}
+     * @private
+     */
+    _getTdByEvent: function(e){
+        var td = $tom.find($tx.element(e), "td");
+        if(!td) return _NULL;
+		var isTxInfo = $tom.find(td, ".txc-info");
+        return td
+    },
+    /**
+     * @param {[]} array
+     * @param {String} type
+     * @return {Number}
+     * @private
+     */
+    _minimum: function (array, type) {
+        var t = '', min = 0;
+        var self = this;
+        this._switch(type, function(){
+            t = 'width';
+            min = self._MINWIDTH;
+        }, function(){
+            t = 'height';
+            min = self._MINHEIGHT;
+        });
+        var res = array.map(function(td){
+            return Trex.TableUtil.getCellOffset(td)[t];
+        });
+        return Math.min.apply(Math, res) - min;
+    },
+    /**
+     * @param {String} type
+     * @param {Function} wfn
+     * @param {Function} hfn
+     * @private
+     */
+    _switch: function(type, wfn, hfn){
+        switch (type) {
+            case this.EDGE_TYPE.LEFT:
+            case this.EDGE_TYPE.RIGHT:
+                wfn();
+                break;
+            case this.EDGE_TYPE.TOP:
+            case this.EDGE_TYPE.BOTTOM:
+                hfn();
+                break;
+        }
+    },
+    /**
+     * @param {{expandElements:HTMLElement,contractElements:HTMLElement}} tdArr
+     * @param {Number[]} point
+     * @param {String} type
+     * @return {Number[]}
+     * @private
+     */
+    _calMinMaxPoint: function (tdArr, point, type){
+        var min = this._minimum(tdArr.expandElements, type);
+        var max = this._minimum(tdArr.contractElements, type);
+        var subPoint = this._subtractPoint(point, this._mouseData.downPoint);
+        var x = 0;
+        var y = 0;
+        this._switch(type, function(){
+            x = Math.min(Math.max(subPoint[0] + min, 0), max+min) - min;
+        }, function(){
+            y = Math.min(Math.max(subPoint[1] + min, 0), max+min) - min;
+        });
+        return this._addPoint(this._mouseData.downPoint, [x,y]);
+    },
+    /**
+     * @param {HTMLElement} td
+     * @returns {Number}
+     * @private
+     */
+    _getTdWidth: function(td){
+        return Trex.TableUtil.getCellOffset(td).width;
+    },
+
+    /**
+     * @param {HTMLElement} td
+     * @returns {Number}
+     * @private
+     */
+    _getTdHeight: function(td) {
+        return Trex.TableUtil.getCellOffset(td).height;
+    },
+
+    /**
+     *
+     * @param {expandElements:Array, contractElements:Array}} tdArr
+     * @param {String} type
+     * @param {Number[]} point
+     * @private
+     */
+    _resize: function(tdArr, point, type){
+        var self = this;
+        var p = this._subtractPoint(this._calMinMaxPoint(tdArr, point, type), this._mouseData.downPoint);
+
+        this._switch(type, function(){
+            self._resizeWidth(tdArr, p[0]);
+        }, function(){
+            self._resizeHeight(tdArr, p[1]);
+        });
+        this._canvas.history.saveHistory();
+
+    },
+    /**
+     * @param {{expandElements:Array, contractElements:Array}} tdArr
+     * @param {Number} d
+     * @private
+     */
+    _resizeWidth: function(tdArr, d) {
+        var self = this;
+        tdArr.expandElements.each(function(td){
+            td.style.width = (self._getTdWidth(td) + d).toPx();
+        });
+        tdArr.contractElements.each(function(td){
+            td.style.width = (self._getTdWidth(td) - d).toPx();
+        });
+        if(tdArr.contractElements.length == 0){
+            var table = $tom.find(tdArr.expandElements[0],'table');
+            this._resizeTableWidth(table,d)
+        }
+    },
+    _resizeTableWidth: function(table, d) {
+        var tableWidth = (Math.min(table.offsetWidth + d, this._canvas.getSizeConfig().contentWidth)).toPx();
+        table.width = tableWidth;
+        table.style.width = tableWidth;
+    },
+    _resizeHeight: function(tdArr, d){
+        var self = this;
+        tdArr.expandElements.each(function(td){
+            td.style.height = (self._getTdHeight(td) + d).toPx();
+        });
+        tdArr.contractElements.each(function(td){
+            td.style.height = (self._getTdHeight(td) - d).toPx();
+        });
+    }
+});
+
 Trex.module("table resize dragger", function(editor, toolbar, sidebar, canvas) {
     canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function() {
-
-        var wysiwygPanel = canvas.getPanel(Trex.Canvas.__WYSIWYG_MODE);
-        var doc = wysiwygPanel.getDocument();
-        var win = wysiwygPanel.getWindow();
-        var body = doc.body;
-        var MIN_WIDTH = 20;
-        var w3cBoxModelWorks;
-
-        var colDragger = $tom.collect(canvas.wysiwygEl, ".tx-table-col-resize-dragger");
-        var rowDragger = $tom.collect(canvas.wysiwygEl, ".tx-table-row-resize-dragger");
-
-        var isDragging = _FALSE;
-
-        var currentTable, currentTD, currentLeftTD, currentRightTD;
-        var currentLeftTDWidth, currentRightTDWidth, currentTDHeight;
-        var currentTableWidth, currentPointX, currentPointY;
-
-        var currentNode, currentDragger;
-        var movingX, movingY;
-        var leftTdArray, rightTdArray, topTdArray;
-        var leftWidthArr, rightWidthArr, topHeightArr;
-
-        var posiX, posiY, elem;
-
-        var EDGE_TYPE = {
-            TOP: "EDGE_TOP",
-            BOTTOM: "EDGE_BOTTOM",
-            LEFT: "EDGE_LEFT",
-            RIGHT: "EDGE_RIGHT",
-            NONE: "NONE"
-        };
-
-        var edgeType = EDGE_TYPE.NONE;
-
-        var initDragger = function() {
-
-            isDragging = _FALSE;
-            currentNode = _NULL;
-            currentDragger = _NULL;
-
-            currentTable = currentTD = _NULL;
-            currentLeftTD = currentRightTD = _NULL;
-
-            rightTdArray = leftTdArray = topTdArray = _NULL;
-            leftWidthArr = rightWidthArr = topHeightArr = _NULL;
-
-            movingX = movingY = 0;
-            currentTableWidth = currentPointX = currentPointY = 0;
-            currentLeftTDWidth = currentRightTDWidth = currentTDHeight = 0;
-        };
-
-        var mouseDownHandler = function() {
-            currentTable = $tom.find(currentNode, "table");
-            if (currentTable == _NULL) {
-                return _NULL;
-            }
-            isDragging = _TRUE;
-            currentTableWidth = currentTable.offsetWidth;
-
-            if (edgeType != EDGE_TYPE.NONE) {
-                $tx.stop(elem);
-                showDragger();
-            }
-
-            switch (edgeType) {
-                case EDGE_TYPE.LEFT:
-                    makeTDArrForLeftEdge();
-                    startResizeCol();
-                    break;
-                case EDGE_TYPE.RIGHT:
-                    makeTDArrForRightEdge();
-                    startResizeCol();
-                    break;
-                case EDGE_TYPE.TOP:
-                    makeTDArrForTopEdge();
-                    startResizeRow();
-                    break;
-                case EDGE_TYPE.BOTTOM:
-                    makeTDArrForBottomEdge();
-                    startResizeRow();
-                    break;
-            }
-        };
-
-        var makeTDArrForLeftEdge = function() {
-            var indexer = new Trex.TableUtil.Indexer(currentTable);
-            var curBoundery = indexer.getBoundary(currentNode);
-
-            if (curBoundery.left > 0) {
-                leftTdArray = indexer.getTdArrHasRight(curBoundery.left - 1);
-                rightTdArray = indexer.getTdArrHasLeft(curBoundery.left);
-            }
-        };
-
-        var makeTDArrForRightEdge = function() {
-            var indexer = new Trex.TableUtil.Indexer(currentTable);
-            var curBoundery = indexer.getBoundary(currentNode);
-            var colSize = indexer.getColSize();
-
-            leftTdArray = indexer.getTdArrHasRight(curBoundery.right);
-
-            if (curBoundery.right < colSize - 1) {
-                rightTdArray = indexer.getTdArrHasLeft(curBoundery.right + 1);
-            }
-        };
-
-        var makeTDArrForTopEdge = function() {
-            var indexer = new Trex.TableUtil.Indexer(currentTable);
-            var curBoundery = indexer.getBoundary(currentNode);
-
-            topTdArray = indexer.getTdArrHasBottom(curBoundery.top - 1);
-        };
-
-        var makeTDArrForBottomEdge = function() {
-            var indexer = new Trex.TableUtil.Indexer(currentTable);
-            var curBoundery = indexer.getBoundary(currentNode);
-
-            topTdArray = indexer.getTdArrHasTop(curBoundery.bottom);
-        };
-
-        var mouseupHandler = function() {
-            switch (edgeType) {
-                case EDGE_TYPE.LEFT:
-                case EDGE_TYPE.RIGHT:
-                    stopResizeCol();
-                    break;
-                case EDGE_TYPE.TOP:
-                case EDGE_TYPE.BOTTOM:
-                    stopResizeRow();
-                    break;
-            }
-        };
-
-        var mousemoveHandler = function() {
-            if (isDragging) {
-                currentDragger = getDragger();
-                moveDraggingAction();
-            }
-            else {
-                moveUnDraggingAction();
-            }
-        };
-
-        var moveDraggingAction = function() {
-            switch (edgeType) {
-                case EDGE_TYPE.LEFT:
-                case EDGE_TYPE.RIGHT:
-                    moveCalcResizeCol();
-                    break;
-                case EDGE_TYPE.TOP:
-                case EDGE_TYPE.BOTTOM:
-                    moveCalcResizeRow();
-                    break;
-            }
-        };
-
-        var moveUnDraggingAction = function() {
-			var td = $tom.find($tx.element(elem), "td");
-			var isTxInfo = $tom.find(td, ".txc-info");
-			if (td && !isTxInfo) {
-                currentNode = td;
-                edgeType = getEdgeType(currentNode);
-                showDragger();
-            }
-            else {
-                edgeType = EDGE_TYPE.NONE;
-                showDragger();
-            }
-        };
-
-        var getDragger = function() {
-            var dragger = _NULL;
-            switch (edgeType) {
-                case EDGE_TYPE.LEFT:
-                case EDGE_TYPE.RIGHT:
-                    dragger = colDragger;
-                    break;
-                case EDGE_TYPE.TOP:
-                case EDGE_TYPE.BOTTOM:
-                    dragger = rowDragger;
-                    break;
-            }
-            return dragger;
-        };
-
-        var startResizeCol = function() {
-            isDragging = _TRUE;
-            leftWidthArr = [];
-            rightWidthArr = [];
-            var i = 0;
-
-            if (leftTdArray) {
-                for (i = 0; i < leftTdArray.length; i++) {
-                    leftWidthArr.push(leftTdArray[i].offsetWidth);
-                }
-                currentLeftTDWidth = minimumOfArray(leftWidthArr);
-                for (i = 0; i < leftTdArray.length; i++) {
-                    if (currentLeftTDWidth == leftWidthArr[i]) {
-                        currentLeftTD = leftTdArray[i];
-                        break;
-                    }
-                }
-            }
-            if (rightTdArray) {
-                for (i = 0; i < rightTdArray.length; i++) {
-                    rightWidthArr.push(rightTdArray[i].offsetWidth);
-                }
-                currentRightTDWidth = minimumOfArray(rightWidthArr);
-                for (i = 0; i < rightTdArray.length; i++) {
-                    if (currentRightTDWidth == rightWidthArr[i]) {
-                        currentRightTD = rightTdArray[i];
-                        break;
-                    }
-                }
-            }
-            currentPointX = $tx.getCoordsTarget(currentDragger).left;
-        };
-
-        var moveCalcResizeCol = function() {
-            if (isDragging) {
-                var distX = parseInt(posiX - $tom.getScrollLeft(doc) - currentPointX);
-                var left;
-
-                if (currentLeftTD && currentRightTD) {
-                    left = calcMiddleCol(currentLeftTD, distX);
-                }
-
-                if (currentLeftTD && currentRightTD == _NULL) {
-                    left = calcLeft(currentLeftTD, distX)
-                }
-
-                if (currentLeftTD == _NULL && currentRightTD) {
-                    left = calcRight(currentRightTD, distX);
-                }
-                if (left) {
-                    $tx.setStyle(currentDragger, {
-                        "left": left.toPx()
-                    });
-                }
-            }
-        };
-
-        var calcMiddleCol = function(currentLeftTD, distX) {
-            var bothWidth, movingLeftWidth, movingRightWidth, tdRect, left;
-            bothWidth = currentLeftTDWidth + currentRightTDWidth;
-            movingLeftWidth = currentLeftTDWidth + distX;
-            movingRightWidth = currentRightTDWidth - distX;
-
-            tdRect = $tx.getCoordsTarget(currentLeftTD);
-            if (movingLeftWidth >= MIN_WIDTH && movingRightWidth >= MIN_WIDTH) {
-                left = posiX - $tom.getScrollLeft(doc);
-            }
-            else if (movingLeftWidth <= MIN_WIDTH) {
-                movingLeftWidth = MIN_WIDTH;
-                movingRightWidth = bothWidth - movingLeftWidth;
-                left = tdRect.left - $tom.getScrollLeft(doc) + movingLeftWidth;
-            }
-            else if (movingRightWidth <= MIN_WIDTH) {
-                movingRightWidth = MIN_WIDTH;
-                movingLeftWidth = bothWidth - movingRightWidth;
-                left = tdRect.left - $tom.getScrollLeft(doc) + movingLeftWidth;
-            }
-
-            movingX = movingLeftWidth - currentLeftTDWidth;
-            return left;
-        };
-
-        var calcLeft = function(currentLeftTD, distX) {
-
-            var movingLeftWidth, tdRect, left;
-            movingLeftWidth = currentLeftTDWidth + distX;
-            tdRect = $tx.getCoordsTarget(currentLeftTD);
-            if (movingLeftWidth < MIN_WIDTH) {
-                movingLeftWidth = MIN_WIDTH;
-            }
-
-            left = tdRect.left - $tom.getScrollLeft(doc) + movingLeftWidth;
-            movingX = movingLeftWidth - currentLeftTDWidth;
-            return left;
-        };
-
-        var calcRight = function(currentRightTD, distX) {
-
-            var movingRightWidth, tdRect, left;
-            movingRightWidth = currentRightTDWidth - distX;
-            tdRect = $tx.getCoordsTarget(currentRightTD);
-            if (movingRightWidth < MIN_WIDTH) {
-                movingRightWidth = MIN_WIDTH;
-            }
-
-            left = tdRect.left + movingRightWidth;
-            movingX = currentRightTDWidth - movingRightWidth;
-            return left;
-        };
-
-        var stopResizeCol = function() {
-            resizeWidth();
-            initDragger();
-			moveUnDraggingAction();
-            saveHistory();
-        };
-
-        var resizeWidth = function() {
-            var i;
-            if (leftTdArray) {
-                for (i = 0; i < leftTdArray.length; i++) {
-                    leftTdArray[i].style.width = (leftWidthArr[i] + movingX).toPx();
-                }
-            }
-            if (rightTdArray) {
-                for (i = 0; i < rightTdArray.length; i++) {
-                    rightTdArray[i].style.width = (rightWidthArr[i] - movingX ).toPx();
-                }
-            }
-            if (leftTdArray && rightTdArray == _NULL) {
-                resizeTableWidth();
-            }
-        };
-
-        var startResizeRow = function() {
-            isDragging = _TRUE;
-            currentTDHeight = currentNode.offsetHeight;
-            topHeightArr = [];
-
-            if (topTdArray) {
-                var i;
-                for (i = 0; i < topTdArray.length; i++) {
-                    topHeightArr.push(parseInt(topTdArray[i].offsetHeight));
-                }
-                currentTDHeight = minimumOfArray(topHeightArr);
-                for (i = 0; i < topTdArray.length; i++) {
-                    if (currentTDHeight == topHeightArr[i]) {
-                        currentTD = topTdArray[i];
-                    }
-                }
-            }
-            currentPointY = $tx.getCoordsTarget(currentDragger).top;
-        };
-
-        var moveCalcResizeRow = function() {
-            if (isDragging) {
-                var distY = posiY - $tom.getScrollTop(doc) - currentPointY;
-                var movingHeight = currentTDHeight + parseInt(distY);
-                var tdRect = $tx.getCoordsTarget(currentTD);
-                var top = _NULL;
-                if (movingHeight < 0) {
-                    movingHeight = 0;
-                    top = tdRect.top + movingHeight - $tom.getScrollTop(doc);
-                }
-                else {
-                    top = posiY - $tom.getScrollTop(doc);
-                }
-
-                if (top) {
-                    $tx.setStyle(currentDragger, {
-                        "top": top.toPx()
-                    });
-                }
-                movingY = movingHeight - currentTDHeight;
-            }
-        };
-
-        var stopResizeRow = function() {
-            resizeHeight();
-            initDragger();
-			moveUnDraggingAction();
-            saveHistory();
-        };
-
-        var resizeHeight = function() {
-            if (topTdArray) {
-                for (var i = 0; i < topTdArray.length; i++) {
-                    var height = topHeightArr[i] + movingY;
-                    if (height < 0) {
-                        height = 20;
-                    }
-                    topTdArray[i].style.height = height.toPx();
-                }
-            }
-        };
-        
-        (function checkW3cBoxModel() {
-			var div = doc.createElement( "div" );
-			body.appendChild(div);
-			div.style.width = div.style.paddingLeft = "1px";
-			w3cBoxModelWorks = div.offsetWidth === 2;
-			body.removeChild(div);
-        })();
-
-        var getEdgeType = function(node) {
-            var rect, edgeType = EDGE_TYPE.NONE;
-			//HISTORY. 아래 코드는 jQuery 1.6.4 에서 훔쳐옴..
-			//버그 재현 코드
-			/*
-<TABLE><TBODY><TR><TD style="BORDER-TOP: #ff8b16 50px solid">
-여기에 테이블 삽입.
-</TD></TR></TBODY></TABLE>
-			*/
-			if ("getBoundingClientRect" in document.documentElement) {
-				try {
-					var doc = node.ownerDocument,
-						docElem = doc.documentElement,
-						body = doc.body;
-					var box = node.getBoundingClientRect(),
-						win = doc.defaultView || doc.parentWindow,
-						clientTop  = docElem.clientTop  || body.clientTop  || 0,
-						clientLeft = docElem.clientLeft || body.clientLeft || 0,
-						scrollTop  = win.pageYOffset || w3cBoxModelWorks && docElem.scrollTop  || body.scrollTop,
-						scrollLeft = win.pageXOffset || w3cBoxModelWorks && docElem.scrollLeft || body.scrollLeft,
-						top  = box.top  + scrollTop  - clientTop,
-						left = box.left + scrollLeft - clientLeft;
-					rect = {
-						top: top,
-						left: left,
-						bottom: top + node.offsetHeight,
-						right: left + node.offsetWidth
-					};
-				} catch (e) {
-					rect = _NULL;
-				}
-			}
-			//기존 코드는 fallback.
-			if (!rect) {
-				rect = $tx.getCoordsTarget(node);
-			}
-            if ((posiX - rect.left) < 5 && node.cellIndex != 0) {
-                edgeType = EDGE_TYPE.LEFT;
-            }
-            else if ((rect.right - 5) < posiX) {
-                edgeType = EDGE_TYPE.RIGHT;
-            }
-            else if ((posiY - rect.top) < 5 && node.parentNode.rowIndex != 0) {
-                edgeType = EDGE_TYPE.TOP;
-            }
-            else if ((rect.bottom - 5) < posiY) {
-                edgeType = EDGE_TYPE.BOTTOM;
-            }
-            return edgeType;
-        };
-
-        var showDragger = function() {
-            canvas.query(function(processor) {
-                if (processor.table) {
-                    if (processor.table.isDuringSelection() || canvas.config.readonly) {
-                        edgeType = EDGE_TYPE.NONE;
-                    }
-                    switch (edgeType) {
-                        case EDGE_TYPE.LEFT:
-                        case EDGE_TYPE.RIGHT:
-                            $tx.hide(rowDragger);
-                            $tx.show(colDragger);
-                            makeColDragger(colDragger);
-                            currentDragger = colDragger;
-                            break;
-                        case EDGE_TYPE.TOP:
-                        case EDGE_TYPE.BOTTOM:
-                            $tx.hide(colDragger);
-                            $tx.show(rowDragger);
-                            makeRowDragger(rowDragger);
-                            currentDragger = rowDragger;
-                            break;
-                        case EDGE_TYPE.NONE:
-                            $tx.hide(colDragger);
-                            $tx.hide(rowDragger);
-                            break;
-                    }
-                }
-            });
-        };
-
-        var makeColDragger = function(dragger) {
-            if (dragger == _NULL) return;
-            var left;
-
-            if (isDragging) {
-                left = $tx.getCoordsTarget(dragger).left;
-                $tx.setStyle(dragger, {
-                    "width": "2px",
-                    "height": wysiwygPanel.el.clientHeight.toPx(),
-                    "border": "1px dotted #81aFFC",
-                    "background":"",
-                    "left": left.toPx()
-                });
-                $tx.setOpacity(colDragger, 1);
-
-            }
-            else {
-                left = posiX - $tom.getScrollLeft(doc);
-                $tx.setStyle(dragger, {
-                    "width": "2px",
-                    "height": wysiwygPanel.el.clientHeight.toPx(),
-                    "border": "",
-                    "background":"#fff",
-                    "left": left.toPx()
-                });
-                $tx.setOpacity(colDragger, 0);
-            }
-        };
-
-        var makeRowDragger = function(dragger) {
-            if (dragger == _NULL) return;
-            var top = _NULL;
-
-            if (isDragging) {
-                top = $tx.getCoordsTarget(dragger).top;
-                $tx.setStyle(dragger, {
-                    "height": "2px",
-                    "border": "1px dotted #81aFFC",
-                    "background":"",
-                    "top": top.toPx()
-                });
-                $tx.setOpacity(rowDragger, 1);
-            }
-            else {
-                top = posiY - $tom.getScrollTop(doc);
-                $tx.setStyle(dragger, {
-                    "height": "2px",
-                    "border": "",
-                    "background":"#fff",
-                    "top": top.toPx()
-                });
-                $tx.setOpacity(rowDragger, 0);
-            }
-        };
-
-        /**
-         * when I pasted MS office table, delete width or width style.
-         */
-        var resizeTableWidth = function() {
-            var movingWidth = 0;
-            if (currentTableWidth) {
-                movingWidth = parseInt(currentTableWidth) + movingX;
-                currentTable.width = movingWidth.toPx();
-                currentTable.style.width = movingWidth.toPx();
-            }
-        };
-
-        /**
-         * dragger event binding
-         */
-        var eventBinding = function() {
-            $tx.observe(_DOC.body, "mouseup", function(ev) {
-                initElement(ev);
-                mouseupHandler();
-            });
-
-            if ($tx.msie) {
-                $tx.observe(body, "mousemove", function(ev) {
-                    initElement(ev);
-                    mousemoveHandler();
-                });
-
-                $tx.observe(body, "mouseup", function(ev) {
-                    initElement(ev);
-                    mouseupHandler();
-                });
-            }
-            else {
-                $tx.observe(win, "mousemove", function(ev) {
-                    initElement(ev);
-                    mousemoveHandler();
-                });
-
-                $tx.observe(win, "mouseup", function(ev) {
-                    initElement(ev);
-                    mouseupHandler();
-                });
-            }
-
-            if ($tx.safari) {
-                $tx.observe(_DOC.body, "mousemove", function(ev) {
-                    if (isDragging) {
-                        initElementForSafari(ev);
-                        mousemoveHandler();
-                    }
-                });
-            }
-
-            $tx.observe(colDragger, "mousedown", function(ev) {
-                initElement(ev);
-                mouseDownHandler();
-            });
-
-            $tx.observe(rowDragger, "mousedown", function(ev) {
-                initElement(ev);
-                mouseDownHandler();
-            });
-        };
-
-        var initElement = function(ev) {
-            elem = ev;
-            posiX = posX(elem);
-            posiY = posY(elem);
-        };
-
-        var initElementForSafari = function(ev) {
-            elem = ev;
-            posiX = posX(elem) - $tx.getCoords(canvas.wysiwygEl).left + doc.body.scrollLeft;
-            posiY = posY(elem) - $tx.getCoords(canvas.wysiwygEl).top + doc.body.scrollTop;
-        };
-
-        // tabledragger 에서 추가된 utility, check!!
-        var posX = function(e) {
-            var posx = 0;
-            e = e || win.event;
-            if (e.pageX) {
-                posx = e.pageX;
-            }
-            else
-            if (e.clientX) {
-                posx = e.clientX + doc.body.scrollLeft + doc.documentElement.scrollLeft;
-            }
-            return posx;
-        };
-
-        var posY = function(e) {
-            var posy = 0;
-            e = e || win.event;
-            if (e.pageY) {
-                posy = e.pageY;
-            }
-            else
-            if (e.clientY) {
-                posy = e.clientY + doc.body.scrollTop + doc.documentElement.scrollTop;
-            }
-            return posy;
-        };
-
-        function minimumOfArray(array) {
-            return Math.min.apply(Math, array);
-        }
-
-        function saveHistory() {
-            console.log("saveHistory");
-            canvas.history.saveHistory();
-        }
-
-        initDragger();
-        eventBinding();
+        new Trex.Table.Dragger(editor);
     });
 });

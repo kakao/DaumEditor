@@ -61,6 +61,9 @@ var $tx = {};
     var dateNow = Date.now || function() { return new Date().getTime(); };
     Object.extend($tx, {
         throttle: function(func, wait, options) {
+            if($tx.msie_nonstd){
+                return func;
+            }
             var context, args, result;
             var timeout = null;
             var previous = 0;
