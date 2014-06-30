@@ -719,18 +719,20 @@ $tx.extend($tx, /** @lends $tx */{
 		 * @function
 		 */
 		pointerX: function(event) {
-			return event.pageX ||
-			(event.clientX +
-			(_DOC.documentElement.scrollLeft || _DOC.body.scrollLeft));
+            var eventDoc = $tx.element(event).ownerDocument;
+            var doc = eventDoc.documentElement;
+            var body = eventDoc.body;
+            return event.pageX || (event.clientX + ( doc && doc.scrollLeft || body && body.scrollLeft || 0 ) - ( doc && doc.clientLeft || body && body.clientLeft || 0 ));
 		},
 		/**
 		 * 페이지에서 마우스 포인터의 y측 좌표값 반환
 		 * @function
 		 */
 		pointerY: function(event) {
-			return event.pageY ||
-			(event.clientY +
-			(_DOC.documentElement.scrollTop || _DOC.body.scrollTop));
+            var eventDoc = $tx.element(event).ownerDocument;
+            var doc = eventDoc.documentElement;
+            var body = eventDoc.body;
+            return event.pageY || (event.clientY + ( doc && doc.scrollTop  || body && body.scrollTop  || 0 ) - ( doc && doc.clientTop  || body && body.clientTop  || 0 ));
 		},
 		/**
 		 * 이벤트의 디폴트 행위를 취소하고 위임을 연기하기 위해 이 함수를 사용
