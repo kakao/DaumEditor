@@ -126,3 +126,326 @@ test('HTML anchor 패턴 파싱 체크', function(){
         equal(autolinkConverter.parseAnchor(item[0]), item[1], desc);
     });
 });
+
+
+var paster,
+    pasteProcessor;
+
+function getTextContent(node) {
+    return node.textContent || node.innerText;
+}
+module('paste basic', {
+    'setup': function() {
+        paster = Editor.getPaster();
+        pasteProcessor = Editor.getPasteProcessor();
+        assi.setContent('');
+
+    },
+    'teardown': function() {
+        paster = null;
+        pasteProcessor = null;
+    }
+});
+
+test('tree 나누기', function(){
+    assi.setContent('<p><span>12<strong>34</strong>56</span></p>');
+
+    var targetText = assi.$$("strong")[0].childNodes[0];
+    assi.selectForNodes(targetText, 1, targetText, 1);
+
+    var result = pasteProcessor.divideTree(assi.$$("p")[0]);
+    assi.delayedAssertion(function() {
+        pasteProcessor.removeDummyText();
+
+        ok(result.previousNode, '이전 노드객체가 존재해야 한다');
+        equal(result.previousNode.nodeType, 1, '이전 노드객체가 존재해야 한다');
+        equal(result.previousNode.tagName, 'P', 'p태그 컨테이너');
+        equal(getTextContent(result.previousNode), '123', '이전 노드객체가 존재해야 한다');
+        equal(assi.$$('strong', result.previousNode)[0].innerHTML, '3', '노드 구조를 유지해야 한다');
+        equal(assi.$$('strong', result.previousNode)[0].parentNode.tagName, 'SPAN', '노드 구조를 유지해야 한다');
+        equal(assi.$$('strong', result.previousNode)[0].parentNode.parentNode.tagName, 'P', '노드 구조를 유지해야 한다');
+
+        ok(result.nextNode, '다음 노드객체가 존재해야 한다');
+        equal(result.nextNode.nodeType, 1, '다음 노드객체가 존재해야 한다');
+        equal(result.nextNode.tagName, 'P', 'p태그 컨테이너');
+        equal(getTextContent(result.nextNode), '456', '이전 노드객체가 존재해야 한다');
+        equal(assi.$$('strong', result.nextNode)[0].innerHTML, '4', '노드 구조를 유지해야 한다');
+        equal(assi.$$('strong', result.nextNode)[0].parentNode.tagName, 'SPAN', '노드 구조를 유지해야 한다');
+        equal(assi.$$('strong', result.nextNode)[0].parentNode.parentNode.tagName, 'P', '노드 구조를 유지해야 한다');
+    });
+});
+
+test('붙여넣기 기본 테스트', function(){
+    assi.setContent('<p><span>12<strong>34</strong>56</span></p>');
+
+    var targetText = assi.$$("strong")[0].childNodes[0];
+    assi.selectForNodes(targetText, 1, targetText, 1);
+
+    var range = Editor.canvas.getProcessor().createGoogRange();
+    ok(range, '분리 후 range객체를 확인 가능해야 한다');
+    var focusNode = range.getFocusNode();
+    ok(focusNode, '분리 후 range.focusNode 객체를 확인 가능해야 한다');
+
+    paster.pasteHTML('<p>test1</p>');
+    paster.pasteHTML('<p>test2</p>');
+    paster.pasteHTML('<p>test3</p>');
+
+    assi.delayedAssertion(function() {
+        equal(assi.$$('p').length, 5, '3번의 p태그를 추가했으므로 나뉘어진 태그와 함께 총 5개가 존재해야 함.');
+        equal(assi.$$('p')[1].innerHTML, 'test1', '2번째 p태그의 내용은 test1이다');
+        equal(assi.$$('p')[2].innerHTML, 'test2', '3번째 p태그의 내용은 test2이다');
+        equal(assi.$$('p')[3].innerHTML, 'test3', '4번째 p태그의 내용은 test3이다');
+    });
+});
+
+
+test('붙여넣기 후 range는 붙여넣은 데이터의 가장 마지막에 위치해야 한다', function(){
+    assi.setContent('<p>111222</p>');
+
+    var targetParagraphText = assi.$$("p")[0].childNodes[0];
+    assi.selectForNodes(targetParagraphText, 3, targetParagraphText, 3);
+
+    paster.pasteHTML('<p>aaa</p><p>bbb</p>');
+    paster.pasteHTML('<p>ccc</p>');
+
+    assi.delayedAssertion(function(){
+        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), '<p>111</p><p>aaa</p><p>bbb</p><p>ccc</p><p>222</p>', '결과 html 확인');
+
+        var range = assi.createGoogRange();
+        equal(range.isCollapsed(), true, 'range isCollapsed 여부');
+    });
+
+});
+
+test('p태그 중간에 p태그 여럿을 붙여넣기', function(){
+    assi.setContent('<p>111</p><p>222</p><p>333</p>');
+
+    var targetParagraphText = assi.$$("p")[1].childNodes[0];
+    assi.selectForNodes(targetParagraphText, 1, targetParagraphText, 1);
+
+    paster.pasteHTML('<p>aaa</p><p>bbb</p>');
+
+    assi.delayedAssertion(function() {
+        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), '<p>111</p><p>2</p><p>aaa</p><p>bbb</p><p>22</p><p>333</p>', '결과 html 확인');
+
+        var range = assi.createGoogRange();
+        equal(range.isCollapsed(), true, 'range isCollapsed 여부');
+    });
+});
+
+test('p태그 중간에 text 붙여넣기', function(){
+    assi.setContent('<p>111</p><p>222</p><p>333</p>');
+
+    var targetParagraphText = assi.$$("p")[1].childNodes[0];
+    assi.selectForNodes(targetParagraphText, 1, targetParagraphText, 1);
+
+    paster.pasteHTML('aaa');
+
+    assi.delayedAssertion(function() {
+
+        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), '<p>111</p><p>2aaa22</p><p>333</p>', '결과 html 확인');
+
+        var range = assi.createGoogRange();
+        equal(range.isCollapsed(), true, 'range isCollapsed 여부');
+    });
+});
+
+test('body 하위 text에 중간에 텍스트 붙여넣기', function(){
+    assi.setContent('111<br>222<br>333<span>marker</span>');
+
+    var marker = assi.$$("span")[0];
+    var targetText = marker.previousSibling;
+    assi.selectForNodes(targetText, 1, targetText, 1);
+
+    paster.pasteHTML('aaa');
+
+    assi.delayedAssertion(function() {
+        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), '111<br>222<br>3aaa33<span>marker</span>', '결과 html 확인');
+
+        var range = assi.createGoogRange();
+        equal(range.isCollapsed(), true, 'range isCollapsed 여부');
+    });
+
+});
+
+
+test('body 하위 text에 중간에 p태그 붙여넣기', function(){
+    assi.setContent('111<br>222<br>333<span>marker</span>');
+
+    var marker = assi.$$("span")[0];
+    var targetText = marker.previousSibling;
+    assi.selectForNodes(targetText, 1, targetText, 1);
+
+    paster.pasteHTML('<p>aaa</p>');
+
+    assi.delayedAssertion(function() {
+        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), '111<br>222<br>3<p>aaa</p>33<span>marker</span>', '결과 html 확인');
+
+        var range = assi.createGoogRange();
+        equal(range.isCollapsed(), true, 'range isCollapsed 여부');
+    });
+
+});
+
+test('table 내부에 p태그를 나누기 - text', function() {
+    assi.setContent('<p>abc</p><table><tbody><tr><td><p>1<strong>23</strong></p></td><td><p>456</p></td></tr></tbody></table><p>def</p>');
+    var targetText = assi.$$("strong")[0].childNodes[0];
+    assi.selectForNodes(targetText, 1, targetText, 1);
+
+    paster.pasteHTML('!!');
+
+    assi.delayedAssertion(function() {
+        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), '<p>abc</p><table><tbody><tr><td><p>1<strong>2!!3</strong></p></td><td><p>456</p></td></tr></tbody></table><p>def</p>', '결과 html 확인');
+    });
+});
+
+test('table 내부에 p태그를 나누기 - text&html', function() {
+    assi.setContent('<p>abc</p><table><tbody><tr><td><p>1<strong>23</strong></p></td><td><p>456</p></td></tr></tbody></table><p>def</p>');
+    var targetText = assi.$$("strong")[0].childNodes[0];
+    assi.selectForNodes(targetText, 1, targetText, 1);
+
+    paster.pasteHTML('<p>!!</p>');
+
+    assi.delayedAssertion(function() {
+        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), '<p>abc</p><table><tbody><tr><td><p>1<strong>2</strong></p><p>!!</p><p><strong>3</strong></p></td><td><p>456</p></td></tr></tbody></table><p>def</p>', '결과 html 확인');
+    });
+});
+
+test('table 내부에 p태그를 나누기 - 다중 text&html', function() {
+    assi.setContent('<p>abc</p><table><tbody><tr><td><p>1<strong>23</strong></p></td><td><p>456</p></td></tr></tbody></table><p>def</p>');
+    var targetText = assi.$$("strong")[0].childNodes[0];
+    assi.selectForNodes(targetText, 1, targetText, 1);
+
+    paster.pasteHTML('<p>!!</p>@@<p>##</p><div>$$</div>');
+
+    assi.delayedAssertion(function() {
+        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), '<p>abc</p><table><tbody><tr><td><p>1<strong>2</strong></p><p>!!</p><p>@@</p><p>##</p><div>$$</div><p><strong>3</strong></p></td><td><p>456</p></td></tr></tbody></table><p>def</p>', '결과 html 확인');
+    });
+});
+
+test('table 내부에 p태그가 없는 상태를 나누기', function() {
+    assi.setContent('<p>abc</p><table><tbody><tr><td>1<strong>23</strong></td><td><p>456</p></td></tr></tbody></table><p>def</p>');
+    var targetText = assi.$$("strong")[0].childNodes[0];
+    assi.selectForNodes(targetText, 1, targetText, 1);
+
+    paster.pasteHTML('<p>!!</p>');
+
+    assi.delayedAssertion(function() {
+        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), '<p>abc</p><table><tbody><tr><td>1<strong>2</strong><p>!!</p><strong>3</strong></td><td><p>456</p></td></tr></tbody></table><p>def</p>', '결과 html 확인');
+
+        // TODO: 나뉘어지는 태그의 상위 컨테이너가 P태그가 아니라면 P태그로 감싸주도록 하자
+//        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), '<p>abc</p><table><tbody><tr><td><p>1<strong>2</strong></p></p><p>!!</p><p><strong>3</strong></p></td><td><p>456</p></td></tr></tbody></table><p>def</p>', '결과 html 확인');
+    });
+});
+
+test('li 내부에 p태그를 나누기', function() {
+    assi.setContent('<p>abc</p><ul><li><p>1<strong>23</strong></p><p>456</p></li></ul><p>def</p>');
+    var targetText = assi.$$("strong")[0].childNodes[0];
+    assi.selectForNodes(targetText, 1, targetText, 1);
+
+    paster.pasteHTML('<p>!!</p>');
+
+    assi.delayedAssertion(function() {
+        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), '<p>abc</p><ul><li><p>1<strong>2</strong></p><p>!!</p><p><strong>3</strong></p><p>456</p></li></ul><p>def</p>', '결과 html 확인');
+    });
+});
+
+test('li 내부에 p태그가 없는 상태를 나누기', function() {
+    assi.setContent('<p>abc</p><ul><li>1<strong>23</strong><p>456</p></li></ul><p>def</p>');
+    var targetText = assi.$$("strong")[0].childNodes[0];
+    assi.selectForNodes(targetText, 1, targetText, 1);
+
+    paster.pasteHTML('<p>!!</p>');
+
+    assi.delayedAssertion(function() {
+        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), '<p>abc</p><ul><li>1<strong>2</strong><p>!!</p><strong>3</strong><p>456</p></li></ul><p>def</p>', '결과 html 확인');
+    });
+});
+
+
+test('li 내부에 p태그를 나누기 - 다중', function() {
+    assi.setContent('<p>abc</p><ul><li><p>1<strong>23</strong></p><p>456</p></li></ul><p>def</p>');
+    var targetText = assi.$$("strong")[0].childNodes[0];
+    assi.selectForNodes(targetText, 1, targetText, 1);
+
+    paster.pasteHTML('<p>!!</p>@@<p>##</p>');
+
+    assi.delayedAssertion(function() {
+        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), '<p>abc</p><ul><li><p>1<strong>2</strong></p><p>!!</p><p>@@</p><p>##</p><p><strong>3</strong></p><p>456</p></li></ul><p>def</p>', '결과 html 확인');
+    });
+});
+
+test('li 내부에 p태그가 없는 상태를 나누기 - 다중 #1', function() {
+    assi.setContent('<p>abc</p><ul><li>1<strong>23</strong><p>456</p></li></ul><p>def</p>');
+    var targetText = assi.$$("strong")[0].childNodes[0];
+    assi.selectForNodes(targetText, 1, targetText, 1);
+
+    paster.pasteHTML('<p>!!</p>@@<p>##</p>');
+
+    assi.delayedAssertion(function() {
+        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), '<p>abc</p><ul><li>1<strong>2</strong><p>!!</p><p>@@</p><p>##</p><strong>3</strong><p>456</p></li></ul><p>def</p>', '결과 html 확인');
+    });
+});
+
+
+test('li 내부에 p태그가 없는 상태를 나누기 - 다중 #2 (pasteHTML를 2연속)', function() {
+    assi.setContent('<p>abc</p><ul><li>1<strong>23</strong><p>456</p></li></ul><p>def</p>');
+    var targetText = assi.$$("strong")[0].childNodes[0];
+    assi.selectForNodes(targetText, 1, targetText, 1);
+
+    paster.pasteHTML('<p>!!</p>');
+    paster.pasteHTML('@@<p>##</p>');
+
+    assi.delayedAssertion(function() {
+        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), '<p>abc</p><ul><li>1<strong>2</strong><p>!!</p><p>@@</p><p>##</p><strong>3</strong><p>456</p></li></ul><p>def</p>', '결과 html 확인');
+    });
+});
+
+test('p태그 없는 노드에서 붙여넣기', function() {
+
+
+    assi.setContent('asd<strong>1234</strong>fghj');
+    var targetText = assi.$$("strong")[0].childNodes[0];
+    assi.selectForNodes(targetText, 1, targetText, 1);
+
+    paster.pasteHTML('<p>!!</p>@@<p>##</p>');
+
+    assi.delayedAssertion(function() {
+        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), 'asd<strong>1</strong><p>!!</p><p>@@</p><p>##</p><strong>234</strong>fghj', '결과 html 확인');
+
+    });
+});
+
+
+test('p태그 없는 노드에서 붙여넣기', function() {
+    assi.setContent('asd<strong>1234</strong>fghj');
+    var targetText = assi.$$("strong")[0].childNodes[0];
+    assi.selectForNodes(targetText, 1, targetText, 1);
+
+    paster.pasteHTML('<p>!!</p>@@<p>##</p>');
+
+    assi.delayedAssertion(function() {
+        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), 'asd<strong>1</strong><p>!!</p><p>@@</p><p>##</p><strong>234</strong>fghj', '결과 html 확인');
+    });
+});
+
+// invalid markup
+//test('invalid markup #1', function() {
+//    assi.setContent('<p>123</p><p>4<strong>56</strong></p><p>789</p>');
+//    var targetText = assi.$$("strong")[0].childNodes[0];
+//    assi.selectForNodes(targetText, 1, targetText, 1);
+//
+//    paster.pasteHTML('<span><p>!!</span></p>');
+//
+//    assi.delayedAssertion(function() {
+//        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), '<p>123</p><p>4<strong>5</strong></p><p>!!</p><p><strong>6</strong></p><p>789</p>', '결과 html 확인');
+//    });
+//});
+
+// body
+// li > table
+// blockquote > table
+// li > blockquote
+// h1 > p
+// p > h1
+//

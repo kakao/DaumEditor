@@ -1,5 +1,9 @@
 !function() {
 
+    var ELEMENT_NODE = _WIN['Node'] ? Node.ELEMENT_NODE : 1;
+    var TEXT_NODE = _WIN['Node'] ? Node.TEXT_NODE : 3;
+
+
     /**
      * Paste를 가로채서 추가될 HTML 및 Text를 정제하는 기능
      *
@@ -11,6 +15,292 @@
         MODE_HTML: 'html',
         MODE_TEXT: 'text'
     };
+
+    /**
+     * pasteContent를 보완하는 processor(BETA)
+     * 해당 기능을 충분히 테스트&검증&사용 후 기존의 processor의 pasteContent를 대체하는 방향으로 한다.
+     */
+    Trex.Paste.I.ProcessorBETA = Trex.Mixin.create({
+        initialize: function(editor, canvas) {
+            this.editor = editor;
+            this.canvas = canvas;
+
+            this.processor = null;
+        },
+        getProcessor: function() {
+            if (!this.processor) {
+                this.processor = this.canvas.getProcessor();
+            }
+            return this.processor;
+        },
+        /**
+         * html을 편집화면에 붙여넣는다.
+         *
+         * @param html
+         */
+        pasteContent: function(html) {
+            var processor = this.getProcessor();
+            var range = processor.createGoogRange();
+
+            var anchorNode = this._getAnchorNodeByRange(range);
+
+            var _tmpNode = processor.create('div');
+            html = html.replace(/<\/p>\s+/gi, '</p>');
+            html = html.replace(/<\/(span|font|i|b|strong|center|i)>[\r\n]+/g, '<\/$1> ');
+            html = this.cleanPasteHtml(html);
+            _tmpNode.innerHTML = html;
+
+            var targetNodes = $tom.children(_tmpNode);
+
+            var isOnlyTextNode = _FALSE;
+            var isAllInlineNode = _TRUE;
+            for (var i = 0, m = targetNodes.length; i < m; i++) {
+                var node = targetNodes[i];
+                if (m == 1 && node.nodeType === TEXT_NODE) {
+                    isOnlyTextNode = _TRUE;
+                    break;
+                } else {
+                    if ($tom.isBlock(node)) {
+                        isAllInlineNode = _FALSE;
+                        break;
+                    }
+                }
+            }
+
+            if (isOnlyTextNode) {
+                this._pasteTextOnly(targetNodes, range);
+            } else {
+                this._pasteHtmlAndText(targetNodes, range, isAllInlineNode, anchorNode);
+            }
+            this.removeDummyText();
+        },
+        /**
+         * html을 유효한 마크업으로 변형이 필요하다면 이 메소드를 구현하도록 한다.
+         *
+         * @param html
+         * @returns {*}
+         */
+        cleanPasteHtml: function(html) {
+            var dom = this.getProcessor().create('div');
+            dom.innerHTML = html;
+            return dom.innerHTML;
+        },
+
+        /**
+         * caret의 이동 및 노드 삽입의 보조역을 위해 word_joiner을 생성한다.
+         * 기존에 생성되어 있던 객체가 있다면 재활용 하도록 한다.
+         *
+         * @returns {Text}
+         */
+        getDummyText: function() {
+            if (!this.dummyText) {
+                this.dummyText = this.getProcessor().doc.createTextNode(Trex.__WORD_JOINER);
+            }
+            return this.dummyText;
+        },
+        /**
+         * caret용 word_joiner를 제거한다.
+         */
+        removeDummyText: function() {
+            if (this.dummyText) {
+                $tom.remove(this.dummyText);
+                this.dummyText = _NULL;
+            }
+        },
+
+        /**
+         * caret이 위치한 노드를 기준으로 상위 노드까지 tree를 2분할 한다.
+         *
+         * @param topNode
+         * @param range
+         * @returns {{previousNode: (_NULL|*), nextNode: (_NULL|*)}}
+         */
+        divideTree: function(topNode, range) {
+            var processor = this.canvas.getProcessor();
+            range = range || processor.createGoogRange();
+
+            var pNode = _NULL,
+                nNode = _NULL;
+
+            var copyRange;
+
+            // range 기준 '이전' 트리노드를 복사 > 끼워넣기
+            copyRange = processor.createGoogRangeFromNodes(topNode, 0, range.getFocusNode(), range.getFocusOffset());
+            var pHtml = copyRange.getPastableHtml().trim();
+            if (pHtml !== '') {
+                pNode = topNode.cloneNode(false);
+                pNode.innerHTML = pHtml;
+                $tom.insertAt(pNode, topNode);
+
+                if (pNode.childNodes.length == 1 && $tom.isElement(pNode.childNodes[0]) && pNode.tagName == pNode.childNodes[0].tagName) {
+                    pNode = $tom.unwrap(pNode);
+                }
+                copyRange = processor.createGoogRangeFromNodes(topNode, 0, range.getFocusNode(), range.getFocusOffset());
+                copyRange.select();
+                var text = copyRange.getText();
+                if (text !== '') {
+                    copyRange.removeContents();
+                }
+            }
+
+            // 끼워넣는 노드 사이에 캐럿을 이동시키기 위한 임시노드 추가
+            var caretNode = this.getDummyText();
+            $tom.insertAt(caretNode, topNode);
+
+            var caretRange = processor.createGoogRangeFromNodes(caretNode, caretNode.length, caretNode, caretNode.length);
+            caretRange.select();
+            var savedCaret = caretRange.saveUsingCarets();
+
+            // range 기준 '다음' 트리노드를 topNode에서 '이전' 트리노드에 해당하는 range를 제거하여 완성
+            var nHtml = topNode.innerHTML.trim();
+            if (nHtml !== '') {
+                topNode.innerHTML = nHtml;
+                nNode = topNode;
+            } else {
+                // 빈태그만 존재하므로 topNode를 제거해 준다
+                $tom.remove(topNode);
+            }
+
+            // 캐럿 이동을 위한 임시 노드로 range 이동
+            savedCaret.restore();
+
+            return {
+                previousNode: pNode,
+                nextNode: nNode
+            };
+        },
+
+        _pasteTextOnly: function (targetNodes, range) {
+            var textNode = targetNodes[0];
+            range.insertNode(textNode);
+
+            range = this.getProcessor().createGoogRangeFromNodes(textNode, $tom.getLength(textNode), textNode, $tom.getLength(textNode));
+            var savedCaret = range.saveUsingCarets();
+            savedCaret.restore();
+            return range;
+        },
+
+        _pasteHtmlAndText: function (targetNodes, range, isAllInlineNode, anchorNode) {
+            var processor = this.getProcessor();
+
+            // anchorNode가 p태그 이거나 p태그를 포함한 하위노드라면 상위의 p를 찾아서 반으로 쪼갠다
+            // 단, p태그가 없을 수 있는데 body하위 레벨의 node를 찾거나 신규로 생성하는 방법을 사용하도록 한다.
+            var markerContainer = processor.create('div');
+            var divideResult;
+
+            if (isAllInlineNode === _FALSE && anchorNode.nodeType === ELEMENT_NODE) {
+                this.divideTree(anchorNode, range);
+                range = processor.createGoogRange();
+                range.insertNode(markerContainer);
+                this.removeDummyText();
+            } else {
+                range.insertNode(markerContainer);
+            }
+
+
+            // range를 marker의 가장 마지막으로 위치이동하고 node를 삽입한다.
+            var childNodes;
+            targetNodes.each(function (node) {
+                childNodes = markerContainer.childNodes.length;
+                range = processor.createGoogRangeFromNodes(markerContainer, childNodes, markerContainer, childNodes);
+                range.select();
+                if (node.nodeType === TEXT_NODE) {
+                    var p = processor.create('p');
+                    p.appendChild(node);
+                    markerContainer.appendChild(p);
+                } else {
+                    markerContainer.appendChild(node);
+                }
+            });
+
+            // marker를 unwrapping 시키고
+            var lastNode = $tom.bottom(markerContainer);
+            $tom.unwrap(markerContainer);
+
+            // range 이동
+            range = processor.createGoogRangeFromNodes(lastNode, $tom.getLength(lastNode), lastNode, $tom.getLength(lastNode));
+            range.select();
+            return range;
+        },
+        _getAnchorNodeByRange: function (range) {
+            var anchorNode = range.getFocusNode();
+
+            while (anchorNode) {
+
+                var parentNode = anchorNode.parentNode;
+                if ($tom.kindOf(parentNode, 'p,div')) {
+                    // 상위 노드까지 포함해서 리턴
+                    anchorNode = parentNode;
+                    break;
+                } else if ($tom.isBody(parentNode) || $tom.kindOf(parentNode, '%innergroup') || $tom.isBlock(parentNode)) {
+                    // 중단
+                    break;
+                } else if ($tom.kindOf(parentNode, '%text,%inline')){
+                    // 계속진행
+
+                } else {
+                    // 1.
+                    // 2.
+                    // 중단
+                    break;
+                }
+
+                anchorNode = parentNode;
+            }
+
+            return anchorNode;
+        }
+    });
+
+    Trex.Paste.I.ProcessorBETATridentLegacy = Trex.Mixin.create({
+        cleanPasteHtml: function(html) {
+            // TODO: invalid markup에 대한 보완처리가 필요하다.
+            return html;
+//            return HTMLParser(html).cleanHTML;
+        },
+        _pasteTextOnly: function (targetNodes, range_notused) {
+            var processor = this.getProcessor();
+            var range = processor.doc.selection.createRange();
+            range.pasteHTML(targetNodes[0].nodeValue);
+        },
+        _pasteHtmlAndText: function (targetNodes, range, isAllInlineNode, anchorNode) {
+            var processor = this.getProcessor();
+
+            // anchorNode가 p태그 이거나 p태그를 포함한 하위노드라면 상위의 p를 찾아서 반으로 쪼갠다
+            // 단, p태그가 없을 수 있는데 body하위 레벨의 node를 찾거나 신규로 생성하는 방법을 사용하도록 한다.
+            if (isAllInlineNode === _FALSE && anchorNode.nodeType === ELEMENT_NODE) {
+                var diviedResult = this.divideTree(anchorNode, range);
+                range = processor.createGoogRange();
+                if (diviedResult.previousNode && diviedResult.previousNode.innerText.trim() === '') {
+                    $tom.remove(diviedResult.previousNode);
+                }
+                if (diviedResult.nextNode && diviedResult.nextNode.innerText.trim() === '') {
+                    $tom.remove(diviedResult.nextNode);
+                }
+            }
+
+            targetNodes.each(function(node) {
+                range.collapse(false);
+                if (node.nodeType === TEXT_NODE) {
+                    var p = processor.create('p');
+                    p.appendChild(node);
+                    range.insertNode(p);
+                } else {
+                    range.insertNode(node);
+                }
+            });
+
+            range.collapse(false);
+        }
+    });
+
+
+    Trex.Paste.Helper = Trex.Class.create({
+        $mixins: [
+            Trex.Paste.I.ProcessorBETA,
+            Trex.Paste.isMSSelection ? Trex.Paste.I.ProcessorBETATridentLegacy : {}
+        ]
+    });
 
     Trex.Paste.I.CleanerStandard = Trex.Mixin.create({
         $const: {
@@ -47,13 +337,14 @@
         },
         defaultFilterBegin: function (html) {
             html = html.replace(/>\s+</g, '><');// 태그간 공백 제거
-            html = html.replace(/[\n|\r]/g, '');// 줄바꿈 제거 #1
+//            html = html.replace(/[\n|\r]/g, '');// 줄바꿈 제거 #1
             html = html.replace(/(<[a-z]+[^>]*>)/gi, '\n$1');// 태그 제거를 위한 줄바꿈 문자 추가
             html = html.replace(/\n<head>.*<\/head>/gi, '');// head태그 제거
-            html = html.replace(/<\/?(html|body)[^>]*>/gi, '');
+            html = html.replace(/<\/?(html|body|meta)[^>]*>/gi, '');
             html = html.replace(/<!--/g, '\n<!--');// 주석 제거를 위한 줄바꿈 문자 추가
             html = html.replace(/\n<!--.*-->/g, '');// 주석 제거
             html = html.replace(/<p[^>]*>/gi, '<p>');// p태그에 속성 제거
+            html = html.replace(/<(font|span[^>]*)>/gi, '<$1>');// 빈 태그 제거
             html = html.replace(/\n<(font|span)[^>]*>\s*<\/\1>/gi, '');// 빈 태그 제거
             html = html.replace(/(\d+)?\.(\d+)([a-z]+)/gi, function (matched, p1, p2, p3) {
                 p1 = p1 || '0';
@@ -63,7 +354,7 @@
             return html;
         },
         defaultFilterEnd: function (html) {
-            html = html.replace(/[\n|\r]/g, '');// 줄바꿈 제거 #2
+//            html = html.replace(/[\n|\r]/g, '');// 줄바꿈 제거 #2
             return html;
         },
         filterOptional: function (html) {
@@ -134,12 +425,14 @@
         isTextOnly: _FALSE,
         isEnable: _FALSE,
         isPasteProcessing: _FALSE,
-        initialize: function (editor, canvas, cleaner) {
+        initialize: function (editor, canvas, cleaner, helper) {
             this.editor = editor;
             this.canvas = canvas;
             this.cleaner = cleaner;
+            this.helper = helper;
 
             this.doc = _NULL;
+            this.processor = _NULL;
 
             this.bindEvents();
         },
@@ -221,6 +514,12 @@
         getPasteDummy: function () {
             return this.getDocument().getElementById('pasteDummy');
         },
+        getProcessor: function() {
+            if (!this.processor) {
+                this.processor = this.canvas.getProcessor();
+            }
+            return this.processor;
+        },
         /**
          * 이벤트 기본 기능을 제한한다.
          * @param {Object} ev
@@ -254,11 +553,9 @@
             this.removeRangeContents();
             this.saveRange();
 
-            this.canvas.execute(function (processor) {
-                self.restoreRange();
-                processor.pasteContent(self.cleaner.execute(html));
-                self.isPasteProcessing = _FALSE;
-            });
+            this.restoreRange();
+            this.pasteHTML(this.cleaner.execute(html));
+            this.isPasteProcessing = _FALSE;
         },
         pasteByRedirection: function (ev) {
             var self = this;
@@ -286,12 +583,7 @@
             }
 
             var cleanHtml = this.isTextOnly ? dummy.innerText : this.cleaner.execute(dummy.innerHTML);
-
-            this.canvas.execute(function (processor) {
-                dummy.parentNode.removeChild(dummy);
-                dummy = null;
-                processor.pasteContent(cleanHtml);
-            });
+            this.pasteHTML(cleanHtml);
         },
         createPasteDummy: function (tagName) {
             tagName = tagName || 'div';// default div;
@@ -311,6 +603,13 @@
         appendPasteDummy: function (dummyNode) {
             var doc = this.getDocument();
             doc.body.appendChild(dummyNode);
+        },
+        removePasteDummy: function() {
+            var dummy = this.getPasteDummy();
+            if (dummy) {
+                $tom.remove(dummy);
+                dummy  = _NULL;
+            }
         },
         setRangeToDummy: function (dummyNode) {
             var doc = this.getDocument();
@@ -348,6 +647,14 @@
             if (!this.savedCaret.isDisposed()) {
                 this.savedCaret.restore();
             }
+        },
+        pasteHTML: function(html) {
+            var self = this;
+            this.canvas.execute(function (processor) {
+                self.processor = processor;
+                self.helper.pasteContent(html);
+                self.removePasteDummy();
+            });
         }
     });
 
@@ -465,7 +772,9 @@
     Trex.install("editor.getPaster",
         function (editor, toolbar, sidebar, canvas, config) {
             var cleaner = new Trex.Paste.Cleaner(editor, canvas);
-            var paster = new Trex.Paste.Paster(editor, canvas, cleaner);
+            var pasteProcessor = new Trex.Paste.Helper(editor, canvas);
+            var paster = new Trex.Paste.Paster(editor, canvas, cleaner, pasteProcessor);
+
 
             editor.getPaster = function () {
                 return paster;
@@ -473,6 +782,10 @@
 
             editor.getPasteCleaner = function () {
                 return paster.cleaner;
+            };
+
+            editor.getPasteProcessor = function() {
+                return pasteProcessor;
             };
         }
     );
