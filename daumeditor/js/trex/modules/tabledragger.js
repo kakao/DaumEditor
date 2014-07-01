@@ -103,6 +103,17 @@ Trex.Table.Dragger = Trex.Class.create({
             this._resize(tdArr, point, this._mouseData.downType)
         }
 
+        if(this._state == 'READY'){
+            var el = $tom.find(this._mouseData.downTd, 'table');
+            var sel = Trex.Area.Select.getSelection();
+            if(!el) {
+                sel.reset();
+                return;
+            }
+            sel.select(el);
+            $tx.stop(ev);
+        }
+
         if(this._state != 'NONE'){
             this._changeState('NONE');
             this._makeGuide(this.EDGE_TYPE.NONE, 'NONE', this._getPointByEvent(ev));
@@ -257,29 +268,7 @@ Trex.Table.Dragger = Trex.Class.create({
         mapping[state](g);
         this._setGuideStyle(g, style);
     },
-    /**
-     * @param {HTMLElement} node
-     * @returns {Object} {top:Number, left:Number}
-     * @private
-     */
-    _getOffset: function(node){
-        var doc = node.ownerDocument;
-        if ("getBoundingClientRect" in doc.documentElement) {
-            var docElem = doc.documentElement;
-            var win = doc.defaultView || doc.parentWindow;
-            var box = node.getBoundingClientRect();
-            var ot = (win.pageYOffset || docElem.scrollTop) - (docElem.clientTop||0);
-            var or = (win.pageXOffset || docElem.scrollLeft) - (docElem.clientLeft||0);
-            return {
-                'top': box.top + ot,
-                'bottom': box.bottom + ot,
-                'left': box.left + or,
-                'right': box.right + or
-            }
-        }else {
-            return $tx.getCoordsTarget(node);
-        }
-    },
+
     /**
      *
      * @param {[]} point
@@ -291,7 +280,7 @@ Trex.Table.Dragger = Trex.Class.create({
         var edgeType = this.EDGE_TYPE.NONE;
         if(!node) return edgeType;
         var MAX_SELECTION = 5;
-        var rect = this._getOffset(node);
+        var rect = $tx.getOffset(node);
         if ((point[0] - rect.left) < MAX_SELECTION && node.cellIndex != 0) {
             edgeType = this.EDGE_TYPE.LEFT;
         }
@@ -327,7 +316,7 @@ Trex.Table.Dragger = Trex.Class.create({
         var x = $tx.pointerX(e);
         var y = $tx.pointerY(e);
         if(doc !== this._doc){
-            var of = this._getOffset(this._panel.el);
+            var of = $tx.getOffset(this._panel.el);
             return [x-of.left+(this._win.pageXOffset || this._doc.documentElement.scrollLeft), y-of.top+(this._win.pageYOffset || this._doc.documentElement.scrollTop)];
         }
         return [x,y]
