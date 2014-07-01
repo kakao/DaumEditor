@@ -720,6 +720,9 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	createGoogRangeFromNodes: function(startNode, startOffset, endNode, endOffset) {
 		return goog.dom.Range.createFromNodes(startNode, startOffset, endNode, endOffset);
 	},
+    createGoogFromNodeContents: function (node, opt_isReversed) {
+        return goog.dom.Range.createFromNodeContents(node, opt_isReversed);
+    },
 	executeUsingCaret: function(handler) {
 		try {
 			var range = this.createGoogRange();

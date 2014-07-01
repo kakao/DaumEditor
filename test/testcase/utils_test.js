@@ -11,7 +11,7 @@ test("getAllAttributes basic", function() {
     equal(attrMap.style, "clear:none;float:none;", 'style');
     equal(attrMap.id, "tx_entry_69451_", 'id');
     equal(attrMap.src, "http://cfile143.uf.daum.net/image/2303033A5350914626C759", 'src');
-    equal(attrMap.class, "txc-image", 'class');
+    equal(attrMap['class'], "txc-image", "class");
 
 });
 
