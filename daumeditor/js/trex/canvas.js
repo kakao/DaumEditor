@@ -29,7 +29,6 @@
             minHeight: 200,
             ext: 'html',
             param: "",
-
             newlinepolicy: "p",
             showGuideArea: _TRUE,
             convertingText: _TRUE,

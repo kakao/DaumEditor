@@ -90,10 +90,10 @@
 		 *	});
 		 */
 		__CANVAS_PANEL_CLICK: 'canvas.panel.click',
-		/**
-         * wysiwyg 영역에서 발생하는 더블클릭 이벤트<br/>
-         * @example
-         * 	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DBLCLICK, function(ev) {
+		/** 
+		 * wysiwyg 영역에서 발생하는 더블클릭 이벤트<br/>
+		 * @example
+		 * 	canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DBLCLICK, function(ev) {
 		 *	});
          */
         __CANVAS_PANEL_DBLCLICK: 'canvas.panel.dbclick',
