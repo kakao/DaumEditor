@@ -298,7 +298,7 @@
     Trex.Paste.Helper = Trex.Class.create({
         $mixins: [
             Trex.Paste.I.ProcessorBETA,
-            ($tx.msie && $tx.msie_ver <= 8) ? Trex.Paste.I.ProcessorBETATridentLegacy : {}
+            ($tx.msie && ($tx.msie_quirks || $tx.msie_ver <= 10)) ? Trex.Paste.I.ProcessorBETATridentLegacy : {}
         ]
     });
 
