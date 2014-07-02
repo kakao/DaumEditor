@@ -122,11 +122,11 @@ Trex.Area.Select = Trex.Class.single({
      * @param element
      */
     select: function(element){
-        this._canvas.fireJobs(Trex.Ev.__CANVAS_SELECT_ITEM);
         this._target = element;
         $tom.insertNext(this._selectElement,this._doc.body);
         this._isSelect = _TRUE;
         this._makeSelect(element);
+        this._canvas.fireJobs(Trex.Ev.__CANVAS_SELECT_ITEM);
     },
     update: function(element){
         this._makeSelect(element||this._target);
@@ -234,6 +234,7 @@ Trex.Area.Resize = Trex.Class.single({
             this._mouseData.moveTarget = _NULL;
             this.update();
             $tx.stop(e);
+            this._canvas.history.saveHistory();
         }
     },
     _mousemove: function(e){
@@ -334,9 +335,19 @@ Trex.Area.Control = Trex.Class.single({
                 }
             }
         );
+        this.observeKey({
+                keyCode: 8
+            },  function(e){
+                if(self.isSelect()){
+                    $tom.remove(self._select.getTarget());
+                    self.reset();
+                    $tx.stop(e);
+                }
+            }
+        );
         this._canvas.observeJob(Trex.Ev.__CANVAS_PANEL_KEYDOWN, function(e){
-            if(/^(46)$/.test(e.keyCode)){
-                self.fireKeys(e);
+            if(/^(46|8)$/.test(e.keyCode)){
+                self.fireKeys(e, _TRUE);
             }
             self.reset();
         });

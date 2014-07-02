@@ -70,7 +70,10 @@ Trex.module("Register an eventhandler in order to change align icons upon toolba
 		});
 
         canvas.observeJob(Trex.Ev.__CANVAS_SELECT_ITEM, function(){
-            _changeButton("image");
+            var sel = new Trex.Area.Select();
+            if($tom.kindOf(sel.getTarget(), 'table')){
+                _changeButton("image");
+            }
         });
         canvas.observeJob(Trex.Ev.__CANVAS_UNSELECT_ITEM, function(){
             var sel = new Trex.Area.Select();
