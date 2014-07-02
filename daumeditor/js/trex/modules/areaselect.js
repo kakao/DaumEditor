@@ -1,5 +1,5 @@
 Trex.MarkupTemplate.add('module.areaselect',
-    '<div class="tx-area-selection" style="position:absolute;z-index:999;display: block; left: 0px; top: 0px; width: 0px; height: 0px;border:1px dashed #000000;">' +
+    '<div class="tx-area-selection" contenteditable="false" style="position:absolute;z-index:999;display: block; left: 0px;line-height:1; top: 0px; width: 0px; height: 0px;border:1px dashed #000000;">' +
     '<div class="tx-area-selection-bg" style="width:100%;height:100%;background-color: black;position:absolute;z-index:1000"></div>' +
     '<div class="tx-area-holder" style="display:none;position: absolute; z-index: 1000; line-height: 1; cursor:nw-resize; bottom: -4px; right: -5px; border:1px solid #000000;width:8px;height:8px;background-color: #FFFFFF;"></div>' +
     '<div class="tx-area-selection-info" style="display:none;position: absolute; z-index:1002; line-height: 1;top: 5px; right: 5px; background-color:#000000;font-size:12px;color:#FFFFFF;padding: 3px">0x0</div>' +
@@ -122,8 +122,9 @@ Trex.Area.Select = Trex.Class.single({
      * @param element
      */
     select: function(element){
+        this._canvas.fireJobs(Trex.Ev.__CANVAS_SELECT_ITEM);
         this._target = element;
-        $tom.insertFirst(this._doc.body, this._selectElement);
+        $tom.insertNext(this._selectElement,this._doc.body);
         this._isSelect = _TRUE;
         this._makeSelect(element);
     },
@@ -131,6 +132,8 @@ Trex.Area.Select = Trex.Class.single({
         this._makeSelect(element||this._target);
     },
     reset: function(){
+        if(this.isSelect())
+            this._canvas.fireJobs(Trex.Ev.__CANVAS_UNSELECT_ITEM);
         this._isSelect = _FALSE;
         $tom.remove(this._selectElement);
         this._target = _NULL;
@@ -218,7 +221,7 @@ Trex.Area.Resize = Trex.Class.single({
                 zIndex: 998
             });
             $tx.setOpacity(el, 0.3);
-            $tom.insertFirst(this._doc.body, el);
+            $tom.insertNext(el,this._doc.body);
             this._mouseData.moveTarget = el;
             $tx.stop(e);
         }
@@ -331,13 +334,16 @@ Trex.Area.Control = Trex.Class.single({
                 }
             }
         );
-        this._canvas.observeJob(Trex.Ev.__CANVAS_PANEL_KEYUP, function(e){
+        this._canvas.observeJob(Trex.Ev.__CANVAS_PANEL_KEYDOWN, function(e){
             if(/^(46)$/.test(e.keyCode)){
                 self.fireKeys(e);
             }
             self.reset();
         });
 
+    },
+    getTarget: function(){
+        return this._select.getTarget();
     },
     isSelect: function(){
         return this._select.isSelect();
@@ -355,15 +361,22 @@ Trex.Area.Control = Trex.Class.single({
 });
 
 Trex.module("area select", function(editor, toolbar, sidebar, canvas, config){
-
     canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function() {
+        var _processor = canvas.getProcessor();
         var select = new Trex.Area.Control(new Trex.Area.Resize(new Trex.Area.Select(editor)));
         Trex.Area.Select.getSelection = function(){
             return select;
         };
         if($tx.msie8under) return;
         canvas.observeJob(Trex.Ev.__CANVAS_PANEL_MOUSEDOWN, function(e){
-            var el = $tom.find( $tx.element(e), 'img');
+            var el = $tx.element(e);
+            if(!$tx.msie8under) {
+                var _node = $tx.element(e);
+                if ($tom.kindOf(_node, "img")){
+                    _processor.createGoogFromNodeContents(_node).select();
+                }
+            }
+            el = $tom.find( el, 'img')||($tom.kindOf(el,'table')&&el);
             if(!el) {
                 select.reset();
                 return;
@@ -372,7 +385,15 @@ Trex.module("area select", function(editor, toolbar, sidebar, canvas, config){
             $tx.stop(e);
 
         });
+        canvas.observeJob(Trex.Ev.__CANVAS_SELECT_ITEM, function(){
+            setTimeout(function() {
+                var googRange = canvas.getProcessor().createGoogRange();
+                if (googRange) {
+                    canvas.fireJobs(Trex.Ev.__CANVAS_PANEL_QUERY_STATUS, googRange);
+                }
+            }, 20);
 
+        });
         canvas.observeJob(Trex.Ev.__CANVAS_PANEL_SCROLLING, function(e){
             select.update();
         });
@@ -381,7 +402,12 @@ Trex.module("area select", function(editor, toolbar, sidebar, canvas, config){
             select.reset();
         });
         toolbar.observeJob(Trex.Ev.__TOOL_CLICK, function (identity) {
-            select.reset();
+            if(/align(center|full|left|right)/.test(identity) && $tom.kindOf(select.getTarget(), 'table')){
+            }
+            else {
+                select.reset();
+            }
+
         });
 
     });

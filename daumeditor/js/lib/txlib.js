@@ -742,7 +742,7 @@ $tx.extend($tx, /** @lends $tx */{
 		 * @function
 		 */
 		pointerX: function(event) {
-            var eventDoc = $tx.element(event).ownerDocument;
+            var eventDoc = $tx.element(event).ownerDocument||_DOC;
             var doc = eventDoc.documentElement;
             var body = eventDoc.body;
             return event.pageX || (event.clientX + ( doc && doc.scrollLeft || body && body.scrollLeft || 0 ) - ( doc && doc.clientLeft || body && body.clientLeft || 0 ));
@@ -752,7 +752,7 @@ $tx.extend($tx, /** @lends $tx */{
 		 * @function
 		 */
 		pointerY: function(event) {
-            var eventDoc = $tx.element(event).ownerDocument;
+            var eventDoc = $tx.element(event).ownerDocument||_DOC;
             var doc = eventDoc.documentElement;
             var body = eventDoc.body;
             return event.pageY || (event.clientY + ( doc && doc.scrollTop  || body && body.scrollTop  || 0 ) - ( doc && doc.clientTop  || body && body.clientTop  || 0 ));

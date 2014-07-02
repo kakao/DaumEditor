@@ -362,6 +362,26 @@
          */
         __CMD_ALIGN_IMG_FLOAT_RIGHT: 'align.img.floatright',
         /**
+         * table 가운데 정렬을 실행하고서 발생하는 사용자 정의 이벤트
+         * @private
+         */
+        __CMD_ALIGN_TABLE_CENTER: 'align.table.center',
+        /**
+         * table 오른쪽흐름 정렬을 실행하고서 발생하는 사용자 정의 이벤트
+         * @private
+         */
+        __CMD_ALIGN_TABLE_FLOAT_RIGHT: 'align.table.right',
+        /**
+         * table 왼쪽흐름 정렬을 실행하고서 발생하는 사용자 정의 이벤트
+         * @private
+         */
+        __CMD_ALIGN_TABLE_FLOAT_LEFT: 'align.table.left',
+        /**
+         * 테이블 왼쪽 정렬을 실행하고서 발생하는 사용자 정의 이벤트
+         * @private
+         */
+        __CMD_ALIGN_TABLE_LEFT: 'align.table.none',
+        /**
          * 툴바의 축소를을 실행하고 발생하는 사용자 정의 이벤트
          */
         __CMD_ADVANCED_FOLD: 'toolbar.advanced.fold',
@@ -429,7 +449,13 @@
         /**
          * 툴바의 레이어형 메뉴의 크기가 변경되면 호출.
          */
-        __MENU_LAYER_CHANGE_SIZE: 'menu.layer.change.size'
+        __MENU_LAYER_CHANGE_SIZE: 'menu.layer.change.size',
+
+        /**
+         * table, img가 선택 된 경우 호출
+         */
+        __CANVAS_SELECT_ITEM: 'canvas.select.item',
+        __CANVAS_UNSELECT_ITEM: 'canvas.unselect.item'
 
 	};
 })(Trex);

@@ -103,15 +103,23 @@ Trex.Table.Dragger = Trex.Class.create({
             this._resize(tdArr, point, this._mouseData.downType)
         }
 
-        if(this._state == 'READY'){
-            var el = $tom.find(this._mouseData.downTd, 'table');
-            var sel = Trex.Area.Select.getSelection();
-            if(!el) {
-                sel.reset();
-                return;
+        if(this._state == 'READY' ){
+            var el;
+            if($tx.msie8under){
+                el = $tom.find(this._mouseData.downTd, 'table');
+                this._canvas.getProcessor().selectControl(el)
+
+            }else {
+                el = $tom.find(this._mouseData.downTd, 'table');
+                var sel = Trex.Area.Select.getSelection();
+                if(!el) {
+                    sel.reset();
+                    return;
+                }
+                sel.select(el);
+                $tx.stop(ev);
             }
-            sel.select(el);
-            $tx.stop(ev);
+
         }
 
         if(this._state != 'NONE'){
