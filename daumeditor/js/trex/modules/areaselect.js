@@ -386,7 +386,8 @@ Trex.Area.Move = Trex.Class.single({
             $tom.remove(this._mouseData.moveTarget);
             this._move(this._select.getTarget(),this._getPointByEvent(e));
             this._mouseData.moveTarget = _NULL;
-            this.update();
+            //ie 문제 element 위치 변경전의 위치를 가져온다.
+            setTimeout(this.update.bind(this), 35);
             $tx.stop(e);
             this._canvas.history.saveHistory();
         }
