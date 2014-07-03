@@ -46,6 +46,7 @@
 
             var _tmpNode = processor.create('div');
             html = html.replace(/<\/p>\s+/gi, '</p>');
+            html = html.replace(/<br class="Apple-interchange-newline">\s*/g, '');// for chrome clipboard.getData()..
             html = html.replace(/<\/(span|font|i|b|strong|center|i)>[\r\n]+/g, '<\/$1> ');
             html = this.cleanPasteHtml(html);
             _tmpNode.innerHTML = html;
@@ -116,6 +117,13 @@
          * @returns {{previousNode: (_NULL|*), nextNode: (_NULL|*)}}
          */
         divideTree: function(topNode, range) {
+            if ($tom.isBody(topNode)) {
+                return {
+                    previousNode: null,
+                    nextNode: null
+                }
+            }
+
             var processor = this.canvas.getProcessor();
             range = range || processor.createGoogRange();
 
@@ -180,16 +188,25 @@
             return range;
         },
 
+        _removeNodeIfContentIsEmpty: function(node) {
+            var text = (node && (node.textContent || node.innerText));
+            if (node && (text.trim() === '')) {
+                $tom.remove(node);
+            }
+        },
+
         _pasteHtmlAndText: function (targetNodes, range, isAllInlineNode, anchorNode) {
             var processor = this.getProcessor();
 
             // anchorNode가 p태그 이거나 p태그를 포함한 하위노드라면 상위의 p를 찾아서 반으로 쪼갠다
             // 단, p태그가 없을 수 있는데 body하위 레벨의 node를 찾거나 신규로 생성하는 방법을 사용하도록 한다.
             var markerContainer = processor.create('div');
-            var divideResult;
+            var dividedResult;
 
             if (isAllInlineNode === _FALSE && anchorNode.nodeType === ELEMENT_NODE) {
-                this.divideTree(anchorNode, range);
+                dividedResult = this.divideTree(anchorNode, range);
+                this._removeNodeIfContentIsEmpty(dividedResult.previousNode);
+                this._removeNodeIfContentIsEmpty(dividedResult.nextNode);
                 range = processor.createGoogRange();
                 range.insertNode(markerContainer);
                 this.removeDummyText();
@@ -218,7 +235,15 @@
             $tom.unwrap(markerContainer);
 
             // range 이동
-            range = processor.createGoogRangeFromNodes(lastNode, $tom.getLength(lastNode), lastNode, $tom.getLength(lastNode));
+            if ($tom.kindOf(lastNode, 'br')) {
+                var brNextIndex = $tom.indexOf(lastNode) + 1;
+                var brParentNode = lastNode.parentNode;
+                range = processor.createGoogRangeFromNodes(brParentNode, brNextIndex, brParentNode, brNextIndex);
+            } else {
+                // text인 경우 해당 text의 끝에 위치하게 range를 변경
+                range = processor.createGoogRangeFromNodes(lastNode, $tom.getLength(lastNode), lastNode, $tom.getLength(lastNode));
+            }
+
             range.select();
             return range;
         },
@@ -269,14 +294,10 @@
             // anchorNode가 p태그 이거나 p태그를 포함한 하위노드라면 상위의 p를 찾아서 반으로 쪼갠다
             // 단, p태그가 없을 수 있는데 body하위 레벨의 node를 찾거나 신규로 생성하는 방법을 사용하도록 한다.
             if (isAllInlineNode === _FALSE && anchorNode.nodeType === ELEMENT_NODE) {
-                var diviedResult = this.divideTree(anchorNode, range);
+                var dividedResult = this.divideTree(anchorNode, range);
                 range = processor.createGoogRange();
-                if (diviedResult.previousNode && diviedResult.previousNode.innerText.trim() === '') {
-                    $tom.remove(diviedResult.previousNode);
-                }
-                if (diviedResult.nextNode && diviedResult.nextNode.innerText.trim() === '') {
-                    $tom.remove(diviedResult.nextNode);
-                }
+                this._removeNodeIfContentIsEmpty(dividedResult.previousNode);
+                this._removeNodeIfContentIsEmpty(dividedResult.nextNode);
             }
 
             targetNodes.each(function(node) {

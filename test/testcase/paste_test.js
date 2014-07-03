@@ -429,6 +429,19 @@ test('p태그 없는 노드에서 붙여넣기', function() {
     });
 });
 
+test('붙여넣기 데이터 중 마지막 요소가 br인경우', function() {
+    assi.setContent('<p>content</p>');
+    assi.focusOnTop();
+
+    paster.pasteHTML('<p>test1</p><br>');
+    paster.pasteHTML('<p>test2</p><br>');
+
+    assi.delayedAssertion(function() {
+        // TODO: body > br 구조에 대한 처리는 향후에 차차 개선하기로 한다. 현재는 붙여넣는 구조 그대로를 유지하도록 함.
+        equal(assi.getContent().toLowerCase().replace(/[\r\n]/g, ''), '<p>test1</p><br><p>test2</p><br><p>content</p>', '결과 html 확인');
+    });
+});
+
 // invalid markup
 //test('invalid markup #1', function() {
 //    assi.setContent('<p>123</p><p>4<strong>56</strong></p><p>789</p>');
