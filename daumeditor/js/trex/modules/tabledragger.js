@@ -98,7 +98,9 @@ Trex.Table.Dragger = Trex.Class.create({
 
     },
     mouseup: function(ev){
+        var sel = Trex.Area.Select.getSelection();
         if(this._state == 'DRAG'){
+            sel.reset();
             var tdArr = this._makeTDArr(this._mouseData.downTd, this._mouseData.downType, $tom.find(this._mouseData.downTd, 'table'));
             var point = this._getPointByEvent(ev);
             this._resize(tdArr, point, this._mouseData.downType)
@@ -112,7 +114,6 @@ Trex.Table.Dragger = Trex.Class.create({
 
             }else {
                 el = $tom.find(this._mouseData.downTd, 'table');
-                var sel = Trex.Area.Select.getSelection();
                 if(!el) {
                     sel.reset();
                     return;

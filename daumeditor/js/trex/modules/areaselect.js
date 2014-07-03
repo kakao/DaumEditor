@@ -233,9 +233,13 @@ Trex.Area.Resize = Trex.Class.single({
     },
     _mouseup: function(e){
         if(this._state === 'DRAG'){
+            var isRatio = _FALSE;
+            if(e.shiftKey== true){
+                isRatio = _TRUE;
+            }
             this._changeState('NONE');
             $tom.remove(this._mouseData.moveTarget);
-            this._resize(this._select.getTarget(),this._getPointByEvent(e));
+            this._resize(this._select.getTarget(), isRatio? this._ratio(this._mouseData.targetOffset,this._getPointByEvent(e)):this._getPointByEvent(e));
             this._mouseData.moveTarget = _NULL;
             this.update();
             $tx.stop(e);
@@ -244,10 +248,23 @@ Trex.Area.Resize = Trex.Class.single({
     },
     _mousemove: function(e){
         if(this._state === 'DRAG'){
-            this._resize(this._mouseData.moveTarget,this._getPointByEvent(e));
+            var isRatio = _FALSE;
+            if(e.shiftKey== true){
+                isRatio = _TRUE;
+            }
+            this._resize(this._mouseData.moveTarget, isRatio? this._ratio(this._mouseData.targetOffset,this._getPointByEvent(e)):this._getPointByEvent(e));
             this.update(this._mouseData.moveTarget);
             $tx.stop(e);
         }
+    },
+    _ratio: function(offset, point){
+        var p = this._subtractPoint(point, this._mouseData.downPoint);
+        var r = (offset.right-offset.left)/(offset.bottom - offset.top);
+        var isW = _FALSE
+        if(p[0] < 1/r*p[1]){
+            isW = _TRUE;
+        }
+        return this._addPoint(this._mouseData.downPoint,[isW?p[0]:r*p[1], isW?1/r*p[0]:p[1]]);
     },
     _resize: function(el, point){
         if(!el) return;
@@ -383,11 +400,21 @@ Trex.Area.Move = Trex.Class.single({
     _mouseup: function(e){
         if(this._state === 'DRAG'){
             this._changeState('NONE');
+            var isDuplicate = _FALSE;
+            if(e.shiftKey == _TRUE){
+                isDuplicate = _TRUE;
+            }
             $tom.remove(this._mouseData.moveTarget);
-            this._move(this._select.getTarget(),this._getPointByEvent(e));
+            if(!isDuplicate){
+                this._move(this._select.getTarget(),this._getPointByEvent(e));
+                //ie 문제 element 위치 변경전의 위치를 가져온다.
+                setTimeout(this.update.bind(this), 35);
+            }else {
+                var cl = this._select.getTarget().cloneNode(true);
+                this._move(cl,this._getPointByEvent(e));
+                setTimeout(this.select.bind(this,cl),35);
+            }
             this._mouseData.moveTarget = _NULL;
-            //ie 문제 element 위치 변경전의 위치를 가져온다.
-            setTimeout(this.update.bind(this), 35);
             $tx.stop(e);
             this._canvas.history.saveHistory();
         }
@@ -480,10 +507,10 @@ Trex.Area.Control = Trex.Class.single({
             }
         );
         this._canvas.observeJob(Trex.Ev.__CANVAS_PANEL_KEYDOWN, function(e){
-            if(/^(46|8)$/.test(e.keyCode)){
+            if(/^(46|8|16|17|18)$/.test(e.keyCode)){
                 self.fireKeys(e, _TRUE);
             }
-            self.reset();
+            //self.reset();
         });
 
     },
