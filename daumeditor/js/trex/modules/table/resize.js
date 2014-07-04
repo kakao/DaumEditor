@@ -43,6 +43,7 @@ Trex.Table.Resize = Trex.Class.create({
             this._resizeTableWidth(select.currentTable);
         }else {
             this._resizeHeight(els.expandElement, d, isDifference)
+            this._deleteTableHeight(select.currentTable)
         }
     },
     /**
@@ -155,5 +156,10 @@ Trex.Table.Resize = Trex.Class.create({
                 tds[i].style.height = (Math.max(parseInt((isDifference?tds[i].style.height:0),10) + (d*tds[i].rowSpan||1), MIN_HEIGHT)).toPx();
             }
         }
+    },
+    _deleteTableHeight: function(table){
+        table.height = '';
+        table.style.height = '';
     }
+
 });

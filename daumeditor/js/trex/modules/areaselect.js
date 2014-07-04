@@ -50,7 +50,7 @@ Trex.Area.Select = Trex.Class.single({
      * @private
      */
     _getPosition: function(element){
-        var of = $tx.getCoordsTarget(element);
+        var of = $tx.getOffset(element);
         var width = of.right - of.left;
         var height = of.bottom - of.top;
         of.width = width;
@@ -75,7 +75,7 @@ Trex.Area.Select = Trex.Class.single({
         var INFO_MIN_WIDTH = 100;
         var INFO_MIN_HEIGHT = 50;
         var info = $tom.collect(this._selectElement,'.tx-area-selection-info');
-        info.innerHTML = width + 'x' + height;
+        info.innerHTML = (width|0) + 'x' + (height|0);
         if(width < INFO_MIN_WIDTH || height < INFO_MIN_HEIGHT){
             $tx.setStyle(info, {
                 right: '',
@@ -509,8 +509,9 @@ Trex.Area.Control = Trex.Class.single({
         this._canvas.observeJob(Trex.Ev.__CANVAS_PANEL_KEYDOWN, function(e){
             if(/^(46|8|16|17|18)$/.test(e.keyCode)){
                 self.fireKeys(e, _TRUE);
+            }else {
+                self.reset();
             }
-            //self.reset();
         });
 
     },
