@@ -37,7 +37,8 @@
             respectVisibilityInDesign: _TRUE,
             dropZone: {
                 use:_FALSE,
-                adaptor: 'tenth2'
+                useImageUpload: _TRUE,
+                useFileUpload: _FALSE
             }
         }
     }, function(root) {
