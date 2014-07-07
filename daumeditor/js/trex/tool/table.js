@@ -441,7 +441,8 @@ Trex.Menu.Table = Trex.Class.create({
 			});
 		});
 
-		$tx.observe(elACancel, "click", function() {
+		$tx.observe(elACancel, "click", function(e) {
+            $tx.stop(e);
 			this.onCancel();
 			return _FALSE;
 		}.bindAsEventListener(this));
