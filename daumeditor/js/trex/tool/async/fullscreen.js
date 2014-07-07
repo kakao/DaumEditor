@@ -129,24 +129,24 @@
 			if (!this.isFullScreen) {
 				return;
 			}
-			
+
 			this._showScrollbar();
-			
+
 			//Service Specific
 			this.showNormalScreenAtService();
-			
+
 			var _wrapper = this.wrapper;
 			if (!_wrapper) {
 				return;
 			}
-			
+
 			_wrapper.style.width = '';
 			$tx.removeClassName(_wrapper, 'tx-editor-fullscreen');
-			
+
 			this.elSavedHiddens.each(function (el) {
 				el.style.visibility = 'visible';
 			});
-			
+
 			if (parent) {
 				try {
 					$tx.stopObserving(parent, 'resize', this.resizeHandler);
@@ -155,16 +155,16 @@
 			} else {
 				$tx.stopObserving(window, 'resize', this.resizeHandler);
 			}
-			
+
 			this.canvas.setCanvasSize({
 				height: this.panelNormalHeight.toPx()
 			});
-			
+
 			//첨부파일박스
 			if (this.useAttachBox) {
 				this.attachClickHandler(this.attachBox.checkDisplay());
 			}
-			
+
 			//NOTE: Service Specific
 			if (this.showAttachBoxAtServiceForSave) {
 				_WIN.showAttachBox = this.showAttachBoxAtServiceForSave;
@@ -287,8 +287,16 @@
 			_DOC.body.style.overflow = 'hidden';
 		},
 		_showScrollbar: function () {
-			_DOC_EL.style.overflow = '';
-			_DOC.body.style.overflow = '';
+            if ($tx.msie && $tx.msie_ver <= 8) {
+                // FTDUEDTR-1453
+                setTimeout(function(){
+                    _DOC_EL.style.overflow = '';
+                    _DOC.body.style.overflow = '';
+                }, 50);
+            } else {
+                _DOC_EL.style.overflow = '';
+                _DOC.body.style.overflow = '';
+            }
 		},
 		generate: function () {
 			if (this.isInit) {
