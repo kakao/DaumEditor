@@ -743,6 +743,8 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
         var pos;
         if (doc.caretPositionFromPoint) {
             rng = doc.createRange()
+            x-=doc.documentElement.scrollLeft;
+            y-=doc.documentElement.scrollTop;
             pos = doc.caretPositionFromPoint(x, y);
             rng.setStart(pos.offsetNode, pos.offset);
             rng.setEnd(pos.offsetNode, pos.offset);

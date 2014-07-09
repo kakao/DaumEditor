@@ -687,7 +687,7 @@
             try {
                 this.fireJobs(Trex.Ev.__CANVAS_PANEL_MOUSEMOVE, event);
             } catch (ignore) {
-                console.error(ignore);
+                console.log(ignore);
             }
         }, 50),
 

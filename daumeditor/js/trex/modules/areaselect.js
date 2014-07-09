@@ -368,9 +368,9 @@ Trex.Area.Move = Trex.Class.create({
         $tx.observe(_DOC.body, 'mouseup',function(e){
             self._mouseup(e);
         }, false);
-        $tx.observe(_DOC.body, 'mousemove',function(e){
+        /*$tx.observe(_DOC.body, 'mousemove',function(e){
             self._mousemove(e);
-        }, false);
+        }, false);*/
 
         this._canvas.observeJob(Trex.Ev.__CANVAS_PANEL_MOUSEMOVE, function(e){
             self._mousemove(e);
