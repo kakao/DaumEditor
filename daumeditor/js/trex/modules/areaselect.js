@@ -1,9 +1,10 @@
 Trex.MarkupTemplate.add('module.areaselect',
-    '<div class="tx-area-selection" contenteditable="false" style="position:absolute;z-index:999;display: block; left: 0px;line-height:1; top: 0px; width: 0px; height: 0px;border:1px dashed #000000;">' +
-    '<div class="tx-area-selection-bg" style="width:100%;height:100%;background-color: black;position:absolute;z-index:1000"></div>' +
-    '<div class="tx-area-move-holder" style="position: absolute; z-index: 1000; line-height: 1; cursor:move; top: -4px; left: -5px; border:1px solid #FFFFFF;width:8px;height:8px;background-color: #000000;"></div>' +
-    '<div class="tx-area-holder" style="position: absolute; z-index: 1000; line-height: 1; cursor:nw-resize; bottom: -4px; right: -5px; border:1px solid #000000;width:8px;height:8px;background-color: #FFFFFF;"></div>' +
-    '<div class="tx-area-selection-info" style="display:none;position: absolute; z-index:1002; line-height: 1;top: 5px; right: 5px; background-color:#000000;font-size:12px;color:#FFFFFF;padding: 3px">0x0</div>' +
+    '<div class="tx-area-selection" contenteditable="false" style="visibility:hidden;position:absolute;z-index:999;display: block; left: 0px;line-height:1; top: 0px; width: 0px; height: 0px;">' +
+    '<div class="tx-area-move-holder" style="visibility:visible;position: absolute; z-index: 1000; line-height: 1; cursor:move; top: -4px; left: -5px; border:1px solid #FFFFFF;width:8px;height:8px;background-color: #000000;"></div>' +
+    '<div class="tx-area-holder-sw" style="visibility:visible;position: absolute; z-index: 1000; line-height: 1; bottom: -4px; left: -5px; border:1px solid #000000;width:5px;height:5px;border-right:0;border-top:0;"></div>' +
+    '<div class="tx-area-holder-sw" style="visibility:visible;position: absolute; z-index: 1000; line-height: 1; top: -4px; right: -3px; border:1px solid #000000;width:5px;height:5px;border-left:0;border-bottom:0;"></div>' +
+    '<div class="tx-area-holder" style="visibility:visible;position: absolute; z-index: 1000; line-height: 1; cursor:nw-resize; bottom: -4px; right: -5px; border:1px solid #000000;width:8px;height:8px;background-color: #FFFFFF;"></div>' +
+    '<div class="tx-area-selection-info" style="visibility:visible;display:none;position: absolute; z-index:1002; line-height: 1;top: 5px; right: 5px; background-color:#000000;font-size:12px;color:#FFFFFF;padding: 3px">0x0</div>' +
     '</div>');
 
 /**
@@ -111,7 +112,6 @@ Trex.Area.Select = Trex.Class.single({
     },
     _makeElement: function(){
         var sel= Trex.MarkupTemplate.get("module.areaselect").evaluateAsDom({});
-        $tx.setOpacity($tom.collect(sel,'.tx-area-selection-bg'),0.2);
         $tx.setOpacity($tom.collect(sel,'.tx-area-selection-info'),0.7);
         return sel;
     },
@@ -148,7 +148,7 @@ Trex.Area.Select = Trex.Class.single({
 
 });
 
-Trex.Area.Resize = Trex.Class.single({
+Trex.Area.Resize = Trex.Class.create({
     _mouseData : {
         downPoint:[0,0],
         targetOffset: _NULL,
@@ -241,6 +241,7 @@ Trex.Area.Resize = Trex.Class.single({
             $tom.remove(this._mouseData.moveTarget);
             this._resize(this._select.getTarget(), isRatio? this._ratio(this._mouseData.targetOffset,this._getPointByEvent(e)):this._getPointByEvent(e));
             this._mouseData.moveTarget = _NULL;
+            $tx.hide(this._info);
             this.update();
             $tx.stop(e);
             this._canvas.history.saveHistory();
@@ -248,6 +249,7 @@ Trex.Area.Resize = Trex.Class.single({
     },
     _mousemove: function(e){
         if(this._state === 'DRAG'){
+            $tx.show(this._info);
             var isRatio = _FALSE;
             if(e.shiftKey== true){
                 isRatio = _TRUE;
@@ -260,7 +262,7 @@ Trex.Area.Resize = Trex.Class.single({
     _ratio: function(offset, point){
         var p = this._subtractPoint(point, this._mouseData.downPoint);
         var r = (offset.right-offset.left)/(offset.bottom - offset.top);
-        var isW = _FALSE
+        var isW = _FALSE;
         if(p[0] < 1/r*p[1]){
             isW = _TRUE;
         }
@@ -301,7 +303,6 @@ Trex.Area.Resize = Trex.Class.single({
     },
     update: function(element){
         this._select.update(element);
-        $tx.show(this._info);
     },
     reset: function(){
         this._select.reset();
@@ -316,7 +317,7 @@ Trex.Area.Resize = Trex.Class.single({
     }
 });
 
-Trex.Area.Move = Trex.Class.single({
+Trex.Area.Move = Trex.Class.create({
     _mouseData : {
         downPoint:[0,0],
         targetOffset: _NULL,
@@ -401,17 +402,18 @@ Trex.Area.Move = Trex.Class.single({
         if(this._state === 'DRAG'){
             this._changeState('NONE');
             var isDuplicate = _FALSE;
-            if(e.shiftKey == _TRUE){
+            if(e.ctrlKey == _TRUE){
                 isDuplicate = _TRUE;
             }
             $tom.remove(this._mouseData.moveTarget);
             if(!isDuplicate){
                 this._move(this._select.getTarget(),this._getPointByEvent(e));
                 //ie 문제 element 위치 변경전의 위치를 가져온다.
-                setTimeout(this.update.bind(this), 35);
+                setTimeout(this.select.bind(this, this._select.getTarget()), 35);
             }else {
                 var cl = this._select.getTarget().cloneNode(true);
                 this._move(cl,this._getPointByEvent(e));
+                //ie 문제 element 위치 변경전의 위치를 가져온다.
                 setTimeout(this.select.bind(this,cl),35);
             }
             this._mouseData.moveTarget = _NULL;
@@ -476,7 +478,7 @@ Trex.Area.Move = Trex.Class.single({
     }
 });
 
-Trex.Area.Control = Trex.Class.single({
+Trex.Area.Control = Trex.Class.create({
     $mixins: [Trex.I.KeyObservable],
     initialize: function(select){
         this._select = select;
@@ -507,7 +509,7 @@ Trex.Area.Control = Trex.Class.single({
             }
         );
         this._canvas.observeJob(Trex.Ev.__CANVAS_PANEL_KEYDOWN, function(e){
-            if(/^(46|8|16|17|18)$/.test(e.keyCode)){
+            if(/^(16|17|18|46|8)$/.test(e.keyCode)){
                 self.fireKeys(e, _TRUE);
             }else {
                 self.reset();
@@ -537,34 +539,46 @@ Trex.Area.Control = Trex.Class.single({
 });
 
 Trex.module("area select", function(editor, toolbar, sidebar, canvas, config){
-    canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function() {
+    canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function(doc) {
         var _processor = canvas.getProcessor();
-        var s = new Trex.Area.Resize(new Trex.Area.Select(editor));
-        if(_DOC.caretPositionFromPoint||_DOC.caretRangeFromPoint||$tx.msie){
-            s = new Trex.Area.Move(s)
+        var select = new Trex.Area.Control(new Trex.Area.Resize(new Trex.Area.Select(editor)));
+        if(_DOC.caretPositionFromPoint||_DOC.caretRangeFromPoint){
+            select = new Trex.Area.Move(select)
         }
-        var select = new Trex.Area.Control(s);
         Trex.Area.Select.getSelection = function(){
             return select;
         };
-        if($tx.msie8under) return;
-        canvas.observeJob(Trex.Ev.__CANVAS_PANEL_MOUSEDOWN, function(e){
+        if($tx.msie) return;
+        var mousedownel = _NULL;
+        function mousedown(e){
             var el = $tx.element(e);
-            if(!$tx.msie8under) {
-                var _node = $tx.element(e);
-                if ($tom.kindOf(_node, "img")){
-                    _processor.createGoogFromNodeContents(_node).select();
-                }
+            if($tom.kindOf(el, 'img,table')){
+                $tx.stop(e);
             }
-            el = $tom.find( el, 'img')||($tom.kindOf(el,'table')&&el);
+            mousedownel = el;
+            el = $tom.find( el, 'img,table');
             if(!el) {
                 select.reset();
+            }
+        }
+        function mouseup(e){
+            var el = $tx.element(e);
+            if(el != mousedownel || (!$tom.kindOf(el, 'img') &&!_processor.isCollapsed())){
+                select.reset();
+                mousedownel = _NULL;
                 return;
             }
+            el = $tom.find( el, 'img,table');
+            if ($tom.kindOf(el, "img")){
+                setTimeout(function(){
+                    _processor.createGoogFromNodeContents(el).select();
+                }, 10);
+            }
             select.select(el);
-            $tx.stop(e);
 
-        });
+        }
+        canvas.observeJob(Trex.Ev.__CANVAS_PANEL_MOUSEDOWN, mousedown);
+        canvas.observeJob(Trex.Ev.__CANVAS_PANEL_MOUSEUP, mouseup);
         canvas.observeJob(Trex.Ev.__CANVAS_SELECT_ITEM, function(){
             setTimeout(function() {
                 var googRange = canvas.getProcessor().createGoogRange();
@@ -582,7 +596,7 @@ Trex.module("area select", function(editor, toolbar, sidebar, canvas, config){
             select.reset();
         });
         toolbar.observeJob(Trex.Ev.__TOOL_CLICK, function (identity) {
-            if(/align(center|full|left|right)/.test(identity) && $tom.kindOf(select.getTarget(), 'table')){
+            if(/align(center|full|left|right)/.test(identity) && $tom.kindOf(select.getTarget(), 'table,img')){
             }
             else {
                 select.reset();

@@ -752,9 +752,6 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
             try{
                 rng = doc.body.createTextRange();
                 rng.moveToPoint(x,y);
-                var endRange = rng.duplicate();
-                endRange.moveToPoint(x,y);
-                rng.setEndPoint('EndToEnd', endRange);
                 rng.select();
             }catch(e){
                 console.log(e);

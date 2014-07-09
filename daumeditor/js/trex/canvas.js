@@ -703,7 +703,7 @@
             try {
                 this.fireElements($tx.element(event));
             } catch(ignore) {
-                console.error(ignore);
+                console.log(ignore);
             }
             this.fireJobs(Trex.Ev.__CANVAS_PANEL_MOUSEDOWN, event);
             var history = this.history;
@@ -721,7 +721,7 @@
                     }
                 }, 20);
             } catch(ignore) {
-                console.error(ignore);
+                console.log(ignore);
             }
         },
 

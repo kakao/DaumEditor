@@ -1,5 +1,6 @@
 Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
 	executeAlignImageMode: function(processor) {
+        var sel = new Trex.Area.Select;
 		var _imageAlignProps = this.constructor.__ImageModeProps['image'];
 		var _node = processor.getControl();
 		if(!_node) {
@@ -12,6 +13,7 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
 			var _wNode = $tom.find(_node, "%paragraph");
 			processor.apply(_wNode, _textAlignProps);
 		}
+        sel.update();
 	},
     executeAlignTableMode: function(processor) {
         var sel = new Trex.Area.Select;
@@ -21,6 +23,7 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
         sel.update();
     },
 	executeAlignTextMode: function(processor) {
+        var sel = new Trex.Area.Select;
 		var _textAlignProps = this.constructor.__TextModeProps['paragraph'];
 		var _node = processor.getControl();
 		if(_node && $tom.kindOf(_node, 'button') ) {
@@ -50,6 +53,7 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
 				'align': _textAlignProps['style']['textAlign']
 			});
 		}
+        sel.update();
 	},
 	queryImageFloat: function(processor) {
 		var _node = processor.getControl();

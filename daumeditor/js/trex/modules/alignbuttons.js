@@ -63,7 +63,8 @@ Trex.module("Register an eventhandler in order to change align icons upon toolba
 			{ tag: "hr" }
 		], function() {
             var sel = new Trex.Area.Select();
-            if($tom.kindOf(sel.getTarget(), 'table')){
+            var el = sel.getTarget();
+            if($tom.kindOf(el, 'table,img')&&!Trex.Util.getMatchedClassName(el, _excludes)){
                 return _changeButton("image");
             }
 			_changeButton("text");
