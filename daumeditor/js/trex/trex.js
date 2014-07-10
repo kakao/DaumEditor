@@ -89,6 +89,27 @@ var Trex = {
 	 * @name Trex.Class
 	 */
 	Trex.Class = /** @lends Trex.Class */ {
+        single: function(properties){
+            var _class = function() {
+                if(this.constructor._single)
+                    return this.constructor._single;
+                var _proto = this.constructor.prototype; //NOTE: Cuz properties must not share
+                for(var _name in _proto) {
+                    if(_proto[_name] && typeof(_proto[_name]) === 'object') {
+                        if(_proto[_name].constructor == Array) { //Array
+                            this[_name] = [].concat(_proto[_name]);
+                        } else {
+                            this[_name] = Object.extend({}, _proto[_name]);
+                        }
+                    }
+                }
+                $$super(this);
+                var _arguments = arguments;
+                this.initialize.apply(this, _arguments);
+                this.constructor._single = this;
+            };
+            return Trex.Class.draft(properties, _class);
+        },
 		/**
 		 * creates class 
 		 * @param {Object} properties

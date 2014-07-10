@@ -232,6 +232,7 @@ var $tx = {};
         msie_std: ($tx.msie && !_DOC.selection),
         msie_nonstd: ($tx.msie && !!_DOC.selection),
         msie6: ($tx.msie && 6 <= $tx.msie_ver && $tx.msie_ver < 7),
+        msie8under: ($tx.msie && $tx.msie_ver <= 8),
         msie_quirks: (function(){
             try {
                 return $tx.msie && _WIN.top.document.compatMode !== 'CSS1Compat'
@@ -459,7 +460,7 @@ $tx.extend($tx, /** @lends $tx */{
 });
 (function() {
 
-	if ($tx.msie_nonstd) {
+	if ($tx.msie8under) {
         $tx.getStyle = function (element, style) {
             element = $tx(element);
             style = (style == 'float' || style == 'cssFloat') ? 'styleFloat' : style.camelize();
@@ -482,7 +483,7 @@ $tx.extend($tx, /** @lends $tx */{
         };
     }
 
-    if ($tx.msie_nonstd) {
+    if ($tx.msie8under) {
         $tx.setOpacity = function (element, value) {
             element = $tx(element);
             var filter = $tx.getStyle(element, 'filter'), style = element.style;
@@ -645,10 +646,32 @@ $tx.extend($tx, /** @lends $tx */{
 	 
 		getCoordsTarget: function(element){
 			return this.getCoords(element, _TRUE);
-		}
+		},
+        /**
+         * 향상된 getCoord Jquery 참고
+         */
+        getOffset: function(node){
+            var doc = node.ownerDocument;
+            if ("getBoundingClientRect" in doc.documentElement) {
+                var docElem = doc.documentElement;
+                var win = doc.defaultView || doc.parentWindow;
+                var box = node.getBoundingClientRect();
+                var ot = (win.pageYOffset || docElem.scrollTop) - (docElem.clientTop||0);
+                var or = (win.pageXOffset || docElem.scrollLeft) - (docElem.clientLeft||0);
+                return {
+                    'top': box.top + ot,
+                    'bottom': box.bottom + ot,
+                    'left': box.left + or,
+                    'right': box.right + or
+                }
+            }else {
+                return $tx.getCoordsTarget(node);
+            }
+        }
 	 
 	});
-	
+
+
 	
 	// Safari returns margins on body which is incorrect if the child is absolutely
 	// positioned.  For performance reasons, redefine Position.cumulativeOffset for
@@ -719,7 +742,7 @@ $tx.extend($tx, /** @lends $tx */{
 		 * @function
 		 */
 		pointerX: function(event) {
-            var eventDoc = $tx.element(event).ownerDocument;
+            var eventDoc = $tx.element(event).ownerDocument||_DOC;
             var doc = eventDoc.documentElement;
             var body = eventDoc.body;
             return event.pageX || (event.clientX + ( doc && doc.scrollLeft || body && body.scrollLeft || 0 ) - ( doc && doc.clientLeft || body && body.clientLeft || 0 ));
@@ -729,7 +752,7 @@ $tx.extend($tx, /** @lends $tx */{
 		 * @function
 		 */
 		pointerY: function(event) {
-            var eventDoc = $tx.element(event).ownerDocument;
+            var eventDoc = $tx.element(event).ownerDocument||_DOC;
             var doc = eventDoc.documentElement;
             var body = eventDoc.body;
             return event.pageY || (event.clientY + ( doc && doc.scrollTop  || body && body.scrollTop  || 0 ) - ( doc && doc.clientTop  || body && body.clientTop  || 0 ));

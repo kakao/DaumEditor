@@ -633,6 +633,7 @@
             var doc = this.getCurrentPanel().getDocument();
             function getNodeAndOffsetAtSel(){
                 var rng = goog.dom.Range.createFromBrowserSelection(doc.getSelection? doc.getSelection():p.getSel());
+                if(!rng) return _NULL;
                 var node = rng.getStartNode();
                 var offset = rng.getStartOffset();
                 return {node: node,
@@ -641,7 +642,7 @@
             var where = getNodeAndOffsetAtSel();
             this.fireJobs(Trex.Ev.__CANVAS_PANEL_KEYDOWN, event);
             var prev = null;
-            if(event.keyCode == Trex.__KEY.BACKSPACE && p.isCollapsed() && (prev = $tom.prevNodeUntilTagName(where.node, where.offset, 'table')) && $tom.isTagName(prev, 'table')){
+            if(event.keyCode == Trex.__KEY.BACKSPACE && where && p.isCollapsed() && (prev = $tom.prevNodeUntilTagName(where.node, where.offset, 'table')) && $tom.isTagName(prev, 'table')){
                 $tx.stop(event);
                 this.fireJobs(Trex.Ev.__CANVAS_PANEL_BACKSPACE_TABLE, prev);
             }
@@ -686,6 +687,7 @@
             try {
                 this.fireJobs(Trex.Ev.__CANVAS_PANEL_MOUSEMOVE, event);
             } catch (ignore) {
+                console.log(ignore);
             }
         }, 50),
 
@@ -701,6 +703,7 @@
             try {
                 this.fireElements($tx.element(event));
             } catch(ignore) {
+                console.log(ignore);
             }
             this.fireJobs(Trex.Ev.__CANVAS_PANEL_MOUSEDOWN, event);
             var history = this.history;
@@ -718,6 +721,7 @@
                     }
                 }, 20);
             } catch(ignore) {
+                console.log(ignore);
             }
         },
 

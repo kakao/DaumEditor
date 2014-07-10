@@ -9,6 +9,9 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
     lastRange: _NULL,
 	initialize: function(win, doc) {
 		this.win = win;
+        /**
+         * @type {HTMLDocument}
+         */
 		this.doc = doc;
 
 		this.txSelection = new Trex.Canvas.Selection(this);
@@ -733,7 +736,35 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 				savedCaret.restore();
 			}
 		}
-	}
+	},
+    moveSelection: function(x,y){
+        var doc = this.doc;
+        var rng;
+        var pos;
+        if (doc.caretPositionFromPoint) {
+            rng = doc.createRange()
+            x-=doc.documentElement.scrollLeft;
+            y-=doc.documentElement.scrollTop;
+            pos = doc.caretPositionFromPoint(x, y);
+            rng.setStart(pos.offsetNode, pos.offset);
+            rng.setEnd(pos.offsetNode, pos.offset);
+        }else if(doc.caretRangeFromPoint){
+            rng = doc.caretRangeFromPoint(x, y)
+        }else if(doc.body.createTextRange != undefined){
+            try{
+                rng = doc.body.createTextRange();
+                rng.moveToPoint(x,y);
+                rng.select();
+            }catch(e){
+                console.log(e);
+            }
+            return;
+        }
+        if(!rng) return;
+        var sel = this.getSel();
+        sel.removeAllRanges();
+        sel.addRange(rng);
+    }
 };
 
 Trex.module("observe that @when control elements are focused at",

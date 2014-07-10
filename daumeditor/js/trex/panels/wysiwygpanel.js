@@ -82,15 +82,22 @@
 
 			if (this.wysiwygDoc.body.contentEditable) {
 				this.wysiwygDoc.body.contentEditable = _TRUE;
+                if ($tx.gecko) {
+                    this.wysiwygDoc.execCommand("enableInlineTableEditing", _FALSE, _FALSE);
+                    this.wysiwygDoc.execCommand("enableObjectResizing",  _FALSE, _FALSE);
+                }
 			} else {
 				var self = this;
 				setTimeout(function () {
 					try {
 						self.wysiwygDoc.designMode = "On";
+                        console.log($tx.gecko)
 						if ($tx.gecko) {
 							self.wysiwygDoc.execCommand("enableInlineTableEditing", _FALSE, _FALSE);
+                            self.wysiwygDoc.execCommand("enableObjectResizing",  _FALSE, _FALSE);
 						}
 					} catch (e) {
+                        console.log(22);
 						self.designModeActivated = _FALSE;
 					}
 				}, 10);

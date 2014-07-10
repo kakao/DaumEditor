@@ -51,6 +51,9 @@
                         'margin': '0 0 0 auto'
                     }
                 }
+            },
+            __TableModeProps: {
+                align: __ImageFloatProperty
             }
         },
         $extend: Trex.Tool,
@@ -74,7 +77,10 @@
                     toolbar.fireJobs(Trex.Ev.__CMD_ALIGN_IMG_FLOAT_LEFT);
                 } else if (alignMode == "text") {
                     toolbar.fireJobs(Trex.Ev.__CMD_ALIGN_RIGHT);
+                } else if (alignMode == "table") {
+                    toolbar.fireJobs(Trex.Ev.__CMD_ALIGN_TABLE_FLOAT_LEFT);
                 }
+
             });
             canvas.triggerQueryStatus();
         },

@@ -31,6 +31,7 @@ var CORE_FILES = [
 	"trex/mixins/observable.js",
 	"trex/mixins/colorpallete.js",
 	"trex/mixins/cookiebaker.js",
+    "trex/mixins/point.js",
 	/** trex common */
 	"trex/common/button.js",
 	"trex/common/menu.js",
@@ -178,6 +179,8 @@ var CORE_FILES = [
 
 	"trex/modules/table/border.js",
 	"trex/modules/table/template.js",
+
+    "trex/modules/areaselect.js",
 
 	"trex/modules/tabledragger.js",
     "trex/modules/exiteditor.js",

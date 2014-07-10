@@ -1,5 +1,6 @@
 Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
 	executeAlignImageMode: function(processor) {
+        var sel = new Trex.Area.Select;
 		var _imageAlignProps = this.constructor.__ImageModeProps['image'];
 		var _node = processor.getControl();
 		if(!_node) {
@@ -12,8 +13,17 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
 			var _wNode = $tom.find(_node, "%paragraph");
 			processor.apply(_wNode, _textAlignProps);
 		}
+        sel.update();
 	},
+    executeAlignTableMode: function(processor) {
+        var sel = new Trex.Area.Select;
+        var selEl = sel.getTarget();
+        if(!selEl) return;
+        processor.apply(selEl, this.constructor.__TableModeProps);
+        sel.update();
+    },
 	executeAlignTextMode: function(processor) {
+        var sel = new Trex.Area.Select;
 		var _textAlignProps = this.constructor.__TextModeProps['paragraph'];
 		var _node = processor.getControl();
 		if(_node && $tom.kindOf(_node, 'button') ) {
@@ -43,6 +53,7 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
 				'align': _textAlignProps['style']['textAlign']
 			});
 		}
+        sel.update();
 	},
 	queryImageFloat: function(processor) {
 		var _node = processor.getControl();
@@ -81,14 +92,19 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
             tool.executeTableCellMode(processor);
         } else if (alignMode == "image") {
             tool.executeAlignImageMode(processor);
+        } else if (alignMode == "table") {
+            tool.executeAlignTableMode(processor);
         } else {
             tool.executeAlignTextMode(processor);
         }
     },
     getAlignMode: function(processor) {
 		var selectedTdArr = (processor.table) ? processor.table.getTdArr() : [];
+        var select = new Trex.Area.Select.getSelection&&Trex.Area.Select.getSelection();
         if (selectedTdArr.length > 0) {
             return "tableCell";
+        } else if($tom.kindOf(select.getTarget(), 'table')){
+            return 'table'
         } else if (this.imageAlignMode) {
             return "image";
         } else {
@@ -121,10 +137,19 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
         self.button.setState(state);
     },
     queryCurrentStyle: function(processor) {
-        if (this.imageAlignMode) {
+        var mode = this.getAlignMode(processor);
+        if(mode == 'table'){
+            return this.queryTableMode(processor)
+        }else if(mode == 'image'){
             return this.queryImageMode(processor)
+        }else {
+            return this.queryTextMode(processor)
         }
-        return this.queryTextMode(processor);
+    },
+    queryTableMode: function(processor){
+        var sel = new Trex.Area.Select();
+        var _node = sel.getTarget();
+        return $tom.getAttribute(_node, 'align') == this.constructor.__TableModeProps.align
     },
     queryImageMode: function(processor) {
 		var imageModeProps = this.constructor.__ImageModeProps;

@@ -51,6 +51,9 @@
                         'margin': '0'
                     }
                 }
+            },
+            __TableModeProps: {
+                align: _NULL
             }
         },
         $extend: Trex.Tool,
@@ -74,6 +77,8 @@
                     toolbar.fireJobs(Trex.Ev.__CMD_ALIGN_IMG_LEFT);
                 } else if (alignMode == "text") {
                     toolbar.fireJobs(Trex.Ev.__CMD_ALIGN_LEFT);
+                } else if (alignMode == "table") {
+                    toolbar.fireJobs(Trex.Ev.__CMD_ALIGN_TABLE_LEFT);
                 }
             });
             canvas.triggerQueryStatus();

@@ -6,6 +6,7 @@ Trex.Table.Dragger = Trex.Class.create({
         RIGHT: "EDGE_RIGHT",
         NONE: "NONE"
     },
+    $mixins: [Trex.I.point],
     initialize: function(editor, config){
         /**
          * @type {Trex.Editor.canvas}
@@ -97,10 +98,30 @@ Trex.Table.Dragger = Trex.Class.create({
 
     },
     mouseup: function(ev){
+        var sel = Trex.Area.Select.getSelection();
         if(this._state == 'DRAG'){
+            sel.reset();
             var tdArr = this._makeTDArr(this._mouseData.downTd, this._mouseData.downType, $tom.find(this._mouseData.downTd, 'table'));
             var point = this._getPointByEvent(ev);
             this._resize(tdArr, point, this._mouseData.downType)
+        }
+
+        if(this._state == 'READY' ){
+            var el;
+            if($tx.msie){
+                el = $tom.find(this._mouseData.downTd, 'table');
+                this._canvas.getProcessor().selectControl(el)
+
+            }else {
+                el = $tom.find(this._mouseData.downTd, 'table');
+                if(!el) {
+                    sel.reset();
+                    return;
+                }
+                sel.select(el);
+                $tx.stop(ev);
+            }
+
         }
 
         if(this._state != 'NONE'){
@@ -257,29 +278,7 @@ Trex.Table.Dragger = Trex.Class.create({
         mapping[state](g);
         this._setGuideStyle(g, style);
     },
-    /**
-     * @param {HTMLElement} node
-     * @returns {Object} {top:Number, left:Number}
-     * @private
-     */
-    _getOffset: function(node){
-        var doc = node.ownerDocument;
-        if ("getBoundingClientRect" in doc.documentElement) {
-            var docElem = doc.documentElement;
-            var win = doc.defaultView || doc.parentWindow;
-            var box = node.getBoundingClientRect();
-            var ot = (win.pageYOffset || docElem.scrollTop) - (docElem.clientTop||0);
-            var or = (win.pageXOffset || docElem.scrollLeft) - (docElem.clientLeft||0);
-            return {
-                'top': box.top + ot,
-                'bottom': box.bottom + ot,
-                'left': box.left + or,
-                'right': box.right + or
-            }
-        }else {
-            return $tx.getCoordsTarget(node);
-        }
-    },
+
     /**
      *
      * @param {[]} point
@@ -291,7 +290,7 @@ Trex.Table.Dragger = Trex.Class.create({
         var edgeType = this.EDGE_TYPE.NONE;
         if(!node) return edgeType;
         var MAX_SELECTION = 5;
-        var rect = this._getOffset(node);
+        var rect = $tx.getOffset(node);
         if ((point[0] - rect.left) < MAX_SELECTION && node.cellIndex != 0) {
             edgeType = this.EDGE_TYPE.LEFT;
         }
@@ -315,44 +314,6 @@ Trex.Table.Dragger = Trex.Class.create({
         this._mouseData.downPoint = point;
         this._mouseData.downTd = node;
         this._mouseData.downType = this._getType(node, point);
-    },
-    /**
-     * @param {Event} e
-     * @returns {Number[]}
-     * @private
-     */
-    _getPointByEvent: function(e){
-        var el = $tx.element(e);
-        var doc = el.ownerDocument;
-        var x = $tx.pointerX(e);
-        var y = $tx.pointerY(e);
-        if(doc !== this._doc){
-            var of = this._getOffset(this._panel.el);
-            return [x-of.left+(this._win.pageXOffset || this._doc.documentElement.scrollLeft), y-of.top+(this._win.pageYOffset || this._doc.documentElement.scrollTop)];
-        }
-        return [x,y]
-    },
-    /**
-     * @param {Number[]} p1
-     * @param {Number[]} p2
-     * @return {Number[]}
-     * @private
-     */
-    _subtractPoint: function(p1, p2){
-        return [ p1[0] - p2[0], p1[1] - p2[1] ];
-    },
-    _addPoint: function(p1, p2){
-        return [ p1[0] + p2[0], p1[1] + p2[1] ];
-    },
-    /**
-     * @param {Number[]} p1
-     * @param {Number[]} p2
-     * @returns {number}
-     * @private
-     */
-    _distancePoint: function(p1, p2){
-        var point = this._subtractPoint(p1,p2);
-        return Math.sqrt(Math.pow(point[0],2) + Math.pow(point[1],2));
     },
     /**
      * @param {Event} e

@@ -32,7 +32,7 @@
 				var klass = m[2];
 				var _node = cnxt;
 				while(_node) {
-					if(_node.nodeName.toLowerCase() == "body") {
+					if(_node.nodeName.toLowerCase() == "body"||_node.nodeType === 9) {
 						break;
 					}
 					if (tag == "*" || _node.nodeName.toLowerCase() == tag) {
