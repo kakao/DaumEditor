@@ -350,6 +350,28 @@
 			var id = config.initializedId || "";
 			return $must("tx_canvas_wysiwyg" + id, "Trex.Canvas.WysiwygPanel");
 		},
+        //#1454
+        setPanelHeight: function(height) {
+            var self = this;
+            function setHeightBody(height){
+                var body = self.wysiwygWindow.document.body;
+                var marginPaddingTop = parseInt($tx.getStyle(body, 'margin-top')) + parseInt($tx.getStyle(body, 'padding-top'));
+                var marginPaddingBottom = parseInt($tx.getStyle(body, 'margin-bottom')) + parseInt($tx.getStyle(body, 'padding-bottom'));
+                height = parseInt(height);
+                body.style.height = (height - marginPaddingTop - marginPaddingBottom).toPx();
+            }
+            function timesTry(n){
+                if(n === 0) return;
+                try{
+                    setHeightBody(height);
+                }catch(e){
+                    setTimeout(timesTry.bind(this, n-1), 30);
+                }
+            }
+            //초기화 중에 body가 초기화 되지 않았기 때문에 body가 오류날 확률이 있음. 10번 시도 하는 로직 추가
+            timesTry(10);
+            self.$super.setPanelHeight(height);
+        },
 
 
 		/**
