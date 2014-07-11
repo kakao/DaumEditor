@@ -190,7 +190,7 @@
 
         _removeNodeIfContentIsEmpty: function(node) {
             var text = (node && (node.textContent || node.innerText));
-            if (node && (text.trim() === '')) {
+            if (node && text && (text.trim() === '')) {
                 $tom.remove(node);
             }
         },
@@ -758,24 +758,33 @@
     /**
      * Paste gecko windows용 모듈
      * - 2014.06.19 : windows용 ff는 "text/html"이 정상 동작하지 않고 있어서 clipboardData 객체를 이용 할 수 없다.
+     * - 2014.07.10 : windows용 ff의 "text/html" 못 불러오는 문제가 해결되어 다시 기본으로 onNativePaste를 사용하도록 한다.
      */
     Trex.Paste.I.GeckoForWindows = Trex.Mixin.create({
         $const: {
             __Identity: 'paste-gecko-for-windows'
         },
-        onNativePaste: function (ev) {
-            if (!this.canvas.isWYSIWYG()) {
-                return _FALSE;
-            }
-
-            var dummy = this.getPasteDummy();
-            if (dummy) {
-                this.preventPasteDefault(ev);
-                return _FALSE;
-            }
-
-            this.pasteByRedirection(ev);
-        },
+//        onNativePaste: function (ev) {
+//            if (!this.canvas.isWYSIWYG()) {
+//                return _FALSE;
+//            }
+//
+//            var dummy = this.getPasteDummy();
+//            if (dummy) {
+//                this.preventPasteDefault(ev);
+//                return _FALSE;
+//            }
+//
+//            var clipboardData = ev.clipboardData;
+//            debugger;
+//            if (clipboardData && clipboardData.getData) {
+//                console.log('paste clipboard data');
+//                return this.pasteByClipboardGetData(ev);
+//            } else {
+//                console.log('paste redirect range');
+//                return this.pasteByRedirection(ev);
+//            }
+//        },
         execPasteCommand: function () {
             // empty method
         }
