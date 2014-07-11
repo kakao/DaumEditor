@@ -196,6 +196,9 @@
         },
 
         _pasteHtmlAndText: function (targetNodes, range, isAllInlineNode, anchorNode) {
+            if (!range) {
+                return;
+            }
             var processor = this.getProcessor();
 
             // anchorNode가 p태그 이거나 p태그를 포함한 하위노드라면 상위의 p를 찾아서 반으로 쪼갠다
@@ -232,13 +235,18 @@
 
             // marker를 unwrapping 시키고
             var lastNode = $tom.bottom(markerContainer);
+            if (lastNode == markerContainer) {
+                lastNode = markerContainer.childNodes[markerContainer.childNodes.length-1];
+            }
             $tom.unwrap(markerContainer);
 
             // range 이동
-            if ($tom.kindOf(lastNode, 'br')) {
-                var brNextIndex = $tom.indexOf(lastNode) + 1;
-                var brParentNode = lastNode.parentNode;
-                range = processor.createGoogRangeFromNodes(brParentNode, brNextIndex, brParentNode, brNextIndex);
+            if ($tom.isElement(lastNode)) {
+                var txtNode = processor.doc.createTextNode(Trex.__WORD_JOINER);
+                $tom.insertAt(txtNode, lastNode);
+                $tom.insertAt(lastNode, txtNode);
+                range = processor.createGoogRangeFromNodes(txtNode, 0, txtNode, $tom.getLength(txtNode));
+                range.removeContents();
             } else {
                 // text인 경우 해당 text의 끝에 위치하게 range를 변경
                 range = processor.createGoogRangeFromNodes(lastNode, $tom.getLength(lastNode), lastNode, $tom.getLength(lastNode));
@@ -248,6 +256,9 @@
             return range;
         },
         _getAnchorNodeByRange: function (range) {
+            if (!range) {
+                return;
+            }
             var anchorNode = range.getFocusNode();
 
             while (anchorNode) {
@@ -658,11 +669,15 @@
         },
         removeRangeContents: function() {
             var range = this.canvas.getProcessor().createGoogRange();
-            range.removeContents();
+            if (range) {
+                range.removeContents();
+            }
         },
         saveRange: function() {
             var range = this.canvas.getProcessor().createGoogRange();
-            this.savedCaret = range.saveUsingCarets();
+            if (range) {
+                this.savedCaret = range.saveUsingCarets();
+            }
         },
         restoreRange: function() {
             if (!this.savedCaret.isDisposed()) {
@@ -764,27 +779,20 @@
         $const: {
             __Identity: 'paste-gecko-for-windows'
         },
-//        onNativePaste: function (ev) {
-//            if (!this.canvas.isWYSIWYG()) {
-//                return _FALSE;
-//            }
-//
-//            var dummy = this.getPasteDummy();
-//            if (dummy) {
-//                this.preventPasteDefault(ev);
-//                return _FALSE;
-//            }
-//
-//            var clipboardData = ev.clipboardData;
-//            debugger;
-//            if (clipboardData && clipboardData.getData) {
-//                console.log('paste clipboard data');
-//                return this.pasteByClipboardGetData(ev);
-//            } else {
-//                console.log('paste redirect range');
-//                return this.pasteByRedirection(ev);
-//            }
-//        },
+        onNativePaste: function (ev) {
+            if (!this.canvas.isWYSIWYG()) {
+                return _FALSE;
+            }
+
+            var dummy = this.getPasteDummy();
+            if (dummy) {
+                this.preventPasteDefault(ev);
+                return _FALSE;
+            }
+
+                console.log('paste redirect range');
+                return this.pasteByRedirection(ev);
+        },
         execPasteCommand: function () {
             // empty method
         }
