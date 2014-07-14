@@ -27,6 +27,13 @@ Trex.DropZone = Trex.Class.create({
     _canvasObserveJobs: function() {
         var self = this;
 
+        this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGOVER, function(ev) {
+            var dt = ev.dataTransfer || _NULL;
+
+            if (dt && dt.types && dt.types.length) {
+                $tx.stop(ev);
+            }
+        });
         this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGENTER, function(ev) {self.showDragArea(ev)});
         this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGLEAVE, function(ev) {self.hideDragArea(ev)});
         this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DROP, function(ev) {
@@ -59,6 +66,7 @@ Trex.DropZone = Trex.Class.create({
                 } else {
                     self.attachHtml(dt.getData(type));
                 }
+                $tx.stop(ev);
             }
 
         });
