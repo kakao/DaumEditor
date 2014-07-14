@@ -7,6 +7,7 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	txSelection: _NULL,
     isRangeInsideWysiwyg: _FALSE,
     lastRange: _NULL,
+    savedRange: _NULL,
 	initialize: function(win, doc) {
 		this.win = win;
         /**
@@ -818,5 +819,41 @@ Trex.module("bind iframe activate or deactivate event",
                 });
             });
 //        }
+    }
+);
+
+
+Trex.module("save range when keyup or mouseup event ",
+    function(editor, toolbar, sidebar, canvas) {
+        canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function(panelDoc) {
+            $tx.observe(panelDoc, 'deactivate', function (ev) {
+                saveRange();
+            });
+
+            $tx.observe(panelDoc, 'mouseup', function (ev) {
+                saveRange();
+            });
+
+            $tx.observe(panelDoc, 'keyup', function (ev) {
+                saveRange();
+            });
+
+            var intervalId;
+            function saveRange() {
+                if (intervalId) {
+                    clearTimeout(intervalId);
+                }
+
+                intervalId = setTimeout(function() {
+                    canvas.execute(function(processor){
+                        var newRange = processor.createGoogRange();
+                        if (newRange) {
+                            processor.savedRange = newRange;
+                        }
+                    });
+                }, 200);
+
+            }
+        });
     }
 );

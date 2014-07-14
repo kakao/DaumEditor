@@ -28,6 +28,7 @@ var testCases = [
 	//"testcase/htmlparser_test.js",
 	"testcase/FontCssProperty_test.js",
 	"testcase/paste_test.js",
+    "testcase/dropzone_test.js",
 //    "testcase/well_formed_test.js", // not finished
     "testcase/embeder_test.js",
     "testcase/tableedit.js",

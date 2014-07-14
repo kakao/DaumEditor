@@ -34,7 +34,12 @@
             convertingText: _TRUE,
 			escapeTextModeContents: _TRUE,
 			removeTextModeBr: _FALSE,
-            respectVisibilityInDesign: _TRUE
+            respectVisibilityInDesign: _TRUE,
+            dropZone: {
+                use:_FALSE,
+                useImageUpload: _TRUE,
+                useFileUpload: _FALSE
+            }
         }
     }, function(root) {
         var _config = TrexConfig.get('canvas', root);
@@ -733,6 +738,26 @@
 
         onDoubleClick: function(event) {
             this.fireJobs(Trex.Ev.__CANVAS_PANEL_DBLCLICK, event);
+        },
+
+        onDragOver: function(event) {
+            this.fireJobs(Trex.Ev.__CANVAS_PANEL_DRAGOVER, event);
+            $tx.stop(event);
+        },
+
+        onDragEnter: function(event) {
+            this.fireJobs(Trex.Ev.__CANVAS_PANEL_DRAGENTER, event);
+            $tx.stop(event);
+        },
+
+        onDragLeave: function(event) {
+            this.fireJobs(Trex.Ev.__CANVAS_PANEL_DRAGLEAVE, event);
+            $tx.stop(event);
+        },
+
+        onDrop: function(event) {
+            $tx.stop(event);
+            this.fireJobs(Trex.Ev.__CANVAS_PANEL_DROP, event);
         },
 
         onScroll: $tx.throttle(function(event) {
