@@ -29,19 +29,18 @@ Trex.DropZone = Trex.Class.create({
 
         this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGOVER, function(ev) {
             var dt = ev.dataTransfer || _NULL;
+            var processor = self.canvas.getProcessor();
 
             if (dt && dt.types && dt.types.length) {
                 $tx.stop(ev);
+
+                processor.moveSelection(ev.x, ev.y);
             }
         });
         this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGENTER, function(ev) {self.showDragArea(ev)});
         this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGLEAVE, function(ev) {self.hideDragArea(ev)});
         this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DROP, function(ev) {
             var processor = self.canvas.getProcessor();
-
-            if (processor.savedRange) {
-                processor.savedRange.select();
-            }
 
             var dt = ev.dataTransfer || _NULL;
             if (!dt) {
@@ -59,6 +58,8 @@ Trex.DropZone = Trex.Class.create({
             });
 
             if (typeIndex != -1) {
+                processor.moveSelection(ev.x, ev.y);
+
                 var type = self.dataType[typeIndex];
 
                 if (type == "Files") {
