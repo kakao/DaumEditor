@@ -10,6 +10,12 @@ Trex.module('register drag and drop attacher on canvas', function(editor, toolba
     };
 });
 
+Trex.MarkupTemplate.add('module.dropZone',
+        '<div style="display: table; left:0px; top:0px; width:0px; height:0px; z-index:9999; border-spacing:6px; position:absolute;">\
+        <div style="display:table-row">\
+        <div style="background-color:white; border:4px dashed #cfcfcf; display:table-cell; opacity: .8; vertical-align:middle">\
+        <div style="font-size: 40px; color:#cfcfcf; text-align:center;">여기에 파일 놓기</div></div></div></div>');
+
 Trex.DropZone = Trex.Class.create({
     initialize: function(editor, sidebar, canvas, config) {
         this.editor = editor;
@@ -22,56 +28,132 @@ Trex.DropZone = Trex.Class.create({
 
         this.dataType = ["text/html", "text/uri-list", "text/plain", "Files"];
 
+        this.cover = this._createCover();
+        this.coverShow = _FALSE;
         this._canvasObserveJobs();
+    },
+    _createCover: function() {
+        var cover = Trex.MarkupTemplate.get("module.dropZone").evaluateAsDom({});
+        return cover;
     },
     _canvasObserveJobs: function() {
         var self = this;
 
-        this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGOVER, function(ev) {
-            var dt = ev.dataTransfer || _NULL;
-            var processor = self.canvas.getProcessor();
 
+        var checkDragEvent = function(ev) {
+            var dt = ev.dataTransfer || _NULL;
             if (dt && dt.types && dt.types.length) {
                 $tx.stop(ev);
-
-                processor.moveSelection(ev.x, ev.y);
+                return true;
             }
-        });
-        this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGENTER, function(ev) {self.showDragArea(ev)});
-        this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGLEAVE, function(ev) {self.hideDragArea(ev)});
-        this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DROP, function(ev) {
-            var processor = self.canvas.getProcessor();
+            return false;
+        }
 
-            var dt = ev.dataTransfer || _NULL;
-            if (!dt) {
-                return;
-            }
+        var timeInterval;
 
-            var typeIndex = -1;
+        var _dragoverHandler = function(ev) {
+            if(checkDragEvent(ev)) {
+                self.showDragArea();
 
-            $A(dt.types).each(function(type) {
-                var index = self.dataType.indexOf(type);
-
-                if (index < typeIndex || typeIndex == -1) {
-                    typeIndex = index;
+                if (timeInterval) {
+                    clearTimeout(timeInterval);
                 }
-            });
-
-            if (typeIndex != -1) {
-                processor.moveSelection(ev.x, ev.y);
-
-                var type = self.dataType[typeIndex];
-
-                if (type == "Files") {
-                    self.attachFiles($A(dt.files));
-                } else {
-                    self.attachHtml(dt.getData(type));
-                }
-                $tx.stop(ev);
+                timeInterval = setTimeout(function() {
+                    self.hideDragArea();
+                }, 100);
             }
+        }
 
+        this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGOVER, _dragoverHandler);
+        $tx.observe(_WIN, "dragover", _dragoverHandler);
+        $tx.observe(_WIN, "drop", checkDragEvent);
+
+        $tx.observe(this.cover, "drop", function(ev) {
+            self._dropHandler(ev);
         });
 
+
+//        var getXY = function(event) {
+//            var x, y;
+//
+//            if (typeof event.clientX === 'undefined') {
+//                x = event.pageX + _DOC_EL.scrollLeft;
+//                y = event.pageY + _DOC_EL.scrollTop;
+//            } else {
+//                x = event.clientX + _DOC.body.scrollLeft + _DOC_EL.scrollLeft;
+//                y = event.clientY + _DOC.body.scrollTop + _DOC_EL.scrollTop;
+//            }
+//
+//            return { x: x, y : y };
+//        }
+//        $tx.observe(_WIN, "dragleave", function(ev) {
+//            if (checkDragEvent(ev)) {
+//                var rect = $tx.getOffset(_DOC_EL);
+//                var xy = getXY(ev);
+//
+//                if (xy.x > rect.right - 1 || xy.x < rect.left + 1 || xy.y > rect.bottom - 1 || xy.y < rect.top + 1) {
+//                    self.hideDragArea();
+//                }
+//            }
+//        });
+    },
+    _dropHandler: function(ev) {
+        var self = this;
+        var processor = this.canvas.getProcessor();
+
+        var dt = ev.dataTransfer || _NULL;
+        if (!dt) {
+            return;
+        }
+
+        var typeIndex = -1;
+
+        $A(dt.types).each(function(type) {
+            var index = self.dataType.indexOf(type);
+
+            if (index < typeIndex || typeIndex == -1) {
+                typeIndex = index;
+            }
+        });
+
+        if (typeIndex != -1) {
+            if (processor.savedRange) {
+                processor.savedRange.select();
+            }
+
+            this.hideDragArea();
+            (new Trex.Area.Select()).reset();
+
+            var type = this.dataType[typeIndex];
+
+            if (type == "Files") {
+                this.attachFiles($A(dt.files));
+            } else {
+                this.attachHtml(dt.getData(type));
+            }
+            $tx.stop(ev);
+        }
+    },
+    showDragArea: function() {
+        if(this.coverShow) {
+            return;
+        }
+
+        var _iframe = this.canvas.getPanel(Trex.Canvas.__WYSIWYG_MODE).el;
+        var _iframeRect = $tx.getOffset(_iframe);
+
+        $tom.applyStyles(this.cover, {left: _iframeRect.left.toPx(),
+                                      top: _iframeRect.top.toPx(),
+                                      width: (_iframeRect.right - _iframeRect.left).toPx(),
+                                      height: (_iframeRect.bottom - _iframeRect.top).toPx()});
+        $tom.insertNext(this.cover, _DOC.body);
+
+
+        this.coverShow = _TRUE;
+    },
+    hideDragArea: function() {
+        $tom.remove(this.cover);
+        this.coverShow = _FALSE;
     },
     attachFiles: function(files) {
         if (!files || !files.length) {
@@ -150,7 +232,6 @@ Trex.DropZone = Trex.Class.create({
                 range = processor.createGoogRange();
             }
 
-
             if (!range.isCollapsed()) {
                 range.removeContents();
                 range.select();
@@ -158,12 +239,6 @@ Trex.DropZone = Trex.Class.create({
 
             processor.pasteNode(node, _TRUE);
         });
-    },
-    showDragArea: function(ev) {
-        //console.log("show");
-    },
-    hideDragArea: function(ev) {
-        //console.log("hide");
     },
     alertMessage: function(overfiles) {
         if (!overfiles || overfiles.length == 0) {
