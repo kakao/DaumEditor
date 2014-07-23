@@ -680,29 +680,37 @@
         /**
          * @function
          */
-        onMouseOver: $tx.throttle(function(event) {
-            try {
-                this.fireMouseover($tx.element(event));
-                this.fireJobs(Trex.Ev.__CANVAS_PANEL_MOUSEOVER, event);
-            } catch (ignore) {
-            }
-        }, 50),
+        onMouseOver: (function(){
+            var fn = function(event) {
+                try {
+                    this.fireMouseover($tx.element(event));
+                    this.fireJobs(Trex.Ev.__CANVAS_PANEL_MOUSEOVER, event);
+                } catch (ignore) {
+                }
+            };
+            return $tx.msie_nonstd? fn :$tx.throttle(fn, 50);
+        })(),
 
-        onMouseMove: $tx.throttle(function(event) {
-            try {
-                this.fireJobs(Trex.Ev.__CANVAS_PANEL_MOUSEMOVE, event);
-            } catch (ignore) {
-                console.log(ignore);
-            }
-        }, 50),
+        onMouseMove: (function(){
+            var fn = function(event) {
+                try {
+                    this.fireJobs(Trex.Ev.__CANVAS_PANEL_MOUSEMOVE, event);
+                } catch (ignore) {
+                    console.log(ignore);
+                }
+            };
+            return $tx.msie_nonstd? fn :$tx.throttle(fn, 50);
+        })(),
 
-        onMouseOut: $tx.throttle(function(event) {
-            try {
-                this.fireJobs(Trex.Ev.__CANVAS_PANEL_MOUSEOUT, event);
-            } catch (ignore) {
-            }
-        }, 50),
-
+        onMouseOut: (function(){
+            var fn = function(event) {
+                try {
+                    this.fireJobs(Trex.Ev.__CANVAS_PANEL_MOUSEOUT, event);
+                } catch (ignore) {
+                }
+            };
+            return $tx.msie_nonstd? fn : $tx.throttle(fn, 50);
+        })(),
         onMouseDown: function(event) {
             this.getProcessor().clearDummy();
             try {
@@ -756,9 +764,12 @@
             this.fireJobs(Trex.Ev.__CANVAS_PANEL_DROP, event);
         },
 
-        onScroll: $tx.throttle(function(event) {
-            this.fireJobs(Trex.Ev.__CANVAS_PANEL_SCROLLING, event);
-        }, 50),
+        onScroll: (function(){
+            var fn = function(event) {
+                this.fireJobs(Trex.Ev.__CANVAS_PANEL_SCROLLING, event);
+            };
+            return $tx.msie_nonstd? fn : $tx.throttle(fn, 50);
+        })(),
 		
 		onPaste: function(event) {
 			this.fireJobs(Trex.Ev.__CANVAS_PANEL_PASTE, event);
