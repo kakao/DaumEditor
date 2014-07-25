@@ -826,6 +826,14 @@ Trex.module("bind iframe activate or deactivate event",
 Trex.module("save range when keyup or mouseup event ",
     function(editor, toolbar, sidebar, canvas) {
         canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function(panelDoc) {
+            var processor = canvas.getProcessor();
+            var throttleSaveRange = $tx.throttle(saveRange, 200);
+            function saveRange() {
+                var newRange = processor.createGoogRange();
+                if (newRange) {
+                    processor.savedRange = newRange;
+                }
+            }
             $tx.observe(panelDoc, 'deactivate', function (ev) {
                 saveRange();
             });
@@ -834,26 +842,9 @@ Trex.module("save range when keyup or mouseup event ",
                 saveRange();
             });
 
-            $tx.observe(panelDoc, 'keyup', function (ev) {
-                saveRange();
+            $tx.observe(panelDoc, 'keydown', function (ev) {
+                throttleSaveRange();
             });
-
-            var intervalId;
-            function saveRange() {
-                if (intervalId) {
-                    clearTimeout(intervalId);
-                }
-
-                intervalId = setTimeout(function() {
-                    canvas.execute(function(processor){
-                        var newRange = processor.createGoogRange();
-                        if (newRange) {
-                            processor.savedRange = newRange;
-                        }
-                    });
-                }, 200);
-
-            }
         });
     }
 );
