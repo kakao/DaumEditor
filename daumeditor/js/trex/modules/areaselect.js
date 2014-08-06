@@ -4,7 +4,7 @@ Trex.MarkupTemplate.add('module.areaselect',
     '<div class="tx-area-holder-sw" style="visibility:visible;position: absolute; z-index: 1000; line-height: 1; bottom: -4px; left: -5px; border:1px solid #000000;width:5px;height:5px;border-right:0;border-top:0;"></div>' +
     '<div class="tx-area-holder-sw" style="visibility:visible;position: absolute; z-index: 1000; line-height: 1; top: -4px; right: -3px; border:1px solid #000000;width:5px;height:5px;border-left:0;border-bottom:0;"></div>' +
     '<div class="tx-area-holder" style="visibility:visible;position: absolute; z-index: 1000; line-height: 1; cursor:nw-resize; bottom: -4px; right: -5px; border:1px solid #000000;width:8px;height:8px;background-color: #FFFFFF;"></div>' +
-    '<div class="tx-area-selection-info" style="visibility:visible;display:none;position: absolute; z-index:1002; line-height: 1;top: 5px; right: 5px; background-color:#000000;font-size:12px;color:#FFFFFF;padding: 3px">0x0</div>' +
+    '<div class="tx-area-selection-info" style="visibility:visible;display:none;position: absolute; z-index:1002; line-height: 1;bottom: 10px; right: 5px; background-color:#000000;font-size:12px;color:#FFFFFF;padding: 3px">0x0</div>' +
     '</div>');
 
 /**
