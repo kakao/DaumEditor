@@ -202,21 +202,20 @@ Trex.DropZone = Trex.Class.create({
         }
     },
     _insertNode: function(node) {
-        this.canvas.execute(function(processor) {
-            var range = processor.createGoogRange();
+        var processor = this.canvas.getProcessor();
+        var range = processor.createGoogRange();
 
-            if (range == _NULL) {
-                processor.focusOnTop();
-                range = processor.createGoogRange();
-            }
+        if (range == _NULL) {
+            processor.focusOnTop();
+            range = processor.createGoogRange();
+        }
 
-            if (!range.isCollapsed()) {
-                range.removeContents();
-                range.select();
-            }
+        if (!range.isCollapsed()) {
+            range.removeContents();
+            range.select();
+        }
 
-            processor.pasteNode(node, _TRUE);
-        });
+        processor.pasteNode(node, _TRUE);
     },
     alertMessage: function(overfiles) {
         if (!overfiles || overfiles.length == 0) {
