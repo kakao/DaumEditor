@@ -740,18 +740,24 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 	},
     moveSelection: function(x,y){
         var doc = this.doc;
+        var win = this.win;
         var rng;
         var pos;
         if (doc.caretPositionFromPoint) {
-            rng = doc.createRange()
+            //ff
+            rng = doc.createRange();
             x-=doc.documentElement.scrollLeft;
             y-=doc.documentElement.scrollTop;
             pos = doc.caretPositionFromPoint(x, y);
             rng.setStart(pos.offsetNode, pos.offset);
             rng.setEnd(pos.offsetNode, pos.offset);
         }else if(doc.caretRangeFromPoint){
-            rng = doc.caretRangeFromPoint(x, y)
+            //chrome
+            x-=win.pageXOffset;
+            y-=win.pageYOffset;
+            rng = doc.caretRangeFromPoint(x, y);
         }else if(doc.body.createTextRange != undefined){
+            //ie
             try{
                 rng = doc.body.createTextRange();
                 rng.moveToPoint(x,y);
