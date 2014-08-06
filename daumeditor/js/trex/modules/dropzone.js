@@ -39,20 +39,10 @@ Trex.DropZone = Trex.Class.create({
     _canvasObserveJobs: function() {
         var self = this;
 
-
-        var checkDragEvent = function(ev) {
-            var dt = ev.dataTransfer || _NULL;
-            if (dt && dt.types && dt.types.length) {
-                $tx.stop(ev);
-                return true;
-            }
-            return false;
-        }
-
         var timeInterval;
 
         var _dragoverHandler = function(ev) {
-            if(checkDragEvent(ev)) {
+            if(self._checkDragType(ev) != -1) {
                 self.showDragArea();
 
                 if (timeInterval) {
@@ -66,36 +56,32 @@ Trex.DropZone = Trex.Class.create({
 
         this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGOVER, _dragoverHandler);
         $tx.observe(_WIN, "dragover", _dragoverHandler);
-        $tx.observe(_WIN, "drop", checkDragEvent);
+        $tx.observe(_WIN, "drop", function(ev) {
+            self._checkDragType(ev);
+        });
 
         $tx.observe(this.cover, "drop", function(ev) {
             self._dropHandler(ev);
         });
+    },
+    _checkDragType: function(ev) {
+        var dataType = this.dataType;
+        var dt = ev.dataTransfer || _NULL;
 
+        var typeIndex = -1;
 
-//        var getXY = function(event) {
-//            var x, y;
-//
-//            if (typeof event.clientX === 'undefined') {
-//                x = event.pageX + _DOC_EL.scrollLeft;
-//                y = event.pageY + _DOC_EL.scrollTop;
-//            } else {
-//                x = event.clientX + _DOC.body.scrollLeft + _DOC_EL.scrollLeft;
-//                y = event.clientY + _DOC.body.scrollTop + _DOC_EL.scrollTop;
-//            }
-//
-//            return { x: x, y : y };
-//        }
-//        $tx.observe(_WIN, "dragleave", function(ev) {
-//            if (checkDragEvent(ev)) {
-//                var rect = $tx.getOffset(_DOC_EL);
-//                var xy = getXY(ev);
-//
-//                if (xy.x > rect.right - 1 || xy.x < rect.left + 1 || xy.y > rect.bottom - 1 || xy.y < rect.top + 1) {
-//                    self.hideDragArea();
-//                }
-//            }
-//        });
+        if (dt) {
+            $A(dt.types).each(function(type) {
+                var index = dataType.indexOf(type);
+
+                if (index < typeIndex || typeIndex == -1) {
+                    $tx.stop(ev);
+                    typeIndex = index;
+                }
+            });
+        }
+
+        return typeIndex;
     },
     _dropHandler: function(ev) {
         var self = this;
@@ -106,15 +92,7 @@ Trex.DropZone = Trex.Class.create({
             return;
         }
 
-        var typeIndex = -1;
-
-        $A(dt.types).each(function(type) {
-            var index = self.dataType.indexOf(type);
-
-            if (index < typeIndex || typeIndex == -1) {
-                typeIndex = index;
-            }
-        });
+        var typeIndex = this._checkDragType(ev);
 
         if (typeIndex != -1) {
             if (processor.savedRange) {
