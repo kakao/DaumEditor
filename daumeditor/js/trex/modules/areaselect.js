@@ -440,7 +440,17 @@ Trex.Area.Move = Trex.Class.create({
         this._canvas.focus();
         try {
             p.moveSelection(point[0], point[1]);
+            var _node = p.getNode();
+            if(!$tom.findAncestor(_node, function(node){
+                return node.tagName === 'BODY';
+            }, function(node){
+                return !node;
+            } )){
+                p.selectControl(element);
+                return;
+            }
             this._canvas.pasteNode(element);
+            p.selectControl(element);
         }catch(e){
             console.log(e);
         }
