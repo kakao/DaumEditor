@@ -1293,12 +1293,12 @@ $tx.extend($tx, /** @lends $tx */{
 		each: function(iterator) {
             if (_WIN['DEBUG']) {
                 for (var i = 0, length = this.length; i < length; i++) {
-                    iterator(this[i]);
+                    iterator(this[i], i);
                 }
             } else {
                 try {
                     for (var i = 0, length = this.length; i < length; i++) {
-                        iterator(this[i]);
+                        iterator(this[i], i);
                     }
                 } catch (e) {
                     if (e != $break) {
