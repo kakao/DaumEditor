@@ -397,9 +397,13 @@
          * @returns {String}
          */
         getContent: function() {
+            function toRegExp(str){
+                return str.replace(/([\\^$(){}[\]+*?.])/g,'\\$1');
+            }
             var _content = this.panels[this.mode].getContent();
             if(_content) {
                 _content = _content.replace(Trex.__WORD_JOINER_REGEXP, ""); //NOTE: 서비스의 DB charset이 euc-kr 계열일 경우 문제가 있음.
+                _content = _content.replace(RegExp('<img[^>]*'+toRegExp(Trex.__WAITING_IMG_SRC)+'[^>]*>','g'),'');
             }
             return _content;
         },
