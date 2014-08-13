@@ -833,7 +833,7 @@ Trex.module("save range when keyup or mouseup event ",
     function(editor, toolbar, sidebar, canvas) {
         canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function(panelDoc) {
             var processor = canvas.getProcessor();
-            var throttleSaveRange = $tx.throttle(saveRange, 200);
+            var debounceSaveRange = $tx.debounce(saveRange, 200);
             function saveRange() {
                 var newRange = processor.createGoogRange();
                 if (newRange) {
@@ -849,7 +849,7 @@ Trex.module("save range when keyup or mouseup event ",
             });
 
             $tx.observe(panelDoc, 'keydown', function (ev) {
-                throttleSaveRange();
+                debounceSaveRange();
             });
         });
     }

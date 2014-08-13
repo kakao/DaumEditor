@@ -39,23 +39,22 @@ Trex.DropZone = Trex.Class.create({
     _canvasObserveJobs: function() {
         var self = this;
 
-        var timeInterval;
-
-        var _dragoverHandler = function(ev) {
+        var hideHandler = function() {
+            self.hideDragArea();
+        }
+        var debounceHideDragArea = $tx.debounce(function() {
+            self.hideDragArea();
+        }, 150);
+        var throttleDragOverHandler = $tx.throttle(function(ev) {
             if(self._checkDragType(ev) != -1) {
                 self.showDragArea();
 
-                if (timeInterval) {
-                    clearTimeout(timeInterval);
-                }
-                timeInterval = setTimeout(function() {
-                    self.hideDragArea();
-                }, 100);
+                debounceHideDragArea();
             }
-        }
+        }, 100, {trailing:_FALSE});
 
-        this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGOVER, _dragoverHandler);
-        $tx.observe(_WIN, "dragover", _dragoverHandler);
+        this.canvas.observeJob(Trex.Ev.__CANVAS_PANEL_DRAGOVER, throttleDragOverHandler);
+        $tx.observe(_WIN, "dragover", throttleDragOverHandler);
         $tx.observe(_WIN, "drop", function(ev) {
             self._checkDragType(ev);
         });
