@@ -90,12 +90,12 @@ var $tx = {};
             };
         },
         debounce: function(func, wait, immediate) {
-            var timeout, args, context, timestamp, result;
+            var timeout, args, context, timestamp = 0, result;
 
             var later = function() {
                 var last = dateNow() - timestamp;
 
-                if (last < wait && last > 0) {
+                if (last < wait && last >= 0) {
                     timeout = setTimeout(later, wait - last);
                 } else {
                     timeout = null;
