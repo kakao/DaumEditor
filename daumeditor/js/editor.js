@@ -180,9 +180,8 @@ var CORE_FILES = [
 
 	"trex/modules/table/border.js",
 	"trex/modules/table/template.js",
-
     "trex/modules/areaselect.js",
-
+    "trex/modules/pageupdown.js",
 	"trex/modules/tabledragger.js",
     "trex/modules/exiteditor.js",
     "trex/modules/autolink.js"

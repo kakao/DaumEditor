@@ -402,25 +402,29 @@ Trex.Menu.Table = Trex.Class.create({
 		$tx.observe(colInput, "blur", function(){
 			colInput.value = _self.colSize = calculator.getValidValue(colInput.value, _self.colSize, Trex.Menu.Table.MAX_COL);
 		});
-		$tx.observe( $tom.collect(elContext, "div.tx-col-field a.tx-btn-add"), "click", function(){
+		$tx.observe( $tom.collect(elContext, "div.tx-col-field a.tx-btn-add"), "click", function(e){
 			colInput.value = _self.colSize = calculator.calculate(_self.colSize, Trex.Menu.Table.MAX_COL, 1);
+            $tx.stop(e);
 			return _FALSE;
 		});
-		$tx.observe($tom.collect(elContext, "div.tx-col-field a.tx-btn-sub"), "click", function(){
+		$tx.observe($tom.collect(elContext, "div.tx-col-field a.tx-btn-sub"), "click", function(e){
 			colInput.value = _self.colSize = calculator.calculate(_self.colSize, Trex.Menu.Table.MAX_COL, -1);
-			return _FALSE;
+            $tx.stop(e);
+            return _FALSE;
 		});
 
 		var rowInput = $tom.collect(elContext, "div.tx-row-field input");
 		$tx.observe(rowInput, "blur", function(){
 			rowInput.value = _self.rowSize = calculator.getValidValue(rowInput.value, _self.rowSize, Trex.Menu.Table.MAX_ROW);
 		});
-		$tx.observe($tom.collect(elContext, "div.tx-row-field a.tx-btn-add"), "click", function(){
+		$tx.observe($tom.collect(elContext, "div.tx-row-field a.tx-btn-add"), "click", function(e){
 			rowInput.value = _self.rowSize = calculator.calculate(_self.rowSize, Trex.Menu.Table.MAX_ROW, 1);
+            $tx.stop(e);
 			return _FALSE;
 		});
-		$tx.observe($tom.collect(elContext, "div.tx-row-field a.tx-btn-sub"), "click", function(){
+		$tx.observe($tom.collect(elContext, "div.tx-row-field a.tx-btn-sub"), "click", function(e){
 			rowInput.value = _self.rowSize = calculator.calculate(_self.rowSize, Trex.Menu.Table.MAX_ROW, -1);
+            $tx.stop(e);
 			return _FALSE;
 		});
 	},
@@ -437,7 +441,8 @@ Trex.Menu.Table = Trex.Class.create({
 			});
 		});
 
-		$tx.observe(elACancel, "click", function() {
+		$tx.observe(elACancel, "click", function(e) {
+            $tx.stop(e);
 			this.onCancel();
 			return _FALSE;
 		}.bindAsEventListener(this));

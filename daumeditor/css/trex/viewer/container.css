@@ -1,5 +1,5 @@
 /*==== container ====*/
-	.tx-content-container { word-wrap: break-word; }
+	.tx-content-container { word-break: break-all; }
 	.tx-content-container em { font-style: italic; }
 	.tx-content-container ol { padding-left:35px; margin-left:0; }
 	.tx-content-container ol li{ list-style-type: inherit; }
