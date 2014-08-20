@@ -12,13 +12,12 @@ Trex.module("page up & down", function(editor, toolbar, sidebar, canvas, config)
 
             function fixscroll(e){
                 window.scrollTo(left, top);
-                //$tx.stop(e);
             }
 
-            $tx.observe(_DOC, 'scroll', fixscroll);
+            $tx.observe(_WIN, 'scroll', fixscroll);
 
             setTimeout(function(){
-                $tx.stopObserving(_DOC, 'scroll', fixscroll);
+                $tx.stopObserving(_WIN, 'scroll', fixscroll);
             },30);
 
         }
