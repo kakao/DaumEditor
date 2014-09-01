@@ -497,7 +497,13 @@ $tx.extend($tx, /** @lends $tx */{
 
     // 이 문자열이 "[1, 3, 4]" 와 같이 배열을 Stringify 한 것인지 확인한다
     var isStringifiedArray = function (str) {
-        return (str.charAt(0) == "[" && str.charAt(str.length - 1) == "]");
+        if (str.charAt(0) == "[" && str.charAt(str.length - 1) == "]") {
+            try{
+                JSON.parse(str);
+                return true;
+            }catch (ignore) {}
+        }
+        return false;
     };
 })();
 
