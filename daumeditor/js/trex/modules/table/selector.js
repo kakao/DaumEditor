@@ -355,7 +355,7 @@ Trex.Table.Selector = Trex.Class.create({
 		if (this.canvas.config.readonly === _FALSE) {
 			td = Trex.TableUtil.getClosestByTagNames(["td", "th"], elem);
 			isTxInfo = $tom.find(td, ".txc-info");
-			if (td && !isTxInfo) {
+			if (td && !isTxInfo ) {
 				this.selectStart(td);
 				this.turnOnDragging();
 			}
@@ -367,6 +367,9 @@ Trex.Table.Selector = Trex.Class.create({
 	 */
 	onmousemove: function (elem) {
 		var td, table, notSelected;
+        if(Trex.Area.Select.isResizing){
+            this.turnOffDragging();
+        }
 		if (this.isDragging) {
 			td = Trex.TableUtil.getClosestByTagNames(["td", "th"], elem);
 			if (td) {

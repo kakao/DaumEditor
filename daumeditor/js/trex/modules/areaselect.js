@@ -558,7 +558,24 @@ Trex.module("area select", function(editor, toolbar, sidebar, canvas, config){
         Trex.Area.Select.getSelection = function(){
             return select;
         };
-        if($tx.msie) return;
+        if($tx.msie) {
+            // ie에서만 isResizeing을 사용한다. ie인 경우 리사이즈 여부를 확인하기 어렵다.
+            Trex.Area.Select.isResizing = false;
+            $tx.observe(doc.body, "resizestart", function(ev) {
+                var el = $tx.element(ev);
+                if($tom.kindOf(el, 'img,table')){
+                    Trex.Area.Select.isResizing = true;
+                }
+
+            });
+            $tx.observe(doc.body, "resizeend", function(ev) {
+                var el = $tx.element(ev);
+                if($tom.kindOf(el, 'img,table')){
+                    Trex.Area.Select.isResizing = false;
+                }
+            });
+            return;
+        }
         var mousedownel = _NULL;
         function mousedown(e){
             var el = $tx.element(e);

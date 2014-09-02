@@ -816,7 +816,7 @@ $tx.extend($tx, /** @lends $tx */{
 		_observeAndCache: function(element, name, observer, useCapture) {
 			if (!this.observers) 
 				this.observers = [];
-			if (element.addEventListener) {
+			if (name!='resizestart' && name!='resizeend' && element.addEventListener) {
 				this.observers.push([element, name, observer, useCapture]);
 				element.addEventListener(name, observer, useCapture);
 			} else if (element.attachEvent) {
