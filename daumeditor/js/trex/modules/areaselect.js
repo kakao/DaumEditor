@@ -140,6 +140,9 @@ Trex.Area.Select = Trex.Class.single({
         this._target = _NULL;
     },
     getTarget: function(){
+        if($tx.msie){
+            return this._canvas.getProcessor().getControl();
+        }
         return this._target;
     },
     getOrigin: function(){

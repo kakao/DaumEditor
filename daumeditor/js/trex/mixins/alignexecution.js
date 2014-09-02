@@ -1,7 +1,7 @@
 Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
 	executeAlignImageMode: function(processor) {
 		var _imageAlignProps = this.constructor.__ImageModeProps['image'];
-		var _node = processor.getControl();
+		var _node = (new Trex.Area.Select).getTarget();
 		if(!_node) {
 			return;
 		}
@@ -11,19 +11,13 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
 			var _wNode = $tom.find(_node, "%paragraph");
 			processor.apply(_wNode, _textAlignProps);
 		}
-        if($tx.msie) return;
-        var sel = new Trex.Area.Select;
-        sel.update();
 	},
     executeAlignTableMode: function(processor) {
-        var sel = new Trex.Area.Select;
-        var selEl = sel.getTarget();
+        var selEl = (new Trex.Area.Select).getTarget();
         if(!selEl) return;
         processor.apply(selEl, this.constructor.__TableModeProps);
-        sel.update();
     },
 	executeAlignTextMode: function(processor) {
-        var sel = new Trex.Area.Select;
 		var _textAlignProps = this.constructor.__TextModeProps['paragraph'];
 		var _node = processor.getControl();
 		if(_node && $tom.kindOf(_node, 'button') ) {
@@ -53,10 +47,9 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
 				'align': _textAlignProps['style']['textAlign']
 			});
 		}
-        sel.update();
 	},
 	queryImageFloat: function(processor) {
-		var _node = processor.getControl();
+		var _node = (new Trex.Area.Select).getTarget();
 		if (_node) {
 			return processor.queryStyle(_node, 'float');
 		} else {
@@ -82,7 +75,7 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
 		return _value;
 	},
 	queryControlAlign: function(processor) {
-		var node = processor.getControl();
+		var node = (new Trex.Area.Select).getTarget();
         return processor.queryAttr(node, 'align');
 	},
     executeAlign: function(processor) {
@@ -97,6 +90,9 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
         } else {
             tool.executeAlignTextMode(processor);
         }
+        if($tx.msie) return;
+        var sel = new Trex.Area.Select;
+        sel.update();
     },
     getAlignMode: function(processor) {
 		var selectedTdArr = (processor.table) ? processor.table.getTdArr() : [];
