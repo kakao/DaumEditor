@@ -1,18 +1,18 @@
 Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
 	executeAlignImageMode: function(processor) {
-        var sel = new Trex.Area.Select;
 		var _imageAlignProps = this.constructor.__ImageModeProps['image'];
 		var _node = processor.getControl();
 		if(!_node) {
 			return;
 		}
 		processor.apply(_node, _imageAlignProps);
-
 		var _textAlignProps = this.constructor.__ImageModeProps['paragraph'];
 		if (_textAlignProps) {
 			var _wNode = $tom.find(_node, "%paragraph");
 			processor.apply(_wNode, _textAlignProps);
 		}
+        if($tx.msie) return;
+        var sel = new Trex.Area.Select;
         sel.update();
 	},
     executeAlignTableMode: function(processor) {

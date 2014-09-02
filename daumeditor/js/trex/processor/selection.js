@@ -566,11 +566,11 @@ Trex.I.Selection.TridentStandard = {
                 return null;
             }
         }
-        //button
+        //button,img
         var _prevNode = $tom.previous(_sel.focusNode);
         var _nextNode = $tom.next(_sel.anchorNode);
         if(_prevNode == _nextNode) {
-            return $tom.first(_prevNode, '%control');
+            return ($tom.kindOf(_prevNode, '%control')&&_prevNode)||$tom.first(_prevNode, '%control');
         } else {
             return null;
         }
