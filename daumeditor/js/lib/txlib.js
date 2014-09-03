@@ -261,6 +261,7 @@ var $tx = {};
         msie_nonstd: ($tx.msie && !!_DOC.selection),
         msie6: ($tx.msie && 6 <= $tx.msie_ver && $tx.msie_ver < 7),
         msie8under: ($tx.msie && $tx.msie_ver <= 8),
+        msie10under: ($tx.msie && $tx.msie_ver <= 10),
         msie_quirks: (function(){
             try {
                 return $tx.msie && _WIN.top.document.compatMode !== 'CSS1Compat'
@@ -816,7 +817,7 @@ $tx.extend($tx, /** @lends $tx */{
 		_observeAndCache: function(element, name, observer, useCapture) {
 			if (!this.observers) 
 				this.observers = [];
-			if (name!='resizestart' && name!='resizeend' && element.addEventListener) {
+			if (($tx.msie_ver >= 11||name!='resizestart' && name!='resizeend') && element.addEventListener) {
 				this.observers.push([element, name, observer, useCapture]);
 				element.addEventListener(name, observer, useCapture);
 			} else if (element.attachEvent) {

@@ -756,10 +756,10 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
             x-=win.pageXOffset;
             y-=win.pageYOffset;
             rng = doc.caretRangeFromPoint(x, y);
-        }else if(doc.body.createTextRange != undefined){
+        }else {
             //ie
             try{
-                rng = doc.body.createTextRange();
+                rng = doc.body.createTextRange()||doc.createRange();
                 rng.moveToPoint(x,y);
                 rng.select();
             }catch(e){

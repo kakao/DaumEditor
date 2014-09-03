@@ -1,6 +1,6 @@
 Trex.MarkupTemplate.add('module.areaselect',
     '<div class="tx-area-selection" contenteditable="false" style="visibility:hidden;position:absolute;z-index:999;display: block; left: 0px;line-height:1; top: 0px; width: 0px; height: 0px;">' +
-    '<div class="tx-area-move-holder" style="visibility:visible;position: absolute; z-index: 1000; line-height: 1; cursor:move; top: -4px; left: -5px; border:1px solid #FFFFFF;width:8px;height:8px;background-color: #000000;"></div>' +
+    '<div class="tx-area-move-holder" style="display:none;visibility:visible;position: absolute; z-index: 1000; line-height: 1; cursor:move; top: -4px; left: -5px; border:1px solid #FFFFFF;width:8px;height:8px;background-color: #000000;"></div>' +
     '<div class="tx-area-holder-sw" style="visibility:visible;position: absolute; z-index: 1000; line-height: 1; bottom: -4px; left: -5px; border:1px solid #000000;width:5px;height:5px;border-right:0;border-top:0;"></div>' +
     '<div class="tx-area-holder-sw" style="visibility:visible;position: absolute; z-index: 1000; line-height: 1; top: -4px; right: -3px; border:1px solid #000000;width:5px;height:5px;border-left:0;border-bottom:0;"></div>' +
     '<div class="tx-area-holder" style="visibility:visible;position: absolute; z-index: 1000; line-height: 1; cursor:nw-resize; bottom: -4px; right: -5px; border:1px solid #000000;width:8px;height:8px;background-color: #FFFFFF;"></div>' +
@@ -140,7 +140,7 @@ Trex.Area.Select = Trex.Class.single({
         this._target = _NULL;
     },
     getTarget: function(){
-        if($tx.msie){
+        if($tx.msie10under){
             return this._canvas.getProcessor().getControl();
         }
         return this._target;
@@ -437,12 +437,14 @@ Trex.Area.Move = Trex.Class.create({
             left: (point[0]+10).toPx(),
             top: (point[1]+10).toPx()
         });
+        var p = this._canvas.getProcessor();
+        this._canvas.focus();
+        p.moveSelection(point[0], point[1]);
     },
     _move: function(element, point){
         var p = this._canvas.getProcessor();
         this._canvas.focus();
         try {
-            p.moveSelection(point[0], point[1]);
             var _node = p.getNode();
             if(!$tom.findAncestor(_node, function(node){
                 return node.tagName === 'BODY';
@@ -452,7 +454,7 @@ Trex.Area.Move = Trex.Class.create({
                 p.selectControl(element);
                 return;
             }
-            this._canvas.pasteNode(element);
+            p.pasteNode(element);
             p.selectControl(element);
         }catch(e){
             console.log(e);
@@ -555,28 +557,30 @@ Trex.module("area select", function(editor, toolbar, sidebar, canvas, config){
     canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function(doc) {
         var _processor = canvas.getProcessor();
         var select = new Trex.Area.Control(new Trex.Area.Resize(new Trex.Area.Select(editor)));
-        if(_DOC.caretPositionFromPoint||_DOC.caretRangeFromPoint){
+        if(_DOC.caretPositionFromPoint||_DOC.caretRangeFromPoint||!$tx.msie10under){
             select = new Trex.Area.Move(select)
         }
         Trex.Area.Select.getSelection = function(){
             return select;
         };
-        if($tx.msie) {
+        if($tx.msie10under) {
             // ie에서만 isResizeing을 사용한다. ie인 경우 리사이즈 여부를 확인하기 어렵다.
             Trex.Area.Select.isResizing = false;
-            $tx.observe(doc.body, "resizestart", function(ev) {
+            function resizestart(ev) {
                 var el = $tx.element(ev);
                 if($tom.kindOf(el, 'img,table')){
                     Trex.Area.Select.isResizing = true;
                 }
-
-            });
-            $tx.observe(doc.body, "resizeend", function(ev) {
+            }
+            function resizeend(ev) {
                 var el = $tx.element(ev);
                 if($tom.kindOf(el, 'img,table')){
                     Trex.Area.Select.isResizing = false;
                 }
-            });
+            }
+            $tx.observe(doc.body, "resizestart", resizestart);
+            $tx.observe(doc.body, "resizeend", resizeend);
+
             return;
         }
         var mousedownel = _NULL;
