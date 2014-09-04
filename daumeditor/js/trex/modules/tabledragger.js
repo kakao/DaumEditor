@@ -108,7 +108,7 @@ Trex.Table.Dragger = Trex.Class.create({
 
         if(this._state == 'READY' ){
             var el;
-            if($tx.msie){
+            if($tx.msie10under){
                 el = $tom.find(this._mouseData.downTd, 'table');
                 this._canvas.getProcessor().selectControl(el)
 

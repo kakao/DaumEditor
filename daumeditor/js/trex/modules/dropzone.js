@@ -291,7 +291,7 @@ Trex.DropZone = Trex.Class.create({
             this.canvas.execute(function(processor) {
                 var _img = _DOC.createElement('img');
                 _img.src = data.imageurl;
-                $tom.addStyles(_img, {clear:'none', float: 'none'});
+                $tom.addStyles(_img, {'clear':'none', 'float': 'none'});
 
                 if (self.canvas.isWYSIWYG()) {
                     var replaceNode = self._getIndicator(replaceNodeId);
