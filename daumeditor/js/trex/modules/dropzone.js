@@ -275,7 +275,7 @@ Trex.DropZone = Trex.Class.create({
             return;
         }
         if (this.canvas.isWYSIWYG()) {
-            self._getIndicator(id);
+            var indicator = this._getIndicator(id);
 
             if (indicator) {
                 goog.dom.removeNode(indicator);
