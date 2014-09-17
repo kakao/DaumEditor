@@ -1,0 +1,59 @@
+{
+    "src": {
+        "editor":{
+            "dir": "daumeditor",
+            "js":{
+                "dir": "<%= buildConfig.src.editor.dir %>/js",
+                "files": []
+            },
+            "css":{
+                "dir": "<%= buildConfig.src.editor.dir %>/css"
+            }
+        },
+        "popup":{
+            "dir": "daumeditor",
+            "js":{
+                "dir": "<%= buildConfig.src.popup.dir %>/js",
+                "files": []
+            }
+        }
+    },
+    "build":{
+        "dir":"build",
+        "target":{
+            "dir": "<%= buildConfig.build.dir %>/target",
+            "js" : {
+                "list":["editor","popup"],
+                "merged":{
+                    "dir":"<%= buildConfig.build.target.dir %>/js_merged"
+                },
+                "escaped":{
+                    "dir": "<%= buildConfig.build.target.dir %>/js_escaped"
+                },
+                "minified":{
+                    "dir": "<%= buildConfig.build.target.dir %>/js"
+                }
+            },
+            "css":{
+                "list": ["editor","popup","content_view","content_wysiwyg"],
+                "merged":{
+                    "dir": "<%= buildConfig.build.target.dir %>/css_merged"
+                },
+                "minified":{
+                    "dir": "<%= buildConfig.build.target.dir %>/css"
+                }
+            }
+        },
+        "link":{
+            "image":{
+                "url":"../images"
+            }
+        },
+        "dist":{
+            "dir": "<%= buildConfig.build.dir %>/dist"
+        },
+        "script":{
+            "dir": "<%= buildConfig.build.dir %>/script"
+        }
+    }
+}
