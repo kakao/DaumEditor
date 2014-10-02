@@ -4,4 +4,5 @@ target/
 .DS_Store
 /.idea
 /atlassian-ide-plugin.xml
-node_module/
+node_modules/
+test/coverage/
