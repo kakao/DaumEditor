@@ -98,8 +98,9 @@ Trex.Table.Selector = Trex.Class.create({
         }
 
         this.canvas.observeKey({
-            shiftKey: true,
-            keyCode:35
+            shiftKey: _TRUE,
+            altKey: _TRUE,
+            keyCode:39
         }, function (e){
             var elem, td;
             elem = self.canvas.getProcessor().getNode();
