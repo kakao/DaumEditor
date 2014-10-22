@@ -107,7 +107,6 @@ Trex.I.KeyObservable = Trex.Faculty.create(/** @lends Trex.I.KeyObservable */{
 			this.keyObservers[_name] = [];
 		}
         if(isBubble){
-            console.log(11);
             observer._bubble = _TRUE;
         }
 		this.keyObservers[_name].push(observer);
