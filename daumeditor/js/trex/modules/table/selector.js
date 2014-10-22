@@ -106,11 +106,12 @@ Trex.Table.Selector = Trex.Class.create({
             elem = self.canvas.getProcessor().getNode();
             td = getTdFromElement(elem);
             if(!td) return;
+            $tx.stop(e);
             self.isSelectMode = _TRUE;
             self.selectStart(td);
             self.applySelected();
             Trex.TableUtil.collapseCaret(self.wysiwygPanel, elem);
-        });
+        }, _TRUE);
 
         function selectByArrowKey(f){
             var b = self.tableIndexer.getBoundary(self.currentTd);

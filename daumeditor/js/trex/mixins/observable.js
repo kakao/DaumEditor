@@ -95,16 +95,21 @@ Trex.I.KeyObservable = Trex.Faculty.create(/** @lends Trex.I.KeyObservable */{
 	 * custom 이벤트가 발생하는지를 관찰하는 observer를 등록한다.
 	 * @param {Object} keys - 이벤트가 발생하길 원하는 키의 조합 {ctrlKey:T, altKey:F, shiftKey:T, keyCode:17} 
 	 * @param {Function} observer - 해당 이벤트 발생시 실행될 handler
+     * @param {Boolean=} isBubble - 해당 이벤트가 bubble인지 여부
 	 * @example
 	 * canvas.observeKey({ctrlKey:'T', altKey:'F', keyCode:32}, function(){alert('ctrl + 32키가 눌렸네요.')}) 
 	 */
-	observeKey: function(keys, observer) {
+	observeKey: function(keys, observer, isBubble) {
 		var _name = function(keys) {
 			return (keys.ctrlKey? 'T': 'F') + (keys.altKey? 'T': 'F') + (keys.shiftKey? 'T': 'F') + "_" + keys.keyCode;
 		}(keys);
 		if(!this.keyObservers[_name]) {
 			this.keyObservers[_name] = [];
 		}
+        if(isBubble){
+            console.log(11);
+            observer._bubble = _TRUE;
+        }
 		this.keyObservers[_name].push(observer);
 	},
 	/**
@@ -132,7 +137,7 @@ Trex.I.KeyObservable = Trex.Faculty.create(/** @lends Trex.I.KeyObservable */{
 		this.keyObservers[_name].each(function(observer) {
 			try {
 				observer.apply(_self, [ev]);
-                !isBubble&&stopEventOnce();
+                !(observer._bubble||isBubble)&&stopEventOnce();
 			} catch (e1) {
 				if(e1 === $stop) {
 					stopEventOnce();
