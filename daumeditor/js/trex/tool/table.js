@@ -9,7 +9,15 @@ TrexConfig.addTool(
 	{
 		borderStyle: "1px solid #ccc",
 		sync: _FALSE,
-		status: _TRUE
+		status: _TRUE,
+        cellSelect:{
+            hotKeyUse:_TRUE,
+            hotKey:{
+                shiftKey: _TRUE,
+                altKey: _TRUE,
+                keyCode:39
+            }
+        }
 	},
 	function(root){
 		var bgc = TrexConfig.get("canvas",root).styles.backgroundColor;

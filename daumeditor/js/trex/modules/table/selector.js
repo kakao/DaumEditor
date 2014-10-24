@@ -3,7 +3,8 @@
 Trex.Table.Selector = Trex.Class.create({
 	SELECTED_CLASS_NAME: "tx_table_selected_cell",
     SELECTED_CSS_TEXT: "{background:#D8E9FD !important;background:rgba(179, 212, 253, 0.5) !important;}",
-	initialize: function (editor/*, config*/) {
+	initialize: function (editor, config) {
+        this.config = config.toolbar.table;
 		this.canvas = editor.getCanvas();
 		this.wysiwygPanel = this.canvas.getPanel(Trex.Canvas.__WYSIWYG_MODE);
 		this.htmlBody = this.getHtmlBody();
@@ -96,12 +97,7 @@ Trex.Table.Selector = Trex.Class.create({
             }
             return _NULL;
         }
-
-        this.canvas.observeKey({
-            shiftKey: _TRUE,
-            altKey: _TRUE,
-            keyCode:39
-        }, function (e){
+        this.config.cellSelect&&this.config.cellSelect.hotKeyUse&&this.canvas.observeKey(this.config.cellSelect.hotKey, function (e){
             var elem, td;
             elem = self.canvas.getProcessor().getNode();
             td = getTdFromElement(elem);
