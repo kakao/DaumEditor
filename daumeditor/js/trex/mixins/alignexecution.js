@@ -90,7 +90,7 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
         } else {
             tool.executeAlignTextMode(processor);
         }
-        if($tx.msie10under) return;
+        if($tx.msie) return;
         var sel = new Trex.Area.Select;
         sel.update();
     },
