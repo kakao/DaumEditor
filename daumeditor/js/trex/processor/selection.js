@@ -582,11 +582,18 @@ Trex.I.Selection.TridentStandard = {
      * 	txSelection.selectControl(node);
      */
     selectControl: function(node) {
-        var _rng = this.createRange();
-        _rng.selectNode(node);
-        var _sel = this.getSel();
-        _sel.removeAllRanges();
-        _sel.addRange(_rng);
+		var _rng;
+		if(this.doc.body.createControlRange) {
+			_rng = this.doc.body.createControlRange();
+			_rng.add(node);
+			_rng.select();
+		}else {
+			_rng = this.createRange();
+			_rng.selectNode(node);
+			var _sel = this.getSel();
+			_sel.removeAllRanges();
+			_sel.addRange(_rng);
+		}
     }
 };
 

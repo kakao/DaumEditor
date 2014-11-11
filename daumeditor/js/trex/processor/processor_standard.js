@@ -743,18 +743,16 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
         var win = this.win;
         var rng;
         var pos;
+		x-=win.pageXOffset||doc.documentElement.scrollLeft;
+		y-=win.pageYOffset||doc.documentElement.scrollTop;
         if (doc.caretPositionFromPoint) {
             //ff
             rng = doc.createRange();
-            x-=doc.documentElement.scrollLeft;
-            y-=doc.documentElement.scrollTop;
             pos = doc.caretPositionFromPoint(x, y);
             rng.setStart(pos.offsetNode, pos.offset);
             rng.setEnd(pos.offsetNode, pos.offset);
         }else if(doc.caretRangeFromPoint){
             //chrome
-            x-=win.pageXOffset;
-            y-=win.pageYOffset;
             rng = doc.caretRangeFromPoint(x, y);
         }else {
             //ie

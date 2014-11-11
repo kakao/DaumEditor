@@ -140,7 +140,7 @@ Trex.Area.Select = Trex.Class.single({
         this._target = _NULL;
     },
     getTarget: function(){
-        if($tx.msie10under){
+        if($tx.msie){
             return this._canvas.getProcessor().getControl();
         }
         return this._target;
@@ -557,13 +557,13 @@ Trex.module("area select", function(editor, toolbar, sidebar, canvas, config){
     canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function(doc) {
         var _processor = canvas.getProcessor();
         var select = new Trex.Area.Control(new Trex.Area.Resize(new Trex.Area.Select(editor)));
-        if(_DOC.caretPositionFromPoint||_DOC.caretRangeFromPoint||!$tx.msie10under){
+        if(_DOC.caretPositionFromPoint||_DOC.caretRangeFromPoint||!$tx.msie){
             select = new Trex.Area.Move(select)
         }
         Trex.Area.Select.getSelection = function(){
             return select;
         };
-        if($tx.msie10under) {
+        if($tx.msie) {
             // ie에서만 isResizeing을 사용한다. ie인 경우 리사이즈 여부를 확인하기 어렵다.
             Trex.Area.Select.isResizing = false;
             function resizestart(ev) {
@@ -580,7 +580,6 @@ Trex.module("area select", function(editor, toolbar, sidebar, canvas, config){
             }
             $tx.observe(doc.body, "resizestart", resizestart);
             $tx.observe(doc.body, "resizeend", resizeend);
-
             return;
         }
         var mousedownel = _NULL;
