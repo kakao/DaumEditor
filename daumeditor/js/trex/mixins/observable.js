@@ -134,6 +134,8 @@ Trex.I.KeyObservable = Trex.Faculty.create(/** @lends Trex.I.KeyObservable */{
 			}
 		};
 		this.keyObservers[_name].each(function(observer) {
+            //osx chorme - backspace bug
+            if(_name==='FFF_8'&&!Trex.Area.Select.getSelection().isSelect()) return;
 			try {
 				observer.apply(_self, [ev]);
                 !(observer._bubble||isBubble)&&stopEventOnce();
