@@ -29,6 +29,9 @@ Trex.register("filter > dropzone",
         }
 
         function changeWaitingSourceToHTML(contents) {
+            if (!editor.hasOwnProperty('getDropZone')) {
+                return contents;
+            }
             var dropZone = editor.getDropZone();
 
             return contents.replace(getSourceWaitingRegExp(), function(match, p1, offset) {
@@ -71,9 +74,6 @@ Trex.register("filter > dropzone",
                     return removeWaiting(contents);
                 },
                 'source2html': function(contents){
-                    if (!editor.hasOwnProperty('getDropZone')) {
-                        return contents;
-                    }
                     return changeWaitingSourceToHTML(contents);
                 },
                 'html2source': function(contents){
