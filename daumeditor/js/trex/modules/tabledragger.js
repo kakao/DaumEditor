@@ -134,6 +134,7 @@ Trex.Table.Dragger = Trex.Class.create({
     _observeEvent: function(){
         var self = this;
         $tx.observe(_DOC.body, "mouseup", function(ev) {
+            if(!self._canvas.isWYSIWYG()) return;
             self.mouseup(ev);
         });
         this._canvas.observeJob(Trex.Ev.__CANVAS_PANEL_MOUSEUP, function(ev){
