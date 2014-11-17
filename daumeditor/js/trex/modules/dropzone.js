@@ -198,7 +198,7 @@ Trex.DropZone = Trex.Class.create({
             }
 
             this.hideDragArea();
-            (new Trex.Area.Select()).reset();
+            this.canvas.getProcessor().getAreaSelection().reset();
 
             var type = this.dataType[typeIndex];
 

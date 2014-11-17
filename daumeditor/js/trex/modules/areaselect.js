@@ -13,7 +13,7 @@ Trex.MarkupTemplate.add('module.areaselect',
  */
 Trex.Area = {};
 
-Trex.Area.Select = Trex.Class.single({
+Trex.Area.Select = Trex.Class.create({
     /**
      * @type {_NULL|HTMLElement}
      * @private
@@ -560,22 +560,22 @@ Trex.module("area select", function(editor, toolbar, sidebar, canvas, config){
         if(_DOC.caretPositionFromPoint||_DOC.caretRangeFromPoint||!$tx.msie){
             select = new Trex.Area.Move(select)
         }
-        Trex.Area.Select.getSelection = function(){
+        _processor.getAreaSelection = function(){
             return select;
         };
         if($tx.msie) {
             // ie에서만 isResizeing을 사용한다. ie인 경우 리사이즈 여부를 확인하기 어렵다.
-            Trex.Area.Select.isResizing = false;
+            select.isResizing = false;
             function resizestart(ev) {
                 var el = $tx.element(ev);
                 if($tom.kindOf(el, 'img,table')){
-                    Trex.Area.Select.isResizing = true;
+                    select.isResizing = true;
                 }
             }
             function resizeend(ev) {
                 var el = $tx.element(ev);
                 if($tom.kindOf(el, 'img,table')){
-                    Trex.Area.Select.isResizing = false;
+                    select.isResizing = false;
                 }
             }
             $tx.observe(doc.body, "resizestart", resizestart);

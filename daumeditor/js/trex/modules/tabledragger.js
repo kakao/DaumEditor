@@ -98,7 +98,7 @@ Trex.Table.Dragger = Trex.Class.create({
 
     },
     mouseup: function(ev){
-        var sel = Trex.Area.Select.getSelection();
+        var sel = this._canvas.getProcessor().getAreaSelection();
         if(this._state == 'DRAG'){
             sel.reset();
             var tdArr = this._makeTDArr(this._mouseData.downTd, this._mouseData.downType, $tom.find(this._mouseData.downTd, 'table'));
