@@ -56,14 +56,13 @@ Trex.module("Register an eventhandler in order to change align icons upon toolba
 			_exec(_alignset[2], kind, kind=="image" ? TXMSG("@align.image.align.right") : TXMSG("@align.text.align.right"));
 			_exec(_alignset[3], kind, kind=="image" ? TXMSG("@align.image.align.full") : TXMSG("@align.text.align.full"));
 		};
-		
 		canvas.observeElement([
 			{ tag: "body" },
 			{ tag: "table" },
 			{ tag: "hr" }
 		], function() {
             setTimeout(function(){
-                var el =  (new Trex.Area.Select()).getTarget(),p = 'table,img';
+                var el = canvas.getProcessor().getAreaSelection().getTarget(),p = 'table,img';
                 if($tom.kindOf(el, p)&&!Trex.Util.getMatchedClassName(el, _excludes)){
                     return _changeButton("image");
                 }
@@ -72,13 +71,13 @@ Trex.module("Register an eventhandler in order to change align icons upon toolba
         });
 
         canvas.observeJob(Trex.Ev.__CANVAS_SELECT_ITEM, function(){
-            var sel = new Trex.Area.Select();
+            var sel = canvas.getProcessor().getAreaSelection();
             if($tom.kindOf(sel.getTarget(), 'table')){
                 _changeButton("image");
             }
         });
         canvas.observeJob(Trex.Ev.__CANVAS_UNSELECT_ITEM, function(){
-            var sel = new Trex.Area.Select();
+            var sel = canvas.getProcessor().getAreaSelection();
             if($tom.kindOf(sel.getTarget(), 'table')){
                 _changeButton("text");
             }
