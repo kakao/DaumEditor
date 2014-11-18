@@ -24,7 +24,7 @@ Trex.Tool.Outdent = Trex.Class.create({
 	oninitialized: function(config) {
         this.weave(new Trex.Button(this.buttonCfg), _NULL, this.handler);
         this.createHandlers();
-		if ($tx.opera == _FALSE) {
+		if (!$tx.opera&&!($tx.chrome&&$tx.os_mac)) {
             this.observeBackspace();
 		}
         this.bindKeyboard(config.hotKey, this.shiftTabKeyHandler.bind(this));
