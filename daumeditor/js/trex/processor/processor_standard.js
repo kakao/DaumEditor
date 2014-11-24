@@ -738,6 +738,11 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
 			}
 		}
 	},
+	getControlByAreaSelection: function(){
+		if(this.getAreaSelection)
+			return this.getAreaSelection().getTarget();
+		return this.getControl();
+	},
     moveSelection: function(x,y){
         var doc = this.doc;
         var win = this.win;

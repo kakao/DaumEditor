@@ -1,7 +1,7 @@
 Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
 	executeAlignImageMode: function(processor) {
 		var _imageAlignProps = this.constructor.__ImageModeProps['image'];
-		var _node = processor.getAreaSelection().getTarget();
+		var _node = processor.getControlByAreaSelection();
 		if(!_node) {
 			return;
 		}
@@ -13,7 +13,7 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
 		}
 	},
     executeAlignTableMode: function(processor) {
-        var selEl = processor.getAreaSelection().getTarget();
+        var selEl = processor.getControlByAreaSelection();
         if(!selEl) return;
         processor.apply(selEl, this.constructor.__TableModeProps);
     },
@@ -49,7 +49,7 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
 		}
 	},
 	queryImageFloat: function(processor) {
-		var _node = processor.getAreaSelection().getTarget();
+		var _node = processor.getControlByAreaSelection();
 		if (_node) {
 			return processor.queryStyle(_node, 'float');
 		} else {
@@ -75,7 +75,7 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
 		return _value;
 	},
 	queryControlAlign: function(processor) {
-		var node = processor.getAreaSelection().getTarget();
+		var node = processor.getControlByAreaSelection();
         return processor.queryAttr(node, 'align');
 	},
     executeAlign: function(processor) {
@@ -90,16 +90,16 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
         } else {
             tool.executeAlignTextMode(processor);
         }
-        if($tx.msie) return;
+        if(!processor.getAreaSelection) return;
         var sel = processor.getAreaSelection();
         sel.update();
     },
     getAlignMode: function(processor) {
 		var selectedTdArr = (processor.table) ? processor.table.getTdArr() : [];
-        var select = processor.getAreaSelection();
+        var node = processor.getControlByAreaSelection();
         if (selectedTdArr.length > 0) {
             return "tableCell";
-        } else if($tom.kindOf(select.getTarget(), 'table')){
+        } else if($tom.kindOf(node, 'table')){
             return 'table'
         } else if (this.imageAlignMode) {
             return "image";
@@ -143,8 +143,7 @@ Trex.I.AlignExecution = Trex.Mixin.create(/** @lends Trex.I.AlignExecution */{
         }
     },
     queryTableMode: function(processor){
-        var sel = processor.getAreaSelection();
-        var _node = sel.getTarget();
+        var _node = processor.getControlByAreaSelection();
         return $tom.getAttribute(_node, 'align') == this.constructor.__TableModeProps.align
     },
     queryImageMode: function(processor) {

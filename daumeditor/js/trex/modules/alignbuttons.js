@@ -62,7 +62,7 @@ Trex.module("Register an eventhandler in order to change align icons upon toolba
 			{ tag: "hr" }
 		], function() {
             setTimeout(function(){
-                var el = canvas.getProcessor().getAreaSelection().getTarget(),p = 'table,img';
+                var el = canvas.getProcessor().getControlByAreaSelection(),p = 'table,img';
                 if($tom.kindOf(el, p)&&!Trex.Util.getMatchedClassName(el, _excludes)){
                     return _changeButton("image");
                 }
@@ -71,14 +71,12 @@ Trex.module("Register an eventhandler in order to change align icons upon toolba
         });
 
         canvas.observeJob(Trex.Ev.__CANVAS_SELECT_ITEM, function(){
-            var sel = canvas.getProcessor().getAreaSelection();
-            if($tom.kindOf(sel.getTarget(), 'table')){
+            if($tom.kindOf(canvas.getProcessor().getControlByAreaSelection(), 'table')){
                 _changeButton("image");
             }
         });
         canvas.observeJob(Trex.Ev.__CANVAS_UNSELECT_ITEM, function(){
-            var sel = canvas.getProcessor().getAreaSelection();
-            if($tom.kindOf(sel.getTarget(), 'table')){
+            if($tom.kindOf(canvas.getProcessor().getControlByAreaSelection(), 'table')){
                 _changeButton("text");
             }
         });

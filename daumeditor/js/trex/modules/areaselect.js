@@ -13,6 +13,23 @@ Trex.MarkupTemplate.add('module.areaselect',
  */
 Trex.Area = {};
 
+Trex.Area.BrowserSelect = Trex.Class.create({
+    initialize: function(editor){
+        this._canvas = editor.getCanvas();
+        this._panel = this._canvas.getPanel(Trex.Canvas.__WYSIWYG_MODE);
+        this._doc = this._panel.getDocument();
+        this._win = this._panel.getWindow();
+    },
+    select:function(element){
+        this._canvas.getProcessor().selectControl(element);
+    },
+    update:function(element){},
+    reset:function(){},
+    getTarget:function(){
+        return this._canvas.getProcessor().getControl();
+    }
+});
+
 Trex.Area.Select = Trex.Class.create({
     /**
      * @type {_NULL|HTMLElement}
@@ -140,9 +157,6 @@ Trex.Area.Select = Trex.Class.create({
         this._target = _NULL;
     },
     getTarget: function(){
-        if($tx.msie){
-            return this._canvas.getProcessor().getControl();
-        }
         return this._target;
     },
     getOrigin: function(){
@@ -556,9 +570,14 @@ Trex.Area.Control = Trex.Class.create({
 Trex.module("area select", function(editor, toolbar, sidebar, canvas, config){
     canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function(doc) {
         var _processor = canvas.getProcessor();
-        var select = new Trex.Area.Control(new Trex.Area.Resize(new Trex.Area.Select(editor)));
-        if(_DOC.caretPositionFromPoint||_DOC.caretRangeFromPoint||!$tx.msie){
-            select = new Trex.Area.Move(select)
+        var select;
+        if($tx.msie){
+            select = new Trex.Area.BrowserSelect(editor);
+        }else {
+            select = new Trex.Area.Control(new Trex.Area.Resize(new Trex.Area.Select(editor)));
+            if (_DOC.caretPositionFromPoint || _DOC.caretRangeFromPoint) {
+                select = new Trex.Area.Move(select)
+            }
         }
         _processor.getAreaSelection = function(){
             return select;
