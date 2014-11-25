@@ -363,7 +363,11 @@ Trex.Editor = Trex.Class.create( /** @lends Trex.Editor.prototype */{
 		var indexName, list= Editor.__MULTI_LIST;
 		for (indexName in list) {
 			if (list.hasOwnProperty(indexName)) {
-				fn(list[indexName]);
+				try {
+					fn(list[indexName]);
+				}catch(e){
+					//메일인 경우 이전 에디터를 없애서 오류 발생.
+				}
 			}
 		}
 	};
