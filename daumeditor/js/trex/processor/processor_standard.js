@@ -835,7 +835,7 @@ Trex.module("bind iframe activate or deactivate event",
 Trex.module("save range when keyup or mouseup event ",
     function(editor, toolbar, sidebar, canvas) {
         canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function(panelDoc) {
-            var processor = canvas.getProcessor();
+            var processor = canvas.getProcessor(Trex.Canvas.__WYSIWYG_MODE);
             var debounceSaveRange = $tx.debounce(saveRange, 200);
             function saveRange() {
                 var newRange = processor.createGoogRange();

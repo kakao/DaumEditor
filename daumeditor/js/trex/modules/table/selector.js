@@ -170,7 +170,8 @@ Trex.Table.Selector = Trex.Class.create({
             keyCode: 77
         }, function(e){
             self.canvas.execute(function(processor){
-                processor.table.merge(self)
+                if(processor.table)
+                    processor.table.merge(self)
             });
         });
         //ctrl + shiftKey + s 표를 분할한다.
@@ -180,7 +181,8 @@ Trex.Table.Selector = Trex.Class.create({
             keyCode: 83
         }, function(e){
             self.canvas.execute(function(processor){
-                processor.table.resetMerge(self)
+                if(processor.table)
+                    processor.table.resetMerge(self);
             });
         });
 
@@ -368,6 +370,7 @@ Trex.Table.Selector = Trex.Class.create({
         var _p = this.canvas.getProcessor();
         if(_p.getAreaSelection().isResizing||($tx.msie&&$tx.msie_ver>=11&&(el = _p.getControl())&&el.tagName.match(/^(IMG|TABLE)$/i))){
             this.turnOffDragging();
+            return;
         }
 		if (this.isDragging) {
 			td = Trex.TableUtil.getClosestByTagNames(["td", "th"], elem);

@@ -569,7 +569,7 @@ Trex.Area.Control = Trex.Class.create({
 
 Trex.module("area select", function(editor, toolbar, sidebar, canvas, config){
     canvas.observeJob(Trex.Ev.__IFRAME_LOAD_COMPLETE, function(doc) {
-        var _processor = canvas.getProcessor();
+        var _processor = canvas.getProcessor(Trex.Canvas.__WYSIWYG_MODE);
         var select;
         if($tx.msie){
             select = new Trex.Area.BrowserSelect(editor);
