@@ -1384,7 +1384,8 @@ Object.extend($tom, /** @lends $tom */{
 				return _NULL;
 			}
 			if(node && node.getAttribute) {
-				return node.getAttribute(__ATTRIBUTE_TRANSLATIONS[attrName] || attrName);
+				var val = node.getAttribute(__ATTRIBUTE_TRANSLATIONS[attrName] || attrName)
+				return (val)? val:_NULL ;
 			} else {
 				return _NULL;
 			}

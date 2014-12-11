@@ -620,10 +620,21 @@ Trex.module("area select", function(editor, toolbar, sidebar, canvas, config){
             $tx.observe(doc.body, "resizestart", resizestart);
             $tx.observe(doc.body, "resizeend", resizeend);
             mousedown = function mousedown(e) {
-                select.reset();
+                var el = $tx.element(e);
+                mousedownel = el;
+                if ($tom.kindOf(el, 'table')&&el!==select.getTarget()) {
+                    $tx.stop(e);
+                }else {
+                    select.reset();
+                }
             };
             mouseup = function mouseup(e) {
                 var el = $tx.element(e);
+                if (el != mousedownel || !$tom.kindOf(el, 'img')) {
+                    select.reset();
+                    mousedownel = _NULL;
+                    return;
+                }
                 if($tom.kindOf(el, 'img,table')&&!Trex.Util.getMatchedClassName(el, _excludes))
                     select.select(el);
             };
