@@ -108,19 +108,13 @@ Trex.Table.Dragger = Trex.Class.create({
 
         if(this._state == 'READY' ){
             var el;
-            if($tx.msie){
-                el = $tom.find(this._mouseData.downTd, 'table');
-                this._canvas.getProcessor().selectControl(el)
-
-            }else {
-                el = $tom.find(this._mouseData.downTd, 'table');
-                if(!el) {
-                    sel.reset();
-                    return;
-                }
-                sel.select(el);
-                $tx.stop(ev);
+            el = $tom.find(this._mouseData.downTd, 'table');
+            if(!el) {
+                sel.reset();
+                return;
             }
+            sel.select(el);
+            $tx.stop(ev);
 
         }
 

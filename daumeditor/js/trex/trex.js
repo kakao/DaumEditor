@@ -17,6 +17,10 @@ var Trex = {
 		PASTE: '86', //+ ctrl
 		CUT: '88' //+ ctrl
 	},
+	__EXCLUDE_IMG : [
+		"txc-2image-c", "txc-3image-c", "txc-footnote", "txc-jukebox", "txc-movie", "txc-gallery", "txc-imazing", "txc-map",
+		"txc-file",'txc-emo',"tx-entry-embed", "txc-bgm", "txc-pie"
+	],
 	I: {},
 	X: {},
 	define: function(destination, properties) {

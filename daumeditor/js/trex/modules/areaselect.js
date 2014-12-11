@@ -19,12 +19,24 @@ Trex.Area.BrowserSelect = Trex.Class.create({
         this._panel = this._canvas.getPanel(Trex.Canvas.__WYSIWYG_MODE);
         this._doc = this._panel.getDocument();
         this._win = this._panel.getWindow();
+        this._isSelect = _FALSE;
     },
     select:function(element){
+        if(!element)
+            return;
         this._canvas.getProcessor().selectControl(element);
+        this._isSelect = _TRUE;
+        this._canvas.fireJobs(Trex.Ev.__CANVAS_SELECT_ITEM);
     },
     update:function(element){},
-    reset:function(){},
+    reset:function(){
+        if(this.isSelect())
+            this._canvas.fireJobs(Trex.Ev.__CANVAS_UNSELECT_ITEM);
+        this._isSelect = _FALSE;
+    },
+    isSelect: function(){
+        return this._isSelect;
+    },
     getTarget:function(){
         return this._canvas.getProcessor().getControl();
     }
@@ -140,6 +152,12 @@ Trex.Area.Select = Trex.Class.create({
      * @param element
      */
     select: function(element){
+        if(!element)
+            return;
+        var self = this;
+        if ($tom.kindOf(element, "img")){
+            self._canvas.getProcessor().createGoogFromNodeContents(element).select();
+        }
         this._target = element;
         $tom.insertNext(this._selectElement,this._doc.body);
         this._isSelect = _TRUE;
@@ -582,6 +600,8 @@ Trex.module("area select", function(editor, toolbar, sidebar, canvas, config){
         _processor.getAreaSelection = function(){
             return select;
         };
+        var _excludes = Trex.__EXCLUDE_IMG;
+        var mousedownel = _NULL, mouseup, mousedown;
         if($tx.msie) {
             // ie에서만 isResizeing을 사용한다. ie인 경우 리사이즈 여부를 확인하기 어렵다.
             select.isResizing = false;
@@ -599,46 +619,42 @@ Trex.module("area select", function(editor, toolbar, sidebar, canvas, config){
             }
             $tx.observe(doc.body, "resizestart", resizestart);
             $tx.observe(doc.body, "resizeend", resizeend);
-            return;
-        }
-        var mousedownel = _NULL;
-        function mousedown(e){
-            var el = $tx.element(e);
-            if($tom.kindOf(el, 'img,table')){
-                $tx.stop(e);
-            }
-            mousedownel = el;
-            el = $tom.find( el, 'img,table');
-            if(!el) {
+            mousedown = function mousedown(e) {
                 select.reset();
-            }
-        }
-        function mouseup(e){
-            var el = $tx.element(e);
-            if(el != mousedownel || (!$tom.kindOf(el, 'img') &&!_processor.isCollapsed())){
-                select.reset();
-                mousedownel = _NULL;
-                return;
-            }
-            el = $tom.find( el, 'img,table');
-            if ($tom.kindOf(el, "img")){
-                setTimeout(function(){
-                    _processor.createGoogFromNodeContents(el).select();
-                }, 10);
-            }
-            select.select(el);
-
+            };
+            mouseup = function mouseup(e) {
+                var el = $tx.element(e);
+                if($tom.kindOf(el, 'img,table')&&!Trex.Util.getMatchedClassName(el, _excludes))
+                    select.select(el);
+            };
+        }else {
+            mousedown = function mousedown(e) {
+                var el = $tx.element(e);
+                mousedownel = el;
+                if ($tom.kindOf(el, 'img,table')) {
+                    $tx.stop(e);
+                }else {
+                    select.reset();
+                }
+            };
+            mouseup = function mouseup(e) {
+                var el = $tx.element(e);
+                if (el != mousedownel || (!$tom.kindOf(el, 'img') && !_processor.isCollapsed())) {
+                    select.reset();
+                    mousedownel = _NULL;
+                    return;
+                }
+                if($tom.kindOf(el, 'img,table')&&!Trex.Util.getMatchedClassName(el, _excludes)&&!$tom.find(el, 'button'))
+                    select.select(el);
+            };
         }
         canvas.observeJob(Trex.Ev.__CANVAS_PANEL_MOUSEDOWN, mousedown);
         canvas.observeJob(Trex.Ev.__CANVAS_PANEL_MOUSEUP, mouseup);
         canvas.observeJob(Trex.Ev.__CANVAS_SELECT_ITEM, function(){
-            setTimeout(function() {
-                var googRange = canvas.getProcessor().createGoogRange();
-                if (googRange) {
-                    canvas.fireJobs(Trex.Ev.__CANVAS_PANEL_QUERY_STATUS, googRange);
-                }
-            }, 20);
-
+            var googRange = canvas.getProcessor().createGoogFromNodeContents(select.getTarget());
+            if (googRange) {
+                canvas.fireJobs(Trex.Ev.__CANVAS_PANEL_QUERY_STATUS, googRange);
+            }
         });
         canvas.observeJob(Trex.Ev.__CANVAS_PANEL_SCROLLING, function(e){
             select.update();

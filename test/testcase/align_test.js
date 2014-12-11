@@ -64,12 +64,8 @@ function testAlign(alignDirection) {
         var img = ax.img(IMG_SIZE);
         var p = ax.p(img);
         assi.setContentElement(p);
-        if ($tx.msie) {
-            var range = assi.createControlRangeFrom(img);
-            range.select();
-        } else {
-            assi.selectNodeContents(p);
-        }
+        var sel = assi.canvas.getProcessor().getAreaSelection();
+        sel.select(img);
         tool.imageAlignMode = true;
         assi.assertToolExecution(currentToolName, null, function() {
             if (tool.constructor.__ImageModeProps.paragraph) {
@@ -82,7 +78,9 @@ function testAlign(alignDirection) {
             equal(img.style.marginLeft, tool.constructor.__ImageModeProps.image.style.marginLeft);
             equal(img.style.marginRight, tool.constructor.__ImageModeProps.image.style.marginRight);
             tool.imageAlignMode = false;
+            sel.reset();
         });
+
     });
 
     test("text,p,h1,align이 속성으로 지정된 p가 각각 들어있는 td를 선택하여" + alignDirection + "정렬", function() {
@@ -151,34 +149,34 @@ function testAlign(alignDirection) {
 
         var paragraphStyle = tool.constructor.__ImageModeProps.paragraph || {};
         var p = ax.p(paragraphStyle, img, "Hello");
-        
+        assi.canvas.focus();
         assi.setContentElement(p);
-        if ($tx.msie) {
-            var range = assi.createControlRangeFrom(assi.byTag("img"));
-            range.select();
-        } else {
-            assi.selectForNodes(p, 0, p, 1);
-        }
+        var sel = assi.canvas.getProcessor().getAreaSelection();
+        sel.select(assi.byTag('img'));
         canvas.fireElements(img);
 
         canvas.fireJobs(Trex.Ev.__CANVAS_PANEL_QUERY_STATUS, assi.createGoogRange());
         expect(2);
         equal(tool.button.currentState(), "pushed");
         equal(tool.button.elIcon.title, TXMSG("@align.image.align." + alignDirection));
+        sel.reset();
     });
 
     test("텍스트모드 모드일 때 " + currentToolName + " 정렬 버튼 눌린 상태", function() {
+        QUnit.stop();
         var paragraphStyle = tool.constructor.__TextModeProps.paragraph || {};
         var p = ax.p(paragraphStyle, "Hello");
-
         assi.setContentElement(p);
         assi.selectNodeContents(p);
         canvas.fireElements(assi.doc.body);
 
         canvas.fireJobs(Trex.Ev.__CANVAS_PANEL_QUERY_STATUS, assi.createGoogRange());
-        expect(2);
-        equal(tool.button.currentState(), "pushed");
-        equal(tool.button.elIcon.title, TXMSG("@align.text.align." + alignDirection));
+        setTimeout(function(){
+            QUnit.start();
+            expect(2);
+            equal(tool.button.currentState(), "pushed");
+            equal(tool.button.elIcon.title, TXMSG("@align.text.align." + alignDirection));
+        },100);
     });
 
     test("인용구 포함 " + currentToolName + " 정렬", function() {

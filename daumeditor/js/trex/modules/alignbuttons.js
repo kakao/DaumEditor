@@ -20,10 +20,7 @@ Trex.module("Register an eventhandler in order to change align icons upon toolba
 		var _alignset = [	
 			toolbar.tools['alignleft'], toolbar.tools['aligncenter'], toolbar.tools['alignright'], toolbar.tools['alignfull']	
 		];
-		var _excludes = [
-			"txc-2image-c", "txc-3image-c", "txc-footnote", "txc-jukebox", "txc-movie", "txc-gallery", "txc-imazing", "txc-map",
-			"txc-file",'txc-emo',"tx-entry-embed", "txc-bgm", "txc-pie"
-		];
+		var _excludes = Trex.__EXCLUDE_IMG;
 			
 		var _changeButton = function(kind) {
 			var _exec = function(tool, kind, title){
@@ -56,41 +53,26 @@ Trex.module("Register an eventhandler in order to change align icons upon toolba
 			_exec(_alignset[2], kind, kind=="image" ? TXMSG("@align.image.align.right") : TXMSG("@align.text.align.right"));
 			_exec(_alignset[3], kind, kind=="image" ? TXMSG("@align.image.align.full") : TXMSG("@align.text.align.full"));
 		};
-		canvas.observeElement([
-			{ tag: "body" },
-			{ tag: "table" },
-			{ tag: "hr" }
-		], function() {
-            setTimeout(function(){
-                var el = canvas.getProcessor().getControlByAreaSelection(),p = 'table,img';
-                if($tom.kindOf(el, p)&&!Trex.Util.getMatchedClassName(el, _excludes)){
-                    return _changeButton("image");
-                }
-                _changeButton("text");
-            }, 50);
-        });
 
         canvas.observeJob(Trex.Ev.__CANVAS_SELECT_ITEM, function(){
+			var el;
             if($tom.kindOf(canvas.getProcessor().getControlByAreaSelection(), 'table')){
                 _changeButton("image");
             }
+			if($tom.kindOf(el = canvas.getProcessor().getControlByAreaSelection(), 'img')){
+				var matched = Trex.Util.getMatchedClassName(el, _excludes);
+				if(matched||$tom.find(el, 'button')){
+					_changeButton("text");
+				}else {
+					_changeButton("image");
+				}
+
+			}
         });
         canvas.observeJob(Trex.Ev.__CANVAS_UNSELECT_ITEM, function(){
-            if($tom.kindOf(canvas.getProcessor().getControlByAreaSelection(), 'table')){
-                _changeButton("text");
-            }
+			_changeButton("text");
         });
-		
-		canvas.observeElement({ tag: "img" },  function(element) {
-			var matched = Trex.Util.getMatchedClassName(element, _excludes);
-			if(matched) {
-				_changeButton("text");
-			} else if($tom.find(element, 'button')) {
-				_changeButton("text");
-			} else {
-				_changeButton("image");
-			}
-		});
+
 	}
 );
 
