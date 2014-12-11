@@ -2,7 +2,38 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Daum에디터 - 코드 첨부</title>
+    <meta charset="utf-8">
+    <title>코드 첨부</title>
+    <style type="text/css">
+        /* reset */
+        body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,textarea,p,blockquote,th,td,input,select,textarea,button{margin:0;padding:0}
+        fieldset,img{border:0 none}
+        dl,ul,ol,menu,li {list-style:none}
+        input,select,textarea,button {vertical-align:middle}
+        input::-ms-clear {display:none}
+        button {border:0 none;background-color:transparent;cursor:pointer}
+        body {background:#fff}
+        body,th,td,input,select,textarea,button {font-size:12px;line-height:1.5;font-family:'돋움',dotum,sans-serif;color:#333}
+        a {color:#333;text-decoration:none}
+        a:active, a:hover {text-decoration:underline}
+        a:active {background-color:transparent}
+
+        /* global */
+        .ir_pm {display:block;overflow:hidden;font-size:0px;line-height:0;text-indent:-9999px}
+        .ir_wa {display:block;overflow:hidden;position:relative;z-index:-1;width:100%;height:100%}
+        .screen_out {overflow:hidden;position:absolute;width:0;height:0;line-height:0;text-indent:-9999px}
+
+        /*  */
+        .daum_popup {width:700px;height:437px;margin:0 auto;}
+        .popup_head {position:relative;height:36px;border-bottom:1px solid #34373d;background-color:#43474e}
+        .popup_head .tit_code {position:absolute;top:10px;left:18px;width:58px;height:15px;background:url(../../images/icon/editor/popup/tit_code.gif) 0 0 no-repeat;font-size:13px;font-family:'돋움',dotum,sans-serif;color:#fff}
+        .popup_body {height:323px;padding:15px 15px 12px;background-color:#fbfbfb}
+        .popup_body .tf_code {width:660px;height:321px;padding:0 4px;border:1px solid #afafaf;background-color:#fff;resize:none}
+        .popup_foot {width:700px;height:49px;border-bottom:1px solid #dfdfdf;vertical-align:top;text-align:center;background-color:#fbfbfb}
+        .popup_foot .wrap_btn {display:inline-block;margin:0 auto}
+        .popup_foot .btn_confirm{display:block;float:left;width:46px;height:26px;margin-right:4px;background:url(../../images/icon/editor/popup/btn_confirm_popup.gif) no-repeat 0 0}
+        .popup_foot .btn_close{display:block;float:left;width:48px;height:26px;background:url(../../images/icon/editor/popup/btn_cancel_popup.gif) no-repeat 0 0}
+    </style>
     <script src="../../js/popup.js" type="text/javascript" charset="utf-8"></script>
     <link rel="stylesheet" href="../../css/popup.css" type="text/css"  charset="utf-8"/>
     <script type="text/javascript">
@@ -37,18 +68,27 @@
 </head>
 <body onload="initUploader();">
 <div class="wrapper">
-    <div class="header">
-        <h1>코드 첨부</h1>
-    </div>
-    <div class="body">
-        <textarea id="code_content" style="height:300px;width:98%"></textarea>
-    </div>
-    <div class="footer">
-        <p><a href="#" onclick="closeWindow();" title="닫기" class="close">닫기</a></p>
-        <ul>
-            <li class="submit"><a href="#" onclick="done();" title="등록" class="btnlink">등록</a> </li>
-            <li class="cancel"><a href="#" onclick="closeWindow();" title="취소" class="btnlink">취소</a></li>
-        </ul>
+    <div class="daum_popup">
+        <div class="popup_code">
+            <div class="popup_head">
+                <h1 class="tit_code ir_pm">코드 첨부</h1>
+            </div>
+            <div class="popup_body">
+                <form action="#" method="get">
+                    <fieldset>
+                        <legend class="screen_out">코드 첨부</legend>
+                        <label for="code_content" class="screen_out">코드 첨부 입력란</label>
+                        <textarea name="area_code" id="code_content" class="tf_code"></textarea>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="popup_foot">
+				<span class="wrap_btn">
+					<a href="#" class="btn_confirm ir_pm" onclick="done();" title="확인">확인</a>
+					<a href="#" class="btn_close ir_pm" onclick="closeWindow();" title="취소">취소</a>
+				</span>
+            </div>
+        </div>
     </div>
 </div>
 </body>

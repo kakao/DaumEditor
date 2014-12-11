@@ -8,7 +8,7 @@ TrexConfig.addTool(
         sync: _FALSE,
         status: _FALSE,
         wysiwygonly: _TRUE,
-        features: { left:250, top:65, width:797, height:385 },
+        features: { left:250, top:65, width:700, height:437 },
         popPageUrl: "#host#path/pages/trex/code_highlight.html",
         highlight: function (){
             alert(TXMSG("@codehighlight.insert.alert"));

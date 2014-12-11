@@ -10,8 +10,8 @@ TrexMessage.addMsg({
     '@tableresize.confirm.image': "#iconpath/btn_confirm.gif?v=2",
     '@tableresize.invalid': "잘못된 입력 값 입니다.",
     '@tableresize.title': "선택된 표 cell 크기를 입력해 주세요.",
-    '@tableresize.width': "너비(px)",
-    '@tableresize.height': "높이(px)"
+    '@tableresize.width': "너비",
+    '@tableresize.height': "높이"
 });
 
 TrexConfig.addTool(
@@ -56,28 +56,22 @@ Trex.Tool.TableResize = Trex.Class.create({
 
 Trex.MarkupTemplate.add(
     'menu.tableresize', [
-        '<div class="tx-menu-inner">',
-        '    <dl>',
-        '        <dt>',
-        '            @tableresize.title',
-        '        </dt>',
-        '        <dd>',
-        '            <span>@tableresize.width</span><input type="text" class="tx-text-input"/>',
-        '        </dd>',
-        '        </dt>',
-        '        <dd>',
-        '            <span>@tableresize.height</span><input type="text" class="tx-text-input"/>',
-        '        </dd>',
-        '        <dd class="tx-hr">',
-        '            <hr/>',
-        '        </dd>',
-        '        <dd>',
-        '            <img width="32" height="21" src="@tableresize.confirm.image"/>',
-        '            <img width="32" height="21" src="@tableresize.cancel.image"/>',
-        '        </dd>',
-        '    </dl>',
-        '</div>'
-    ].join("")
+    '<div class="tx-menu-inner">',
+    '<p class="desc_cellsize">선택된 표cell 크기를 입력해주세요.</p>',
+    '<div>',
+    '<label for="cellWidth">@tableresize.width</label>',
+    '<input type="text" name="cellWidth" id="cellWidth" class="inp_cellw" /> px',
+    '</div>',
+    '<div>',
+    '<label for="cellHeight">@tableresize.height</label>',
+    '<input type="text" name="cellHeight" id="cellHeight" class="inp_cellh" /> px',
+    '</div>',
+    '<div class="wrap_btn">',
+    '<img src="@tableresize.confirm.image" class="tx-menu-btn" alt="확인" />',
+    '<img src="@tableresize.cancel.image" class="tx-menu-btn" alt="취소" />',
+    '</div>',
+    '</div><!-- //tx-menu-inner -->'
+    ].join("\n")
 );
 Trex.Menu.TableResize = Trex.Class.create({
     $extend: Trex.Menu,
@@ -85,7 +79,7 @@ Trex.Menu.TableResize = Trex.Class.create({
         var _elMenu = this.elMenu;
         Trex.MarkupTemplate.get('menu.tableresize').evaluateToDom({}, _elMenu);
         var self = this;
-        var _elInput = $tom.collectAll(_elMenu, 'input.tx-text-input');
+        var _elInput = $tom.collectAll(_elMenu, 'input');
         var _elImgs = $tom.collectAll(_elMenu, 'img');
         $tx.observe(_elImgs[0], "click", function(ev) {
             var _val = self._isValidation(_elInput[0].value)&&self._isValidation(_elInput[1].value);
@@ -113,7 +107,7 @@ Trex.Menu.TableResize = Trex.Class.create({
         var _elMenu = this.elMenu;
         var p = Editor.getCanvas().getProcessor();
         var td = p.table.getTdArr()[0];
-        var _elInput =$tom.collectAll(_elMenu, 'input.tx-text-input');
+        var _elInput =$tom.collectAll(_elMenu, 'input');
         if(!td){
             _elInput[0].value = '';
             _elInput[1].value = '';

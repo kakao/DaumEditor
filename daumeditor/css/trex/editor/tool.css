@@ -301,8 +301,39 @@
 	.tx-undo a.tx-icon {background-position:-45px -70px;}
 	.tx-redo a.tx-icon {background-position:-65px -70px;}
 
+/*==== 2014-09-15 추가 시작 ====*/
+	/*==== effect ====*/
+	.tx-effect a.tx-icon {background-position:-23px -172px}
+	.tx-effect-menu {width:242px;height:110px}
+	.tx-effect-menu .tx-menu-inner {width:225px;height:94px;padding:5px 8px 11px 9px;font-family:'돋움',dotum;font-size:11px;color:#333}
+	.tx-effect-menu .tf_address {width:193px;height:16px;margin-left:3px;border:1px solid #bababa} /* 2014-12-11 수정 */
+	.tx-effect-menu .tf_radius {width:43px;height:16px;margin:5px 5px 0 3px;border:1px solid #bababa} /* 2014-12-11 수정 */
+	.tx-effect-menu .sel_effect01 {width:99px;height:18px;font-size:11px;margin:5px 0 0 3px;border:1px solid #bababa} /* 2014-12-11 수정 */
+	.tx-effect-menu .sel_effect02 {width:59px;height:18px;font-size:11px;margin:5px 0 0 3px;border:1px solid #bababa} /* 2014-12-11 수정 */
+	.tx-effect-menu .effect_repeat {overflow:hidden;position:absolute;width:0;height:0;line-height:0;text-indent:-9999px}
+	.tx-effect-menu .wrap_btn {margin-top:8px;text-align:center}
+	.tx-effect-menu .wrap_btn {margin-right:4px} /* 2014-12-11 추가 */
+	.tx-menu-inner .tx-menu-btn {cursor:pointer}
+	/*==== hotkeys ====*/
+	.tx-hotkeys a.tx-icon {background-position:-43px -172px}
+	.tx-hotkeys-menu {width:751px;height:594px}
+	.tx-hotkeys-menu .tx-menu-inner {overflow:hidden;width:731px;height:574px;padding:20px 0 0 20px;font-family:'돋움',dotum;font-size:12px;color:#333}
+	.tx-hotkeys-menu .tit_hotkeys {display:block;width:711px;padding-bottom:5px;border-bottom:2px solid #eaeaea;color:#6481e3}
+	.tx-hotkeys-menu .area_hotkeys {float:left;width:320px;margin-top:20px}
+	.tx-hotkeys-menu .fst {margin-right:54px}
+	.tx-hotkeys-menu .tit_mail {display:block;width:320px;margin-bottom:15px;font-weight:bold}
+	.tx-hotkeys-menu .list_mail {overflow:hidden}
+	.tx-hotkeys-menu .list_mail .lst_key {margin-bottom:30px}
+	.tx-hotkeys-menu .tit_key {float:left;width:192px;margin-bottom:4px;vertical-align:top}
+	.tx-hotkeys-menu .cont_key {float:left;margin-bottom:4px;vertical-align:top}
+	/*==== clipboard ====*/
+	.tx-clipboard a.tx-icon {background-position:-62px -172px;}
+	/*==== sourcecode ====*/
+	.tx-sourcecode a.tx-icon {background-position:-83px -171px}
+/*==== 2014-09-15 추가 끝====*/
+
 /*==== table  ====*/
-	.tx-table a.tx-icon { background-position:-84px -50px; }
+	.tx-table a.tx-icon { background-position:-84px -50px }
 	.tx-table-menu { 
 		width:175px;
 		color: #333;
@@ -1103,8 +1134,8 @@
 	.tx-cellslineheight a.tx-icon2 {background-position:-5px -135px;}
 	
 /*==== createtable ====*/
-	.tx-tableedit-title {background:url(../../../images/icon/editor/skin/05/icon_add_table01.gif);
-	 background-position:40px 215px; width:38px; height: 20px;}
+	.tx-tableedit-title {background:url(../../../images/icon/editor/skin/05/icon_add_table01_140915.gif);
+	 background-position:-7px -6px; width:38px; height: 20px;}
 
 /*==== cellslinepreview ====*/
 	.tx-cellslinepreview a:hover { text-decoration:none }
@@ -1115,10 +1146,35 @@
 	.tx-tablebackcolor a.tx-icon2 {width:22px;height:21px;}
 	.tx-tablebackcolor a.tx-icon2 {background-position:-5px -193px}
 	.tx-tablebackcolor-menu { left:-165px; }
+
 /*==== tabletemplate ====*/
 	.tx-tabletemplate a.tx-icon2 {width:22px;}
 	.tx-tabletemplate a.tx-icon2 { background-position:-5px -173px; }
-		
+
+/*==== 2014-09-15 추가 시작 ====*/
+	/*==== cellsize ====*/
+	.tx-cellsize a.tx-icon2 {width:22px;}
+	.tx-cellsize a.tx-icon2 {background-position:-5px -212px}
+	.tx-cellsize-menu {width:201px;height:111px}
+	.tx-cellsize-menu .tx-menu-inner {width:192px;height:102px;padding:9px 0 0 9px;font-family:'돋움',dotum;font-size:11px;color:#333}
+	.tx-cellsize-menu .desc_cellsize {height:11px;margin:0}
+	.tx-cellsize-menu .inp_cellw {width:43px;height:16px;margin:10px 0 0 3px;border:1px solid #bababa} /* 2014-12-11 수정 */
+	.tx-cellsize-menu .inp_cellh {width:43px;height:16px;margin:5px 0 0 3px;border:1px solid #bababa} /* 2014-12-11 수정 */
+	.tx-cellsize-menu .wrap_btn {margin-top:8px;text-align:center}
+	.tx-cellsize-menu .wrap_btn .tx-menu-btn {margin-right:4px} /* 2014-12-11 추가 */
+	.tx-menu-inner .tx-menu-btn {cursor:pointer}
+	/*==== cellvalgin ====*/
+	.tx-cellvalign a.tx-icon2 {width:22px; }
+	.tx-cellvalign a.tx-icon2 { background-position:-5px -232px}
+	.tx-cellvalign-menu {width:94px;height:71px;font-family:'돋움',dotum;font-size:11px;color:#333}
+	.tx-cellvalign-menu .list_valign li {height:23px;text-indent:20px}
+	.tx-cellvalign-menu .list_valign li .cell_ico {background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01_140915.gif);background-repeat:no-repeat;}
+	.tx-cellvalign-menu .list_valign li .cell_top {background-position:-2px -353px}
+	.tx-cellvalign-menu .list_valign li .cell_mid {background-position:-2px -376px}
+	.tx-cellvalign-menu .list_valign li .cell_bot {background-position:-2px -398px}
+
+/*==== 2014-09-15 추가 끝 ====*/
+
 /*==== horizontalrule ====*/
 	.tx-horizontalrule a.tx-icon {background-position:-23px -90px;}
 	.tx-horizontalrule-menu {  }
