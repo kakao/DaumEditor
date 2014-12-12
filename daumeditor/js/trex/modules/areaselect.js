@@ -642,7 +642,7 @@ Trex.module("area select", function(editor, toolbar, sidebar, canvas, config){
             mousedown = function mousedown(e) {
                 var el = $tx.element(e);
                 mousedownel = el;
-                if ($tom.kindOf(el, 'img,table')) {
+                if ($tom.kindOf(el, 'img,table')&&!Trex.Util.getMatchedClassName(el, _excludes)) {
                     $tx.stop(e);
                 }else {
                     select.reset();

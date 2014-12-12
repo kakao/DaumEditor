@@ -91,13 +91,11 @@
 				setTimeout(function () {
 					try {
 						self.wysiwygDoc.designMode = "On";
-                        console.log($tx.gecko)
 						if ($tx.gecko) {
 							self.wysiwygDoc.execCommand("enableInlineTableEditing", _FALSE, _FALSE);
                             self.wysiwygDoc.execCommand("enableObjectResizing",  _FALSE, _FALSE);
 						}
 					} catch (e) {
-                        console.log(22);
 						self.designModeActivated = _FALSE;
 					}
 				}, 10);
