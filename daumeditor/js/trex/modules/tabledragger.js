@@ -66,7 +66,7 @@ Trex.Table.Dragger = Trex.Class.create({
     mousedown: function(e){
         if(this._state =='NONE'){
             var td = this._mouseData.moveTd;
-            if(!td) return;
+            if(!td||!td.parentNode) return;
             var point = this._getPointByEvent(e);
             if(this._getType(td,point)=='NONE') return;
             $tx.stop(e);
