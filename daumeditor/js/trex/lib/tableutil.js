@@ -114,9 +114,10 @@ Trex.TableUtil = {
      */
     getCellOffset: function(td){
         var get = function(td, key){
-            var val = td[key]||td.style[key];
+			var offset;
+            var val = td[key]||td.style[key]||(offset = td['offset'+key.capitalize()]).toPx();
             if(val.indexOf("%")!=-1)
-                return td['offset'+key.capitalize()];
+                return offset;
             else
                 return parseInt(val,10);
         };

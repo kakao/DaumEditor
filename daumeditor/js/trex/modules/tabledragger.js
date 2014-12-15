@@ -317,8 +317,7 @@ Trex.Table.Dragger = Trex.Class.create({
      */
     _getTdByEvent: function(e){
         var td = $tom.find($tx.element(e), "td");
-        if(!td) return _NULL;
-		var isTxInfo = $tom.find(td, ".txc-info");
+        if(!td || $tom.find(td, ".txc-info")) return _NULL;
         return td
     },
     /**
@@ -340,7 +339,7 @@ Trex.Table.Dragger = Trex.Class.create({
         var res = array.map(function(td){
             return Trex.TableUtil.getCellOffset(td)[t];
         });
-        return Math.min.apply(Math, res) - min;
+        return (Math.min.apply(Math, res) - min)||0;
     },
     /**
      * @param {String} type
