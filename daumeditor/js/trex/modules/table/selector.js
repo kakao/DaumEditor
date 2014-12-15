@@ -368,7 +368,7 @@ Trex.Table.Selector = Trex.Class.create({
 	onmousemove: function (elem) {
 		var td, table, notSelected, el;
         var _p = this.canvas.getProcessor();
-        if(_p.getAreaSelection().isResizing||($tx.msie&&$tx.msie_ver>=11&&(el = _p.getControl())&&el.tagName.match(/^(IMG|TABLE)$/i))){
+        if(_p.getAreaSelection().isResizing||($tx.msie&&$tx.msie_ver>=11&&(el = _p.getControl())&&$tom.kindOf(el, 'img,table'))){
             this.turnOffDragging();
             return;
         }

@@ -554,12 +554,15 @@ Trex.I.Selection.TridentStandard = {
      * 	txSelection.getControl();
      */
     getControl: function() {
+		//ie11에서 img태그를 이동시에 다시 getControl을 하면 anchorNode에 있는게 아니라 focusNode에 있다.
         var _sel = this.getSel();
         if(_sel.isCollapsed) {
             return null;
         }
-        if ($tom.isElement(_sel.anchorNode)) {
-            var _node = _sel.anchorNode.childNodes[_sel.anchorOffset];
+		var selNode, selOffset;
+		selOffset = $tom.isElement(selNode = _sel.anchorNode)?_sel.anchorOffset:$tom.isElement(selNode = _sel.focusNode)?_sel.focusOffset-1:_NULL;
+        if (selOffset !== _NULL) {
+            var _node = selNode.childNodes[selOffset];
             if ($tom.kindOf(_node, '%control')) {
                 return _node;
             } else {

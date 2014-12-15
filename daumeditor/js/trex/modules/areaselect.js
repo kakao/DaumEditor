@@ -24,7 +24,9 @@ Trex.Area.BrowserSelect = Trex.Class.create({
     select:function(element){
         if(!element)
             return;
-        this._canvas.getProcessor().selectControl(element);
+        var _p;
+        if((_p = this._canvas.getProcessor()).getControl() !== element)
+            _p.selectControl(element);
         this._isSelect = _TRUE;
         this._canvas.fireJobs(Trex.Ev.__CANVAS_SELECT_ITEM);
     },
