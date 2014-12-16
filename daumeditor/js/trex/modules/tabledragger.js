@@ -336,7 +336,9 @@ Trex.Table.Dragger = Trex.Class.create({
             t = 'height';
             min = self._MINHEIGHT;
         });
-        var res = array.map(function(td){
+        var res = array.findAll(function(td){
+            return !!td
+        }).map(function(td){
             return Trex.TableUtil.getCellOffset(td)[t];
         });
         return (Math.min.apply(Math, res) - min)||0;
@@ -423,11 +425,21 @@ Trex.Table.Dragger = Trex.Class.create({
      */
     _resizeWidth: function(tdArr, d) {
         var self = this;
-        tdArr.expandElements.each(function(td){
-            td.style.width = (self._getTdWidth(td) + d).toPx();
+        var e = tdArr.expandElements.map(function(td){
+           return self._getTdWidth(td);
         });
-        tdArr.contractElements.each(function(td){
-            td.style.width = (self._getTdWidth(td) - d).toPx();
+        var c = tdArr.contractElements.map(function(td){
+            return self._getTdWidth(td);
+        });
+        tdArr.expandElements.each(function(td, i){
+            var v = (e[i] + d).toPx();
+            td.style.width = v;
+            td.width = v;
+        });
+        tdArr.contractElements.each(function(td,i){
+            var v = (c[i] - d).toPx();
+            td.style.width = v;
+            td.width = v;
         });
         if(tdArr.contractElements.length == 0){
             var table = $tom.find(tdArr.expandElements[0],'table');
@@ -441,11 +453,21 @@ Trex.Table.Dragger = Trex.Class.create({
     },
     _resizeHeight: function(tdArr, d){
         var self = this;
-        tdArr.expandElements.each(function(td){
-            td.style.height = (self._getTdHeight(td) + d).toPx();
+        var e = tdArr.expandElements.map(function(td){
+            return self._getTdHeight(td);
         });
-        tdArr.contractElements.each(function(td){
-            td.style.height = (self._getTdHeight(td) - d).toPx();
+        var c = tdArr.contractElements.map(function(td){
+            return self._getTdHeight(td);
+        });
+        tdArr.expandElements.each(function(td, i){
+            var v = (e[i] + d).toPx();
+            td.style.height = v;
+            td.height = v;
+        });
+        tdArr.contractElements.each(function(td,i){
+            var v = (c[i] - d).toPx();
+            td.style.height = v;
+            td.height = v;
         });
     }
 });
