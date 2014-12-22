@@ -790,13 +790,30 @@ $tx.extend($tx, /** @lends $tx */{
 		 * 이벤트의 디폴트 행위를 취소하고 위임을 연기하기 위해 이 함수를 사용
 		 * @function
 		 */
-		stop: function(event) {
-			if (event.preventDefault) {
-				event.preventDefault();
+		stop: function(event){
+			this.stopPropagation(event);
+			this.preventDefault(event);
+		},
+		/**
+		 * 이벤트의 버블링을 막을 때 이 함수를 사용
+		 * @function
+		 */
+		stopPropagation: function(event) {
+			if(event.stopPropagation){
 				event.stopPropagation();
-			} else {
-				event.returnValue = _FALSE;
+			}else {
 				event.cancelBubble = _TRUE;
+			}
+		},
+		/**
+		 * 이벤트 디폴트 실행 방지를 위해 이 함수를 사용
+		 * @function
+		 */
+		preventDefault: function(event){
+			if(event.preventDefault){
+				event.preventDefault();
+			}else{
+				event.returnValue = _FALSE;
 			}
 		},
 		/**

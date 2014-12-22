@@ -648,15 +648,8 @@
             var dummy = dummyNode || this.getPasteDummy();
 
             var processor = this.canvas.getProcessor();
-            processor.focus();
-
-            var rng = doc.createRange();
-            rng.setStart(dummy, 0);
-            rng.setEnd(dummy, 0);
-
-            var sel = doc.defaultView.getSelection();
-            sel.removeAllRanges();
-            sel.addRange(rng);
+            dummy.focus();
+            processor.createGoogFromNodeContents(dummy).select();
         },
         execPasteCommand: function () {
             try {
@@ -703,8 +696,7 @@
             __Identity: 'paste-trident-standard'
         },
         createPasteDummy: function (tagName) {
-            tagName = tagName || 'body';// ie는 body로 생성;
-
+            tagName = tagName || 'div';
             var node = this.getDocument().createElement(tagName);
             node.id = 'pasteDummy';
             node.innerHTML = Trex.__WORD_JOINER;
@@ -716,12 +708,17 @@
             node.style.height = '200px';
             node.style.background = 'gray';
             node.setAttribute('contentEditable', _TRUE);// contentEditable 속성을 부여한다
-
+            ['beforedeactivate', 'focusin', 'focusout', 'paste'].each(function (name){
+                    $tx.observe(node, name, function(e){
+                        $tx.stopPropagation(e);
+                    });
+            });
             return node;
         },
         appendPasteDummy: function (dummyNode) {
             var doc = this.getDocument();
-            doc.body.parentNode.appendChild(dummyNode);
+            doc.body.appendChild(dummyNode);
+            //ie11 은 body 밑에다 생성해야 정상동작 된다.
         },
         pasteByRedirection: function (ev) {
             var self = this;
@@ -750,8 +747,30 @@
         $const: {
             __Identity: 'paste-trident-legacy'
         },
-        createPasteDummy: Trex.Paste.I.TridentStandard.createPasteDummy,
-        appendPasteDummy: Trex.Paste.I.TridentStandard.appendPasteDummy,
+        createPasteDummy: function (tagName) {
+            tagName = tagName || 'body';
+            var node = this.getDocument().createElement(tagName);
+            node.id = 'pasteDummy';
+            node.innerHTML = Trex.__WORD_JOINER;
+            node.style.position = 'absolute';
+            node.style.overflow = 'hidden';
+            node.style.left = '-999em';
+            node.style.top = '0';
+            node.style.width = '100%';
+            node.style.height = '200px';
+            node.style.background = 'gray';
+            node.setAttribute('contentEditable', _TRUE);// contentEditable 속성을 부여한다
+            ['beforedeactivate', 'focusin', 'focusout', 'paste'].each(function (name){
+                $tx.observe(node, name, function(e){
+                    $tx.stopPropagation(e);
+                });
+            });
+            return node;
+        },
+        appendPasteDummy: function (dummyNode) {
+            var doc = this.getDocument();
+            doc.body.parentNode.appendChild(dummyNode);
+        },
         pasteByRedirection: Trex.Paste.I.TridentStandard.pasteByRedirection,
         setRangeToDummy: function (dummyNode) {
             var dummy = dummyNode || this.getPasteDummy();
@@ -761,7 +780,6 @@
             range.collapse(_TRUE);
             range.moveStart("character", 0);
             range.moveEnd("character", 0);
-
             range.execCommand('paste', _NULL, _FALSE);
         },
         execPasteCommand: function () {
@@ -828,3 +846,58 @@
         }
     );
 }();
+
+Trex.register("filter > paste",
+    function(editor, toolbar, sidebar, canvas, config) {
+        if(!($tx.msie && !Trex.Paste.isMSSelection))
+            return;
+        function removePasteBin(contents){
+            var d = document.createElement('div');
+            d.style.display = 'none';
+            d.innerHTML = contents;
+            document.body.appendChild(d);
+            var el = document.getElementById('pasteDummy');
+            if(el && $tom.findAncestor(el, function(node){
+                    return node === d;
+                }, function(node){
+                    return $tom.isBody(node)||node.parentNode == _NULL;
+                })){
+                $tom.remove(el);
+            }
+            var res = d.innerHTML;
+            $tom.remove(d);
+            return res;
+        }
+
+        var _docparser = editor.getDocParser();
+        _docparser.registerFilter(
+            'filter/paste', {
+                'source@load': function(contents){
+                    return contents;
+                },
+                'html@load': function(contents){
+                    return contents;
+                },
+                'source4save': function(contents){
+                    return contents;
+                },
+                'html4save': function(contents){
+                    return removePasteBin(contents);
+                },
+                'text4save': function(contents){
+                    return contents;
+                },
+                'html2text': function(contents) {
+                    return removePasteBin(contents);
+                },
+                'source2text': function(contents) {
+                    return contents;
+                },
+                'source2html': function(contents){
+                    return contents;
+                },
+                'html2source': function(contents){
+                    return removePasteBin(contents);
+                }
+            });
+    });
