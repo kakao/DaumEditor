@@ -1,7 +1,7 @@
 // TODO duplicated with editor_common.js
 (function(){
     var DEBUG = 1;
-    var CORE_FILES = [
+    var _CORE_FILES = [
         "scopeVariable.js",
         /** common library */
         "lib/json2.js",
@@ -188,8 +188,8 @@
         "trex/modules/autolink.js"
 
     ];
-    if(typeof module !=='undefined' && module.exports) { module.exports.CORE_FILES = CORE_FILES; return}
-    window.CORE_FILES = CORE_FILES;
+    if(typeof module !=='undefined' && module.exports) { module.exports.CORE_FILES = _CORE_FILES; return}
+    this.CORE_FILES = _CORE_FILES;
     var DE_PREFIX = EditorJSLoader.getJSBasePath("editor.js");
     EditorJSLoader.loadModule(DE_PREFIX + "development_environments.js");
 })();

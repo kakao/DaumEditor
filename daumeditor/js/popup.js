@@ -1,5 +1,5 @@
 (function(){
-    var CORE_FILES = [
+    var _CORE_FILES = [
         "scopeVariable.js",
         /** common library */
         "lib/txlib.js",
@@ -22,8 +22,8 @@
         /** trex common */
         "popuputil.js"
     ];
-    if(typeof module !=='undefined' && module.exports) { module.exports.CORE_FILES = CORE_FILES; return}
-    window.CORE_FILES = CORE_FILES;
+    if(typeof module !=='undefined' && module.exports) { module.exports.CORE_FILES = _CORE_FILES; return}
+    this.CORE_FILES = _CORE_FILES;
     try {
         var urlParams = {};
         (function () {
