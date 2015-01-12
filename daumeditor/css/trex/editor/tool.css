@@ -311,7 +311,7 @@
 	.tx-effect-menu .sel_effect01 {width:99px;height:18px;font-size:11px;margin:5px 0 0 3px;border:1px solid #bababa} /* 2014-12-11 수정 */
 	.tx-effect-menu .sel_effect02 {width:59px;height:18px;font-size:11px;margin:5px 0 0 3px;border:1px solid #bababa} /* 2014-12-11 수정 */
 	.tx-effect-menu .effect_repeat {overflow:hidden;position:absolute;width:0;height:0;line-height:0;text-indent:-9999px}
-	.tx-effect-menu .wrap_btn {margin-top:8px;text-align:center}
+	.tx-effect-menu .wrap_btn {height:26px;margin-top:8px;text-align:center} /* 2015-01-05 수정 */
 	.tx-effect-menu .wrap_btn {margin-right:4px} /* 2014-12-11 추가 */
 	.tx-menu-inner .tx-menu-btn {cursor:pointer}
 	/*==== hotkeys ====*/
@@ -326,10 +326,9 @@
 	.tx-hotkeys-menu .list_mail .lst_key {margin-bottom:30px}
 	.tx-hotkeys-menu .tit_key {float:left;width:192px;margin-bottom:4px;vertical-align:top}
 	.tx-hotkeys-menu .cont_key {float:left;margin-bottom:4px;vertical-align:top}
-	/*==== clipboard ====*/
-	.tx-clipboard a.tx-icon {background-position:-62px -172px;}
+
 	/*==== sourcecode ====*/
-	.tx-sourcecode a.tx-icon {background-position:-83px -171px}
+	.tx-sourcecode a.tx-icon {background-position:-89px -171px} /* 2015-01-07 수정 */
 /*==== 2014-09-15 추가 끝====*/
 
 /*==== table  ====*/
@@ -1168,7 +1167,7 @@
 	.tx-cellvalign a.tx-icon2 { background-position:-5px -232px}
 	.tx-cellvalign-menu {width:94px;height:71px;font-family:'돋움',dotum;font-size:11px;color:#333}
 	.tx-cellvalign-menu .list_valign li {height:23px;text-indent:20px}
-	.tx-cellvalign-menu .list_valign li .cell_ico {background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01_140915.gif);background-repeat:no-repeat;}
+	.tx-cellvalign-menu .list_valign li .cell_ico {background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01_150107.gif);background-repeat:no-repeat;}/* 2015-01-07 수정 */
 	.tx-cellvalign-menu .list_valign li .cell_top {background-position:-2px -353px}
 	.tx-cellvalign-menu .list_valign li .cell_mid {background-position:-2px -376px}
 	.tx-cellvalign-menu .list_valign li .cell_bot {background-position:-2px -398px}
@@ -1211,8 +1210,19 @@
 	.tx-formula a:hover {background-position: -519px -18px;}
 
 /*==== paste ====*/
-    .tx-paste a.tx-icon {width:21px;}
-    .tx-paste a.tx-icon {background-position:-44px -90px;}
-    .tx-paste-off a.tx-icon {background-position:-44px -90px;}
-    .tx-paste-html a.tx-icon {background-position:-44px -30px;}
-    .tx-paste-text a.tx-icon {background-position:-105px -50px;}
+	.tx-paste a.tx-icon {background-position:-62px -172px;}
+    .tx-paste-off a.tx-icon {background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01_150107.gif);background-repeat:no-repeat;background-position:-4px -419px;}
+    .tx-paste-html a.tx-icon {background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01_150107.gif);background-position:-4px -443px;}
+    .tx-paste-text a.tx-icon {background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01_150107.gif);background-position:-4px -465px;}
+
+/*==== 2015-01-07 추가 시작 ====*/
+/*==== clipboard ====*/
+	.arr_btntx {width:31px;height:21px;background-position:-1291px 0}
+	.arr_btntx_pushed {width:31px;height:21px;background-position:-1291px -64px}
+	.arr_btntx_hovered {width:31px;height:21px;background-position:-1291px -32px}
+	.tx-paste-menu{width:25px;height:71px;font-size:0;text-indent:-9999px}
+	.tx-paste-menu .tx-menu-list li .clip_off {background-position:-4px -418px}
+	.tx-paste-menu .tx-menu-list li .clip_on {background-position:-4px -444px}
+	.tx-paste-menu .tx-menu-list li .clip_text {background-position:-4px -465px}
+	.tx-paste-menu .tx-menu-list li .cell_ico {background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01_150107.gif);background-repeat:no-repeat;}
+/*==== 2015-01-07 추가 끝 ====*/
