@@ -155,7 +155,10 @@
     });
 
     test('$A : convert node list objects to array', function () {
-        var nodeList = document.body.childNodes;
+        var testEl = document.createElement('div');
+        testEl.innerHTML = '<div>A<div></div>C<div></div></div>B<div>C</div><a><span></span><div></div></a>';
+
+        var nodeList = testEl.childNodes;
         var arrayConverted = $A(nodeList);
 
         equal(nodeList.length, arrayConverted.length, "length");
