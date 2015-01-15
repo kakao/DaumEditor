@@ -189,6 +189,7 @@ module.exports = function(config) {
         "../daumeditor/js/trex/modules/table/merge.js",
         "../daumeditor/js/trex/modules/table/insert.js",
         "../daumeditor/js/trex/modules/table/delete.js",
+        "../daumeditor/js/trex/modules/table/resize.js",
 
         "../daumeditor/js/trex/modules/table/border.js",
         "../daumeditor/js/trex/modules/table/template.js",
