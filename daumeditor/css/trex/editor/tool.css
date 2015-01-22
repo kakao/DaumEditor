@@ -1157,7 +1157,8 @@
 	.tx-cellsize-menu {width:201px;height:111px}
 	.tx-cellsize-menu .tx-menu-inner {width:192px;height:102px;padding:9px 0 0 9px;font-family:'돋움',dotum;font-size:11px;color:#333}
 	.tx-cellsize-menu .desc_cellsize {height:11px;margin:0}
-	.tx-cellsize-menu .inp_cellw {width:43px;height:16px;margin:10px 0 0 3px;border:1px solid #bababa} /* 2014-12-11 수정 */
+	.tx-cellsize-menu .lab_cell {display:inline-block;height:18px;margin-top:-1px;line-height:18px} /* 2015-01-19 추가 */
+	.tx-cellsize-menu .inp_cellw {width:43px;height:16px;margin:12px 0 0 3px;border:1px solid #bababa} /* 2015-01-19 수정 */
 	.tx-cellsize-menu .inp_cellh {width:43px;height:16px;margin:5px 0 0 3px;border:1px solid #bababa} /* 2014-12-11 수정 */
 	.tx-cellsize-menu .wrap_btn {margin-top:8px;text-align:center}
 	.tx-cellsize-menu .wrap_btn .tx-menu-btn {margin-right:4px} /* 2014-12-11 추가 */
@@ -1212,7 +1213,7 @@
 /*==== paste ====*/
 	.tx-paste a.tx-icon {background-position:-62px -172px;}
     .tx-paste-off a.tx-icon {background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01_150107.gif);background-repeat:no-repeat;background-position:-4px -419px;}
-    .tx-paste-html a.tx-icon {background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01_150107.gif);background-position:-4px -443px;}
+    .tx-paste-html a.tx-icon {background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01_150107.gif);background-position:-4px -444px} /* 2015-01-19 수정 */
     .tx-paste-text a.tx-icon {background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01_150107.gif);background-position:-4px -465px;}
 
 /*==== 2015-01-07 추가 시작 ====*/

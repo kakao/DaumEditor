@@ -386,8 +386,8 @@
 	}
 	/* 2014-09-15  추가*/
 	.layer_loading {position:absolute;top:10px;left:10px;width:917px;height:380px;background:url(../../../images/icon/editor/loading/bg_drop.gif) no-repeat 0 0;text-align:center}
-	.layer_loading .ico_loading {margin-top:110px;font-size:24px;font-family:'돋움',dotum,sans-serif;color:#ccc}
-	.layer_loading .txt_drop {margin-top:20px;font-size:24px;font-family:'돋움',dotum,sans-serif;color:#ccc}
+	.layer_loading .ico_loading {display:none;position:absolute;top:50%;left:50%;margin:-15px 0 0 -15px;font-size:24px;font-family:'돋움',dotum,sans-serif;color:#ccc} /* 2015-01-19 수정 */
+	.layer_loading .txt_drop {display:none;position:absolute;top:50%;left:50%;width:150px;margin:-13px 0 0 -75px;font-weight:bold;font-size:18px;font-family:'돋움',dotum,sans-serif;color:#ccc} /* 2015-01-19 수정 */
 	/* 2014-09-15  추가 끝*/
 	.tx-daumtrans { position:absolute; top:-1000px; left:-1000px; }
 	.tx-canvas .tx-holder { display:none; font-size:0 !important; zoom: 1; }
