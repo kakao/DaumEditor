@@ -112,7 +112,7 @@ Trex.Responder = {
 	register: function(handler) {
 		var _key = this.newKey();
 		this.callbacks[_key] = function(response) {
-			handler(response);
+			handler.apply(this, Array.prototype.slice.call(arguments,0));
 			this.callbacks[_key] = _NULL;
 		}.bind(this);
 		return _key;
