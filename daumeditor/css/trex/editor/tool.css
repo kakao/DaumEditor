@@ -1212,9 +1212,9 @@
 
 /*==== paste ====*/
 	.tx-paste a.tx-icon {background-position:-62px -172px;}
-    .tx-paste-off a.tx-icon {background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01_150107.gif);background-repeat:no-repeat;background-position:-4px -419px;}
+    .tx-paste-off a.tx-icon {background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01_150107.gif);background-repeat:no-repeat;background-position:-4px -420px;}
     .tx-paste-html a.tx-icon {background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01_150107.gif);background-position:-4px -444px} /* 2015-01-19 수정 */
-    .tx-paste-text a.tx-icon {background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01_150107.gif);background-position:-4px -465px;}
+    .tx-paste-text a.tx-icon {background-image:url(../../../images/icon/editor/skin/05/icon_table_layer01_150107.gif);background-position:-4px -466px;}
 
 /*==== 2015-01-07 추가 시작 ====*/
 /*==== clipboard ====*/
