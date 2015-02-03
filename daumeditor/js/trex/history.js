@@ -42,8 +42,10 @@ Trex.I.History.Webkit = {
         };
     },
     restoreRange: function(savedSel){
-        var containerEl = this.canvas.getCurrentPanel().getDocument().body;
-        var charIndex = 0, range = document.createRange();
+        var win = this.canvas.getCurrentPanel().getWindow();
+        var doc = win.document;
+        var containerEl = doc.body;
+        var charIndex = 0, range = doc.createRange();
         range.setStart(containerEl, 0);
         range.collapse(true);
         var nodeStack = [containerEl], node, foundStart = false, stop = false;
@@ -68,7 +70,7 @@ Trex.I.History.Webkit = {
             }
         }
 
-        var sel = window.getSelection();
+        var sel = win.getSelection();
         sel.removeAllRanges();
         sel.addRange(range);
     }
