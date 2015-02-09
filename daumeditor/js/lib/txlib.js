@@ -1227,6 +1227,10 @@ $tx.extend($tx, /** @lends $tx */{
 			}  
 			return !isNaN(str);
 		},
+        isPercent: function(){
+            var str = this.trim();
+            return parseInt(str, 10)+'%' === str;
+        },
 		/**
 		 * 바이트를 계산하여 단위를(KB, MB) 붙여서 반환한다.
 		 * @function

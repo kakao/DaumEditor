@@ -338,9 +338,9 @@ TrexConfig.addEmbeder(
 	function getHtmlByExt(source, embed) {
 		var _attrs = Trex.Util.getAllAttributesFromEmbed(embed);
 		var _url = _attrs['src'];
-		var _width = (_attrs['width'] || " ").parsePx();
-		var _height = (_attrs['height'] || " ").parsePx();
-		if(isNaN(_width) || isNaN(_height)) {
+		var _width = _attrs['width'].isPercent()?_attrs['width']:(_attrs['width'] || " ").parsePx();
+		var _height = _attrs['height'].isPercent()?_attrs['height']:(_attrs['height'] || " ").parsePx();
+		if(parseInt(_width, 10) === 0 || parseInt(_height, 10) ===0) {
 			var _size = getDefaultSizeByUrl(_url);
 			_width = _size.width;
 			_height = _size.height;
