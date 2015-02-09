@@ -262,23 +262,26 @@ Trex.I.History.Trident = {
                 code: event.keyCode,
                 ctrl: event.ctrlKey || (event.keyCode === 17),
                 alt: event.altKey || (event.keyCode === 18),
-                shift: event.shiftKey || (event.keyCode === 16)
+                shift: event.shiftKey || (event.keyCode === 16),
+                meta: event.metaKey || (event.keyCode === 91)
             };
-
+            
             if (key.code == 229) {                // ignore mouse click in ff.
                 return;
             }
-
+            
+            key._combination = goog.userAgent.MAC ? key.meta : key.ctrl;
+            
             var self = this;
             if (key.code == Trex.__KEY.ENTER || key.code == Trex.__KEY.SPACE || key.code == Trex.__KEY.TAB) {
                 self.saveHistoryIfEdited();
             } else if (key.code == Trex.__KEY.DELETE || key.code == Trex.__KEY.BACKSPACE) {
                 self.saveHistory();
-            } else if ((key.code == Trex.__KEY.PASTE || key.code == Trex.__KEY.CUT) && key.ctrl) {
+            } else if ((key.code == Trex.__KEY.PASTE || key.code == Trex.__KEY.CUT) && key._combination) {
                 self.saveHistory();
-            } else if (((key.code > 32 && key.code < 41) && key.shift) || (key.code == 65 && key.ctrl)) {   // shift + arrow,  home, end,  etc..  / select all
+            } else if (((key.code > 32 && key.code < 41) && key.shift) || (key.code == 65 && key._combination)) {   // shift + arrow,  home, end,  etc..  / select all
                 self.saveHistoryIfEdited();
-            } else if (key.ctrl || key.alt || (key.shift && key.code == 16)) {
+            } else if (key.ctrl || key.meta || key.alt || (key.shift && key.code == 16)) {
                 // content isn't modified
             } else {
                 self.contentModified = _TRUE;

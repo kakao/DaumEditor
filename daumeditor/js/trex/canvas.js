@@ -631,22 +631,25 @@
             return this.panels[this.mode].getPositionByNode(node);
         },
 
+        getNodeAndOffsetAtSelection: function (processor, doc){
+            var select = doc.getSelection? doc.getSelection() : processor.getSel();
+            var range = goog.dom.Range.createFromBrowserSelection(select);
+            if(!range) return _NULL;
 
+            return {
+                node: range.getStartNode(),
+                offset: range.getStartOffset()
+            };
+        },
 
         onKeyDown: function(event) {
             var p = this.getProcessor();
             var doc = this.getCurrentPanel().getDocument();
-            function getNodeAndOffsetAtSel(){
-                var rng = goog.dom.Range.createFromBrowserSelection(doc.getSelection? doc.getSelection():p.getSel());
-                if(!rng) return _NULL;
-                var node = rng.getStartNode();
-                var offset = rng.getStartOffset();
-                return {node: node,
-                    offset: offset}
-            }
-            var where = getNodeAndOffsetAtSel();
+            var where = this.getNodeAndOffsetAtSelection(p, doc);
+            
             this.fireJobs(Trex.Ev.__CANVAS_PANEL_KEYDOWN, event);
-            var prev = null;
+            
+            var prev = _NULL;
             if(event.keyCode == Trex.__KEY.BACKSPACE && where && p.isCollapsed() && (prev = $tom.prevNodeUntilTagName(where.node, where.offset, 'table')) && $tom.isTagName(prev, 'table')){
                 $tx.stop(event);
                 this.fireJobs(Trex.Ev.__CANVAS_PANEL_BACKSPACE_TABLE, prev);
@@ -654,26 +657,37 @@
             if (this.config.useHotKey) {
                 this.fireKeys(event);
             }
-        },
 
-        onKeyUp: function(event) {
             var keyCode = event.keyCode+'';
 
             if (shouldTriggerQuery(keyCode)) {
                 this.getProcessor().clearDummy();
             }
-
+            
             this.history.saveHistoryByKeyEvent(event);
+        },
+
+        onKeyUp: function(event) {
+            //var keyCode = event.keyCode+'';
+            //
+            //if (shouldTriggerQuery(keyCode)) {
+            //    this.getProcessor().clearDummy();
+            //}
+            //
+            //this.history.saveHistoryByKeyEvent(event);
 
             try {
                 this.mayAttachmentChanged = _TRUE;
                 this.fireJobs(Trex.Ev.__CANVAS_PANEL_KEYUP, event);
+                
                 if (this.isWYSIWYG() && shouldTriggerQuery(keyCode)) {
                     this.triggerQueryStatus();
                 }
+                
                 if (keyCode === Trex.__KEY.DELETE || keyCode === Trex.__KEY.BACKSPACE) { //NOTE: (Del/Backspace) keys를 눌러 본문에서 무엇인가가 삭제되었다고 생각될 경우 첨부들의 싱크를 확인한다.
                     this.fireJobs(Trex.Ev.__CANVAS_PANEL_DELETE_SOMETHING);
                 }
+                
             } catch(ignore) {
             }
         },
