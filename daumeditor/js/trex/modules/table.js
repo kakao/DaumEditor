@@ -231,6 +231,7 @@ Trex.module("table selector", function (editor, toolbar, sidebar, canvas, config
 
 			tableBackground: function (value) {
 				var self = this;
+                value = value || 'transparent';
 				this.execute(function () {
 					var style, tdArr, i, len;
 					style = {
