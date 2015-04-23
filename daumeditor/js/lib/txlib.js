@@ -842,6 +842,13 @@ $tx.extend($tx, /** @lends $tx */{
 				}
 			}
 			return _dest;
+		},
+		defaults: function(dest, source){
+			for(var name in source){
+				if(dest[name] === _UNDEFINED){
+					dest[name] = source[name];
+				}
+			}
 		}
 	});
 })();
@@ -1134,7 +1141,14 @@ $tx.extend($tx, /** @lends $tx */{
 			source = source.replace(new RegExp("(\\W)", "g"), "\\$1");
 			target = target.replace(new RegExp("\\$", "g"), "$$$$");
 			return this.replace(new RegExp(source, "gm"), target);
-		}
+		},
+        underscore :function () {
+        return this.replace(/::/g, '/')
+            .replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2')
+            .replace(/([a-z\d])([A-Z])/g, '$1_$2')
+            .replace(/-/g, '_')
+            .toLowerCase();
+        }
 	});
 })();
 
