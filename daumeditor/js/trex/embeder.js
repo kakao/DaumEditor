@@ -279,7 +279,6 @@ Trex.module("embad entry data", function (editor, toolbar, sidebar, canvas, conf
         }
         for(var name in _embeders){
             if(_embeders[name]["onloadData"]){
-                console.log(name);
                 setEmbedEntrys(_embeders[name]["onloadData"](content),content)
             }
         }
