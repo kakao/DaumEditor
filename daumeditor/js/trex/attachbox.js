@@ -41,7 +41,7 @@ Trex.install("editor.getAttachBox & sidebar.getAttachments",
 
 Trex.register("filter > attachers",
 	function(editor) {
-		var _attachBox = editor.getAttachBox();		
+		var _attachBox = editor.getAttachBox();
 		var _docparser = editor.getDocParser();		
 		_docparser.registerFilter(
 			'filter/attachments', {
@@ -96,7 +96,7 @@ Trex.register("filter > attachers",
 					return contents;
 				},
 				'html4save': function(contents){
-					var entries = _attachBox.datalist;					
+					var entries = _attachBox.datalist;
 					entries.each(function(entry) {
 						if (entry.loadDataByContent) {
 							entry.loadDataByContent('html4save', contents);

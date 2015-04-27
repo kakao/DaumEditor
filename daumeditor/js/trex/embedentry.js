@@ -45,6 +45,9 @@ Trex.EmbedEntry = Trex.Class.create({
 		this.saveHtml = this.dispText = this.getDispText(_data); //NOTE: embeder들은 dispText와 saveHtml가 같다.
 		this.regHtml = this.getRegHtml(_data);
 		this.regLoad = this.regText = this.getRegText(_data); //NOTE: embeder들은 dispText와 saveHtml가 같다.
+	},
+	refreshProperties: function() {
+		this.setProperties(this.data);
 	}
 });
 
