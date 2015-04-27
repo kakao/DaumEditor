@@ -65,6 +65,7 @@ Trex.Embeder = Trex.Class.draft({
 	initialize: function(editor, entryBox, config) {
 		this.editor = editor;
 		this.canvas = editor.getCanvas();
+        this.entryBox = entryBox;
 		
 		var _config = this.config = TrexConfig.getEmbeder(this.constructor.__Identity, config);
 		if(config.pvpage && !!_config.usepvpage) {
@@ -136,4 +137,151 @@ Trex.Embeder = Trex.Class.draft({
 		}
 		return content;
 	}
+});
+
+
+Trex.register("filter > embeder",
+    function(editor) {
+        var _embedBox = editor.getEmbedBox();
+        var _docparser = editor.getDocParser();
+        _docparser.registerFilter(
+            'filter/embeder', {
+                'text@load': function(contents){
+                    var entries = _embedBox.datalist;
+                    entries.each(function(entry) {
+                        if (entry.loadDataByContent) {
+                            entry.loadDataByContent('text@load', contents);
+                        }
+                        contents = entry.getChangedContent(contents, entry.regLoad, "");
+                    });
+                    return contents;
+                },
+                'source@load': function(contents){
+                    var entries = _embedBox.datalist;
+                    entries.each(function(entry) {
+                        if (entry.loadDataByContent) {
+                            entry.loadDataByContent('source@load', contents);
+                        }
+                        contents = entry.getChangedContent(contents, entry.regLoad, entry.dispText);
+                    });
+                    return contents;
+                },
+                'html@load': function(contents){
+                    var entries = _embedBox.datalist;
+                    entries.each(function(entry) {
+                        if (entry.loadDataByContent) {
+                            entry.loadDataByContent('html@load', contents);
+                        }
+                        contents = entry.getChangedContent(contents, entry.regLoad, entry.dispHtml);
+                    });
+                    return contents;
+                },
+                'text4save': function(contents){
+                    var entries = _embedBox.datalist;
+                    entries.each(function(entry) {
+                        if (entry.loadDataByContent) {
+                            entry.loadDataByContent('text4save', contents);
+                        }
+                        contents = entry.getChangedContent(contents, entry.regText, "");
+                    });
+                    return contents;
+                },
+                'source4save': function(contents){
+                    var entries = _embedBox.datalist;
+                    entries.each(function(entry) {
+                        if (entry.loadDataByContent) {
+                            entry.loadDataByContent('source4save', contents);
+                        }
+                        contents = entry.getChangedContent(contents, entry.regText, entry.saveHtml, ["id", "class"]);
+                    });
+                    return contents;
+                },
+                'html4save': function(contents){
+                    var entries = _embedBox.datalist;
+                    entries.each(function(entry) {
+                        if (entry.loadDataByContent) {
+                            entry.loadDataByContent('html4save', contents);
+                        }
+                        contents = entry.getChangedContent(contents, entry.regHtml, entry.saveHtml, ["id", "class"]);
+                    });
+                    return contents;
+                },
+                'text2source': function(contents){
+                    return contents;
+                },
+                'text2html': function(contents){
+                    return contents;
+                },
+                'source2text': function(contents){
+                    var entries = _embedBox.datalist;
+                    entries.each(function(entry) {
+                        if (entry.loadDataByContent) {
+                            entry.loadDataByContent('source2text', contents);
+                        }
+                        contents = entry.getChangedContent(contents, entry.regText, "");
+                    });
+                    return contents;
+                },
+                'source2html': function(contents){
+                    var entries = _embedBox.datalist;
+                    entries.each(function(entry) {
+                        if (entry.loadDataByContent) {
+                            entry.loadDataByContent('source2html', contents);
+                        }
+                        contents = entry.getChangedContent(contents, entry.regText, entry.dispHtml);
+                    });
+                    return contents;
+                },
+                'html2text': function(contents){
+                    var entries = _embedBox.datalist;
+                    entries.each(function(entry) {
+                        if (entry.loadDataByContent) {
+                            entry.loadDataByContent('html2text', contents);
+                        }
+                        contents = entry.getChangedContent(contents, entry.regHtml, "");
+                    });
+                    return contents;
+                },
+                'html2source': function(contents){
+                    var entries = _embedBox.datalist;
+                    entries.each(function(entry) {
+                        if (entry.loadDataByContent) {
+                            entry.loadDataByContent('html2source', contents);
+                        }
+                        contents = entry.getChangedContent(contents, entry.regHtml, entry.dispText, ["id", "class"]);
+                    });
+                    return contents;
+                }
+            }
+        );
+    }
+);
+Trex.module("embad entry data", function (editor, toolbar, sidebar, canvas, config) {
+    var _embedBox = editor.getEmbedBox();
+    var _embeders = sidebar.embeders;
+    editor.observeJob(Trex.Ev.__EDITOR_LOAD_DATA_BEGIN, function(jsonData) {
+        _embedBox.empty();
+        var content = jsonData.content;
+        function setEmbedEntrys(embedEntrys, contents) { //NOTE: data format = JSON
+            embedEntrys = embedEntrys || [];
+            contents = contents || "";
+            embedEntrys.each(function(embedEntry){
+                try {
+                    var _actor = _embeders[embedEntry.embeder];
+                    if(_actor) {
+                        _actor.execReload(embedEntry.data, contents, embedEntry.type);
+                    }
+                } catch(ignore) {
+                    // 첨부데이터 일부를 정상적으로 불러오지 못했습니다.
+                    console.error("첨부데이터 일부를 정상적으로 불러오지 못했습니다:", ignore);
+                }
+            });
+        }
+        for(var name in _embeders){
+            if(_embeders[name]["onloadData"]){
+                console.log(name);
+                setEmbedEntrys(_embeders[name]["onloadData"](content),content)
+            }
+        }
+    });
 });
