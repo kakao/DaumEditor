@@ -1,22 +1,10 @@
-Daum Editor Licence Information
+This software is licensed under the Apache 2 license, quoted below.
 
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Daum Editor
-Developed by : HTML5. Cell
-Powered by : Daum Kakao Corp.
-License: GNU LGPL (Lesser General Public Licence)
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Copyright 2015 Daum Kakao Corp. <http://daumkakao.com>
 
-This library is free software;
-This source code and the demo application is distributed under the GNU Lesser
-General Public License.
-You can redistribute it and/or modify it under the this License;
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this project except in compliance with
+the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
 
-See the GNU Lesser General Public License for more details.
-http://www.gnu.org/licenses/lgpl.html
-[KO] http://korea.gnu.org/people/chsong/copyleft/lgpl.ko.html
-
-For further information visit:
-	https://github.com/daumcorp/DaumEditor
-Do you have any questions?
-	https://github.com/daumcorp/DaumEditor/issues
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
+language governing permissions and limitations under the License.
