@@ -1531,10 +1531,12 @@ Object.extend($tom, /** @lends $tom */{
 	 *  $tom.getScrollTop(document)
 	 */
 	getScrollTop: function(doc) {
-		if(!doc) {
+		if (!doc) {
 			return 0;
 		}
-		return doc.documentElement.scrollTop >= 0 ? doc.documentElement.scrollTop : doc.body.scrollTop;
+		var win = doc.defaultView;
+		var prop = 'pageYOffset';
+		return (prop in win)? win[prop]:doc.documentElement.scrollTop;
 	},
 	/**
 	 * 수직 스크롤 값을 셋팅한다.
