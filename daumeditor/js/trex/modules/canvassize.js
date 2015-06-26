@@ -104,17 +104,17 @@ Trex.module("make padding area inside Canvas with editor width",
         	}
             
             if (fixedContentWidth) {
-            	canvasPadding.left = Math.max(Math.ceil(getGuideAreaWidth()), 0);
-            	canvasPadding.right = Math.max(Math.floor(getGuideAreaWidth()), 0);	// for quirks mode
+            	canvasPadding.mleft = Math.max(Math.ceil(getGuideAreaWidth()), 0);
+            	canvasPadding.mright = Math.max(Math.floor(getGuideAreaWidth()), 0);	// for quirks mode
 
             	return {
             		width: contentWidth.toPx(),
-            		paddingLeft: "0",
-            		paddingRight: "0",
+            		paddingLeft: canvasPadding.left.toPx(),
+            		paddingRight: canvasPadding.right.toPx(),
             		paddingTop: canvasPadding.top.toPx(),
             		paddingBottom: canvasPadding.bottom.toPx(),
-            		marginLeft: canvasPadding.left.toPx(),
-            		marginRight: canvasPadding.right.toPx()
+            		marginLeft: canvasPadding.mleft.toPx(),
+            		marginRight: canvasPadding.mright.toPx()
             	};
             } else {
             	return {
