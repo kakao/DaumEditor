@@ -1535,7 +1535,7 @@ Object.extend($tom, /** @lends $tom */{
 		if (!doc) {
 			return 0;
 		}
-		var win = doc.defaultView;
+		var win = 'defaultView' in doc? doc.defaultView : doc.parentWindow;
 		var prop = 'pageYOffset';
 		return (prop in win)? win[prop]:doc.documentElement.scrollTop;
 	},
