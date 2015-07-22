@@ -69,32 +69,6 @@ Trex.module("delete image element @when backspace key event fires",
 	}
 );
 
-Trex.module("delete table element @when backspace key event fires",
-	function(editor, toolbar, sidebar, canvas) {
-		if ($tx.msie_nonstd) {
-			var _oldRangeLeftOffset;
-			canvas.observeKey({ 
-				ctrlKey: _FALSE,
-				altKey: _FALSE,
-				shiftKey: _FALSE,
-				keyCode: Trex.__KEY.BACKSPACE
-			}, function() {
-				var _processor = canvas.getProcessor();
-				var _rng = _processor.getRange();
-				try{
-					if(_oldRangeLeftOffset == _rng.boundingLeft){
-						var _el = $tom.previous(_processor.getNode());
-						if($tom.kindOf(_el, "table")){
-							$tom.remove(_el);	
-						}	
-					}
-				}catch(e){ }
-				_oldRangeLeftOffset = _rng.boundingLeft;
-				throw $propagate;
-			});
-		}
-	}
-);
 
 /*-------------------------------------------------------*/
 
