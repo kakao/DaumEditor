@@ -404,7 +404,7 @@ Trex.module("table resize dragger", function(editor, toolbar, sidebar, canvas) {
 						docElem = doc.documentElement,
 						body = doc.body;
 					var box = node.getBoundingClientRect(),
-						win = doc.defaultView || doc.parentWindow,
+						win = $tom.getWindow(doc),
 						clientTop  = docElem.clientTop  || body.clientTop  || 0,
 						clientLeft = docElem.clientLeft || body.clientLeft || 0,
 						scrollTop  = win.pageYOffset || w3cBoxModelWorks && docElem.scrollTop  || body.scrollTop,

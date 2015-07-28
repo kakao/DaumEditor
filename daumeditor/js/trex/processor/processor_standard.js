@@ -160,7 +160,8 @@ Trex.I.Processor.Standard = /** @lends Trex.Canvas.Processor.prototype */{
             while($tom.isText(targetNode)){
                 targetNode = targetNode.parentNode;
             }
-			var _cssStyle = this.doc.defaultView.getComputedStyle(targetNode, _NULL);
+			var win = $tom.getWindow(this.doc);
+			var _cssStyle = win.getComputedStyle(targetNode, _NULL);
 			return ((_cssStyle)? _cssStyle[styleName] : _NULL);
 		}
 		return _NULL;

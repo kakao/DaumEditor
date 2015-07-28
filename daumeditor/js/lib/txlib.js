@@ -343,7 +343,8 @@ $tx.extend($tx, /** @lends $tx */{
         style = style == 'float' ? 'cssFloat' : style.camelize();
         var value = element.style[style];
         if (!value) {
-            var css = _DOC.defaultView.getComputedStyle(element, _NULL);
+			var win = (_DOC.defaultView || _DOC.parentWindow);
+            var css = win.getComputedStyle(element, _NULL);
             value = css ? css[style] : _NULL;
         }
         if (style == 'opacity')
