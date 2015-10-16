@@ -654,6 +654,26 @@
             if (this.config.useHotKey) {
                 this.fireKeys(event);
             }
+            if($tx.msie&&$tx.msie_ver==11&&event.keyCode == Trex.__KEY.ENTER){
+                setTimeout(this._ie11Enterbug.bind(this), 20);
+            }
+        },
+
+        _ie11Enterbug: function(){
+            var p = this.getProcessor();
+            if(p.isCollapsed()){
+                var doc = this.getCurrentPanel().getDocument();
+                var rng = goog.dom.Range.createFromBrowserSelection(doc.getSelection? doc.getSelection():p.getSel());
+                var node = rng.getStartNode();
+                //node.textContents
+                //ie9+
+                if(node&&node.nodeType===1&&(node.textContent.replace(/[ \f\n\r\t\v]/g,'')==='')){
+                    var dummy = p.newDummy(false);
+                    rng.insertNode(dummy, true);
+                    rng.select();
+                }
+
+            }
         },
 
         onKeyUp: function(event) {
