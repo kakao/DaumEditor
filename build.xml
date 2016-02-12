@@ -40,7 +40,7 @@
         <trycatch>
             <try>
                 <property file="${user.home}/daumeditor.credentials.properties"/>
-                <gcupload username="${gc.username}" password="${gc.password}" projectname="daumopeneditor" filename="${build.dist.dir}/daumeditor.zip" targetfilename="daumeditor-${editor.version}.zip" summary="${editor.version} release zip file" verbose="true"/>
+                <!-- <gcupload username="${gc.username}" password="${gc.password}" projectname="daumopeneditor" filename="${build.dist.dir}/daumeditor.zip" targetfilename="daumeditor-${editor.version}.zip" summary="${editor.version} release zip file" verbose="true"/> -->
             </try>
             <catch>
                 <echo> Write your google account in ${user.home}/daumeditor.credentials.properties  </echo>
