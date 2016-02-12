@@ -3,7 +3,7 @@
     <property file="build.properties"/>
     <taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${build.lib.antcontrib}" />
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${build.lib.antcontrib}"/>
-	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${build.lib.gcuploader}" name="gcupload"/>
+	<!-- <taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${build.lib.gcuploader}" name="gcupload"/> -->
     <!-- main tasks ====================================================== -->
     <target name="buildall" description="clean and build all" depends="clean, packaging">
 	</target>
