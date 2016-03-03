@@ -20,7 +20,7 @@ Trex.TableUtil = {
 		return newNode;
 	},
 	emptyTd: function (node) {
-		node.innerHTML = "&nbsp;";
+		node.innerHTML = "<p><br></p>";
 	},
 	/**
 	 * splitWidthByColSpan
