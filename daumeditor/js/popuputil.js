@@ -25,7 +25,7 @@ _WIN.autoResizeHeight = function ( fixedWidth, heightOffset) {
 			diff.width = 8;
 			diff.height = dl.clientHeight - contentScreentHeight + 35;
 		}
-		pos.y = Math.min(screen.availHeight - contentScreentHeight - top - __STATUSBAR_SIZE,0) ;
+		pos.y = Math.min(screen.availHeight - contentScreentHeight - top - __STATUSBAR_SIZE,0);
 		pos.x = Math.min(screen.availWidth - contentScreentWidth - left - __SCROLLBAR_SIZE,0);
 		
 		if ( pos.x || pos.y ) {
